@@ -28,7 +28,7 @@ jobs:
           git config user.name  "bladeforge-sync[bot]"
           git config user.email "bladeforge-sync@users.noreply.github.com"
       - name: Build content
-        run: tools/sync/build.sh "$GITHUB_WORKSPACE/.bf-src"
+        run: .github/sync/build.sh "$GITHUB_WORKSPACE/.bf-src"
       - name: Refresh sync branch
         run: |
           rm -rf .bf-src
@@ -49,5 +49,5 @@ jobs:
           if ! gh pr view sync/from-personal --json number >/dev/null 2>&1; then
             gh pr create --base main --head sync/from-personal \
               --title "Sync from Xaaalera/claude-skills" \
-              --body "Automated sync. Review before merge. Excludes: see tools/sync/exclude.txt."
+              --body "Automated sync. Review before merge. Excludes: see .github/sync/exclude.txt."
           fi

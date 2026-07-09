@@ -4,8 +4,6 @@
 !/.claude-plugin/
 !/plugins/
 !/scripts/
-!/tools/
-!/docs/
 !/.github/
 !/README.md
 node_modules/

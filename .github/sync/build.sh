@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Build BladeForge content from a source-repo checkout.
-# Usage: tools/sync/build.sh <path-to-source-checkout>
+# Usage: .github/sync/build.sh <path-to-source-checkout>
 set -euo pipefail
 SRC="${1:?usage: build.sh <source-checkout>}"
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
-EXCLUDE="$ROOT/tools/sync/exclude.txt"
+EXCLUDE="$ROOT/.github/sync/exclude.txt"
 
 # 1. reset synced trees
 rm -rf plugins scripts
