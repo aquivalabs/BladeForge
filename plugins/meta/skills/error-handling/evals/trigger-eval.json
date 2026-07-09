@@ -1,0 +1,21 @@
+[
+  { "query": "In the /api/billings POST route, throw a proper typed error when the SF create call comes back rejected instead of just letting it 500", "should_trigger": true },
+  { "query": "The Anthropic proxy sometimes returns a 502 and the UI just shows a blank screen — handle it properly so the user sees something", "should_trigger": true },
+  { "query": "Add a NOT_FOUND error code for when a ledger record id doesn't resolve, and use it in the controller", "should_trigger": true },
+  { "query": "Map the Salesforce INVALID_FIELD_FOR_INSERT_UPDATE fault we get from the composite API into whatever envelope our client expects", "should_trigger": true },
+  { "query": "On the AR aging page the fetch hook resolves with an error payload — how should the component read the code and message out of it?", "should_trigger": true },
+  { "query": "My Apex REST controller catches DmlException but I'm not sure what shape to return to the BFF — walk me through throwing it the right way", "should_trigger": true },
+  { "query": "When the KPI metric endpoint rejects, we need a google.rpc.Status with a proper status field so the frontend can branch on it", "should_trigger": true },
+  { "query": "Wrap the upstream Plaid transport failures so a downstream 429 surfaces as a retryable error the client can recognize", "should_trigger": true },
+  { "query": "Right now every layer invents its own error JSON shape — I want one envelope from Apex through the BFF to the React toast", "should_trigger": true },
+
+  { "query": "Fix this TypeError: cannot read properties of undefined crashing the DataGrid on first render", "should_trigger": false },
+  { "query": "Why is this try/catch swallowing the stack trace? I can't see where it actually failed", "should_trigger": false },
+  { "query": "Add React error boundaries around the router so a crash in one route doesn't blank the whole app", "should_trigger": false },
+  { "query": "Write a vitest test that asserts createBilling throws when the amount is negative", "should_trigger": false },
+  { "query": "The linter flags an unused catch binding in this function — how do I silence it cleanly?", "should_trigger": false },
+  { "query": "Explain the difference between throwing an Error and rejecting a promise in async JS", "should_trigger": false },
+  { "query": "Our Apex test coverage dropped — add negative-path assertions so the failing branch is covered", "should_trigger": false },
+  { "query": "The retry logic in the fetch wrapper loops forever on a network drop; add a max-attempts cap", "should_trigger": false },
+  { "query": "Rename the ApiException class to ServiceException across the Apex codebase without changing behavior", "should_trigger": false }
+]

@@ -1,0 +1,15 @@
+{
+  "name": "frontend-react",
+  "description": "Frontend React skills — component structure, hooks registry, skeleton components, Storybook stories.",
+  "version": "1.0.1",
+  "keywords": [
+    "react",
+    "components",
+    "hooks",
+    "storybook",
+    "skeleton"
+  ],
+  "author": {
+    "name": "AccountingSeed"
+  }
+}

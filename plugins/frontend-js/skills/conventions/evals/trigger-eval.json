@@ -1,0 +1,20 @@
+[
+  {"query": "I have function getAcct(r) { return r.id } — should it be an arrow function?", "should_trigger": true},
+  {"query": "the file uses double quotes everywhere, our house style is single quotes right?", "should_trigger": true},
+  {"query": "rename variable sel to selectedRecord throughout useAccountsFilter.ts", "should_trigger": true},
+  {"query": "this if statement has no braces: if (isLoading) return null — is that ok?", "should_trigger": true},
+  {"query": "the fetchInvoices function is 80 lines long, help me break it into smaller pieces", "should_trigger": true},
+  {"query": "import from ../../../lib/salesforce/client — should I use an alias instead?", "should_trigger": true},
+  {"query": "review TransactionList.tsx for code style issues before i push", "should_trigger": true},
+  {"query": "add a @shared alias to vite config and tsconfig so I can import shared types cleanly", "should_trigger": true},
+  {"query": "the handler is named fn and the arg is e — is that naming acceptable in our codebase?", "should_trigger": true},
+  {"query": "add margin-top: 1.5rem to the card header scss", "should_trigger": false},
+  {"query": "create a new SCSS variables file for spacing tokens", "should_trigger": false},
+  {"query": "should I use rem or px for the sidebar width in tailwind?", "should_trigger": false},
+  {"query": "scaffold a new React component folder for TransactionFilters with BEM scss", "should_trigger": false},
+  {"query": "add a Storybook story for the MetricCard component", "should_trigger": false},
+  {"query": "add skeleton loading to the JournalEntryList component", "should_trigger": false},
+  {"query": "write an Apex test for AccountPeriodResolver with @TestSetup", "should_trigger": false},
+  {"query": "route the 'No results found' label in InvoiceTable.tsx through useTranslation", "should_trigger": false},
+  {"query": "the BFF route /api/invoices is missing auth — fix the middleware", "should_trigger": false}
+]

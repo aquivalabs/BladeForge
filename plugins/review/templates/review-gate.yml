@@ -1,0 +1,15 @@
+name: review-gate
+on:
+  pull_request:
+jobs:
+  review-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Secret scan (deterministic review gate)
+        run: npx tsx scripts/review/gate.ts --base origin/main --secrets-only
