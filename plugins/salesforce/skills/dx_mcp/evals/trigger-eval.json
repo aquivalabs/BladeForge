@@ -1,0 +1,21 @@
+[
+  {"query": "run the apex tests for KPIMetricCompilerTest on acountingSeed", "should_trigger": true},
+  {"query": "deploy UIConfigResource.cls and UIConfigResourceTest.cls to the org", "should_trigger": true},
+  {"query": "query the org: SELECT Id, Name FROM AcctSeed__UI_Config__c LIMIT 20", "should_trigger": true},
+  {"query": "retrieve the ApexClass:KPIMetricCompiler metadata from acountingSeed", "should_trigger": true},
+  {"query": "which org alias should I use for this project?", "should_trigger": true},
+  {"query": "the deploy job is still running, resume it with the test run id", "should_trigger": true},
+  {"query": "list all my connected orgs and their aliases", "should_trigger": true},
+  {"query": "run a tooling API query to check code coverage for KPIMetricCompiler", "should_trigger": true},
+  {"query": "push the uiSettings metadata to the acountingSeed scratch org", "should_trigger": true},
+
+  {"query": "what fields does AcctSeed__Financial_Cube__c have", "should_trigger": false},
+  {"query": "how does AcctSeed__AccountingPeriodHandler work under the hood", "should_trigger": false},
+  {"query": "run anonymous apex: System.debug('hello');", "should_trigger": false},
+  {"query": "run a quick soql check — how many billing records are posted", "should_trigger": false},
+  {"query": "write test class for UIConfigResource", "should_trigger": false},
+  {"query": "build a new lwc that shows kpi cards", "should_trigger": false},
+  {"query": "check this diff for soql injection vulnerabilities", "should_trigger": false},
+  {"query": "deploy these classes and run the tests — use sf-deploy-test", "should_trigger": false},
+  {"query": "describe AcctSeed__UI_KPI_Card__c object fields and relationships", "should_trigger": false}
+]

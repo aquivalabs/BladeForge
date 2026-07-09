@@ -1,0 +1,21 @@
+[
+  {"query": "write a test class for KPIMetricCompiler", "should_trigger": true},
+  {"query": "I just created UIConfigResource.cls — add the matching test file", "should_trigger": true},
+  {"query": "our apex tests for AcctSeed__UI_Config__c are still using System.assertEquals, fix them to use Assert.*", "should_trigger": true},
+  {"query": "add @TestSetup data factory for AcctSeed__Billing__c in BillingHandlerTest", "should_trigger": true},
+  {"query": "cover the negative path in AccountingPeriodHandlerTest — what happens when period is null", "should_trigger": true},
+  {"query": "KPIMetricCompilerTest only has 40% coverage, write adversarial tests for the bad-input paths", "should_trigger": true},
+  {"query": "i need a test for the REST resource UIKpiCardConfigResource — mock the RestRequest", "should_trigger": true},
+  {"query": "update JournalEntryHandlerTest after I added the new validateLines method", "should_trigger": true},
+  {"query": "our test inserts a hardcoded id '001000000000001AAA', fix that", "should_trigger": true},
+
+  {"query": "deploy UIConfigResource.cls to the acountingSeed org", "should_trigger": false},
+  {"query": "run the apex tests for KPIMetricCompilerTest on the org", "should_trigger": false},
+  {"query": "how does AcctSeed__AccountingPeriodHandler work under the hood", "should_trigger": false},
+  {"query": "write a new LWC component that calls the UIConfigResource apex class", "should_trigger": false},
+  {"query": "run a SOQL query to check which AcctSeed__UI_Config__c records exist for this user", "should_trigger": false},
+  {"query": "add a BFF route for /api/kpi-config", "should_trigger": false},
+  {"query": "check the security of the UIConfigResource REST endpoint for SOQL injection", "should_trigger": false},
+  {"query": "retrieve the ApexClass metadata for KPIMetricCompiler from the org", "should_trigger": false},
+  {"query": "document the data model for UI_Config__c and UI_KPI_Card__c", "should_trigger": false}
+]

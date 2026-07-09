@@ -1,0 +1,21 @@
+[
+  {"query": "run anonymous apex: System.debug(UserInfo.getOrganizationId());", "should_trigger": true},
+  {"query": "quick soql check — how many AcctSeed__UI_Config__c records exist for the current user", "should_trigger": true},
+  {"query": "execute anon apex on acountingSeed to reset the KPI config for my test user", "should_trigger": true},
+  {"query": "I want to reproduce the org-side null pointer in KPIMetricCompiler — run it anon", "should_trigger": true},
+  {"query": "soql: SELECT Id, AcctSeed__Config_Type__c FROM AcctSeed__UI_Config__c LIMIT 5", "should_trigger": true},
+  {"query": "run this apex snippet on the org without deploying a class", "should_trigger": true},
+  {"query": "check if AcctSeed__UI_KPI_Card__c has any rows where Metric_Key__c is null — quick soql", "should_trigger": true},
+  {"query": "execute apex on the scratch org to see the debug output from KPIPeriodResolver", "should_trigger": true},
+  {"query": "run a soql query against acountingSeed tooling API to check code coverage", "should_trigger": true},
+
+  {"query": "deploy UIConfigResource.cls and run UIConfigResourceTest", "should_trigger": false},
+  {"query": "push the uiSettings metadata package to acountingSeed", "should_trigger": false},
+  {"query": "run the full apex test suite for the uiSettings package", "should_trigger": false},
+  {"query": "write a test class for KPIMetricCompiler", "should_trigger": false},
+  {"query": "what fields does AcctSeed__Financial_Cube__c have", "should_trigger": false},
+  {"query": "build an lwc that displays kpi cards", "should_trigger": false},
+  {"query": "retrieve ApexClass:KPIMetricCompiler from the org", "should_trigger": false},
+  {"query": "check this apex REST endpoint for SOQL injection vulnerabilities", "should_trigger": false},
+  {"query": "update the per-user dashboard config in AccountingCloud and deploy", "should_trigger": false}
+]

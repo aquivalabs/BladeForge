@@ -1,0 +1,15 @@
+{
+  "name": "cicero",
+  "description": "CICERO \u2014 the house voice. A SessionStart hook injects the always-on communication style (bottom line first, concise, plain language, recommend-don't-survey, push back, honesty, stay in scope) + a start banner; a Stop hook enforces principles 12/2/3 (reply in the user's language, concise, gloss/translate jargon) by blocking an off-voice reply so it gets rewritten.",
+  "version": "1.1.1",
+  "keywords": [
+    "communication",
+    "house-voice",
+    "session-start",
+    "hook",
+    "writing-style"
+  ],
+  "author": {
+    "name": "Xaaalera"
+  }
+}

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+ROOT="$(git rev-parse --show-toplevel)"
+# Review gate — fresh passing /review attestation for this diff + secret scan.
+npx tsx "$ROOT/scripts/review/gate.ts"

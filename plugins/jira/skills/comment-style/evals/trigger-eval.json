@@ -1,0 +1,21 @@
+[
+  {"query": "post a status update on FS-14702 saying the KPI config read path is done", "should_trigger": true},
+  {"query": "write a comment on FS-14706 — the daily report batch is ready for QA", "should_trigger": true},
+  {"query": "add a jira comment on FS-14701 explaining the Revenue card formula deviation", "should_trigger": true},
+  {"query": "i need to comment on the ticket that we're blocked on the AcctSeed__GL_Account__c FLS issue", "should_trigger": true},
+  {"query": "drop a note on FS-14711 saying the AI brief is deferred to next sprint", "should_trigger": true},
+  {"query": "use addCommentToJiraIssue to post the handoff note on FS-14705", "should_trigger": true},
+  {"query": "write a 'whats done / whats left' update for the jira ticket FS-14703", "should_trigger": true},
+  {"query": "update FS-14702 jira with a decision note: config stays under Settings tab for now", "should_trigger": true},
+  {"query": "post a comment on the ticket that 40/40 apex tests are passing and the branch is ready for review", "should_trigger": true},
+
+  {"query": "add an inline code comment explaining why we strip the AcctSeed__ namespace prefix here", "should_trigger": false},
+  {"query": "write a git commit message for the KPI metric engine changes", "should_trigger": false},
+  {"query": "write a PR description for the FS-14702 config branch", "should_trigger": false},
+  {"query": "add a JSDoc comment to the KPIMetricCompiler class", "should_trigger": false},
+  {"query": "write a TODO comment in the dashboard component about the missing chart integration", "should_trigger": false},
+  {"query": "add a comment to the Apex test class explaining the @TestSetup data setup", "should_trigger": false},
+  {"query": "post a slack message to the engineering channel that the deploy is done", "should_trigger": false},
+  {"query": "write a changelog entry for the v1.2 release notes", "should_trigger": false},
+  {"query": "add an HTML comment in the LWC template marking the conditional block", "should_trigger": false}
+]
