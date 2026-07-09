@@ -28,6 +28,5 @@ company-approved skills, synced from the shared source and reviewed before relea
 
 ## Contributing
 
-Skills are authored in the public source repo (`Xaaalera/claude-skills`). A push
-there opens a **sync PR** here; a maintainer reviews it, the **eval-gate** check
-must pass, then it merges. `main` is protected — no direct pushes.
+Skills are curated internally and published here after review. The **eval-gate**
+check validates every change before it lands.
