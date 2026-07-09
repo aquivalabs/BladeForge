@@ -1,0 +1,53 @@
+name: sync-from-source
+on:
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [sync-from-source]
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: sync-from-source
+  cancel-in-progress: true
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout BladeForge
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          repository: Xaaalera/claude-skills
+          path: .bf-src
+          fetch-depth: 1
+      - name: Configure git
+        run: |
+          git config user.name  "bladeforge-sync[bot]"
+          git config user.email "bladeforge-sync@users.noreply.github.com"
+      - name: Build content
+        run: tools/sync/build.sh "$GITHUB_WORKSPACE/.bf-src"
+      - name: Refresh sync branch
+        run: |
+          rm -rf .bf-src
+          git checkout -B sync/from-personal origin/main
+          git add -A plugins scripts .claude-plugin/marketplace.json
+          if git diff --cached --quiet; then
+            echo "no changes to sync"; exit 0
+          fi
+          git commit -m "chore: sync plugins from Xaaalera/claude-skills"
+          git push -f origin sync/from-personal
+      - name: Open or update PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet origin/main -- plugins scripts .claude-plugin 2>/dev/null; then
+            echo "branch matches main; nothing to PR"; exit 0
+          fi
+          if ! gh pr view sync/from-personal --json number >/dev/null 2>&1; then
+            gh pr create --base main --head sync/from-personal \
+              --title "Sync from Xaaalera/claude-skills" \
+              --body "Automated sync. Review before merge. Excludes: see tools/sync/exclude.txt."
+          fi
