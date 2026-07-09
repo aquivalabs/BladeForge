@@ -1,0 +1,20 @@
+[
+  {"query": "I just finished building the KpiCard component — do I need to write a story for it?", "should_trigger": true},
+  {"query": "add a storybook story for the new InvoiceSummary component", "should_trigger": true},
+  {"query": "what states should the TransactionList story cover — default, empty, error?", "should_trigger": true},
+  {"query": "created FilterPanel.tsx — should a stories/ folder go inside the component folder?", "should_trigger": true},
+  {"query": "how do I show the KpiCardSkeleton alongside the real KpiCard in the story?", "should_trigger": true},
+  {"query": "the AccountBadge story is using live domain mock data from our test factories — is that ok?", "should_trigger": true},
+  {"query": "where do I put mock data for a storybook story — inline in the file or separate?", "should_trigger": true},
+  {"query": "does this project want me to write stories for every component, or just some?", "should_trigger": true},
+  {"query": "write a story for the DateRangePicker covering its default, open, and disabled states", "should_trigger": true},
+  {"query": "create a KpiCardSkeleton.tsx next to KpiCard.tsx using the Skeleton primitive", "should_trigger": false},
+  {"query": "the component folder for InvoiceRow is a bare .tsx file, move it into its own subfolder", "should_trigger": false},
+  {"query": "add rem-based spacing to the story container div", "should_trigger": false},
+  {"query": "the 'No transactions' empty state is hardcoded — route through useTranslation", "should_trigger": false},
+  {"query": "check hooks-registry.md before writing a useTransactionFilters hook", "should_trigger": false},
+  {"query": "add SCSS variables for the card's shadow and border-radius tokens", "should_trigger": false},
+  {"query": "review the DataTable component for code style — arrow functions, braces, naming", "should_trigger": false},
+  {"query": "add a loading skeleton to the JournalEntryList since it fetches its own data", "should_trigger": false},
+  {"query": "set up the review gate in this repo using the bootstrap script", "should_trigger": false}
+]

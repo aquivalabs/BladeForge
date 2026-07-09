@@ -1,0 +1,14 @@
+{
+  "name": "@review/harness",
+  "private": true,
+  "type": "module",
+  "description": "Self-contained review-gate harness (diff hashing, attestation, secret scan, config, doc pairing).",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,20 @@
+[
+  {"query": "the KpiGrid shows a blank white area while the query is loading — add a skeleton", "should_trigger": true},
+  {"query": "InvoiceTable has isLoading from TanStack Query and just renders nothing — what's the right loading UI?", "should_trigger": true},
+  {"query": "add a loading state to AccountSummary — it fetches its own data from the BFF", "should_trigger": true},
+  {"query": "should I inline the skeleton markup in JournalEntryList.tsx or create a separate component?", "should_trigger": true},
+  {"query": "the dashboard KPI cards show a blank gap for ~500ms before data arrives — fix that", "should_trigger": true},
+  {"query": "do I need to add a skeleton to FilterPanel? it receives data via props from the parent", "should_trigger": true},
+  {"query": "create a TransactionListSkeleton next to TransactionList.tsx using the shared Skeleton primitive", "should_trigger": true},
+  {"query": "add a react-loading-skeleton library so we can use it across all async components", "should_trigger": true},
+  {"query": "the parent already shows a full-page skeleton while the dashboard loads — do child components need their own skeletons?", "should_trigger": true},
+  {"query": "create a new KpiCard component with its folder, tsx, scss, and index.ts", "should_trigger": false},
+  {"query": "add a Storybook story for the AccountSummary component", "should_trigger": false},
+  {"query": "the SidebarNavItem should render inside a sidebar/ subfolder — fix the folder layout", "should_trigger": false},
+  {"query": "add padding: 1rem to the skeleton container in kpi-card-skeleton.scss", "should_trigger": false},
+  {"query": "write a new useKpiMetrics hook — check the hooks-registry first", "should_trigger": false},
+  {"query": "convert the hardcoded 'Loading…' text in InvoiceTable to useTranslation", "should_trigger": false},
+  {"query": "the card hover effect is done with onMouseEnter — rewrite as CSS :hover", "should_trigger": false},
+  {"query": "add a $space-8 variable to _spacing.scss", "should_trigger": false},
+  {"query": "review the BFF /api/accounts route for auth middleware", "should_trigger": false}
+]

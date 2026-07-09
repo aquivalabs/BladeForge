@@ -1,0 +1,21 @@
+[
+  {"query": "deploy UIConfigResource.cls and UIConfigResourceTest.cls then run the tests", "should_trigger": true},
+  {"query": "push the uiSettings apex classes to acountingSeed and run KPIMetricCompilerTest", "should_trigger": true},
+  {"query": "deploy the whole uiSettings package to the org and check test results", "should_trigger": true},
+  {"query": "I updated KPIPeriodResolver — deploy it and verify the tests still pass", "should_trigger": true},
+  {"query": "deploy metadata ApexClass:KPIMetricCompiler and run KPIMetricCompilerTest,KPIPeriodResolverTest", "should_trigger": true},
+  {"query": "the deploy failed with a source-tracking unsafe path error — how do I fix it", "should_trigger": true},
+  {"query": "deploy all classes under force-app/uiSettings/default/classes/ to acountingSeed", "should_trigger": true},
+  {"query": "run the apex tests for UIConfigResourceTest after deploying the latest changes", "should_trigger": true},
+  {"query": "quick deploy-and-test cycle for BillingHandlerTest on the scratch org", "should_trigger": true},
+
+  {"query": "run anonymous apex on the org: System.debug(UserInfo.getUserId());", "should_trigger": false},
+  {"query": "quick soql: SELECT Id FROM AcctSeed__UI_Config__c LIMIT 10", "should_trigger": false},
+  {"query": "write the test class for UIConfigResource", "should_trigger": false},
+  {"query": "how does AcctSeed__AccountingPeriodHandler work", "should_trigger": false},
+  {"query": "build an lwc dashboard component", "should_trigger": false},
+  {"query": "retrieve the UIConfigResource metadata from acountingSeed", "should_trigger": false},
+  {"query": "check this diff for security issues", "should_trigger": false},
+  {"query": "run a tooling query to check code coverage for KPIMetricCompiler", "should_trigger": false},
+  {"query": "list all connected orgs and their aliases", "should_trigger": false}
+]

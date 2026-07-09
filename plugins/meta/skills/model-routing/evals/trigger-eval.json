@@ -1,0 +1,20 @@
+[
+  {"query": "write a workflow that fans out 10 reviewer agents over the cumulative diff and adversarially verifies each finding", "should_trigger": true},
+  {"query": "kick off a couple of subagents to comb the repo for duplicated code in parallel", "should_trigger": true},
+  {"query": "spawn a bunch of agents to audit every route file under src/config in parallel and report violations", "should_trigger": true},
+  {"query": "can you parallelize this alias migration with subagents? there are like 40 files to touch", "should_trigger": true},
+  {"query": "add a verify stage to my workflow script where 3 skeptics try to refute each bug before it lands in the report", "should_trigger": true},
+  {"query": "create a hunt-tests agent in .claude/agents that digs through CI logs for flaky tests", "should_trigger": true},
+  {"query": "use a workflow to sweep src and server for dead code and unused exports", "should_trigger": true},
+  {"query": "dispatch an Explore agent to find where getDataRouter is initialized", "should_trigger": true},
+  {"query": "write a workflow script: loop until we collect 10 confirmed bugs, two verifiers per bug", "should_trigger": true},
+  {"query": "which claude model is cheapest for my API integration right now, haiku or sonnet?", "should_trigger": false},
+  {"query": "switch my default session model to sonnet, tired of burning tokens on chat", "should_trigger": false},
+  {"query": "add a route guard to src/config/guards so the admin pages need the permission check", "should_trigger": false},
+  {"query": "write the data model for the KPI card config object, fields and types", "should_trigger": false},
+  {"query": "my elevenlabs voice agent sounds off, tweak its prompt for me", "should_trigger": false},
+  {"query": "explain how the agent toolset works in the managed agents API, do I need a beta header?", "should_trigger": false},
+  {"query": "fix the workflow yaml for the github actions deploy, it fails on the cache step", "should_trigger": false},
+  {"query": "how do I register a new MCP server in settings.json for this project?", "should_trigger": false},
+  {"query": "refactor the routeRequest function in BFFRouter, it has grown to 80 lines", "should_trigger": false}
+]

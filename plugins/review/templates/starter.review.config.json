@@ -1,0 +1,5 @@
+{
+  "$schema": "./review.config.schema.json",
+  "secretAllowlist": ["EXAMPLE", "AKIA0000000000000000"],
+  "agents": []
+}
