@@ -477,3 +477,5 @@ gh api -X PUT repos/aquivalabs/BladeForge/branches/main/protection \
 - **Spec coverage:** goal ✓ (T1–T7); source/direction ✓ (T3,T5); naming ✓ (T2 marketplace.json, T6 README); exclude-list ✓ (T2); sync mechanism halves ✓ (T3 BladeForge, T5 source); auth ✓ (T3 built-in token, T5+T7 dispatch token); eval gate ✓ (T4); protected main ✓ (T7); README ✓ (T6); non-goals respected (no two-way sync, no hand-edit); dependencies ✓ (T7).
 - **Placeholders:** catalog table rows are the only "…" — intentionally filled from live data in T6 Step 2, not a code placeholder.
 - **Type/name consistency:** `sync/from-personal`, dispatch type `sync-from-source`, secret `BLADEFORGE_DISPATCH_TOKEN`, marketplace `name=bladeforge`, `owner.name=aquivalabs`, `tools/sync/build.sh` + `exclude.txt` — used consistently across tasks.
+
+<!-- eval-gate smoke test -->
