@@ -1,0 +1,23 @@
+name: eval-gate
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  eval-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Ensure origin/main ref
+        run: git fetch origin main:refs/remotes/origin/main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run eval gate
+        run: |
+          if [ ! -f scripts/eval-gate.sh ]; then
+            echo "no scripts/eval-gate.sh yet (pre-seed) — skipping"; exit 0
+          fi
+          chmod +x scripts/eval-gate.sh scripts/validate_eval.py
+          scripts/eval-gate.sh
