@@ -1,0 +1,14 @@
+# Safe by default: ignore everything at root, publish only what a marketplace needs.
+/*
+!/.gitignore
+!/.claude-plugin/
+!/plugins/
+!/scripts/
+!/tools/
+!/docs/
+!/.github/
+!/README.md
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
