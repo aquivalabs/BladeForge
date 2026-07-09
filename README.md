@@ -31,7 +31,12 @@ company-approved skills, synced from the shared source and reviewed before relea
 Grouped by plugin. Each group links back to [Plugins](#plugins).
 
 ### cicero &nbsp;·&nbsp; [↑ Plugins](#plugins)
-No skills — a SessionStart hook that injects the house communication style and a start banner.
+Not a skill — a house communication style enforced by two hooks. A **SessionStart**
+hook injects a list of **14 rules** (answer first, size to the ask, gloss jargon,
+recommend don't survey, push back with reasons, calibrated honesty, … end with a
+one-line joke) plus a start banner; a **Stop** hook (`plain-language-guard`) runs
+after each reply and blocks house-voice violations. Net effect: the bot talks
+plainly and cuts the fluff. Full ruleset: [cicero.md](plugins/cicero/cicero.md).
 
 ### frontend-css &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="rem"></a>**rem** — Enforce rem units over hardcoded px in CSS/SCSS/Tailwind.
