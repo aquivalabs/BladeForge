@@ -84,8 +84,16 @@ On `repository_dispatch` (plus a manual-dispatch button as a fallback):
 - **Branch/PR model:** one rolling branch, one rolling PR. The branch is
   recreated from `main` each run (no drift); there is never a pile-up of stale
   sync PRs.
-- **Write auth:** BladeForge's own `GITHUB_TOKEN` (`contents: write` +
-  `pull-requests: write`) — the write target is the same repo.
+- **Write auth:** the sync workflow must push the branch and open the PR with a
+  **GitHub App installation token**, NOT the built-in `GITHUB_TOKEN`. GitHub
+  deliberately does not fire workflows (`pull_request`, `push`) for events
+  authored by `GITHUB_TOKEN` — so a sync PR opened by it would leave the required
+  `eval-gate` check permanently un-run, and the PR could never merge. Verified
+  2026-07-09: run #29007238350 opened PR #1 with `GITHUB_TOKEN`; no `eval-gate`
+  check attached. A human-authored PR (#2) did fire `eval-gate` (pass). Fix:
+  authenticate the sync workflow with the App token (folded into the final
+  enforcement step). The App is the shared dependency for both this and the
+  source trigger.
 
 ## Eval gate (CI)
 
