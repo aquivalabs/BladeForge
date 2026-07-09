@@ -1,0 +1,21 @@
+[
+  { "query": "I need to add a useDebounce hook under src/hooks for the search input", "should_trigger": true },
+  { "query": "can you create a custom hook to fetch and cache the current accounting period across components?", "should_trigger": true },
+  { "query": "lets extract this polling logic into a reusable useInterval hook", "should_trigger": true },
+  { "query": "rename useFetchUser to useCurrentUser everywhere", "should_trigger": true },
+  { "query": "i need some reusable logic to fetch and cache the current user across components", "should_trigger": true },
+  { "query": "move useLocalStorage from src/components/utils into src/hooks", "should_trigger": true },
+  { "query": "delete the old useLegacyGrid hook, nothing uses it anymore", "should_trigger": true },
+  { "query": "write a useAccountingPeriod hook that wraps the period query", "should_trigger": true },
+  { "query": "add a hook for tracking window resize so multiple charts can subscribe", "should_trigger": true },
+
+  { "query": "explain how useEffect dependency arrays work", "should_trigger": false },
+  { "query": "why does my useState update trigger two re-renders in strict mode?", "should_trigger": false },
+  { "query": "convert this class component to use hooks", "should_trigger": false },
+  { "query": "add a git pre-commit hook to run eslint", "should_trigger": false },
+  { "query": "write a webhook handler in the server for Stripe events", "should_trigger": false },
+  { "query": "useMemo vs useCallback for this expensive calc, which is faster?", "should_trigger": false },
+  { "query": "my useEffect keeps firing in an infinite loop, help me debug it", "should_trigger": false },
+  { "query": "set up a husky pre-push hook that runs the tests", "should_trigger": false },
+  { "query": "should I call useContext here or pass the value down as props?", "should_trigger": false }
+]

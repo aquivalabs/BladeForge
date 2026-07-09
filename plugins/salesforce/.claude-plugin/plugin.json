@@ -1,0 +1,16 @@
+{
+  "name": "salesforce",
+  "description": "Personal Salesforce skills \u2014 Apex test authoring standard and salesforce-dx MCP usage.",
+  "version": "1.4.0",
+  "keywords": [
+    "salesforce",
+    "apex",
+    "lwc",
+    "soql",
+    "security-review",
+    "dx-mcp"
+  ],
+  "author": {
+    "name": "Xaaalera"
+  }
+}

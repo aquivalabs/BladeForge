@@ -1,0 +1,21 @@
+[
+  {"query": "add a 'Save changes' button label to the KPI config panel in React", "should_trigger": true},
+  {"query": "the empty state on the dashboard says 'No data found' — that string is hardcoded, need to move it to i18n", "should_trigger": true},
+  {"query": "add a toast that says 'Invoice saved successfully' after the user submits the form", "should_trigger": true},
+  {"query": "placeholder text for the account search input is hardcoded in english, fix it", "should_trigger": true},
+  {"query": "FS-14702 — the KPI card settings modal needs a heading 'Configure KPI Card' wired through react-i18next", "should_trigger": true},
+  {"query": "write the validation message for a required field in the GL entry form", "should_trigger": true},
+  {"query": "need a tooltip label on the revenue metric card that says 'Rolling 30-day net revenue'", "should_trigger": true},
+  {"query": "add error message copy for when the BFF returns a 403 on the dashboard load", "should_trigger": true},
+  {"query": "the sidebar nav item for 'Journal Entries' needs a localization key, add it to the translation catalog", "should_trigger": true},
+
+  {"query": "log an error to the console when the Salesforce token refresh fails", "should_trigger": false},
+  {"query": "add an error code for the missing AcctSeed__GL_Account__c field and register it in ERROR_CODES.md", "should_trigger": false},
+  {"query": "set the enum key for the KPI metric type to REVENUE in the TypeScript union", "should_trigger": false},
+  {"query": "write a test fixture with a hardcoded account name 'Acme Corp' for the AR aging unit test", "should_trigger": false},
+  {"query": "the backend route logs 'request received' on every BFF call, is that fine?", "should_trigger": false},
+  {"query": "add a config key 'kpi.refreshIntervalMs' to the app settings object", "should_trigger": false},
+  {"query": "how should i handle the google.rpc.Status error envelope when the Apex service throws?", "should_trigger": false},
+  {"query": "rename the internal enum value GL_ENTRY to JOURNAL_ENTRY across the codebase", "should_trigger": false},
+  {"query": "add a server-side log line that prints the Salesforce org id on startup", "should_trigger": false}
+]
