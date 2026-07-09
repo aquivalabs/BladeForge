@@ -90,6 +90,11 @@ Plus the `/review` orchestrator, the reviewer agents, and the secret-scan + atte
 - <a id="sf-deploy-test"></a>**sf-deploy-test** — CLI fallback that deploys Apex/metadata and returns a compact pass/fail + test summary.
 - <a id="sf-run"></a>**sf-run** — Run anonymous Apex or a SOQL query against an org and get a terse result.
 
+## Example config
+
+See [CLAUDE.example.md](CLAUDE.example.md) for a reference `CLAUDE.md` — how to
+wire these plugins into a repo and keep the config thin (rules live in skills).
+
 ## Contributing
 
 Skills are curated internally and published here after review. The **eval-gate**

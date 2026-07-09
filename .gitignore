@@ -5,6 +5,7 @@
 !/plugins/
 !/scripts/
 !/.github/
+!/CLAUDE.example.md
 !/README.md
 node_modules/
 __pycache__/
