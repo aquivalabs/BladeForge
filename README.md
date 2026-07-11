@@ -15,6 +15,7 @@ company-approved skills, synced from the shared source and reviewed before relea
 | Plugin | What it does | Skills | Install |
 |---|---|---|---|
 | cicero | House voice — injects the always-on communication style and enforces it on replies. | — (hook only) | `cicero@bladeforge` |
+| diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) | `diagram@bladeforge` |
 | frontend-css | CSS conventions — rem units, SCSS modules. | [rem](#rem), [scss-modules](#scss-modules) | `frontend-css@bladeforge` |
 | frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) | `frontend-js@bladeforge` |
 | frontend-react | React conventions — placement, structure, hooks, primitives, layout, stories. | [component-placement](#component-placement), [component-structure](#component-structure), [feature-components](#feature-components), [hooks-registry](#hooks-registry), [layout-components](#layout-components), [skeleton-components](#skeleton-components), [storybook-stories](#storybook-stories), [ui-primitive-reuse](#ui-primitive-reuse) | `frontend-react@bladeforge` |
@@ -37,6 +38,9 @@ recommend don't survey, push back with reasons, calibrated honesty, … end with
 one-line joke) plus a start banner; a **Stop** hook (`plain-language-guard`) runs
 after each reply and blocks house-voice violations. Net effect: the bot talks
 plainly and cuts the fluff. Full ruleset: [cicero.md](plugins/cicero/cicero.md).
+
+### diagram &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="diagram"></a>**diagram** — Turn a spec or raw code into a readable, clickable architecture/flow diagram: a D2 graph laid out by ELK, each class showing its real methods, objects with fields, and permission sets, rendered as a browsable HTML page under `docs/diagrams/<name>/`. Node contents come from an **Atlas** entity list that parallel **Sextant** reviewer agents harden to zero edits; bidirectional click-to-jump between diagram and its notes, pan/zoom via svg-pan-zoom.
 
 ### frontend-css &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="rem"></a>**rem** — Enforce rem units over hardcoded px in CSS/SCSS/Tailwind.
