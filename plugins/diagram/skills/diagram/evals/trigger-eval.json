@@ -1,0 +1,26 @@
+[
+  {"query": "i've got a spec for a new handler layer in this apex package (interface, abstract base, factory, concrete impl) — sketch how the classes connect, with their methods, so i can open it in a browser and read it", "should_trigger": true},
+  {"query": "draw the data flow for the executive brief feature — the queueable that writes, the selector that reads, the DTO facade — i want a readable page, not a wall of text", "should_trigger": true},
+  {"query": "can you make a diagram of how UI_Prompt_Storage__c, the handlers and the two permission sets fit together? something i can actually click around and explore", "should_trigger": true},
+  {"query": "draw the architecture of feature FS-14711 from the plan — every class with its methods and relations, and make it clean and readable", "should_trigger": true},
+  {"query": "the prompt-storage-flow diagram we have is hard to read, nodes overlap and the text is tiny — fix the layout and make it nicer", "should_trigger": true},
+  {"query": "i want a picture of how the Canvas bridge enters the controller and goes down to the store, with the methods on each block, as its own page", "should_trigger": true},
+  {"query": "sketch the relationships between these ~12 apex classes so a new dev can understand the whole feature at a glance", "should_trigger": true},
+  {"query": "make a how-it-works schematic of the KPI refresh pipeline that i can share as a standalone html file", "should_trigger": true},
+  {"query": "visualize the object model — the object, its fields, and which permset grants what — as its own readable page", "should_trigger": true},
+  {"query": "i need a flow diagram: where the brief is read from, where it's written, and what that DTO facade between them is", "should_trigger": true},
+  {"query": "no spec for this, just the code — draw how these three files interact: PromptStorageHandler.cls, ExecutiveBriefPromptHandler.cls, PromptStorageHandlerFactory.cls", "should_trigger": true},
+  {"query": "i inherited this module and there's zero documentation — read the classes in force-app/main/default/classes and draw me a readable how-it-works picture so i can get oriented", "should_trigger": true},
+  {"query": "there's no design doc, just make a schema of everything in the brief flow by reading the source, as an html page i can browse", "should_trigger": true},
+
+  {"query": "plot quarterly sales from this csv in my downloads as a bar chart with axis labels", "should_trigger": false},
+  {"query": "explain in words how the sealed-base pattern works in PromptStorageHandler — no picture needed, just walk me through it", "should_trigger": false},
+  {"query": "this svg icon broke, fix the path data so it renders properly again", "should_trigger": false},
+  {"query": "create an ERD for our salesforce objects in Lucidchart and share the link with the team", "should_trigger": false},
+  {"query": "show me a dashboard of the KPI metrics for the last closed period — revenue / cash / AR / AP", "should_trigger": false},
+  {"query": "add a mermaid sequence diagram to the PR description showing the login handshake between the SPA and the BFF", "should_trigger": false},
+  {"query": "convert this hand-drawn architecture photo i took of the whiteboard into an editable excalidraw", "should_trigger": false},
+  {"query": "what's the difference between D2 and Mermaid for docs, which one should we standardize on?", "should_trigger": false},
+  {"query": "just render the existing prompt-storage-flow.html and take a screenshot, don't change anything", "should_trigger": false},
+  {"query": "generate an ascii flowchart of the CI pipeline steps to paste into the README", "should_trigger": false}
+]

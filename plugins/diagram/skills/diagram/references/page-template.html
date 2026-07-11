@@ -1,0 +1,66 @@
+<!doctype html>
+<!-- Reusable diagram page skeleton. Copy to <name>.page.html, fill the {{PLACEHOLDERS}} and the
+     Reference notes, keep the <!--SVG--> marker, then run build.sh <name> to splice in the render.
+     Everything visual/interactive is in diagram.css + diagram.js (copied beside the page) — do NOT
+     add <style>/<script> here. Constant fixtures (legend, zoom controls, the two .ov overlays) stay
+     as-is; only the {{...}} bits and the Reference notes change per diagram. -->
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{TITLE}}</title>
+<link rel="stylesheet" href="diagram.css">
+</head>
+<body>
+<div class="page">
+  <p class="eyebrow">{{EYEBROW}}</p>
+  <h1>{{TITLE}}</h1>
+  <p class="lede">{{LEDE — one or two sentences: what the diagram covers.}}</p>
+
+  <!-- Legend: keep only the roles this diagram actually uses; swatch var()s are defined in diagram.css. -->
+  <div class="legend">
+    <span><span class="sw" style="background:var(--teal)"></span>new code</span>
+    <span><span class="sw" style="background:var(--blue)"></span>rewired existing class</span>
+    <span><span class="sw" style="background:var(--plum)"></span>object / store</span>
+    <span><span class="sw" style="background:var(--olive)"></span>permission set</span>
+    <span><span class="sw" style="background:#2a2410;border-color:var(--amber)"></span>annotation</span>
+    <span><em style="color:var(--amber);font-style:italic">method()</em> = amber italic</span>
+  </div>
+
+  <figure>
+    <div class="zoomwrap">
+      <div class="zoom-controls">
+        <button id="zin" title="Zoom in">+</button>
+        <button id="zout" title="Zoom out">−</button>
+        <button id="zfit" title="Fit">⤢</button>
+      </div>
+      <div class="diagram" id="vp">
+<!--SVG-->
+      </div>
+      <!-- constant overlays (positions fixed by diagram.css) -->
+      <div class="ov ov-tl">Most classes, methods and fields are clickable — click one to jump to its notes below.</div>
+      <div class="ov ov-bl">
+        <div class="hint">drag to pan · scroll to zoom · click a title or method to jump to its notes</div>
+        <div class="cap">{{CAPTION — e.g. how the node contents were sourced + "Rendered with D2 + ELK — geometry is engine-computed, never hand-skewed."}}</div>
+      </div>
+    </div>
+  </figure>
+
+  <section class="ref">
+    <div class="tag">Reference — every entity in the diagram</div>
+    <h2>{{REFERENCE HEADING}}</h2>
+    <div class="refgrid">
+      <!-- One note PER code entity. id MUST be c-<d2-node-key> so diagram.js auto-wires the clickable
+           title + method jumps. dt = signature (matched by identifier), dd = what/why. -->
+      <div class="refB" id="c-{{NODE_KEY}}"><h3>{{ClassName}} <span class="kind">· {{role}}</span></h3>
+        <p class="why">{{one-line why this exists}}</p>
+        <dl>
+          <dt>{{methodSignature}}</dt>
+          <dd>{{what it does}}</dd>
+        </dl></div>
+      <!-- …repeat .refB per entity… -->
+    </div>
+  </section>
+</div>
+
+<script src="svg-pan-zoom.min.js"></script>
+<script src="diagram.js"></script>
+</body></html>

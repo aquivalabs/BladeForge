@@ -1,0 +1,103 @@
+/* Diagram theme — "dark ocean" (soft dark, NOT pitch-black). Canonical stylesheet for D2+ELK
+   class diagrams. Source of truth: keep edits here, do NOT inline into the page — the page <link>s it.
+   Blocks are dark (teal/blue/plum, set in the .d2 + rendered with `d2 --dark-theme 200`); this sheet
+   paints a soft-dark page + a GREY diagram backing, and recolours the SVG text
+   (titles white / names amber / types muted). */
+:root{
+  --ground:#101c22;         /* page — deep ocean, soft (not black) */
+  --panel:#16232b;          /* figure card */
+  --canvas:#26313a;         /* diagram backing — GREY, never white */
+  --hair:#2a3a44; --ink:#d9e6f0; --muted:#8ea2b1;
+  --amber:#f0b429;          /* chrome + method/field name accent */
+  --method:#f0b429;
+  --header:#0d161c;         /* uniform block header bar */
+  --title:#ffffff;
+  /* legend swatches mirror the DARK block fills */
+  --teal:#123f34; --blue:#1c3644; --plum:#2f2540; --olive:#3a3324;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground)}
+.page{max-width:1560px;margin:0 auto;padding:44px 28px 80px;color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:600;margin:0 0 10px}
+h1{font-size:clamp(26px,3.6vw,38px);line-height:1.1;margin:0 0 14px;font-weight:680;letter-spacing:-.01em;color:#eaf3fa;text-wrap:balance}
+.lede{font-size:16.5px;color:#9fb1c0;max-width:74ch;margin:0 0 6px}
+.lede code,.legend code,figcaption code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;
+  background:#1a2a34;border:1px solid var(--hair);border-radius:4px;padding:.5px 5px;color:#a9c3d6}
+/* legend — type→colour */
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:20px 0 4px;font-size:13px}
+.legend span{display:inline-flex;align-items:center;gap:7px;color:#b7c4d0}
+.sw{width:15px;height:15px;border-radius:3px;display:inline-block;border:1px solid rgba(255,255,255,.16)}
+/* figure + diagram viewport */
+figure{margin:26px 0 0;background:var(--panel);border:1px solid var(--hair);border-radius:12px;padding:5px;
+  box-shadow:0 10px 30px rgba(0,0,0,.30)}
+.zoomwrap{position:relative}
+.diagram{overflow:hidden;height:70vh;min-height:420px;background:var(--canvas);border:1px solid #33414c;border-radius:8px;
+  cursor:grab;touch-action:none}
+.diagram.grabbing{cursor:grabbing}
+/* smoothing is done in JS (rAF-eased zoom) — NO CSS transition here (it double-animates the big
+   SVG layer on every wheel tick and lags). transform-origin + will-change keep it on a GPU layer. */
+/* svg-pan-zoom manages the viewport (it transforms an internal <g>), so the SVG element itself just
+   fills the container — no CSS transform on a giant layer, no blank tiles, no lag. */
+.diagram svg{display:block;width:100%;height:100%}
+/* ── injected palette over the D2 SVG ──────────────────────────────────────
+   canvas rect → transparent (the grey backing shows); block header band → ONE uniform dark;
+   EVERY entity title → WHITE; method/field names (anchor:start) → amber italic;
+   return types (anchor:end) → muted; permset/note labels (dark fill) → light.
+   NB: select by class PRESENCE (.text-mono…), not exact [class="text-mono"] — the click-anchor JS
+   appends `t-link` to titles, so an exact match silently misses them. */
+.diagram svg rect.fill-N7{fill:transparent}
+.diagram svg rect.class_header{fill:var(--header)!important;stroke:var(--header)!important}
+.diagram svg text.text-mono[style*="text-anchor:middle"]{fill:var(--title)!important}
+.diagram svg text.text-mono[style*="text-anchor:start"]{fill:var(--method)!important;font-style:italic}
+.diagram svg text.fill-AA2,.diagram svg text.fill-B2{fill:#93a7b6!important}
+.diagram svg text.fill-N1,.diagram svg text.text-bold{fill:#e8eef3!important}
+/* edge / arrow labels (text-italic fill-N2) — bold, big, near-white */
+.diagram svg text.text-italic{fill:#f4f9ff!important;font-size:25px!important;font-weight:700!important}
+.diagram svg text.t-link,.diagram svg text.m-link{cursor:pointer}
+.diagram svg text.t-link:hover{text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}
+.diagram svg text.m-link:hover{text-decoration:underline;text-underline-offset:3px}
+/* reverse-link landing: glow the focused node + flash its row when reached from the Reference */
+.diagram svg g.node-hot{filter:drop-shadow(0 0 9px #f0b429) drop-shadow(0 0 4px #f0b429)}
+.diagram svg text.m-hot{fill:#ffffff!important;font-weight:700;filter:drop-shadow(0 0 5px #f0b429)}
+.zoom-controls{position:absolute;top:7px;right:7px;z-index:5;display:flex;gap:6px}
+.zoom-controls button{width:34px;height:34px;border:1px solid var(--hair);background:#1c2a33;border-radius:8px;
+  font-size:17px;line-height:1;cursor:pointer;color:var(--ink)}
+.zoom-controls button:hover{background:#243440}
+.zoom-controls button:focus-visible{outline:2px solid var(--amber)}
+/* fixed in-diagram overlays (constant position on every diagram): tl = clickability note,
+   bl = usage hint + source caption. Sit above the SVG, below the zoom controls. */
+.ov{position:absolute;z-index:4;font-size:12.5px;line-height:1.4;color:#c4d2de;
+  background:rgba(12,20,26,.80);border:1px solid var(--hair);border-radius:8px;padding:6px 11px;pointer-events:none}
+.ov code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;color:#a9c3d6}
+/* thin bars tucked to the edges: top note clears the zoom controls on the right; bottom spans nearly edge-to-edge */
+.ov-tl{top:7px;left:7px;right:124px;color:#e3edf6}
+.ov-bl{bottom:7px;left:7px;right:7px}
+.ov-bl .hint{color:#eaf3fa;font-weight:600;margin-bottom:3px}
+.ov-bl .cap{color:#9fb1c0}
+/* ── Reference (style B): borderless notes, amber rail ─────────────────────── */
+.ref{margin-top:44px}
+.ref .tag{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#7f96a6;margin:0 0 6px}
+.ref h2{font-size:21px;margin:0 0 18px;color:#eaf3fa;letter-spacing:-.01em}
+/* Reference = ONE column, no cards — a single stacked list of borderless amber-rail notes. */
+.refgrid{display:flex;flex-direction:column;gap:18px}
+.refB{padding:2px 0 8px;scroll-margin-top:16px}
+.refB h3{margin:0 0 3px;font-size:17px;color:#eaf3fa}
+.refB .kind{font-size:12.5px;color:#7f96a6;font-weight:400}
+.refB .why{margin:2px 0 6px;font-size:14px;color:#b7c4d0}
+/* aligned two-column definition grid: method signature | description, hairline per row —
+   scannable (names line up in a column) instead of a stacked wall of text. */
+.refB dl{display:grid;grid-template-columns:minmax(230px,330px) 1fr;column-gap:30px;margin:10px 0 0}
+.refB dt{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;font-style:italic;
+  color:var(--amber);padding:11px 0;border-top:1px solid var(--hair);align-self:start}
+.refB dd{margin:0;font-size:14px;color:#c8d5e0;padding:11px 0;border-top:1px solid var(--hair)}
+.refB dt:first-of-type,.refB dd:first-of-type{border-top:0}
+.refB dd code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;color:#a9c3d6}
+.refB:target h3{color:var(--amber)}
+/* diagram -> Reference landing flash: method highlights its dt/dd, class title its heading */
+.refB dt.hot,.refB dd.hot{background:rgba(240,180,41,.18);border-radius:4px}
+.refB h3.hot{background:rgba(240,180,41,.22);border-radius:5px;box-shadow:0 0 0 5px rgba(240,180,41,.10)}
+/* Reference -> diagram: headings and method rows are clickable (focus the node in the diagram) */
+.refB h3.ref-link,.refB dt.ref-link{cursor:pointer}
+.refB h3.ref-link:hover{text-decoration:underline;text-underline-offset:3px}
+.refB dt.ref-link:hover{text-decoration:underline;text-underline-offset:2px}
