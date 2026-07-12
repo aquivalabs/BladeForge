@@ -31,21 +31,23 @@ It ships in this marketplace and is enabled by default (`cerberus@bladeforge` in
 
 ## Plugins
 
-| Plugin | What it does | Skills | Install |
-|---|---|---|---|
-| cerberus | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer/client brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) | `cerberus@bladeforge` |
-| cicero | House voice — injects the always-on communication style and enforces it on replies. | — (hook only) | `cicero@bladeforge` |
-| diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) | `diagram@bladeforge` |
-| frontend-css | CSS conventions — rem units, SCSS modules. | [rem](#rem), [scss-modules](#scss-modules) | `frontend-css@bladeforge` |
-| frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) | `frontend-js@bladeforge` |
-| frontend-react | React conventions — placement, structure, hooks, primitives, layout, stories. | [component-placement](#component-placement), [component-structure](#component-structure), [feature-components](#feature-components), [hooks-registry](#hooks-registry), [layout-components](#layout-components), [skeleton-components](#skeleton-components), [storybook-stories](#storybook-stories), [ui-primitive-reuse](#ui-primitive-reuse) | `frontend-react@bladeforge` |
-| frontend | Frontend dev-harness — types + tests runner. | [fe-check](#fe-check) | `frontend@bladeforge` |
-| git | Git workflow — atomic commit splitting. | [commit](#commit) | `git@bladeforge` |
-| i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) | `i18n@bladeforge` |
-| jira | Jira — comment style. | [comment-style](#comment-style) | `jira@bladeforge` |
-| meta | Meta — design law, error handling, doc writing, skill authoring. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) | `meta@bladeforge` |
-| review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [setup](#setup) | `review@bladeforge` |
-| salesforce | Salesforce — Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) | `salesforce@bladeforge` |
+Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill links jump to [Skills](#skills).
+
+| Plugin | What it does | Skills |
+|---|---|---|
+| cerberus | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer/client brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
+| cicero | House voice — injects the always-on communication style and enforces it on replies. | — (hook only) |
+| diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) |
+| frontend-css | CSS conventions — rem units, SCSS modules. | [rem](#rem), [scss-modules](#scss-modules) |
+| frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
+| frontend-react | React conventions — placement, structure, hooks, primitives, layout, stories. | [component-placement](#component-placement), [component-structure](#component-structure), [feature-components](#feature-components), [hooks-registry](#hooks-registry), [layout-components](#layout-components), [skeleton-components](#skeleton-components), [storybook-stories](#storybook-stories), [ui-primitive-reuse](#ui-primitive-reuse) |
+| frontend | Frontend dev-harness — types + tests runner. | [fe-check](#fe-check) |
+| git | Git workflow — atomic commit splitting. | [commit](#commit) |
+| i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) |
+| jira | Jira — comment style. | [comment-style](#comment-style) |
+| meta | Meta — design law, error handling, doc writing, skill authoring. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [setup](#setup) |
+| salesforce | Salesforce — Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 
 ## Skills
 
