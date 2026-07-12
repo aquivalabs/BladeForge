@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Review framework per-project config",
+  "description": "Targets the generic review plugin to a specific repo. Place at .claude/review.config.json. Anything omitted falls back to DEFAULT_CONFIG in scripts/review/config.ts.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "persona": {
+      "type": "string",
+      "enum": ["twitch", "plain"],
+      "default": "twitch",
+      "description": "Voice/flavor toggle for reviewer agents that support it (e.g. scavenger). 'twitch' = themed Twitch plague-rat voice; 'plain' = neutral prose. Substance (verdict/findings) is identical either way."
+    },
+    "base": {
+      "type": "string",
+      "description": "Git base ref for the cumulative diff. Defaults to the branch upstream, else origin/main."
+    },
+    "secretAllowlist": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Extra markers (matched against the secret VALUE) that suppress secret-scan false positives."
+    },
+    "agents": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/agent" }
+    }
+  },
+  "definitions": {
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Reviewer id. The 5 built-ins are conventions, architecture, tests, docs, security; others are appended."
+        },
+        "enabled": { "type": "boolean" },
+        "threshold": { "type": "number", "minimum": 0, "maximum": 10 },
+        "zones": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Globs this agent restricts its review to."
+        },
+        "skills": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Skill ids the agent loads (encode the project's rules)."
+        },
+        "rules": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/rule" }
+        },
+        "pairedDocs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/docPair" }
+        },
+        "extensionSkill": {
+          "type": "string",
+          "description": "Optional prose skill for rules too complex for config fields (the escape hatch)."
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "pattern", "severity"],
+      "properties": {
+        "id": { "type": "string" },
+        "pattern": { "type": "string", "description": "Regex grepped across changed files in zones." },
+        "severity": { "type": "string", "enum": ["blocker", "major", "minor"] }
+      }
+    },
+    "docPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "doc", "severity"],
+      "properties": {
+        "code": { "type": "string", "description": "Glob; when a changed path matches it, the doc must also change." },
+        "doc": { "type": "string", "description": "Path/fragment of the required doc/artifact." },
+        "severity": { "type": "string", "enum": ["blocker", "major"] }
+      }
+    }
+  }
+}

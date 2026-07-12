@@ -1,0 +1,21 @@
+[
+  {"query": "review this 60-file diff before we merge — how should I approach it", "should_trigger": true},
+  {"query": "audit all 40 skills in the marketplace for stale descriptions", "should_trigger": true},
+  {"query": "before I run the workflow that evals 20+ skills, how do I avoid deep-processing every one", "should_trigger": true},
+  {"query": "migrate all 130 call sites from the old client API to the new one", "should_trigger": true},
+  {"query": "sweep the whole repo for dead code and unused exports", "should_trigger": true},
+  {"query": "we have 200 failing tests to get through — where do I start", "should_trigger": true},
+  {"query": "read through every doc in docs/ and tell me which are stale", "should_trigger": true},
+  {"query": "check all 50 Apex classes against the security review bar", "should_trigger": true},
+  {"query": "classify every TODO in the codebase and decide what's worth fixing", "should_trigger": true},
+
+  {"query": "fix the bug in this one function", "should_trigger": false},
+  {"query": "what model tier should I use for a mechanical search agent?", "should_trigger": false},
+  {"query": "review this one file I just changed", "should_trigger": false},
+  {"query": "spawn 5 agents to each write a different feature", "should_trigger": false},
+  {"query": "run the full test suite now", "should_trigger": false},
+  {"query": "rename this variable everywhere in this file", "should_trigger": false},
+  {"query": "write the spec for the new metric feature", "should_trigger": false},
+  {"query": "which of these two designs is better?", "should_trigger": false},
+  {"query": "deploy the widgetSettings package to the org", "should_trigger": false}
+]

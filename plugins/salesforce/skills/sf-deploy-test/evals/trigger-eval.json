@@ -1,0 +1,21 @@
+[
+  {"query": "deploy WidgetConfigResource.cls and WidgetConfigResourceTest.cls then run the tests", "should_trigger": true},
+  {"query": "push the widgetSettings apex classes to myOrg and run MetricBuilderTest", "should_trigger": true},
+  {"query": "deploy the whole widgetSettings package to the org and check test results", "should_trigger": true},
+  {"query": "I updated RangeResolver — deploy it and verify the tests still pass", "should_trigger": true},
+  {"query": "deploy metadata ApexClass:MetricBuilder and run MetricBuilderTest,RangeResolverTest", "should_trigger": true},
+  {"query": "the deploy failed with a source-tracking unsafe path error — how do I fix it", "should_trigger": true},
+  {"query": "deploy all classes under force-app/widgetSettings/default/classes/ to myOrg", "should_trigger": true},
+  {"query": "run the apex tests for WidgetConfigResourceTest after deploying the latest changes", "should_trigger": true},
+  {"query": "quick deploy-and-test cycle for OrderHandlerTest on the scratch org", "should_trigger": true},
+
+  {"query": "run anonymous apex on the org: System.debug(UserInfo.getUserId());", "should_trigger": false},
+  {"query": "quick soql: SELECT Id FROM Pkg__Widget_Config__c LIMIT 10", "should_trigger": false},
+  {"query": "write the test class for WidgetConfigResource", "should_trigger": false},
+  {"query": "how does Pkg__RangeHandler work", "should_trigger": false},
+  {"query": "build an lwc dashboard component", "should_trigger": false},
+  {"query": "retrieve the WidgetConfigResource metadata from myOrg", "should_trigger": false},
+  {"query": "check this diff for security issues", "should_trigger": false},
+  {"query": "run a tooling query to check code coverage for MetricBuilder", "should_trigger": false},
+  {"query": "list all connected orgs and their aliases", "should_trigger": false}
+]

@@ -1,0 +1,9 @@
+{
+  "secretAllowlist": ["EXAMPLE"],
+  "agents": [
+    {
+      "name": "docs",
+      "pairedDocs": [{ "code": "src/**", "doc": "README.md", "severity": "major" }]
+    }
+  ]
+}

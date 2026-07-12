@@ -1,0 +1,20 @@
+[
+  {"query": "I just finished building the WidgetCard component — do I need to write a story for it?", "should_trigger": true},
+  {"query": "add a storybook story for the new DataSummary component", "should_trigger": true},
+  {"query": "what states should the ItemList story cover — default, empty, error?", "should_trigger": true},
+  {"query": "created FilterPanel.tsx — should a stories/ folder go inside the component folder?", "should_trigger": true},
+  {"query": "how do I show the WidgetCardSkeleton alongside the real WidgetCard in the story?", "should_trigger": true},
+  {"query": "the AccountBadge story is using live domain mock data from our test factories — is that ok?", "should_trigger": true},
+  {"query": "where do I put mock data for a storybook story — inline in the file or separate?", "should_trigger": true},
+  {"query": "does this project want me to write stories for every component, or just some?", "should_trigger": true},
+  {"query": "write a story for the DateRangePicker covering its default, open, and disabled states", "should_trigger": true},
+  {"query": "create a WidgetCardSkeleton.tsx next to WidgetCard.tsx using the Skeleton primitive", "should_trigger": false},
+  {"query": "the component folder for DataRow is a bare .tsx file, move it into its own subfolder", "should_trigger": false},
+  {"query": "add rem-based spacing to the story container div", "should_trigger": false},
+  {"query": "the 'No orders' empty state is hardcoded — route through useTranslation", "should_trigger": false},
+  {"query": "check hooks-registry.md before writing a useItemFilters hook", "should_trigger": false},
+  {"query": "add SCSS variables for the card's shadow and border-radius tokens", "should_trigger": false},
+  {"query": "review the DataTable component for code style — arrow functions, braces, naming", "should_trigger": false},
+  {"query": "add a loading skeleton to the RecordList since it fetches its own data", "should_trigger": false},
+  {"query": "set up the review gate in this repo using the bootstrap script", "should_trigger": false}
+]

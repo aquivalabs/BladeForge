@@ -1,0 +1,21 @@
+[
+  {"query": "review this diff for security issues before I push", "should_trigger": true},
+  {"query": "my new BFF route /api/widget-config doesn't have auth middleware — is that a problem", "should_trigger": true},
+  {"query": "check this apex class for SOQL injection — it builds a query with user input", "should_trigger": true},
+  {"query": "I'm writing a REST resource that returns Pkg__Widget_Config__c — do I need stripInaccessible", "should_trigger": true},
+  {"query": "does this server route leak the salesforce access token to the client", "should_trigger": true},
+  {"query": "audit the pre-push diff for hardcoded secrets or api keys", "should_trigger": true},
+  {"query": "we're logging the sf session token in the BFF error handler — is that safe", "should_trigger": true},
+  {"query": "does the new order endpoint enforce WITH USER_MODE", "should_trigger": true},
+  {"query": "check if this Aura controller is vulnerable to stored XSS via unescaped output", "should_trigger": true},
+
+  {"query": "write apex tests for the WidgetConfigResource REST class", "should_trigger": false},
+  {"query": "deploy WidgetConfigResource.cls to myOrg org", "should_trigger": false},
+  {"query": "query Pkg__Widget_Config__c records for the current user", "should_trigger": false},
+  {"query": "run the apex tests for MetricBuilderTest", "should_trigger": false},
+  {"query": "build an lwc for displaying order records", "should_trigger": false},
+  {"query": "how does Pkg__RangeHandler work", "should_trigger": false},
+  {"query": "add a new React component for the metrics dashboard", "should_trigger": false},
+  {"query": "update the per-user UI config save logic in SharedPkg", "should_trigger": false},
+  {"query": "run anonymous apex to check the current user's permissions", "should_trigger": false}
+]

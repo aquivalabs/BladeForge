@@ -1,0 +1,17 @@
+{
+  "name": "meta",
+  "description": "Personal meta skills \u2014 authoring new skills.",
+  "version": "1.3.3",
+  "keywords": [
+    "meta",
+    "skill-authoring",
+    "ockham",
+    "wittgenstein",
+    "solid",
+    "error-handling",
+    "lean-writing"
+  ],
+  "author": {
+    "name": "Aquiva"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "name": "bladeforge",
+  "owner": {
+    "name": "aquivalabs"
+  },
+  "metadata": {
+    "description": "BladeForge — aquivalabs Claude Code skills marketplace.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "cicero",
+      "description": "CICERO — the house voice. A SessionStart hook injects the always-on communication style (bottom line first, concise, plain language, recommend-don't-survey, push back, honesty, stay in scope) + a start banner; a Stop hook enforces principles 12/2/3 (reply in the user's language, concise, gloss/translate jargon) by blocking an off-voice reply so it gets rewritten.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/cicero"
+    },
+    {
+      "name": "diagram",
+      "description": "Architecture / flow diagram authoring — turn a spec or raw code into a readable, clickable D2→ELK diagram (classes with methods, objects, permission sets, relations) as a browsable HTML page under docs/diagrams/<name>/. Node contents come from an Atlas entity list that parallel Sextant reviewer agents harden to zero edits.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/diagram"
+    },
+    {
+      "name": "frontend-css",
+      "description": "Personal frontend CSS skills — rem units, SCSS modules.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/frontend-css"
+    },
+    {
+      "name": "frontend-js",
+      "description": "Personal JavaScript/TypeScript style conventions.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/frontend-js"
+    },
+    {
+      "name": "frontend-react",
+      "description": "Frontend React skills — component structure, hooks registry, skeleton components, Storybook stories.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/frontend-react"
+    },
+    {
+      "name": "frontend",
+      "description": "Personal frontend dev-harness skills — types + tests runner.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/frontend"
+    },
+    {
+      "name": "git",
+      "description": "Personal Git workflow skills — atomic commit splitting.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/git"
+    },
+    {
+      "name": "i18n",
+      "description": "Personal i18n skills.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/i18n"
+    },
+    {
+      "name": "jira",
+      "description": "Personal jira skills.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/jira"
+    },
+    {
+      "name": "meta",
+      "description": "Personal meta skills — authoring new skills.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/meta"
+    },
+    {
+      "name": "review",
+      "description": "Stack-agnostic pre-push review framework — 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/review"
+    },
+    {
+      "name": "salesforce",
+      "description": "Personal Salesforce skills — Apex test authoring standard and salesforce-dx MCP usage.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/salesforce"
+    }
+  ]
+}

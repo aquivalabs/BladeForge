@@ -1,0 +1,20 @@
+[
+  {"query": "add styles for the new AccountsTable component — should I use a .css or .scss file?", "should_trigger": true},
+  {"query": "the button color is hardcoded to #003458 in button.scss, how do we fix that?", "should_trigger": true},
+  {"query": "create the SCSS for DataCard following BEM — block, elements, modifiers", "should_trigger": true},
+  {"query": "refactor EntryForm.css to use our variable system and convert to SCSS", "should_trigger": true},
+  {"query": "what's the right file structure for a new component's styles in this project?", "should_trigger": true},
+  {"query": "padding: 12px is scattered everywhere in sidebar.scss — consolidate to the spacing scale", "should_trigger": true},
+  {"query": "colors are hardcoded in three different component scss files, how do I centralize them?", "should_trigger": true},
+  {"query": "add a --highlighted modifier to .widget-card in widget-card.scss with a primary border", "should_trigger": true},
+  {"query": "we don't have a global variables file yet — how do I set up the SCSS token system?", "should_trigger": true},
+  {"query": "add margin-top: 1.5rem to the card header — is that the right unit?", "should_trigger": false},
+  {"query": "the h2 in DashboardPage.tsx uses 20px font-size, convert it to rem", "should_trigger": false},
+  {"query": "create a new React component folder for UserBadge with its tsx, index.ts, and styles", "should_trigger": true},
+  {"query": "should I name the component folder UserBadge or user-badge?", "should_trigger": false},
+  {"query": "what BEM class name goes on the inner icon of the NavItem component?", "should_trigger": false},
+  {"query": "add a Storybook story for the WidgetCard component", "should_trigger": false},
+  {"query": "import alias for styles — should I use @/styles or ../../../styles?", "should_trigger": false},
+  {"query": "add skeleton loading state to the SummaryPanel component", "should_trigger": false},
+  {"query": "the LWC component aura:style isn't picking up my CSS custom properties", "should_trigger": false}
+]

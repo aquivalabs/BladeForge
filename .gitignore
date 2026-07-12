@@ -1,0 +1,12 @@
+# OS / build / editor junk
+.DS_Store
+node_modules/
+__pycache__/
+*.pyc
+
+# skill-creator eval scratch (measured locally, not skill content)
+*-workspace/
+
+# local-only sync helpers (never published)
+sync-skills.sh
+sync-local.sh

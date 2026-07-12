@@ -1,0 +1,14 @@
+{
+  "name": "i18n",
+  "description": "Personal i18n skills.",
+  "version": "1.0.0",
+  "keywords": [
+    "i18n",
+    "localization",
+    "translations",
+    "ui-strings"
+  ],
+  "author": {
+    "name": "Aquiva"
+  }
+}

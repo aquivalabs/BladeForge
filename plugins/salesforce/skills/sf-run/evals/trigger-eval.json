@@ -1,0 +1,21 @@
+[
+  {"query": "run anonymous apex: System.debug(UserInfo.getOrganizationId());", "should_trigger": true},
+  {"query": "quick soql check — how many Pkg__Widget_Config__c records exist for the current user", "should_trigger": true},
+  {"query": "execute anon apex on myOrg to reset the widget config for my test user", "should_trigger": true},
+  {"query": "I want to reproduce the org-side null pointer in MetricBuilder — run it anon", "should_trigger": true},
+  {"query": "soql: SELECT Id, Pkg__Config_Kind__c FROM Pkg__Widget_Config__c LIMIT 5", "should_trigger": true},
+  {"query": "run this apex snippet on the org without deploying a class", "should_trigger": true},
+  {"query": "check if Pkg__Widget_Card__c has any rows where Item_Key__c is null — quick soql", "should_trigger": true},
+  {"query": "execute apex on the scratch org to see the debug output from RangeResolver", "should_trigger": true},
+  {"query": "run a soql query against myOrg tooling API to check code coverage", "should_trigger": true},
+
+  {"query": "deploy WidgetConfigResource.cls and run WidgetConfigResourceTest", "should_trigger": false},
+  {"query": "push the widgetSettings metadata package to myOrg", "should_trigger": false},
+  {"query": "run the full apex test suite for the widgetSettings package", "should_trigger": false},
+  {"query": "write a test class for MetricBuilder", "should_trigger": false},
+  {"query": "what fields does Pkg__Data_View__c have", "should_trigger": false},
+  {"query": "build an lwc that displays widget cards", "should_trigger": false},
+  {"query": "retrieve ApexClass:MetricBuilder from the org", "should_trigger": false},
+  {"query": "check this apex REST endpoint for SOQL injection vulnerabilities", "should_trigger": false},
+  {"query": "update the per-user dashboard config in SharedPkg and deploy", "should_trigger": false}
+]

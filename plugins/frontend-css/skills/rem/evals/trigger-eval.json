@@ -1,0 +1,20 @@
+[
+  {"query": "the SidebarNav.tsx padding is 14px hardcoded, make it consistent with our spacing scale", "should_trigger": true},
+  {"query": "add margin-top: 24px to the card header in card-header.scss", "should_trigger": true},
+  {"query": "I see font-size: 16px in DashboardPanel.scss, should that be in rem?", "should_trigger": true},
+  {"query": "convert all the px values in modal.scss to the right units for accessibility", "should_trigger": true},
+  {"query": "the gap between widget cards is gap: 12px — change it to scale with browser zoom", "should_trigger": true},
+  {"query": "tailwind class p-[10px] on Button.tsx — is that correct or should it be something else?", "should_trigger": true},
+  {"query": "our h2 font-size is hardcoded to 20px in typography.scss, fix that", "should_trigger": true},
+  {"query": "review the spacing in data-table.scss for any absolute pixel values that break zoom accessibility", "should_trigger": true},
+  {"query": "width: 320px on the sidebar feels wrong — what unit should we use so it respects the root font size?", "should_trigger": true},
+  {"query": "add a 1px border-bottom to the table header row in DataTable.scss", "should_trigger": false},
+  {"query": "set box-shadow: 0 2px 8px rgba(0,0,0,0.1) on the dropdown card", "should_trigger": false},
+  {"query": "the svg icon in NavIcon.tsx has width='24' height='24' — fix the svg attributes", "should_trigger": false},
+  {"query": "switch the component stylesheet from .css to .scss and add the variables import", "should_trigger": false},
+  {"query": "add $color-primary to the variables file and use it in the button styles", "should_trigger": false},
+  {"query": "create a new SCSS module for the EntryForm component following BEM", "should_trigger": false},
+  {"query": "the button label says 'Submit' in JSX, route it through useTranslation", "should_trigger": false},
+  {"query": "set letter-spacing: 0.5px on the badge text — is that acceptable?", "should_trigger": false},
+  {"query": "stroke-width on the chart SVG paths should stay in px, right?", "should_trigger": false}
+]

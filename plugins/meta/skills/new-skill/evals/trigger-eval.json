@@ -1,0 +1,20 @@
+[
+  {"query": "i want to create a skill for how we handle i18n strings in this project", "should_trigger": true},
+  {"query": "adding a new skill to the meta plugin — where does the SKILL.md go and what should be in it?", "should_trigger": true},
+  {"query": "what's the right folder name and structure for a new salesforce skill about apex batches?", "should_trigger": true},
+  {"query": "creating a new domain plugin for database stuff — do i need a plugin.json?", "should_trigger": true},
+  {"query": "write a skill that teaches claude to always use the bff proxy for sf calls", "should_trigger": true},
+  {"query": "the new frontend-css:rem skill needs a SKILL.md — show me what it should look like", "should_trigger": true},
+  {"query": "adding embed-test as a project-local skill — how is that different from a marketplace skill?", "should_trigger": true},
+  {"query": "i need a skill that fires before any apex test is authored — help me scaffold it", "should_trigger": true},
+  {"query": "what goes in the description: frontmatter for a new skill?", "should_trigger": true},
+  {"query": "improve this skill's description so it triggers more reliably — run evals on it", "should_trigger": false},
+  {"query": "the ockham skill is triggering on the wrong things — optimize it", "should_trigger": false},
+  {"query": "the lean-writing skill needs better examples in references/ — add some", "should_trigger": false},
+  {"query": "how do i structure a new React component in this project?", "should_trigger": false},
+  {"query": "set up the review gate in <ui-repo>", "should_trigger": false},
+  {"query": "should the WidgetCard use SRP — it's doing fetch and render", "should_trigger": false},
+  {"query": "audit docs/superpowers/specs/widget-engine.md for clarity", "should_trigger": false},
+  {"query": "run the pre-push review before i merge this branch", "should_trigger": false},
+  {"query": "what's the naming convention for scss module files in this repo?", "should_trigger": false}
+]

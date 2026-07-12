@@ -1,0 +1,20 @@
+[
+  { "query": "commit this", "should_trigger": true },
+  { "query": "ok let's commit", "should_trigger": true },
+  { "query": "can you make a commit for these changes", "should_trigger": true },
+  { "query": "commmit my chnages plz", "should_trigger": true },
+  { "query": "i'm done with the widget card feature, save it to git", "should_trigger": true },
+  { "query": "commit and push the sidebar nav refactor", "should_trigger": true },
+  { "query": "wrap this up and get it into version control", "should_trigger": true },
+  { "query": "go ahead and commit the changes to ApiClient.ts and the new hook", "should_trigger": true },
+  { "query": "alright ship these edits into the repo history", "should_trigger": true },
+  { "query": "explain what git rebase does", "should_trigger": false },
+  { "query": "why did my last commit fail CI", "should_trigger": false },
+  { "query": "revert the last commit, it broke the build", "should_trigger": false },
+  { "query": "what's in my git stash right now", "should_trigger": false },
+  { "query": "write me a commit-message linter script", "should_trigger": false },
+  { "query": "set up a pre-commit hook that runs eslint", "should_trigger": false },
+  { "query": "show me the git log for the last week", "should_trigger": false },
+  { "query": "help me resolve this merge conflict in package.json", "should_trigger": false },
+  { "query": "configure my git user.email for this repo", "should_trigger": false }
+]

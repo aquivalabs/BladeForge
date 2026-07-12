@@ -1,0 +1,21 @@
+[
+  {"query": "add a 'Save changes' button label to the widget config panel in React", "should_trigger": true},
+  {"query": "the empty state on the dashboard says 'No data found' — that string is hardcoded, need to move it to i18n", "should_trigger": true},
+  {"query": "add a toast that says 'Record saved successfully' after the user submits the form", "should_trigger": true},
+  {"query": "placeholder text for the account search input is hardcoded in english, fix it", "should_trigger": true},
+  {"query": "TICK-000 — the widget card settings modal needs a heading 'Configure Widget Card' wired through react-i18next", "should_trigger": true},
+  {"query": "write the validation message for a required field in the record entry form", "should_trigger": true},
+  {"query": "need a tooltip label on the usage metric card that says 'Rolling 30-day active users'", "should_trigger": true},
+  {"query": "add error message copy for when the BFF returns a 403 on the dashboard load", "should_trigger": true},
+  {"query": "the sidebar nav item for 'Entries' needs a localization key, add it to the translation catalog", "should_trigger": true},
+
+  {"query": "log an error to the console when the Salesforce token refresh fails", "should_trigger": false},
+  {"query": "add an error code for the missing Pkg__Config_Item__c field and register it in ERROR_CODES.md", "should_trigger": false},
+  {"query": "set the enum key for the metric type to ACTIVE in the TypeScript union", "should_trigger": false},
+  {"query": "write a test fixture with a hardcoded account name 'Acme Corp' for the records unit test", "should_trigger": false},
+  {"query": "the backend route logs 'request received' on every BFF call, is that fine?", "should_trigger": false},
+  {"query": "add a config key 'widget.refreshIntervalMs' to the app settings object", "should_trigger": false},
+  {"query": "how should i handle the google.rpc.Status error envelope when the Apex service throws?", "should_trigger": false},
+  {"query": "rename the internal enum value OLD_ENTRY to NEW_ENTRY across the codebase", "should_trigger": false},
+  {"query": "add a server-side log line that prints the Salesforce org id on startup", "should_trigger": false}
+]

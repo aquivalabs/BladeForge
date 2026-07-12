@@ -1,0 +1,67 @@
+{
+  "queryset_hash": "125cdf99bcc8afea8582f467338b47d6c31dd37b762adca699f695c76969bd5d",
+  "best_score": "6/6",
+  "skill": "diagram",
+  "eval_type": "description-triggering",
+  "date": "2026-07-11",
+  "method": "manual claude -p triggering check: each query run as a real nested `claude -p` with the skill available; killed early after the first tool decisions; a run counts as TRIGGERED iff the model consults the diagram skill (Skill{diagram} or Read of skills/diagram/SKILL.md) among its first tool uses.",
+  "note_on_automated_loop": "The skill-creator run_loop/run_eval harness scored recall~0 on this skill and is INVALID here: it stubs the skill as a transient slash-command (-skill-<hash>) and only counts a trigger if the model's FIRST tool call is Skill/Read of that hash. Slash-commands do not auto-trigger like skills, and diagram tasks often open with Bash (check d2) or reading the spec, so genuine triggers read as misses. Manual verification is the source of truth.",
+  "eval_set": "evals/trigger-eval.json (23 queries: 13 should-trigger incl. no-spec, 10 should-not near-misses)",
+  "spot_checked": 6,
+  "passed": 6,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "results": [
+    {
+      "query": "draw the architecture of feature TICK-000 ... clean and readable browsable page",
+      "should_trigger": true,
+      "triggered": true,
+      "first_tools": [
+        "Skill:diagram"
+      ]
+    },
+    {
+      "query": "no spec, just the code — draw how these three .cls files interact",
+      "should_trigger": true,
+      "triggered": true,
+      "first_tools": [
+        "Skill:diagram"
+      ]
+    },
+    {
+      "query": "the record-flow diagram is hard to read, fix the layout",
+      "should_trigger": true,
+      "triggered": true,
+      "first_tools": [
+        "Skill:diagram"
+      ]
+    },
+    {
+      "query": "visualize the object model — object, fields, permset grants — as a readable page",
+      "should_trigger": true,
+      "triggered": true,
+      "first_tools": [
+        "Skill:diagram"
+      ]
+    },
+    {
+      "query": "explain in words how the sealed-base pattern works — no picture needed",
+      "should_trigger": false,
+      "triggered": false,
+      "first_tools": [
+        "Bash",
+        "Read",
+        "Read"
+      ]
+    },
+    {
+      "query": "plot quarterly sales from this csv as a bar chart with axis labels",
+      "should_trigger": false,
+      "triggered": false,
+      "first_tools": [
+        "Bash",
+        "Bash"
+      ]
+    }
+  ]
+}

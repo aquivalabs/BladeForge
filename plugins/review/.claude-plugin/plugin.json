@@ -1,0 +1,15 @@
+{
+  "name": "review",
+  "description": "Stack-agnostic pre-push review framework \u2014 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
+  "version": "1.5.3",
+  "keywords": [
+    "review",
+    "pre-push",
+    "code-review",
+    "agents",
+    "quality-gate"
+  ],
+  "author": {
+    "name": "Aquiva"
+  }
+}

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Runs the deterministic eval-gate before every push. stdin (the pushed refs)
+# flows through to the gate untouched.
+set -e
+ROOT="$(git rev-parse --show-toplevel)"
+bash "$ROOT/scripts/eval-gate.sh"

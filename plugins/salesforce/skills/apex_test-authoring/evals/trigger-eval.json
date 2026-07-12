@@ -1,0 +1,21 @@
+[
+  {"query": "write a test class for MetricBuilder", "should_trigger": true},
+  {"query": "I just created WidgetConfigResource.cls — add the matching test file", "should_trigger": true},
+  {"query": "our apex tests for Pkg__Widget_Config__c are still using System.assertEquals, fix them to use Assert.*", "should_trigger": true},
+  {"query": "add @TestSetup data factory for Pkg__Order__c in OrderHandlerTest", "should_trigger": true},
+  {"query": "cover the negative path in RangeHandlerTest — what happens when the range is null", "should_trigger": true},
+  {"query": "MetricBuilderTest only has 40% coverage, write adversarial tests for the bad-input paths", "should_trigger": true},
+  {"query": "i need a test for the REST resource WidgetCardConfigResource — mock the RestRequest", "should_trigger": true},
+  {"query": "update RecordHandlerTest after I added the new validateItems method", "should_trigger": true},
+  {"query": "our test inserts a hardcoded id '001000000000001AAA', fix that", "should_trigger": true},
+
+  {"query": "deploy WidgetConfigResource.cls to the myOrg org", "should_trigger": false},
+  {"query": "run the apex tests for MetricBuilderTest on the org", "should_trigger": false},
+  {"query": "how does Pkg__RangeHandler work under the hood", "should_trigger": false},
+  {"query": "write a new LWC component that calls the WidgetConfigResource apex class", "should_trigger": false},
+  {"query": "run a SOQL query to check which Pkg__Widget_Config__c records exist for this user", "should_trigger": false},
+  {"query": "add a BFF route for /api/widget-config", "should_trigger": false},
+  {"query": "check the security of the WidgetConfigResource REST endpoint for SOQL injection", "should_trigger": false},
+  {"query": "retrieve the ApexClass metadata for MetricBuilder from the org", "should_trigger": false},
+  {"query": "document the data model for Widget_Config__c and Widget_Card__c", "should_trigger": false}
+]

@@ -1,0 +1,20 @@
+[
+  {"query": "create a new WidgetCard component — what folder structure and files do I need?", "should_trigger": true},
+  {"query": "adding a sub-component SidebarNavItem inside the sidebar folder — where exactly does it go?", "should_trigger": true},
+  {"query": "the DataRow.tsx file is sitting flat next to DataTable.tsx instead of in its own folder — fix the layout", "should_trigger": true},
+  {"query": "review the structure of the new EntryForm component before I commit", "should_trigger": true},
+  {"query": "what files should a new SummaryPanel component have — tsx, scss, index?", "should_trigger": true},
+  {"query": "the button uses onMouseEnter to toggle a highlight class — rewrite that as CSS hover", "should_trigger": true},
+  {"query": "the 'Submit' label in EntryForm.tsx is hardcoded — route it through i18n", "should_trigger": true},
+  {"query": "add barrel exports for the new FilterPanel sub-components in index.ts", "should_trigger": true},
+  {"query": "i'm building a DateRangePicker, how should I name the BEM classes for its input elements?", "should_trigger": true},
+  {"query": "add margin-top: 24px to .widget-card in widget-card.scss", "should_trigger": false},
+  {"query": "convert all the px values in sidebar.scss to rem", "should_trigger": false},
+  {"query": "add the $color-danger variable to variables/_colors.scss", "should_trigger": false},
+  {"query": "check hooks-registry.md before writing a new useSelectedAccount hook", "should_trigger": false},
+  {"query": "does a Skeleton component exist for SummaryPanel, or do I need to create one?", "should_trigger": false},
+  {"query": "add a Storybook story for the WidgetCard component I just created", "should_trigger": false},
+  {"query": "the import path is ../../../components/primitives/Button — add an alias for that", "should_trigger": false},
+  {"query": "write an Apex REST controller for the new /api/metrics endpoint", "should_trigger": false},
+  {"query": "add a loading skeleton to the RecordList component", "should_trigger": false}
+]

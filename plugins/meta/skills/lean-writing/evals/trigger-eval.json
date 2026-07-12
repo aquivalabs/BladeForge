@@ -1,0 +1,20 @@
+[
+  {"query": "write up the design spec for the new metric engine", "should_trigger": true},
+  {"query": "i need to present the brainstorming results for the list/grid layout feature", "should_trigger": true},
+  {"query": "write a design doc for how we'll store per-user UI config in Widget_Config__c", "should_trigger": true},
+  {"query": "summarize the exploration we did on the error-handling approach — put it in docs/superpowers/specs/", "should_trigger": true},
+  {"query": "draft the spec for TICK-000 daily report batch — should go under docs/superpowers/plans/", "should_trigger": true},
+  {"query": "write the brainstorm summary for the transport-layer refactor, keep it concise", "should_trigger": true},
+  {"query": "update the design doc for the widget card config — it's gotten too wordy", "should_trigger": true},
+  {"query": "putting together the spec for the new apex-test factory pattern, needs to be tight and skimmable", "should_trigger": true},
+  {"query": "write up the options we considered for model routing before we decided — going into the decision log", "should_trigger": true},
+  {"query": "hey what does the Pkg__Widget_Config__c object look like", "should_trigger": false},
+  {"query": "review this spec under docs/superpowers/specs/widget-engine.md for clarity and bloat — cut what's not earning its place", "should_trigger": false},
+  {"query": "this design doc is a wall of text, audit it and fix it", "should_trigger": false},
+  {"query": "check my commit message, is it clear enough", "should_trigger": false},
+  {"query": "I'm about to add a new helper util for date formatting — should I create a new file?", "should_trigger": false},
+  {"query": "what's the SOLID principle for this service class that does both fetching and parsing?", "should_trigger": false},
+  {"query": "write a jira comment summarizing the deploy status", "should_trigger": false},
+  {"query": "add a ui-strings entry for the new toast message", "should_trigger": false},
+  {"query": "explain how the data-sync message flow works", "should_trigger": false}
+]

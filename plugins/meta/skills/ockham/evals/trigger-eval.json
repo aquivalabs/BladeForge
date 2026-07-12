@@ -1,0 +1,20 @@
+[
+  {"query": "i'm about to add a new utils2.ts file for some date helpers", "should_trigger": true},
+  {"query": "thinking of creating a new ErrorMapper class to sit between the BFF and the client", "should_trigger": true},
+  {"query": "let me add a new top-level /helpers folder for shared stuff", "should_trigger": true},
+  {"query": "going to create a new useWidgetCardData hook — we already have useWidgetMetrics but it's a bit different", "should_trigger": true},
+  {"query": "adding a new AbstractBaseTransport wrapper around HttpClient — just in case we need it later", "should_trigger": true},
+  {"query": "i want to create a new DateFormatterService class, it will just call toLocaleDateString", "should_trigger": true},
+  {"query": "spinning up a new config key for list vs grid mode — might be useful in the future", "should_trigger": true},
+  {"query": "creating a new EmbedErrorHandler.ts because the BFF one doesn't handle embed errors — well actually the BFF one does", "should_trigger": true},
+  {"query": "adding a new prop variant=\"compact\" to the WidgetCard component for a future dashboard view", "should_trigger": true},
+  {"query": "this function does two things — split it per SRP or is that overkill?", "should_trigger": false},
+  {"query": "the widget-engine spec is bloated, audit it for clarity", "should_trigger": false},
+  {"query": "how should i name a new skill i'm adding to the meta plugin", "should_trigger": false},
+  {"query": "write the brainstorm summary for the transport refactor", "should_trigger": false},
+  {"query": "review this diff for security issues", "should_trigger": false},
+  {"query": "i have 3 call sites all doing the same date formatting — should i hoist that into a shared util?", "should_trigger": false},
+  {"query": "what's the right model to use when spawning a fan-out agent?", "should_trigger": false},
+  {"query": "add a storybook story for the new DashboardCard component", "should_trigger": false},
+  {"query": "my existing useApiClient hook is getting large — refactor it or leave it?", "should_trigger": false}
+]

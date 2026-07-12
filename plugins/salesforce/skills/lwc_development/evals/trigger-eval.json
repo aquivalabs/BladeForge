@@ -1,0 +1,21 @@
+[
+  {"query": "create an lwc component that displays Pkg__Widget_Card__c data", "should_trigger": true},
+  {"query": "my lwc is querying document.querySelectorAll('.card') — is that ok", "should_trigger": true},
+  {"query": "add a CSS custom property for the card background color in the widget-card lwc", "should_trigger": true},
+  {"query": "wire up a new @wire call to the WidgetConfigResource apex class in the dashboard lwc", "should_trigger": true},
+  {"query": "I'm editing the .html template for the itemList component — add a conditional render", "should_trigger": true},
+  {"query": "write the js-meta.xml for a new widgetDashboard lwc with isExposed true", "should_trigger": true},
+  {"query": "the metricBanner component uses scss — should I convert it to plain css", "should_trigger": true},
+  {"query": "update the RangePicker lwc to emit a custom event when the range changes", "should_trigger": true},
+  {"query": "add a public @api property to the itemCard component for the record id", "should_trigger": true},
+
+  {"query": "write apex tests for WidgetConfigResource.cls", "should_trigger": false},
+  {"query": "deploy the widgetDashboard lwc to myOrg org", "should_trigger": false},
+  {"query": "run SOQL to find all active Pkg__Widget_Config__c records", "should_trigger": false},
+  {"query": "add a new React component for the widget card in <ui-repo>", "should_trigger": false},
+  {"query": "check this apex REST endpoint for SOQL injection", "should_trigger": false},
+  {"query": "how does Pkg manage the order sync flow at the apex level", "should_trigger": false},
+  {"query": "add a new BFF route for /api/lwc-config", "should_trigger": false},
+  {"query": "what fields does Pkg__Order__c have", "should_trigger": false},
+  {"query": "update the ui config per-user dashboard settings in SharedPkg", "should_trigger": false}
+]

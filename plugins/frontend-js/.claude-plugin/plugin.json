@@ -1,0 +1,15 @@
+{
+  "name": "frontend-js",
+  "description": "Personal JavaScript/TypeScript style conventions.",
+  "version": "1.1.0",
+  "keywords": [
+    "javascript",
+    "typescript",
+    "code-style",
+    "conventions",
+    "lint"
+  ],
+  "author": {
+    "name": "Aquiva"
+  }
+}

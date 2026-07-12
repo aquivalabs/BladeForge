@@ -1,0 +1,20 @@
+[
+  {"query": "designing the MetricBuilder class — should it handle both fetching and computing the metric values?", "should_trigger": true},
+  {"query": "this BFF route handler fetches data, formats it, and sends the email — is that a problem?", "should_trigger": true},
+  {"query": "i keep adding cases to the switch in ApiClient.dispatch — how should i structure new transport methods?", "should_trigger": true},
+  {"query": "the PlatformClient hook does 6 things, reviewing it before i add more", "should_trigger": true},
+  {"query": "structuring the error envelope layer — should the BFF import the Apex error codes directly?", "should_trigger": true},
+  {"query": "about to write the RangeResolver — thinking through how it should depend on RangeHandler", "should_trigger": true},
+  {"query": "reviewing this apex class before committing — it handles auth, validation, and db writes in one method", "should_trigger": true},
+  {"query": "the useWidgetConfig hook is doing fetching, caching, and transform — should i split it up?", "should_trigger": true},
+  {"query": "designing a plugin interface for custom metric providers so we can add more without changing the compiler", "should_trigger": true},
+  {"query": "i'm about to add a new apexErrorCodes.ts file — do we need it?", "should_trigger": false},
+  {"query": "this spec for the metric engine is too long, tighten it up", "should_trigger": false},
+  {"query": "how do i add a new skill to the meta plugin?", "should_trigger": false},
+  {"query": "this plan doc is unclear — a manager wouldn't follow section 3", "should_trigger": false},
+  {"query": "what model tier should i use for a mechanical search subagent?", "should_trigger": false},
+  {"query": "adding a new scss module for the dashboard card — what are the naming conventions?", "should_trigger": false},
+  {"query": "should i create a new DateUtils module or just inline the logic?", "should_trigger": false},
+  {"query": "write a jira comment about the deploy blocker", "should_trigger": false},
+  {"query": "run the apex tests for MetricBuilderTest", "should_trigger": false}
+]

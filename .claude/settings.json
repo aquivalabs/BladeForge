@@ -1,0 +1,24 @@
+{
+  "extraKnownMarketplaces": {
+    "bladeforge": {
+      "source": {
+        "source": "github",
+        "repo": "aquivalabs/BladeForge"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "cicero@bladeforge": true,
+    "diagram@bladeforge": true,
+    "frontend@bladeforge": true,
+    "frontend-css@bladeforge": true,
+    "frontend-js@bladeforge": true,
+    "frontend-react@bladeforge": true,
+    "git@bladeforge": true,
+    "i18n@bladeforge": true,
+    "jira@bladeforge": true,
+    "meta@bladeforge": true,
+    "review@bladeforge": true,
+    "salesforce@bladeforge": true
+  }
+}

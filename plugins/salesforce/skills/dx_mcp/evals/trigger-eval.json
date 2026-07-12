@@ -1,0 +1,21 @@
+[
+  {"query": "run the apex tests for MetricBuilderTest on myOrg", "should_trigger": true},
+  {"query": "deploy WidgetConfigResource.cls and WidgetConfigResourceTest.cls to the org", "should_trigger": true},
+  {"query": "query the org: SELECT Id, Name FROM Pkg__Widget_Config__c LIMIT 20", "should_trigger": true},
+  {"query": "retrieve the ApexClass:MetricBuilder metadata from myOrg", "should_trigger": true},
+  {"query": "which org alias should I use for this project?", "should_trigger": true},
+  {"query": "the deploy job is still running, resume it with the test run id", "should_trigger": true},
+  {"query": "list all my connected orgs and their aliases", "should_trigger": true},
+  {"query": "run a tooling API query to check code coverage for MetricBuilder", "should_trigger": true},
+  {"query": "push the widgetSettings metadata to the myOrg scratch org", "should_trigger": true},
+
+  {"query": "what fields does Pkg__Data_View__c have", "should_trigger": false},
+  {"query": "how does Pkg__RangeHandler work under the hood", "should_trigger": false},
+  {"query": "run anonymous apex: System.debug('hello');", "should_trigger": false},
+  {"query": "run a quick soql check — how many order records are synced", "should_trigger": false},
+  {"query": "write test class for WidgetConfigResource", "should_trigger": false},
+  {"query": "build a new lwc that shows widget cards", "should_trigger": false},
+  {"query": "check this diff for soql injection vulnerabilities", "should_trigger": false},
+  {"query": "deploy these classes and run the tests — use sf-deploy-test", "should_trigger": false},
+  {"query": "describe Pkg__Widget_Card__c object fields and relationships", "should_trigger": false}
+]

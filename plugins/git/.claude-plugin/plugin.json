@@ -1,0 +1,14 @@
+{
+  "name": "git",
+  "description": "Personal Git workflow skills — atomic commit splitting.",
+  "version": "1.1.0",
+  "keywords": [
+    "git",
+    "commit",
+    "workflow",
+    "atomic-commits"
+  ],
+  "author": {
+    "name": "Aquiva"
+  }
+}
