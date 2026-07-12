@@ -10,6 +10,25 @@ company-approved skills, synced from the shared source and reviewed before relea
 /plugin install review@bladeforge
 ```
 
+## Guard the gate — [`cerberus`](#leak-check)
+
+**Keep this on — it is what stops a client's private information from leaking out of the marketplace.**
+These skills are authored right next to private client codebases, and anything that leaves the fence — a
+public mirror, a shared repo, a pasted example — can quietly carry a fingerprint of that work: a client's
+brand, real object or class names, ticket keys, even a secret or a work email baked into commit
+*authorship*. Scrubbing it after the fact is slow and nerve-wracking; catching it at edit time is not.
+`cerberus` is that nudge — the moment you touch a skill, it checks the change and flags anything that
+reads as real client or work data before it ships.
+
+**Why it's an agent, not a regex:** a denylist scanner that *lists the private names to catch* is itself
+a leak — it writes down the very thing you are hiding. So `cerberus` keeps **zero denylist by design** —
+a path-only **PostToolUse hook** fires on any edit under `skills/`, `references/`, or `evals/` (or to a
+`SKILL.md` / `plugin.json` / `marketplace.json`); it reads the file path, never the content, so it names
+nothing — and the **[`leak-check`](#leak-check) skill** reads the change in context and rewrites anything
+client-specific onto one neutral fictional demo before it ships.
+
+It ships in this marketplace and is enabled by default (`cerberus@bladeforge` in `.claude/settings.json`).
+
 ## Plugins
 
 | Plugin | What it does | Skills | Install |
