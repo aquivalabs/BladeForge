@@ -1,0 +1,16 @@
+{
+  "name": "cerberus",
+  "description": "CERBERUS — the leak guard at the gate for a PUBLIC skills marketplace. A PostToolUse hook fires on every skill / reference / eval / manifest edit and reminds you to run the cerberus:leak-check skill; that skill is an AGENT judgment pass that reviews the change for anything pointing to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an employer brand, or the aggregate 'one specific company's product' flavor) and rewrites it to a neutral fictional demo before it ships. No denylist by design — a list of the real names to catch would itself be the leak; the intelligence lives in the agent, not a regex.",
+  "version": "1.0.0",
+  "keywords": [
+    "security",
+    "leak-guard",
+    "secret-scan",
+    "fingerprint",
+    "hook",
+    "pre-commit"
+  ],
+  "author": {
+    "name": "Aquiva"
+  }
+}

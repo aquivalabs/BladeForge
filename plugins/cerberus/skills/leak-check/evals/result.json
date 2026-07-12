@@ -1,0 +1,13 @@
+{
+  "skill": "cerberus:leak-check",
+  "measured_at": "2026-07-12T15:58:13",
+  "model": "sonnet",
+  "runs_per_query": 1,
+  "holdout": 0,
+  "best_score": 10.0,
+  "best_train_score": 10.0,
+  "exit_reason": "measured (score-description, runs=1)",
+  "description_hash": "f6b2c5e27f571825a8400dc7dcf3a24273b7fabfe100290f13ec3111ad354fce",
+  "queryset_hash": "c51e37d7a028ff42fb794cc56e3d94b7249e5f10cd8d3b968a6c154ca99c5de8",
+  "applied": false
+}
