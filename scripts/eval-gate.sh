@@ -103,14 +103,15 @@ fi
 if [ -n "$blocks" ]; then
   echo ""
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "  ✖  PUSH BLOCKED by eval-gate"
+  echo "  ✖  eval-gate FAILED"
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "  These touched skills have no valid trigger eval:"
+  echo "  These skills have no valid trigger eval:"
   printf '%s\n' "$blocks"
   echo ""
-  echo "  → Create evals/trigger-eval.json: a JSON array of >= 6 cases"
-  echo "    {\"query\": \"...\", \"should_trigger\": true|false}, >=1 positive and >=1 negative."
-  echo "  Note: 'git push --no-verify' skips this local hook."
+  echo "  HOW TO FIX: add a trigger eval next to the skill, then commit + push again:"
+  echo "    <skill-dir>/evals/trigger-eval.json"
+  echo "    — a JSON array of >= 6 cases: {\"query\": \"...\", \"should_trigger\": true|false}"
+  echo "    — at least 1 positive (true) and 1 negative (false)."
   echo ""
   exit 1
 fi

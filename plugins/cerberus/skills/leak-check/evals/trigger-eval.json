@@ -1,0 +1,12 @@
+[
+  {"query": "i just wrote a new skill's SKILL.md — check it for leaks before i commit it to the public marketplace", "should_trigger": true},
+  {"query": "review this eval fixture, does it leak any real class or object names from our codebase before i push?", "should_trigger": true},
+  {"query": "i renamed some example objects in the salesforce skill references — make sure nothing points to a real work project", "should_trigger": true},
+  {"query": "about to publish this skill — does any example look copied from real work instead of a fictional demo?", "should_trigger": true},
+  {"query": "the cerberus hook flagged my skill edit — run the leak check on it", "should_trigger": true},
+  {"query": "scrub this plugin's examples down to a neutral demo product before it ships publicly", "should_trigger": true},
+  {"query": "fix the failing unit test in the checkout service", "should_trigger": false},
+  {"query": "rename this local variable across the current file", "should_trigger": false},
+  {"query": "write a conventional-commit message for these staged changes", "should_trigger": false},
+  {"query": "add a loading skeleton to the DataTable component", "should_trigger": false}
+]

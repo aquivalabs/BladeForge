@@ -14,6 +14,7 @@ company-approved skills, synced from the shared source and reviewed before relea
 
 | Plugin | What it does | Skills | Install |
 |---|---|---|---|
+| cerberus | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer/client brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) | `cerberus@bladeforge` |
 | cicero | House voice — injects the always-on communication style and enforces it on replies. | — (hook only) | `cicero@bladeforge` |
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) | `diagram@bladeforge` |
 | frontend-css | CSS conventions — rem units, SCSS modules. | [rem](#rem), [scss-modules](#scss-modules) | `frontend-css@bladeforge` |
@@ -30,6 +31,13 @@ company-approved skills, synced from the shared source and reviewed before relea
 ## Skills
 
 Grouped by plugin. Each group links back to [Plugins](#plugins).
+
+### cerberus &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="leak-check"></a>**leak-check** — the leak guard's agent pass. Before a new or edited skill,
+  reference, or eval fixture ships to this marketplace, review the change for anything that points to a
+  real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an
+  employer/client brand, or the aggregate domain flavor) and rewrite it to a neutral fictional demo. A
+  **PostToolUse** hook nudges it on every skill/eval edit; there is no denylist by design.
 
 ### cicero &nbsp;·&nbsp; [↑ Plugins](#plugins)
 Not a skill — a house communication style enforced by two hooks. A **SessionStart**
