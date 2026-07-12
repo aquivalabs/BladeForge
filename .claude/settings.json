@@ -19,6 +19,7 @@
     "jira@bladeforge": true,
     "meta@bladeforge": true,
     "review@bladeforge": true,
-    "salesforce@bladeforge": true
+    "salesforce@bladeforge": true,
+    "cerberus@bladeforge": true
   }
 }

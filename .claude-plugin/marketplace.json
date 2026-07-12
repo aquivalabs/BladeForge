@@ -9,6 +9,15 @@
   },
   "plugins": [
     {
+      "name": "cerberus",
+      "description": "CERBERUS — leak guard for a public skills marketplace. A PostToolUse hook reminds you to run the cerberus:leak-check skill on every skill/reference/eval edit; that agent pass rewrites anything pointing to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an employer brand, or the aggregate product flavor) into a neutral fictional demo. No denylist by design.",
+      "author": {
+        "name": "Aquiva"
+      },
+      "source": "./plugins/cerberus",
+      "category": "engineering"
+    },
+    {
       "name": "cicero",
       "description": "CICERO — the house voice. A SessionStart hook injects the always-on communication style (bottom line first, concise, plain language, recommend-don't-survey, push back, honesty, stay in scope) + a start banner; a Stop hook enforces principles 12/2/3 (reply in the user's language, concise, gloss/translate jargon) by blocking an off-voice reply so it gets rewritten.",
       "author": {
