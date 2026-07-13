@@ -1,0 +1,14 @@
+[
+  {"query": "I need a checkbox component for this settings form — should I just write a new one?", "should_trigger": true},
+  {"query": "there's no dropdown/select in this project yet, I'm about to hand-roll one from scratch", "should_trigger": true},
+  {"query": "before I build a shared tooltip component, is there already one in the primitives folder?", "should_trigger": true},
+  {"query": "I want to add a reusable badge control other screens can use — where do I start?", "should_trigger": true},
+  {"query": "we need a modal/dialog primitive for confirmations across the app, should I create a new one?", "should_trigger": true},
+  {"query": "about to hand-roll a raw <input> with custom styling for a form that other pages will reuse", "should_trigger": true},
+  {"query": "how should I structure the folder and files for this new OrderSummary feature component?", "should_trigger": false},
+  {"query": "should this new component get a loading skeleton, and where should it live?", "should_trigger": false},
+  {"query": "write a Storybook story for the Button component covering default, disabled, and loading states", "should_trigger": false},
+  {"query": "convert the hardcoded 16px padding in this card's SCSS to rem units", "should_trigger": false},
+  {"query": "this error message is hardcoded English text — route it through the i18n system", "should_trigger": false},
+  {"query": "add a new custom useDebouncedValue hook and figure out where it should be registered", "should_trigger": false}
+]

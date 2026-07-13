@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: House rules for authoring LWC/Aura bundles — DOM access boundaries and CSS-only (no SCSS) styling conventions.
+best-for: Any Salesforce project team writing or reviewing LWC/Aura component JS, HTML, or CSS who wants a consistent authoring standard.
+needs: []
+changes:
+  tags: []
+  notes: ""

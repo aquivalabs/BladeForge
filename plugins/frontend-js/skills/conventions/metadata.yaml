@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: House JS/TS coding style — arrow functions, single quotes, full variable names, braces on all control structures, small readable functions, and alias-over-relative-import rules.
+best-for: Any project writing or reviewing JS/TS (React, Node, or plain JS/TS) that wants consistent house style enforced on every edit.
+needs: []
+changes:
+  tags: []
+  notes: ""

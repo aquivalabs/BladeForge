@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Enforce rem (not px) for CSS/SCSS/Tailwind dimensional values so layouts respect user font-size/zoom preferences.
+best-for: Frontend projects with a shared CSS/SCSS/Tailwind codebase that want consistent, accessible, zoom-responsive sizing instead of scattered hardcoded px.
+needs: []
+changes:
+  tags: []
+  notes: Advisory convention skill — guides how CSS dimensions should be written/reviewed; it does not itself run any command or modify files.

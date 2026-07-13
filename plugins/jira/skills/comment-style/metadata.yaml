@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Keeps Jira ticket comments short, essence-first, and readable on the first pass instead of rambling status narration.
+best-for: Teams that post frequent Jira status/handoff comments and want a consistent, scannable house style.
+needs: []
+changes:
+  tags: []
+  notes: ""

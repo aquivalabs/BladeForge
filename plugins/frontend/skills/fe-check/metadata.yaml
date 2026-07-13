@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Typecheck a frontend repo with tsc and run (optionally targeted) vitest tests, printing one terse pass/fail summary instead of two noisy tool outputs.
+best-for: Any TypeScript/React repo with tsc + vitest configured, pulled in right after editing code to confirm types and relevant tests still pass before moving on.
+needs: []
+changes:
+  tags: [files]
+  notes: Runs `tsc --noEmit` and `vitest run` via the bundled fe-check.sh script — read-only checks that touch no source files, git state, network, or org; may write local tsc/vitest cache/output files as a side effect of the tools it invokes.

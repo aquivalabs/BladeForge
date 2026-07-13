@@ -1,0 +1,14 @@
+[
+  {"query": "i just finished editing this React component, can you typecheck and run its tests?", "should_trigger": true},
+  {"query": "run tsc and vitest on src/lib/order-summary.ts and give me a quick pass/fail", "should_trigger": true},
+  {"query": "check that my TypeScript changes didn't break the build before i open a PR", "should_trigger": true},
+  {"query": "quickly confirm types are clean and the widget-catalog tests still pass after my edit", "should_trigger": true},
+  {"query": "run the targeted unit tests for cart-utils.test.ts plus a typecheck, terse summary please", "should_trigger": true},
+  {"query": "did i break anything? typecheck the frontend repo and run the relevant test file", "should_trigger": true},
+  {"query": "deploy this Apex class and its test class to the sandbox and tell me if tests pass", "should_trigger": false},
+  {"query": "write a unit test for this new formatCurrency helper function", "should_trigger": false},
+  {"query": "review my diff for bugs and simplification opportunities before i push", "should_trigger": false},
+  {"query": "run anonymous Apex against the dev org to check the trigger fired correctly", "should_trigger": false},
+  {"query": "add a Storybook story covering the loading and error states of this card component", "should_trigger": false},
+  {"query": "should i convert this hardcoded 16px margin to a rem value?", "should_trigger": false}
+]

@@ -1,0 +1,89 @@
+name: scout-publish
+# Keeps catalog.json current "by construction": on every push to main (i.e. every PR
+# merge), regenerate the catalog, PATCH-bump the affected plugin's version, and
+# auto-commit + push the result back to main.
+#
+# NOTE on gate interaction: scout-gate.yml and eval-gate.yml trigger on `pull_request`
+# only. A direct push to `main` (as this workflow performs) does NOT hit those PR gates.
+# A deploy-key push DOES re-trigger `push` workflows, so the `[skip ci]` loop-guard below
+# is what prevents this job from re-triggering itself.
+#
+# NOTE on auth: the push to protected `main` uses a write DEPLOY KEY (secret DEPLOY_KEY).
+# `main` is protected by the `main-protection` ruleset, which lists "Deploy keys" as a
+# bypass actor — so the deploy-key push bypasses the PR + status-check rules. No PAT
+# (no expiry/rotation), no `enforce_admins` change, no org-owner needed. Setup: docs/publishing.md.
+on:
+  push:
+    branches: [main]
+
+# The token needs no write: the push below authenticates via the deploy key, not GITHUB_TOKEN.
+permissions:
+  contents: read
+
+jobs:
+  scout-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # ssh-key sets the origin remote to SSH and authenticates as the deploy key,
+          # which the ruleset allows to bypass branch protection on the push below.
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML (metadata.yaml parser)
+        run: python -m pip install --quiet pyyaml
+
+      - name: Regenerate catalog
+        run: python3 scripts/gen_catalog.py
+
+      - name: Compute affected plugin(s) and PATCH-bump version
+        run: |
+          set -euo pipefail
+          # "Affected plugin" = any plugin under which a skill changed in this push.
+          # Diff the merge commit against its first parent to get the paths that changed,
+          # then map each plugins/<domain>/skills/... path to its owning plugin.json.
+          changed_paths="$(git diff --name-only HEAD^ HEAD -- 'plugins/*/skills/*' || true)"
+          if [ -z "$changed_paths" ]; then
+            echo "no plugins/*/skills/* changes in this push — nothing to bump"; exit 0
+          fi
+          affected_plugins="$(echo "$changed_paths" | cut -d/ -f2 | sort -u)"
+          for plugin in $affected_plugins; do
+            plugin_json="plugins/$plugin/.claude-plugin/plugin.json"
+            if [ ! -f "$plugin_json" ]; then
+              echo "skip: $plugin_json not found"; continue
+            fi
+            # Bump the PATCH segment only; refuse if version isn't 3-part SemVer,
+            # since a 4th segment would break `/plugin update`. Kept as a one-liner
+            # (semicolon-joined) so it stays a plain shell arg and doesn't fight
+            # YAML's block-scalar indentation rules.
+            #
+            # Neutralize `set -e` via the `if ! ...; then ...; continue; fi` pattern
+            # below (a failing condition in an `if` does NOT trip `set -e`) so one
+            # plugin's malformed/unparseable version can't abort the loop and starve
+            # every other affected plugin's bump in the same push: log a warning to
+            # stderr and `continue` instead.
+            if ! python3 -c "import json, sys; path = sys.argv[1]; data = json.load(open(path)); version = data.get('version', '0.0.0'); parts = version.split('.'); sys.exit(f'{path}: version {version!r} is not 3-part SemVer - refusing to bump') if len(parts) != 3 else None; major, minor, patch = parts; bumped = f'{major}.{minor}.{int(patch) + 1}'; data['version'] = bumped; json.dump(data, open(path, 'w'), indent=2); open(path, 'a').write('\n'); print(f'{path}: {version} -> {bumped}')" "$plugin_json" 2>/tmp/bump-error.$$; then
+              echo "::warning::skipping $plugin_json — $(cat /tmp/bump-error.$$)" >&2
+              rm -f /tmp/bump-error.$$
+              continue
+            fi
+            rm -f /tmp/bump-error.$$
+          done
+
+      - name: Commit and push regenerated catalog + bumped version(s)
+        run: |
+          set -euo pipefail
+          git config user.name "scout-publish-bot"
+          git config user.email "scout-publish-bot@users.noreply.github.com"
+          git add plugins/scout/skills/scout/catalog.json plugins/*/.claude-plugin/plugin.json
+          if git diff --cached --quiet; then
+            echo "nothing to commit — catalog and versions already up to date"; exit 0
+          fi
+          # [skip ci] stops this deploy-key push from re-triggering the workflow.
+          git commit -m "chore(scout): regenerate catalog + bump affected plugin version [skip ci]"
+          git push origin HEAD:main

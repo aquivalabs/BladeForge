@@ -1,0 +1,14 @@
+[
+  {"query": "add a collapsible section to the sidebar nav for the new admin area", "should_trigger": true},
+  {"query": "the top bar needs a global search / command palette trigger button, where should that live?", "should_trigger": true},
+  {"query": "we need a global overlay that shows a maintenance banner across every page — how should I structure it?", "should_trigger": true},
+  {"query": "refactor the app shell so the sidebar can collapse to icons only", "should_trigger": true},
+  {"query": "add a new nav item and route guard for the reports section in the app chrome", "should_trigger": true},
+  {"query": "build a command palette (cmd+k) component that overlays the whole app", "should_trigger": true},
+  {"query": "build a CustomerOrdersTable component that fetches and renders order line items", "should_trigger": false},
+  {"query": "do we already have a reusable dropdown primitive before I build a new one?", "should_trigger": false},
+  {"query": "how should I organize this component's folder — tsx, scss, and index files?", "should_trigger": false},
+  {"query": "add a loading skeleton for the async-loaded dashboard widget", "should_trigger": false},
+  {"query": "write a Storybook story covering the empty and error states for this card", "should_trigger": false},
+  {"query": "route this button's label text through the project's i18n setup", "should_trigger": false}
+]

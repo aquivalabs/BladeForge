@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Split staged/unstaged changes into atomic, well-ordered conventional-commit-style commits, after first syncing any docs/skills owned by the changed area.
+best-for: Personal or small-team repos where the user wants commits auto-split by logical concern instead of committing everything in one lump.
+needs: []
+changes:
+  tags: [git]
+  notes: Runs git status/diff read-only first, then actually mutates repo state — git restore --staged ., git add <files>, and git commit — to create the split commits; may also edit docs/skill files as part of the pre-commit sync step.

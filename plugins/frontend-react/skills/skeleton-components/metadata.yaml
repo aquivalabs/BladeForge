@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Decide whether an async-loading React component actually needs a loading skeleton, and if so, house rules for building it as a colocated sibling composed from the shared Skeleton primitive.
+best-for: React codebases with async data-fetching components (TanStack Query, await, isLoading) that want a consistent, non-duplicated approach to loading states instead of ad hoc blank screens or hand-rolled pulse markup.
+needs: []
+changes:
+  tags: []
+  notes: ""

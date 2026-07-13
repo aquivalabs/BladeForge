@@ -11,6 +11,7 @@
     "pre-commit"
   ],
   "author": {
-    "name": "Aquiva"
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
   }
 }

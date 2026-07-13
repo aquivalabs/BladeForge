@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Run anonymous Apex or a SOQL query against a Salesforce org via a colocated script, returning a terse pass/fail instead of raw JSON.
+best-for: Anyone doing Salesforce org-side dev work who needs a quick anonymous-Apex/SOQL check without hand-rolling the sf CLI token + curl recipe.
+needs: []
+changes:
+  tags: [org, network]
+  notes: Hits the org's Tooling API executeAnonymous/query endpoint over the network; anonymous Apex can run DML against the target org, which is org-mutating by design (per the skill's own warning).

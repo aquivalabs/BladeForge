@@ -1,0 +1,8 @@
+schema-version: 1
+purpose: Writes a colocated Storybook story (with a separate mock-data file) covering a component's key states, after asking once per project whether stories are wanted at all.
+best-for: Projects using Storybook where the team wants every new/finished React component to get a reviewable, state-driving story without re-litigating the yes/no decision each time.
+needs:
+  - frontend-react:skeleton-components
+changes:
+  tags: [files]
+  notes: "Creates/edits a `<Component>.stories.tsx` and a `<Component>.mock.ts` under the component's `stories/` folder, and adds or updates one `Storybook stories: yes/no` line in the project's CLAUDE.md to record the per-project preference."

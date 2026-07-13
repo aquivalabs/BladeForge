@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Guide the agent to discover, recommend, and install marketplace skills from the compiled catalog.
+best-for: Any session where the user wants to browse what skills exist, get a fit recommendation for a task, or install a skill from this marketplace.
+needs: []
+changes:
+  tags: []
+  notes: Read-only — reads the bundled catalog.json and, on explicit user OK, runs /plugin install in-session. Never writes files, never shells out, never touches git.

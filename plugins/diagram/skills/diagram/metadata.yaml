@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Turn a spec/code scope into a hardened entity Atlas, then a readable D2→ELK architecture diagram inlined into a self-contained, committable HTML page.
+best-for: Teams who want an accurate, clickable "how it works" diagram (classes/objects/permission sets + relations) committed alongside a spec or module instead of a hand-drawn or memory-derived picture.
+needs: []
+changes:
+  tags: [files]
+  notes: Writes a new docs/diagrams/<name>/ folder — atlas.md, diagram.html, and assets/ (graph.d2, page.html, copied CSS/JS/svg-pan-zoom, rendered SVG/PNG) — via the bundled references/build.sh script. Does not touch git, network, org, or money.

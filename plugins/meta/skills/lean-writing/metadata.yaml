@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Write terse, caveman-simple specs, design docs, or brainstorming summaries — lead with the decision, bullets over prose, no filler.
+best-for: Anyone drafting a spec/design-doc/RFC/decision-log who wants short plain sentences instead of padded prose.
+needs: []
+changes:
+  tags: []
+  notes: Pure writing-style guidance — produces prose the author places themselves; the skill itself edits nothing.

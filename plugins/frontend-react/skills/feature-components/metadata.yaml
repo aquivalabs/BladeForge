@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Rules for structuring domain-coupled "feature" components — composed from primitives, business logic kept out of primitives, data via the project's data layer.
+best-for: Teams building a React app's domain/feature panels who want features assembled from primitives instead of hand-rolled controls duplicating the primitive library.
+needs: []
+changes:
+  tags: []
+  notes: ""

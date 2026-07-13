@@ -1,0 +1,11 @@
+schema-version: 1
+purpose: Standardizes how a React component's files, folder, BEM classes, and styling conventions are organized so structure stays consistent across the codebase.
+best-for: Teams building a React app who want every component (and sub-component) to follow the same folder/file/BEM/i18n/error-boundary conventions instead of drifting per-author.
+needs:
+  - frontend-css:scss-modules
+  - frontend-css:rem
+  - i18n:ui-strings
+  - frontend-react:storybook-stories
+changes:
+  tags: []
+  notes: Pure advisory/convention skill — it guides how a human or agent should structure component files, styles, and markup, but performs no actions itself.

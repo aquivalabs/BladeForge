@@ -1,0 +1,14 @@
+[
+  {"query": "I need to add a new card component to show order summaries — where should it live?", "should_trigger": true},
+  {"query": "can you scaffold a new React component for a notification badge?", "should_trigger": true},
+  {"query": "we need a settings panel widget, help me build it from scratch", "should_trigger": true},
+  {"query": "I'm about to hand-roll a modal dialog component, what should I check first?", "should_trigger": true},
+  {"query": "add a new control for filtering the results table — should this be its own component?", "should_trigger": true},
+  {"query": "before I create this dashboard section component, is there something like it already?", "should_trigger": true},
+  {"query": "should this reusable button primitive live in the shared UI library or get built one-off?", "should_trigger": false},
+  {"query": "review this diff for SCSS BEM naming and folder structure issues", "should_trigger": false},
+  {"query": "write a Storybook story for the Card component I just finished", "should_trigger": false},
+  {"query": "our top nav bar needs a new dropdown item — how should the layout shell code be organized?", "should_trigger": false},
+  {"query": "rename this custom hook and move it to the shared hooks folder", "should_trigger": false},
+  {"query": "convert these hardcoded pixel margins in the panel's stylesheet to rem units", "should_trigger": false}
+]

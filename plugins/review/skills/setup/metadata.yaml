@@ -1,0 +1,12 @@
+schema-version: 1
+purpose: Install and tailor the pre-push review framework (5 reviewer agents, /review, secret-scan + attestation gate) into a target repo.
+best-for: A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the 5-agent pre-push review gate adopted and tuned to its stack.
+needs: []
+changes:
+  tags: [files, network]
+  notes: >
+    Walks the adopter through running bootstrap.sh/install.sh (fetched via `gh api` over the
+    network), which vendor scripts/review/*, .husky/pre-push, .github/workflows/review-gate.yml,
+    and a seeded .claude/review.config.json into the target repo, and merge the marketplace +
+    plugin entry into the repo's committed .claude/settings.json. The skill itself then hand-edits
+    .claude/review.config.json (zones/skills/rules/pairedDocs) to tailor it to the project.

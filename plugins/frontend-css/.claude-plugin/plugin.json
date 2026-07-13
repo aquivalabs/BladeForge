@@ -1,6 +1,6 @@
 {
   "name": "frontend-css",
-  "description": "Personal frontend CSS skills \u2014 rem units, SCSS modules.",
+  "description": "Personal frontend CSS skills — rem units, SCSS modules.",
   "version": "1.2.0",
   "keywords": [
     "css",
@@ -10,6 +10,7 @@
     "styling"
   ],
   "author": {
-    "name": "Aquiva"
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
   }
 }

@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Forces an explicit, cost-tiered model choice (head/work/sweep) on every spawned agent before any multi-agent fan-out, workflow script, or eval loop launches.
+best-for: Anyone about to spawn subagents, write a Workflow script with agent()/parallel()/pipeline(), or run an eval/optimization loop, who wants to avoid silently inheriting the expensive session model across every spawned instance.
+needs: []
+changes:
+  tags: []
+  notes: "Advisory only: gives model-tier rules, a spend-estimate table format, and rationalizations to check against before launching a fan-out. It does not itself spawn agents, call APIs, or write files — enforcement happens in whatever Workflow/agent-spawning code the user or another skill runs afterward."
