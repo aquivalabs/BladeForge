@@ -16,5 +16,6 @@
   { "query": "set up a pre-commit hook that runs eslint", "should_trigger": false },
   { "query": "show me the git log for the last week", "should_trigger": false },
   { "query": "help me resolve this merge conflict in package.json", "should_trigger": false },
-  { "query": "configure my git user.email for this repo", "should_trigger": false }
+  { "query": "configure my git user.email for this repo", "should_trigger": false },
+  { "query": "how do I squash my last three commits into one", "should_trigger": false }
 ]
