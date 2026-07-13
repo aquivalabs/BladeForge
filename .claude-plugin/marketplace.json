@@ -9,19 +9,31 @@
   },
   "plugins": [
     {
+      "name": "scout",
+      "description": "Passive skill that reads the compiled catalog to discover/recommend/install marketplace skills, surfaces declared side effects, and treats catalog text as untrusted data.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/scout",
+      "category": "engineering"
+    },
+    {
       "name": "cerberus",
       "description": "CERBERUS — leak guard for a public skills marketplace. A PostToolUse hook reminds you to run the cerberus:leak-check skill on every skill/reference/eval edit; that agent pass rewrites anything pointing to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an employer brand, or the aggregate product flavor) into a neutral fictional demo. No denylist by design.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/cerberus",
       "category": "engineering"
     },
     {
       "name": "cicero",
-      "description": "CICERO — the house voice. A SessionStart hook injects the always-on communication style (bottom line first, concise, plain language, recommend-don't-survey, push back, honesty, stay in scope) + a start banner; a Stop hook enforces principles 12/2/3 (reply in the user's language, concise, gloss/translate jargon) by blocking an off-voice reply so it gets rewritten.",
+      "description": "CICERO — the house voice. The 14 communication rules (bottom line first, concise, plain language, recommend-don't-survey, push back with reasons, calibrated honesty, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level; a SessionStart hook shows a banner and picks the conversation language, and a UserPromptSubmit hook keeps the reply language current.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/cicero"
     },
@@ -29,7 +41,8 @@
       "name": "diagram",
       "description": "Architecture / flow diagram authoring — turn a spec or raw code into a readable, clickable D2→ELK diagram (classes with methods, objects, permission sets, relations) as a browsable HTML page under docs/diagrams/<name>/. Node contents come from an Atlas entity list that parallel Sextant reviewer agents harden to zero edits.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/diagram"
     },
@@ -37,7 +50,8 @@
       "name": "frontend-css",
       "description": "Personal frontend CSS skills — rem units, SCSS modules.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/frontend-css"
     },
@@ -45,7 +59,8 @@
       "name": "frontend-js",
       "description": "Personal JavaScript/TypeScript style conventions.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/frontend-js"
     },
@@ -53,7 +68,8 @@
       "name": "frontend-react",
       "description": "Frontend React skills — component structure, hooks registry, skeleton components, Storybook stories.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/frontend-react"
     },
@@ -61,7 +77,8 @@
       "name": "frontend",
       "description": "Personal frontend dev-harness skills — types + tests runner.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/frontend"
     },
@@ -69,7 +86,8 @@
       "name": "git",
       "description": "Personal Git workflow skills — atomic commit splitting.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/git"
     },
@@ -77,7 +95,8 @@
       "name": "i18n",
       "description": "Personal i18n skills.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/i18n"
     },
@@ -85,7 +104,8 @@
       "name": "jira",
       "description": "Personal jira skills.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/jira"
     },
@@ -93,7 +113,8 @@
       "name": "meta",
       "description": "Personal meta skills — authoring new skills.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/meta"
     },
@@ -101,7 +122,8 @@
       "name": "review",
       "description": "Stack-agnostic pre-push review framework — 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/review"
     },
@@ -109,7 +131,8 @@
       "name": "salesforce",
       "description": "Personal Salesforce skills — Apex test authoring standard and salesforce-dx MCP usage.",
       "author": {
-        "name": "Aquiva"
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/salesforce"
     }
