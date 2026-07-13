@@ -7,8 +7,11 @@ company-approved skills, synced from the shared source and reviewed before relea
 
 ```
 /plugin marketplace add aquivalabs/BladeForge
-/plugin install review@bladeforge
+/plugin install scout@bladeforge
 ```
+
+Install [`scout`](#scout) first — it is the one plugin that finds all the others, then recommends and
+installs the rest on demand.
 
 ## Guard the gate — [`cerberus`](#leak-check)
 
@@ -35,6 +38,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 
 | Plugin | What it does | Skills |
 |---|---|---|
+| scout | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data; never runs code itself. | [scout](#scout) |
 | cerberus | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer/client brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
 | cicero | House voice — injects the always-on communication style and enforces it on replies. | — (hook only) |
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) |
@@ -45,13 +49,21 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | git | Git workflow — atomic commit splitting. | [commit](#commit) |
 | i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | jira | Jira — comment style. | [comment-style](#comment-style) |
-| meta | Meta — design law, error handling, doc writing, skill authoring. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| meta | Meta — design law, error handling, doc writing, skill authoring. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [setup](#setup) |
 | salesforce | Salesforce — Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 
 ## Skills
 
 Grouped by plugin. Each group links back to [Plugins](#plugins).
+
+### scout &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="scout"></a>**scout** — Passive, never runs: instructs the agent to read this marketplace's
+  bundled `catalog.json`, then Discover (list skills grouped by plugin with their purpose), Recommend
+  (match a task to a skill and explain why, disclosing transitive `needs`), Safety (surface declared
+  `changes` tags/notes — never "certified safe"), and Install (the unit is the plugin, not the skill —
+  state sibling skills and needs before confirming, then run `/plugin install <plugin>@bladeforge` and
+  prompt `/reload-plugins`).
 
 ### cerberus &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="leak-check"></a>**leak-check** — the leak guard's agent pass. Before a new or edited skill,
@@ -105,6 +117,7 @@ plainly and cuts the fluff. Full ruleset: [cicero.md](plugins/cicero/cicero.md).
 - <a id="lean-writing"></a>**lean-writing** — Write terse technical documents: specs, design docs, RFCs, decision logs.
 - <a id="model-routing"></a>**model-routing** — Assign an explicit model tier to every spawned agent before any fan-out.
 - <a id="new-skill"></a>**new-skill** — Author a brand-new skill: plugin/domain, folder placement, SKILL.md and frontmatter.
+- <a id="update-skill"></a>**update-skill** — Refresh an existing skill's `metadata.yaml` sidecar after its body, tools, scripts, or hooks changed.
 - <a id="ockham"></a>**ockham** — The Razor: justify before creating any new entity — file, module, class, abstraction.
 - <a id="solid"></a>**solid** — The design law: SRP/OCP/LSP/ISP/DIP plus DRY, KISS, YAGNI.
 - <a id="triage"></a>**triage** — Cheap shallow pass over a large batch first, then spend the expensive pass only on the shortlist.
@@ -130,5 +143,11 @@ wire these plugins into a repo and keep the config thin (rules live in skills).
 
 ## Contributing
 
-Skills are curated internally and published here after review. The **eval-gate**
-check validates every change before it lands.
+Skills are curated internally and published here after review. Two PR checks validate every change
+before it lands: **eval-gate** (each touched skill has a valid `trigger-eval.json`) and **scout-gate**
+(the catalog is self-consistent). On merge, the **scout-publish** workflow regenerates `catalog.json`,
+PATCH-bumps the affected plugin version(s), and pushes the result — no manual catalog or version step.
+
+See **[docs/](docs/)** for the contributor guides: [authoring.md](docs/authoring.md) (adding a
+plugin/skill, writing `metadata.yaml`, running evals) and [publishing.md](docs/publishing.md)
+(how the catalog auto-publishes and its one-time setup).

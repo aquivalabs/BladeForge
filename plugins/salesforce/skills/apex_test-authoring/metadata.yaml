@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Enforces a house standard for writing Apex test classes — Assert.* only, one-behavior-per-method, data factories, @TestSetup, FLS/user-mode coverage, REST mocking, and a mandatory adversarial/negative suite.
+best-for: Salesforce projects that want every new or edited Apex class to ship with a rigorous, consistently-structured test class instead of ad-hoc or happy-path-only tests.
+needs: []
+changes:
+  tags: []
+  notes: ""

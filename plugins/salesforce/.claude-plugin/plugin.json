@@ -1,6 +1,6 @@
 {
   "name": "salesforce",
-  "description": "Personal Salesforce skills \u2014 Apex test authoring standard and salesforce-dx MCP usage.",
+  "description": "Personal Salesforce skills — Apex test authoring standard and salesforce-dx MCP usage.",
   "version": "1.4.1",
   "keywords": [
     "salesforce",
@@ -11,6 +11,7 @@
     "dx-mcp"
   ],
   "author": {
-    "name": "Aquiva"
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
   }
 }

@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Refresh an existing skill's metadata.yaml after its body, tools, scripts, or hooks changed, by re-interviewing the non-derivable fields.
+best-for: Any marketplace using metadata.yaml sidecars, to keep a skill's changes/purpose accurate after it is edited.
+needs: []
+changes:
+  tags: [files]
+  notes: Rewrites the edited skill's metadata.yaml sidecar on disk.

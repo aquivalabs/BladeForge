@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Review an already-written spec/plan/design doc/RFC for clarity — cut filler, front-load the bottom line, and rewrite walls of prose into skimmable bullets a non-technical manager could follow.
+best-for: Anyone whose spec/plan/design doc has grown long, padded, or jargon-heavy and needs a laconic pass before a non-technical reader signs off on it.
+needs: []
+changes:
+  tags: []
+  notes: Reviews and rewrites the target document's own prose in place (via Claude's normal edit tools) for clarity and terseness; it runs no command, touches no git, org, or network, and depends on no other skill.

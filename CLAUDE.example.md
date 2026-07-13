@@ -41,7 +41,8 @@ starts) — do not duplicate them here:
 - Terse specs / design docs → skill `meta:lean-writing`; clarity audit → skill `meta:wittgenstein`
 - Architecture / flow diagrams → skill `diagram:diagram`
 - Jira comments → skill `jira:comment-style`
-- Authoring a brand-new skill → skill `meta:new-skill`
+- Authoring a brand-new skill → skill `meta:new-skill`; refreshing its `metadata.yaml` after edits → skill `meta:update-skill`
+- Discovering, recommending, or installing a marketplace skill on demand → skill `scout:scout`
 
 ## Spawning agents / evals / fan-out
 

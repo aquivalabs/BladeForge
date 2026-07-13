@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Run a cheap full-coverage sorting pass over a large batch of items before spending an expensive pass only on the ones that need it.
+best-for: Anyone about to sweep, review, migrate, or classify a large set of files/items uniformly and wants to avoid paying deep-pass cost on every single one.
+needs: []
+changes:
+  tags: []
+  notes: ""

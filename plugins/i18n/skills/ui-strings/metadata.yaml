@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Route every user-facing UI string through the project's localization system (or Custom Labels on Salesforce) instead of hardcoding it.
+best-for: Any project with user-facing UI text — teams that want new labels/messages/toasts to land in the existing i18n catalog/namespace rather than as scattered string literals.
+needs: []
+changes:
+  tags: []
+  notes: Advisory routing skill — tells Claude where a new UI string belongs (i18n catalog, Custom Labels, or a proposed constants module) and how to reference it; it does not itself run any command, deploy, or touch git. Any file edits happen via Claude's normal edit tools, not the skill's own action.

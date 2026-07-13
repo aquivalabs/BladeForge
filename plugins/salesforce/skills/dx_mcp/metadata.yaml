@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Directs org-touching work (SOQL/Tooling queries, Apex test runs, metadata deploy/retrieve, org/alias resolution) through the salesforce-dx MCP tools instead of raw `sf` CLI shell calls.
+best-for: Any Salesforce project with the salesforce-dx MCP connected, where an agent would otherwise reach for `sf` CLI via Bash to query, deploy, or test against a live org.
+needs: []
+changes:
+  tags: [org, network]
+  notes: The skill itself is advisory (routes to MCP tools, edits nothing directly), but following it drives live org side effects — SOQL/Tooling queries, Apex test runs, and metadata deploy/retrieve against scratch/sandbox/prod orgs via the salesforce-dx MCP tools it names.
