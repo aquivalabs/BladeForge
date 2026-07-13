@@ -1,52 +1,52 @@
-# Publishing — how the catalog stays current
+# Publishing — how the marketplace updates itself
 
-`scout` reads `plugins/scout/skills/scout/catalog.json`. That file is generated, never
-hand-edited. The `scout-publish` workflow keeps it current automatically.
+`scout` reads `plugins/scout/skills/scout/catalog.json` to discover and install skills.
+That file is **generated, never hand-edited**. The `scout-publish` workflow keeps it current
+automatically — this is the marketplace's self-update mechanism.
 
-## What happens on merge
+## What happens on every merge (the scout bot)
 
-On every push to `main` (i.e. every PR merge), `scout-publish`:
+`main` is protected: changes land only through a PR that passes `eval-gate` + `scout-gate`.
+On merge (a push to `main`), the `scout-publish` workflow runs and:
 
-1. Regenerates `catalog.json` (`scripts/gen_catalog.py`).
-2. PATCH-bumps the `version` of each plugin whose skills changed in that push.
-3. Commits and pushes the result back to `main` (commit marked `[skip ci]` so it does not
-   re-trigger itself).
+1. Regenerates `catalog.json` from every plugin's skills + `metadata.yaml` (`scripts/gen_catalog.py`).
+2. PATCH-bumps the `version` of each plugin whose skills changed in that push (so `/plugin update`
+   actually reinstalls them — an un-bumped skill edit never reaches users).
+3. Commits as `scout-publish-bot` and pushes the result straight back to `main`, marked `[skip ci]`
+   so the bot's own push does not re-trigger the workflow.
 
-You never edit `catalog.json` or bump versions by hand.
+So the catalog and versions are correct "by construction" after every merge. You never edit
+`catalog.json` or bump a version by hand.
 
-## One-time setup (repo admin)
+## How the bot pushes to a protected `main` (deploy key)
 
-The push in step 3 goes to a protected `main`, so it needs an identity allowed to bypass
-the branch rules. The clean built-in `github-actions[bot]` bypass requires an **org owner**
-(org-level ruleset + `admin:org`); this repo's admins are org **members**, so we use a
-personal access token instead.
+`main` is protected by the `main-protection` **ruleset** (required checks `eval-gate` + `scout-gate`,
+PR required). The ruleset lists **Deploy keys** as a bypass actor, so a push authenticated by the
+repo's write **deploy key** bypasses those rules. `scout-publish` checks out with that key
+(secret `DEPLOY_KEY`) and pushes over SSH.
 
-Do this once:
+Why a deploy key and not the built-in `github-actions[bot]`: the bot bypass is an org-owner action
+(org-level ruleset + `admin:org`); this repo's admins are org members. A deploy key is repo-owned,
+needs only repo-admin, does not expire, and does not require weakening `enforce_admins`.
 
-1. **Create a fine-grained PAT.** GitHub → Settings → Developer settings → Fine-grained
-   tokens. Scope it to `aquivalabs/BladeForge` only, permission **Contents: Read and write**.
-   Set a calendar reminder to rotate it before it expires.
-2. **Add it as a repo secret.** Repo → Settings → Secrets and variables → Actions → New
-   repository secret, name **`PUBLISH_TOKEN`**, value = the PAT.
-3. **Let the token bypass required checks.** Turn off `enforce_admins` on `main` so the PAT
-   owner (a repo admin) can push directly:
+**This is already configured** — no setup needed. For reference, the pieces are:
 
-   ```bash
-   gh api --method DELETE repos/aquivalabs/BladeForge/branches/main/protection/enforce_admins
-   ```
+- A write deploy key on the repo (Settings → Deploy keys, "scout-publish").
+- Its private half in the repo secret `DEPLOY_KEY`.
+- The `main-protection` ruleset with the Deploy keys bypass.
 
-   Re-enable any time with the `PUT` form of the same endpoint.
+## Maintenance
 
-## Verifying it works
-
-Merge any PR that touches a skill, then check the Actions tab: `scout-publish` should run,
-and `main` should gain a `chore(scout): regenerate catalog ...` commit by `scout-publish-bot`.
-If the push step fails with a 403/permission error, the PAT lacks `Contents: write` or the
-secret is empty; if it fails on branch protection, `enforce_admins` is still on.
+- **Rotate the key:** generate a new `ed25519` keypair, replace the deploy key (public half) and
+  the `DEPLOY_KEY` secret (private half). No ruleset change — the bypass is "any write deploy key."
+- **Revoke:** delete the deploy key; `scout-publish` pushes then fail until a new key is set. Human
+  PRs are unaffected.
+- **Verify:** merge any PR that touches a skill, then check the Actions tab — `scout-publish` runs
+  and `main` gains a `chore(scout): regenerate catalog ...` commit by `scout-publish-bot`.
 
 ## Migrating to the built-in bot later
 
 If an org owner grants the `github-actions` ruleset bypass on `main`, switch `scout-publish.yml`
-back to the default `GITHUB_TOKEN` (`permissions: contents: write`, drop the `token:` line and
-the `[skip ci]` guard) and delete the `PUBLISH_TOKEN` secret. That removes the PAT and its
-rotation burden.
+to the default `GITHUB_TOKEN` (`permissions: contents: write`, drop the `ssh-key:` line and the
+`[skip ci]` guard — default-token pushes don't re-trigger), delete the deploy key and the
+`DEPLOY_KEY` secret. That removes the key entirely.
