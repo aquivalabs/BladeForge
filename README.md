@@ -13,6 +13,10 @@ company-approved skills, synced from the shared source and reviewed before relea
 Install [`scout`](#scout) first — it is the one plugin that finds all the others, then recommends and
 installs the rest on demand.
 
+> **Adding or publishing a skill?** Read [`docs/`](docs/) first — [authoring.md](docs/authoring.md)
+> (create a skill, write its `metadata.yaml`, run the evals) and [publishing.md](docs/publishing.md)
+> (how a merge auto-regenerates the catalog and bumps the version — the scout bot).
+
 ## Guard the gate — [`cerberus`](#leak-check)
 
 **Keep this on — it is what stops a client's private information from leaking out of the marketplace.**
