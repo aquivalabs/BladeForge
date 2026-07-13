@@ -2,6 +2,10 @@ name: scout-gate
 on:
   pull_request:
     branches: [main]
+
+permissions:
+  contents: read
+
 jobs:
   scout-gate:
     runs-on: ubuntu-latest

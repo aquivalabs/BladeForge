@@ -16,6 +16,10 @@ on:
   push:
     branches: [main]
 
+# The token needs no write: the push below authenticates via the deploy key, not GITHUB_TOKEN.
+permissions:
+  contents: read
+
 jobs:
   scout-publish:
     runs-on: ubuntu-latest
