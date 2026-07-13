@@ -15,8 +15,9 @@ Install any plugin as `<plugin>@bladeforge`.
 - **No `Co-Authored-By: Claude` / Anthropic attribution** trailers in commits or PR bodies.
 - **Changes land via PR — no direct pushes to `main`.** The `scout-gate` and `eval-gate` checks must
   pass on the PR. On merge, the `scout-publish` workflow regenerates `catalog.json`, PATCH-bumps the
-  affected plugin version(s), and pushes the result to `main` via the built-in `github-actions[bot]`
-  (added to the `main` ruleset bypass) — no manual catalog or version step.
+  affected plugin version(s), and pushes the result to `main` — no manual catalog or version step.
+  See [docs/publishing.md](docs/publishing.md) for the auto-publish auth (a repo-admin PAT) and its
+  one-time setup.
 - **`README.md` is hand-maintained** — update its "Skills" section by hand when you add/rename a skill.
 - **Every `plugin.json` carries `name`, `description`, `version` (semver), `keywords`, `author`.**
 - **Every skill carries `metadata.yaml` and `evals/trigger-eval.json`.** `gen_catalog` fails on a skill

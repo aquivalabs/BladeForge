@@ -146,5 +146,8 @@ wire these plugins into a repo and keep the config thin (rules live in skills).
 Skills are curated internally and published here after review. Two PR checks validate every change
 before it lands: **eval-gate** (each touched skill has a valid `trigger-eval.json`) and **scout-gate**
 (the catalog is self-consistent). On merge, the **scout-publish** workflow regenerates `catalog.json`,
-PATCH-bumps the affected plugin version(s), and pushes the result via the built-in `github-actions[bot]`
-— no manual catalog or version step.
+PATCH-bumps the affected plugin version(s), and pushes the result — no manual catalog or version step.
+
+See **[docs/](docs/)** for the contributor guides: [authoring.md](docs/authoring.md) (adding a
+plugin/skill, writing `metadata.yaml`, running evals) and [publishing.md](docs/publishing.md)
+(how the catalog auto-publishes and its one-time setup).

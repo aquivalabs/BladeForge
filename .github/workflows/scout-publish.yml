@@ -5,12 +5,16 @@ name: scout-publish
 #
 # NOTE on gate interaction: scout-gate.yml and eval-gate.yml trigger on `pull_request`
 # only. A direct bot push to `main` (as this workflow performs) does NOT hit those PR
-# gates and is not blocked by them — they simply never see this push event.
+# gates and is not blocked by them — they simply never see this push event. The
+# `[skip ci]` loop-guard below is what prevents this job from re-triggering itself.
 #
-# NOTE on loop-guard: this job pushes with the default GITHUB_TOKEN (github-actions[bot]).
-# GitHub does NOT re-trigger workflows on pushes made with the default token, so the bot's
-# own push to main cannot re-trigger this workflow. No `[skip ci]` and no actor guard are
-# needed — the default-token behavior is the loop-guard.
+# NOTE on auth (why a PAT, not the built-in bot): the clean github-actions[bot] ruleset
+# bypass is an ORG-OWNER action (org-level ruleset + admin:org). This repo's admins are
+# org MEMBERS, so that path is unavailable. Instead we use a fine-grained PAT owned by a
+# repo admin (secret PUBLISH_TOKEN, Contents: read & write) with `main`'s `enforce_admins`
+# turned OFF, so that admin bypasses the PR requirement and pushes to main directly.
+# See docs/publishing.md for the one-time setup. If an org owner later grants the
+# github-actions bypass, switch back to the default token and drop the [skip ci] guard.
 on:
   push:
     branches: [main]
@@ -18,17 +22,13 @@ on:
 jobs:
   scout-publish:
     runs-on: ubuntu-latest
-    # The default GITHUB_TOKEN needs write access to push the regenerated catalog + bumps.
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # Push to protected main uses the built-in github-actions[bot] via the default
-          # GITHUB_TOKEN. On this ORG-owned repo, "GitHub Actions" is added to the `main`
-          # ruleset bypass (a one-time repo-admin step), so the bot bypasses the PR
-          # requirement — no PAT, no `enforce_admins` off, no separate account.
+          # PUBLISH_TOKEN: fine-grained PAT (Contents: read & write) owned by a repo admin.
+          # A PAT push re-triggers workflows, so the [skip ci] loop-guard below is required.
+          token: ${{ secrets.PUBLISH_TOKEN }}
 
       - uses: actions/setup-python@v5
         with:
@@ -77,13 +77,14 @@ jobs:
       - name: Commit and push regenerated catalog + bumped version(s)
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "scout-publish-bot"
+          git config user.email "scout-publish-bot@users.noreply.github.com"
           git add plugins/scout/skills/scout/catalog.json plugins/*/.claude-plugin/plugin.json
           if git diff --cached --quiet; then
             echo "nothing to commit — catalog and versions already up to date"; exit 0
           fi
-          git commit -m "chore(scout): regenerate catalog + bump affected plugin version"
-          # Succeeds once "GitHub Actions" is on the `main` ruleset bypass (one-time
-          # repo-admin step). Until then, this push step is expected to fail.
+          # [skip ci] stops the PAT push below from re-triggering this workflow.
+          git commit -m "chore(scout): regenerate catalog + bump affected plugin version [skip ci]"
+          # Succeeds only once the one-time setup in docs/publishing.md is done:
+          # PUBLISH_TOKEN secret set AND main's enforce_admins turned off.
           git push origin HEAD:main
