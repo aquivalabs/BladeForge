@@ -81,7 +81,7 @@ from scripts.utils import parse_skill_md           # noqa: E402
 
 def _all_known_plugins():
     """EVERY plugin id in the local plugin cache, across ALL marketplaces
-    (bladeforge, claude-plugins-official, ...). The sandbox
+    (xaaalera, claude-plugins-official, ...). The sandbox
     disables them all — any that loads may contain the REAL copy of the skill
     under test, and the model then invokes the real skill's name instead of
     the probe's, scoring a false miss (2026-07-04: ockham measured 0 recall

@@ -10,3 +10,15 @@ __pycache__/
 # local-only sync helpers (never published)
 sync-skills.sh
 sync-local.sh
+
+# speccy run artifacts (local, not published)
+.speccy/
+
+# plan-execution task breakdown (durable local record, not published)
+.tasks/
+
+# JetBrains IDE config
+.idea/
+
+# user-language docs (Russian reference copies, never published — repo is English-only)
+users-files/

@@ -1,0 +1,22 @@
+name: marketplace-sync
+# Guards the hand-maintained .claude-plugin/marketplace.json against drift from plugins/ on
+# disk — the class of bug where a plugin ships but is never registered (or an entry outlives
+# its plugin). catalog.json is NOT checked here: scout-publish.yml regenerates it post-merge,
+# so gating it on a PR would fight that workflow.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  marketplace-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: marketplace.json <-> plugins/ coverage
+        run: python3 scripts/check_marketplace_sync.py
