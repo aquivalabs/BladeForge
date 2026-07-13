@@ -40,7 +40,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 |---|---|---|
 | scout | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data; never runs code itself. | [scout](#scout) |
 | cerberus | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer/client brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
-| cicero | House voice — injects the always-on communication style and enforces it on replies. | — (hook only) |
+| cicero | House voice — an always-on output style (bottom-line-first, concise, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) |
 | frontend-css | CSS conventions — rem units, SCSS modules. | [rem](#rem), [scss-modules](#scss-modules) |
 | frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
@@ -73,12 +73,15 @@ Grouped by plugin. Each group links back to [Plugins](#plugins).
   **PostToolUse** hook nudges it on every skill/eval edit; there is no denylist by design.
 
 ### cicero &nbsp;·&nbsp; [↑ Plugins](#plugins)
-Not a skill — a house communication style enforced by two hooks. A **SessionStart**
-hook injects a list of **14 rules** (answer first, size to the ask, gloss jargon,
-recommend don't survey, push back with reasons, calibrated honesty, … end with a
-one-line joke) plus a start banner; a **Stop** hook (`plain-language-guard`) runs
-after each reply and blocks house-voice violations. Net effect: the bot talks
-plainly and cuts the fluff. Full ruleset: [cicero.md](plugins/cicero/cicero.md).
+Not a skill — the house communication style. The **14 rules** (answer first, size to the ask, gloss
+jargon, recommend don't survey, push back with reasons, calibrated honesty, … end with a one-line joke)
+ship as a **force-for-plugin output style**
+([output-styles/cicero.md](plugins/cicero/output-styles/cicero.md)), applied at the system-prompt level
+whenever the plugin is on. Two hooks carry the runtime bits: a **SessionStart** hook shows a banner and
+picks the conversation language; a **UserPromptSubmit** hook (`language-nudge`) re-asserts the reply
+language each turn, so it tracks a mid-session language switch. Net effect: the bot talks plainly and
+cuts the fluff. **See the difference:**
+[before / after vs. vanilla Claude](plugins/cicero/examples/before-after.md).
 
 ### diagram &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="diagram"></a>**diagram** — Turn a spec or raw code into a readable, clickable architecture/flow diagram: a D2 graph laid out by ELK, each class showing its real methods, objects with fields, and permission sets, rendered as a browsable HTML page under `docs/diagrams/<name>/`. Node contents come from an **Atlas** entity list that parallel **Sextant** reviewer agents harden to zero edits; bidirectional click-to-jump between diagram and its notes, pan/zoom via svg-pan-zoom.
