@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Before creating any new file/module/class/function/prop/abstraction, forces a three-gate reuse-first check so entities aren't multiplied needlessly.
+best-for: Any project that wants a discipline gate against sprawl — teams prone to premature helpers/wrappers/managers or copy-paste-and-rename duplication.
+needs: []
+changes:
+  tags: []
+  notes: ""

@@ -1,6 +1,6 @@
 {
   "name": "meta",
-  "description": "Personal meta skills \u2014 authoring new skills.",
+  "description": "Personal meta skills — authoring new skills.",
   "version": "1.3.3",
   "keywords": [
     "meta",
@@ -12,6 +12,7 @@
     "lean-writing"
   ],
   "author": {
-    "name": "Aquiva"
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
   }
 }

@@ -1,0 +1,25 @@
+name: scout-gate
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  scout-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Ensure origin/main ref
+        run: git fetch origin main:refs/remotes/origin/main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PyYAML (metadata.yaml parser)
+        run: python -m pip install --quiet pyyaml
+      - name: Run scout gate
+        run: |
+          if [ ! -f scripts/scout-gate.sh ]; then
+            echo "no scripts/scout-gate.sh yet (pre-seed) — skipping"; exit 0
+          fi
+          chmod +x scripts/scout-gate.sh scripts/scout_validate.py
+          scripts/scout-gate.sh

@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Paranoid security-review checklist for Salesforce/BFF changes — secret leakage, token boundary, route auth, injection/XSS, and Apex CRUD/FLS/sharing against the AppExchange Security Review bar.
+best-for: Teams doing pre-push security review or writing auth/SOQL/BFF-touching code who want a consistent, "guilty until proven safe" checklist instead of ad-hoc eyeballing.
+needs: []
+changes:
+  tags: []
+  notes: Pure advisory/checklist skill — guides a reviewer's or author's judgment; it does not itself edit files, run commands, touch git, or call any org/network.

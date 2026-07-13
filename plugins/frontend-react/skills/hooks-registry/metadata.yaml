@@ -1,0 +1,9 @@
+schema-version: 1
+purpose: Keep custom React hooks deduplicated and discoverable by requiring reuse-first checks and a maintained docs/hooks-registry.md.
+best-for: Teams with a growing React codebase where duplicate/overlapping use* hooks keep creeping in and need a single source of truth.
+needs:
+  - frontend-react:component-placement
+changes:
+  tags: []
+  notes: Pure advisory/convention skill — it directs the agent to read and hand-edit docs/hooks-registry.md; the skill itself runs no script and touches nothing on its own.
+

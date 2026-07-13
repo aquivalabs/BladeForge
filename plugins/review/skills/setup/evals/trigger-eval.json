@@ -1,0 +1,14 @@
+[
+  {"query": "this repo has no .claude/review.config.json yet — can you install the pre-push review gate?", "should_trigger": true},
+  {"query": "we want to adopt the 5-agent review system in this new project, set it up for us", "should_trigger": true},
+  {"query": "set up the secret-scan CI and husky pre-push hook for this repo", "should_trigger": true},
+  {"query": "how do I target the review framework to this codebase and pick which skills each reviewer agent loads?", "should_trigger": true},
+  {"query": "onboard this repo onto the org's pre-push review gate — it's greenfield, nothing configured yet", "should_trigger": true},
+  {"query": "tailor review.config.json for a React + Node repo, wiring in the right conventions and security skills", "should_trigger": true},
+  {"query": "run the pre-push review on my current branch before I merge", "should_trigger": false},
+  {"query": "the review gate flagged issues in my diff — walk me through fixing them", "should_trigger": false},
+  {"query": "write a brand-new skill for parsing widget import errors, where should the SKILL.md live?", "should_trigger": false},
+  {"query": "sweep the app for dead code and unused exports", "should_trigger": false},
+  {"query": "add a loading skeleton to the DataTable component", "should_trigger": false},
+  {"query": "fix the failing unit test in the checkout service", "should_trigger": false}
+]

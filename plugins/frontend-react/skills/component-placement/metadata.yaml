@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Entry-point decision guide that makes you search for an existing React component before building a new one, then routes placement (primitive/feature/layout/page-local) to the matching per-type skill.
+best-for: Any team building React UI that wants to stop duplicate components and enforce a consistent placement convention before scaffolding.
+needs: []
+changes:
+  tags: []
+  notes: ""

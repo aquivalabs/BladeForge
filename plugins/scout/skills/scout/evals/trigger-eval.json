@@ -1,0 +1,14 @@
+[
+  {"query": "what skills are available in this marketplace for writing unit tests?", "should_trigger": true},
+  {"query": "recommend a skill for reviewing my SCSS before I push", "should_trigger": true},
+  {"query": "install the skill that formats commit messages for me", "should_trigger": true},
+  {"query": "browse the catalog and show me everything grouped by plugin", "should_trigger": true},
+  {"query": "is there a skill here that helps with i18n string extraction? what would installing it also bring in?", "should_trigger": true},
+  {"query": "what does the widget-sync skill do and is it safe to install?", "should_trigger": true},
+  {"query": "create a brand-new skill for validating invoice totals", "should_trigger": false},
+  {"query": "I edited the widget-catalog skill's body — refresh its metadata.yaml", "should_trigger": false},
+  {"query": "fix the off-by-one bug in this pagination function", "should_trigger": false},
+  {"query": "write a unit test for the new discount calculator", "should_trigger": false},
+  {"query": "rebind ctrl+s to save without formatting", "should_trigger": false},
+  {"query": "run the pre-push review on my current branch", "should_trigger": false}
+]

@@ -15,6 +15,6 @@
   {"query": "check my commit message for clarity", "should_trigger": false},
   {"query": "is the jira comment i wrote clear and short?", "should_trigger": false},
   {"query": "this code comment in the BFF route is confusing — rewrite it", "should_trigger": false},
-  {"query": "update the README for the claude-skills repo", "should_trigger": false},
+  {"query": "update the README for the docs repo", "should_trigger": false},
   {"query": "review this diff for security vulnerabilities", "should_trigger": false}
 ]

@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Scaffold a brand-new skill in the plugin model and author its metadata.yaml via a field-by-field interview.
+best-for: Any marketplace where a new skill must ship a metadata.yaml sidecar and follow the house folder/naming structure.
+needs: []
+changes:
+  tags: [files]
+  notes: Creates the skill's SKILL.md and writes its metadata.yaml sidecar on disk.

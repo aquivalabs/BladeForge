@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Design-time guidance applying SOLID (SRP/OCP/LSP/ISP/DIP) plus DRY/KISS/YAGNI when writing, editing, or reviewing code structure.
+best-for: Any project where a team wants consistent structural judgment calls (when to split a function/class, how modules should depend on each other) enforced during coding and review, not just at architecture-doc time.
+needs: []
+changes:
+  tags: []
+  notes: ""

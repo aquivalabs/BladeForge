@@ -1,0 +1,14 @@
+[
+  {"query": "i just changed the body of the widget-catalog skill — can you refresh its metadata.yaml?", "should_trigger": true},
+  {"query": "i added a new bundled script to this skill and swapped its allowed-tools — update the metadata sidecar", "should_trigger": true},
+  {"query": "the scout hook nudged me after editing this SKILL.md, walk me through updating metadata.yaml before i commit", "should_trigger": true},
+  {"query": "i rewrote the hooks.json for this skill — does its changes.tags still match reality?", "should_trigger": true},
+  {"query": "this skill's purpose and needs fields are stale after my edits, re-run the metadata interview", "should_trigger": true},
+  {"query": "i changed what the order-sync skill actually does — its metadata.yaml purpose no longer matches, fix it", "should_trigger": true},
+  {"query": "i want to create a brand-new skill for handling widget import errors — where does the SKILL.md go?", "should_trigger": false},
+  {"query": "improve this skill's description so it triggers more reliably — run evals on it", "should_trigger": false},
+  {"query": "how do i structure a new React component in this project?", "should_trigger": false},
+  {"query": "set up the review gate in <ui-repo>", "should_trigger": false},
+  {"query": "what's the naming convention for scss module files in this repo?", "should_trigger": false},
+  {"query": "run the pre-push review before i merge this branch", "should_trigger": false}
+]

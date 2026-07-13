@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Before hand-rolling a shared UI primitive (button, input, dialog, tooltip, etc.), search the project's existing primitive library and reuse or extend it instead of creating a duplicate.
+best-for: React codebases with (or growing) a shared primitives folder, pulled in whenever someone is about to add a new reusable field/control/overlay component.
+needs: []
+changes:
+  tags: []
+  notes: Advisory/search-first discipline — it searches and reads the existing codebase and defers actual file creation to other placement/structure skills; it does not itself create, edit, or run anything.

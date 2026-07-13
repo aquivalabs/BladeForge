@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: CLI fallback that deploys Apex/metadata to a Salesforce org and runs Apex tests, returning a terse two-line pass/fail summary — no MCP dependency.
+best-for: Projects without the salesforce-dx MCP connected (headless/cron use), or anyone who wants a single combined deploy+test call with a one-glance result instead of parsing MCP JSON.
+needs: []
+changes:
+  tags: [org, network]
+  notes: Runs `sf project deploy start` and `sf apex run test` against a live Salesforce org via a bundled shell script — deploys metadata/Apex and executes tests on that org over the network.

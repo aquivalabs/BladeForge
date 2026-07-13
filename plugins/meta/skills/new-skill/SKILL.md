@@ -1,5 +1,5 @@
 ---
-description: "Use this skill to author a brand-new skill from scratch \u2014 deciding its plugin/domain, folder name, file placement, and writing its SKILL.md and frontmatter. Triggers for \"create/add/write a skill for X\", \"where does the SKILL.md go\", \"what's the naming convention or folder structure for a new skill\", or \"what goes in the description frontmatter\". This is about scaffolding a new skill's structure and location, NOT about tuning, evaluating, or fixing an existing skill's trigger behavior, and NOT about ordinary code, components, or config in a project. If the task is improving, optimizing, or running evals on a skill that already exists, do not use this skill."
+description: "Use this skill to author a brand-new skill FROM SCRATCH \u2014 deciding its plugin/domain, folder name, file placement, and writing its SKILL.md, frontmatter, and initial metadata.yaml sidecar. Triggers for \"create/add/write a new skill for X\", \"where does the SKILL.md go\", \"what's the naming convention or folder structure for a new skill\", or \"what goes in the description frontmatter\". This is about scaffolding a NOT-YET-EXISTING skill's structure and location, NOT about tuning, evaluating, or fixing an EXISTING skill's trigger behavior (skill-creator), and NOT about refreshing an EXISTING skill's metadata.yaml after its body/tools/scripts/hooks changed \u2014 that is the separate `meta:update-skill` skill. Also NOT for ordinary code, components, or config in a project. If the skill already exists, use `meta:update-skill` or `skill-creator` instead."
 ---
 
 # Create a New Skill
@@ -86,7 +86,7 @@ Use ## sections, code blocks, tables as needed.
 2. Create `plugins/<domain>/skills/<name>/SKILL.md` using the structure above.
 3. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant.
 4. **New domain only:** also create `plugins/<domain>/.claude-plugin/plugin.json`
-   (`{name, description, version, keywords, author:{name:"Aquiva"}}` — `version` is semver,
+   (`{name, description, version, keywords, author:{name:"Roman Maslennikov"}}` — `version` is semver,
    `keywords` an array for marketplace discovery), then enable `<domain>@bladeforge` in the
    consuming repo's `.claude/settings.json → enabledPlugins`. `.claude-plugin/marketplace.json` is
    **generated** from each `plugin.json` by `sync.sh` — do not hand-edit it. Adding a skill to an
@@ -94,11 +94,57 @@ Use ## sections, code blocks, tables as needed.
 5. Add the skill's one-line entry to `README.md` by hand — the README is hand-maintained (`sync.sh`
    does not touch it). `sync.sh` runs on the PostToolUse hook whenever a `SKILL.md` or `plugin.json`
    changes: it regenerates `marketplace.json`, then commits + pushes.
-6. **Editing an EXISTING skill or plugin? Bump its `plugin.json` `version` (semver).** The installed
+6. **Run the metadata interview and write `plugins/<domain>/skills/<name>/metadata.yaml`.** Every
+   skill ships this sidecar. Ask the human ONE field at a time, in this order:
+
+   | field | rule |
+   |---|---|
+   | `purpose` | One-line human gloss. REQUIRED, non-blank. |
+   | `best-for` | Adoption-fit sentence. Optional — may be blank. |
+   | `needs` | Other skill ids (`<domain>:<name>`) this one depends on. `[]` if none. |
+   | `changes.tags` | MULTI-SELECT from the fixed glossary below. `[]` if the skill changes nothing. |
+   | `changes.notes` | Free text. REQUIRED non-blank if `other` is among `changes.tags`. |
+
+   `changes.tags` glossary (present these plain-language meanings when asking):
+
+   | tag | means |
+   |---|---|
+   | `git` | touches git — commits, pushes, branches, rewrites history |
+   | `files` | writes or edits files on disk |
+   | `network` | goes to the network — HTTP calls, downloads, external APIs |
+   | `org` | changes a Salesforce org — deploys, DML, writes records/metadata |
+   | `money` | moves money — payments, billing, real financial operations |
+   | `other` | none of the above — MUST be described in `changes.notes` |
+
+   Do NOT ask about `activates-when` or `schema-version` — both are derivable, not authored:
+   `activates-when` is copied verbatim from the `description:` frontmatter by the catalog compiler
+   at build time, and `schema-version` is the constant `1`. Write the sidecar in one atomic step
+   (temp file + rename, or equivalent) so a crash mid-write never leaves a half-written
+   `metadata.yaml`:
+
+   ```yaml
+   schema-version: 1
+   purpose: One-line human gloss — required, non-blank.
+   best-for: Adoption-fit sentence — optional, may be blank.
+   needs: [salesforce:dx_mcp]     # skill ids in this marketplace; [] = nothing
+   changes:
+     tags: [org, network]         # multi-select from the glossary; [] = none
+     notes: Free text.
+   ```
+
+7. **Bundling a script the skill will call (`scripts/*.py`, `scripts/*.sh`)?** If a line in that
+   script performs a mutation the scout gate would otherwise flag as suspicious (e.g. a stray
+   `git push` in a helper that never actually runs it), you may suppress that one false-positive by
+   adding a trailing `# scout-ignore` comment on that exact line — it is an authored escape hatch,
+   not a way to hide real behavior. Full guidance on when this is appropriate lives in the `scout`
+   skill; this is just the naming convention.
+8. **Editing an EXISTING skill or plugin? Bump its `plugin.json` `version` (semver).** The installed
    plugin cache is keyed by version — `/plugin update` only reinstalls a plugin when its version
    changed. Edit a skill's body or description without bumping the owning plugin's `version` and the
    change lives in git + the marketplace but **never loads in a session**: the stale cache keeps
    serving the old copy and `reload-skills` reports "no changes". One bump per plugin per change set.
+   (For refreshing an existing skill's `metadata.yaml` after a later edit, use `meta:update-skill`
+   instead of repeating the interview here.)
 
 ---
 
