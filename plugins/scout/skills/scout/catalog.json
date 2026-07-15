@@ -395,7 +395,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "1.5.3",
+      "plugin-version": "1.5.4",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the 5-agent /review system in a new project.",
       "purpose": "Install and tailor the pre-push review framework (5 reviewer agents, /review, secret-scan + attestation gate) into a target repo.",
       "best-for": "A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the 5-agent pre-push review gate adopted and tuned to its stack.",
@@ -405,11 +405,9 @@
           "files",
           "network"
         ],
-        "notes": "Walks the adopter through running bootstrap.sh/install.sh (fetched via `gh api` over the network), which vendor scripts/review/*, .husky/pre-push, .github/workflows/review-gate.yml, and a seeded .claude/review.config.json into the target repo, and merge the marketplace + plugin entry into the repo's committed .claude/settings.json. The skill itself then hand-edits .claude/review.config.json (zones/skills/rules/pairedDocs) to tailor it to the project.\n"
+        "notes": "Walks the adopter through running bootstrap.sh/install.sh (fetched via `gh api` over the network), which write .husky/pre-push, .github/workflows/review-gate.yml, the config schema, and a seeded .claude/review.config.json into the target repo, and merge the marketplace + plugin entry into the repo's committed .claude/settings.json. No harness is vendored \u2014 the gate is the published bladeforge-review-harness npm package, run via `npx \u2026@latest`. The skill itself then hand-edits .claude/review.config.json (zones/skills/rules/pairedDocs) to tailor it to the project.\n"
       },
-      "hooks": [
-        "SessionStart"
-      ]
+      "hooks": []
     },
     {
       "name": "salesforce:apex_test-authoring",
