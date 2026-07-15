@@ -44,12 +44,17 @@ jobs:
       - name: Compute affected plugin(s) and PATCH-bump version
         run: |
           set -euo pipefail
-          # "Affected plugin" = any plugin under which a skill changed in this push.
-          # Diff the merge commit against its first parent to get the paths that changed,
-          # then map each plugins/<domain>/skills/... path to its owning plugin.json.
-          changed_paths="$(git diff --name-only HEAD^ HEAD -- 'plugins/*/skills/*' || true)"
+          # "Affected plugin" = any plugin whose PAYLOAD changed in this push — a skill,
+          # hook, command, output-style, or agent. NOT just skills/: a plugin can ship
+          # non-skill content (e.g. cicero is a hook + output-style with no skills at all),
+          # and a skills-only filter silently skips its bump, leaving the version-keyed
+          # plugin cache stale on every client. Diff the merge commit against its first
+          # parent, then map each plugins/<domain>/... path to its owning plugin.json.
+          # Exclude the auto-managed files (the version we're about to write, and scout's
+          # generated catalog) so a bot write or a manual version edit can't self-trigger.
+          changed_paths="$(git diff --name-only HEAD^ HEAD -- 'plugins/*' ':(exclude)plugins/*/.claude-plugin/plugin.json' ':(exclude)plugins/scout/skills/scout/catalog.json' || true)"
           if [ -z "$changed_paths" ]; then
-            echo "no plugins/*/skills/* changes in this push — nothing to bump"; exit 0
+            echo "no plugin payload changes in this push — nothing to bump"; exit 0
           fi
           affected_plugins="$(echo "$changed_paths" | cut -d/ -f2 | sort -u)"
           for plugin in $affected_plugins; do
