@@ -24,19 +24,19 @@ bash <(gh api repos/aquivalabs/BladeForge/contents/plugins/review/bootstrap.sh -
 `bootstrap.sh` shallow-clones this marketplace and runs `install.sh` against the repo. If the plugin is
 already installed, you can run its installer directly instead: `bash "${CLAUDE_PLUGIN_ROOT}/install.sh"`.
 
-This vendors into the repo: `scripts/review/*` (harness + `package.json`), `.husky/pre-push`,
+This installs ONLY thin wiring — NO vendored harness. It writes `.husky/pre-push`,
 `.github/workflows/review-gate.yml`, `.claude/review.config.schema.json`, and a seeded
 `.claude/review.config.json` (only if absent — an existing one is never clobbered). It also **merges**
 the marketplace + `review@<marketplace>` into the repo's committed `.claude/settings.json`, so teammates
-get the plugin on a one-time trust/approve prompt.
+get the plugin on a one-time trust/approve prompt. The gate itself is the published
+`bladeforge-review-harness` npm package, fetched + run via `npx …@latest` (no `scripts/review/` in the
+repo; upgrades arrive from npm automatically).
 
 ## Finish the setup
 
 1. **Enable husky** (once per repo): `npm i -D husky && npx husky init` — then ensure `.husky/pre-push`
    is the one the installer wrote (re-copy if `husky init` overwrote it).
-2. **Install harness deps** for fast local runs: `(cd scripts/review && npm i)`. (Without this, husky/CI
-   still work via `npx tsx`, just slower.)
-3. **CI base branch:** the workflow uses `origin/main`; if the repo's default branch differs, edit
+2. **CI base branch:** the workflow uses `origin/main`; if the repo's default branch differs, edit
    `--base` in `.github/workflows/review-gate.yml`.
 
 ## Tailor the config

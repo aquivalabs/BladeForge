@@ -6,7 +6,8 @@ changes:
   tags: [files, network]
   notes: >
     Walks the adopter through running bootstrap.sh/install.sh (fetched via `gh api` over the
-    network), which vendor scripts/review/*, .husky/pre-push, .github/workflows/review-gate.yml,
-    and a seeded .claude/review.config.json into the target repo, and merge the marketplace +
-    plugin entry into the repo's committed .claude/settings.json. The skill itself then hand-edits
-    .claude/review.config.json (zones/skills/rules/pairedDocs) to tailor it to the project.
+    network), which write .husky/pre-push, .github/workflows/review-gate.yml, the config schema, and
+    a seeded .claude/review.config.json into the target repo, and merge the marketplace + plugin
+    entry into the repo's committed .claude/settings.json. No harness is vendored — the gate is the
+    published bladeforge-review-harness npm package, run via `npx …@latest`. The skill itself then
+    hand-edits .claude/review.config.json (zones/skills/rules/pairedDocs) to tailor it to the project.
