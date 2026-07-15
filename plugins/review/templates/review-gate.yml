@@ -12,4 +12,5 @@ jobs:
         with:
           node-version: 20
       - name: Secret scan (deterministic review gate)
-        run: npx tsx scripts/review/gate.ts --base origin/main --secrets-only
+        # Self-contained: fetch + run the latest published harness; not tied to any repo scripts.
+        run: npx -y -p bladeforge-review-harness@latest review-gate --base origin/main --secrets-only
