@@ -67,6 +67,20 @@ Example:
 Match the user's task against `activates-when`, `best-for`, and `needs` across catalog entries.
 State WHY a skill fits (which of those fields matched), not just its name.
 
+When the recommendation covers MORE THAN TWO skills — including "what should I use on this
+project / for this task?" asks, where the answer is a curated set rather than one pick — render
+it in the same plugin-grouped TABLE shape as Discover, with a third "why it fits" column:
+
+    | skill | what it does | why it fits |
+    |---|---|---|
+    | **▸ {plugin}** | | |
+    | `{name}` | {one-to-two-sentence purpose} | {which field matched, in one short phrase} |
+
+Discover's rendering rules apply (plugin header rows, bare skill names, user's language for
+headers and prose, no `needs`/`changes`/hooks columns — those stay in the Single view and
+Install-time disclosure). Order plugins by relevance to the task, not alphabetically. For one or
+two skills, prose with the pick + a one-line why is fine — don't force a table around one row.
+
 If the best-fitting skill declares a `needs` on another skill:
 - Disclose the transitive need explicitly — a needed skill may live in a different, not-yet-installed
   plugin than the one you're about to recommend.
