@@ -4,6 +4,14 @@ description: Run the configured pre-push reviewer agents + secret scan over the 
 
 Run the mandatory pre-push review.
 
+0. Incremental check — read the branch's attestation FIRST, so an unchanged (or barely-changed) diff never pays for a full re-run. Compute the current hash (`npx tsx -e "import('./scripts/review/diffHash.ts').then((m) => process.stdout.write(m.computeReviewHash()))"`) and read `.review/attestation.json` (committed on the branch by a prior PASS):
+
+   - **Already green** — attestation exists, `overall` is `PASS`, and its `diffHash` equals the current hash → this EXACT change set is already reviewed. Run only the secret scan (step 2); if clean, print the results table from the stored `perAgent`, state the gate is green, and STOP — dispatch NO reviewers.
+   - **Incremental** — attestation exists, `overall` is `PASS`, and it has a `commitSha`, but the hash differs → review only the delta. The files changed since the last review are `git diff --name-only <commitSha>..HEAD`. In step 3 dispatch ONLY the reviewers whose `zones` match at least one of those changed-since files (each still reviews the full current `base..HEAD` diff for its zone); CARRY FORWARD the stored `perAgent` verdict for every other reviewer. If the base branch has moved substantially (the range looks off) or there is no `commitSha`, fall back to a full review.
+   - **Full** — no attestation, or `overall` was `FAIL` → proceed normally to step 1 and dispatch all zone-matched reviewers.
+
+   Either way continue to steps 4–7 to score and (on PASS) rewrite the attestation over the current diff.
+
 1. Resolve the base and the change set. Base: `npx tsx -e "import('./scripts/review/diffHash.ts').then((m) => process.stdout.write(m.resolveBase()))"`. Then run `git diff <base>..HEAD` and `git diff --name-only <base>..HEAD`. If the diff is empty, tell the user there is nothing to review and stop.
 
 2. Run the deterministic secret scan over the SAME change set: `npx tsx scripts/review/gate.ts --secrets-only --base <base>`. Capture any secret findings — they BLOCK regardless of the agent scores.
@@ -30,9 +38,9 @@ Run the mandatory pre-push review.
 
 6. On OVERALL FAIL: do NOT write an attestation and do NOT edit code (reviewers report only). State plainly that the gate is RED, then stop (the table + recommendations are already printed).
 
-7. On OVERALL PASS: build the per-agent JSON `{ "<agent>": {"score":N,"verdict":"PASS"}, ... }` and write the attestation:
+7. On OVERALL PASS: ALWAYS write and commit the attestation — automatically, without asking. This is not optional: the committed `.review/attestation.json` is the branch anchor that lets the NEXT `/review` short-circuit (step 0) instead of re-running the whole cycle. Build the per-agent JSON `{ "<agent>": {"score":N,"verdict":"PASS"}, ... }` (INCLUDING the carried-forward verdicts from step 0) and write it:
    `npx tsx scripts/review/writeAttestation.ts '<perAgentJson>'`
-   This writes `.review/attestation.json`. Then commit it:
+   This stamps the current `diffHash` AND the `commitSha` (HEAD SHA the review covers) into `.review/attestation.json`. Then commit it to the branch:
    `git add .review/attestation.json && git commit -m "chore: review attestation"`
    Tell the user the gate is green and they can push.
 

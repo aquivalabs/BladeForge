@@ -60,6 +60,10 @@ const printReport = (result: GateResult): void => {
     console.error(`  ${step}) Review not passed for THIS change set.`);
     console.error('     No `.review/attestation.json` matching the current diff was found');
     console.error('     (missing, or stale because the diff changed since the last review).');
+    const stale = readAttestation();
+    if (stale?.commitSha) {
+      console.error(`     Last review covered commit ${stale.commitSha.slice(0, 12)}; the diff has changed since.`);
+    }
     console.error('     → Run  /review  in Claude Code. On all-pass it writes the attestation;');
     console.error('       then push again.');
     console.error('');
