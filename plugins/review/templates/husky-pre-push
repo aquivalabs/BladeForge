@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -e
-ROOT="$(git rev-parse --show-toplevel)"
 # Review gate — fresh passing /review attestation for this diff + secret scan.
-npx tsx "$ROOT/scripts/review/gate.ts"
+# Self-contained: fetch + run the latest published harness; nothing vendored in this repo.
+npx -y -p bladeforge-review-harness@latest review-gate

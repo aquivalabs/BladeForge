@@ -7,14 +7,16 @@ trap 'rm -rf "$T"' EXIT
 
 bash "$HERE/install.sh" "$T"
 
-for p in scripts/review/gate.ts scripts/review/config.ts scripts/review/docPairing.ts \
-         scripts/review/package.json .husky/pre-push .github/workflows/review-gate.yml \
+for p in .husky/pre-push .github/workflows/review-gate.yml \
          .claude/review.config.schema.json .claude/review.config.json; do
   [ -f "$T/$p" ] || { echo "MISSING: $p"; exit 1; }
 done
 
 [ -x "$T/.husky/pre-push" ] || { echo "pre-push not executable"; exit 1; }
-[ -d "$T/scripts/review/node_modules" ] && { echo "node_modules leaked"; exit 1; }
+# No vendoring — the harness is the npm package invoked via npx; the target gets NO scripts/review/.
+[ -d "$T/scripts/review" ] && { echo "scripts/review should not be vendored"; exit 1; }
+grep -q 'review-gate' "$T/.husky/pre-push" || { echo "pre-push does not invoke review-gate"; exit 1; }
+grep -q 'bladeforge-review-harness' "$T/.github/workflows/review-gate.yml" || { echo "CI does not invoke the harness package"; exit 1; }
 
 # Idempotency: a custom config must survive a re-run.
 echo '{"custom":true}' > "$T/.claude/review.config.json"

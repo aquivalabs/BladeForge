@@ -12,18 +12,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MARKET_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 TARGET="${1:-$PWD}"
 
-mkdir -p "$TARGET/scripts/review" "$TARGET/.husky" "$TARGET/.github/workflows" "$TARGET/.claude"
+mkdir -p "$TARGET/.husky" "$TARGET/.github/workflows" "$TARGET/.claude"
 
-# Harness (vendored) — *.ts + package.json, never node_modules.
-for f in "$SCRIPT_DIR"/scripts/review/*.ts; do
-  cp "$f" "$TARGET/scripts/review/"
-done
-cp "$SCRIPT_DIR/scripts/review/package.json" "$TARGET/scripts/review/package.json"
-
-# Stamp the vendored harness with the plugin version so the SessionStart sync hook can detect drift
-# and re-vendor on the next version bump.
-PLUGIN_VERSION="$(jq -r '.version // empty' "$SCRIPT_DIR/.claude-plugin/plugin.json" 2>/dev/null || true)"
-[ -n "$PLUGIN_VERSION" ] && printf '%s\n' "$PLUGIN_VERSION" > "$TARGET/scripts/review/.plugin-version"
+# No harness vendoring. The gate is the published `bladeforge-review-harness` npm package, invoked
+# via `npx …@latest` from the hook / CI / the /review command — the repo keeps NO scripts/review/
+# copy, and upgrades arrive from npm automatically.
 
 # Config schema is plugin-owned — always refresh it.
 cp "$SCRIPT_DIR/review.config.schema.json" "$TARGET/.claude/review.config.schema.json"
@@ -32,13 +25,13 @@ cp "$SCRIPT_DIR/review.config.schema.json" "$TARGET/.claude/review.config.schema
 # (lint, type-check, tests, route compliance) in this hook; only ADD the review gate.
 HOOK="$TARGET/.husky/pre-push"
 if [ -f "$HOOK" ]; then
-  if grep -q 'scripts/review/gate.ts' "$HOOK"; then
+  if grep -q 'review-gate' "$HOOK"; then
     echo "kept .husky/pre-push (already invokes the review gate)"
   else
     {
       echo ""
       echo "# Review gate (added by review plugin install) — passing /review attestation + secret scan."
-      echo 'npx tsx "$(git rev-parse --show-toplevel)/scripts/review/gate.ts"'
+      echo 'npx -y -p bladeforge-review-harness@latest review-gate'
     } >> "$HOOK"
     chmod +x "$HOOK"
     echo "extended .husky/pre-push with the review gate (kept your existing checks)"
@@ -53,9 +46,9 @@ fi
 # gate into its own workflow keeps it; we don't overwrite its other CI steps.
 WF="$TARGET/.github/workflows/review-gate.yml"
 if [ -f "$WF" ]; then
-  grep -q 'scripts/review/gate.ts' "$WF" \
+  grep -q 'review-gate' "$WF" \
     && echo "kept .github/workflows/review-gate.yml (already runs the review gate)" \
-    || echo "kept .github/workflows/review-gate.yml (exists — NOT overwritten; add 'npx tsx scripts/review/gate.ts --secrets-only' yourself if missing)"
+    || echo "kept .github/workflows/review-gate.yml (exists — NOT overwritten; add 'npx -y -p bladeforge-review-harness@latest review-gate --secrets-only' yourself if missing)"
 else
   cp "$SCRIPT_DIR/templates/review-gate.yml" "$WF"
   echo "created .github/workflows/review-gate.yml"

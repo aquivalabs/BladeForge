@@ -2,9 +2,11 @@
 description: Run the configured pre-push reviewer agents + secret scan over the cumulative diff, always print a results table, and on all-pass write the review attestation.
 ---
 
-Run the mandatory pre-push review.
+Run the mandatory pre-push review. The harness is the published `bladeforge-review-harness` package, invoked via `npx` — nothing is vendored in the repo.
 
-0. Incremental check — read the branch's attestation FIRST, so an unchanged (or barely-changed) diff never pays for a full re-run. Compute the current hash (`npx tsx -e "import('./scripts/review/diffHash.ts').then((m) => process.stdout.write(m.computeReviewHash()))"`) and read `.review/attestation.json` (committed on the branch by a prior PASS):
+First gather inputs with ONE call: `npx -y -p bladeforge-review-harness@latest review-info` → JSON `{ base, hash, config }` (the base ref, the current diff hash over `base..HEAD`, and the merged review config). Use `hash` in step 0, `base` in step 1, `config` in step 3.
+
+0. Incremental check — read the branch's attestation FIRST, so an unchanged (or barely-changed) diff never pays for a full re-run. Using `hash` from review-info, read `.review/attestation.json` (committed on the branch by a prior PASS):
 
    - **Already green** — attestation exists, `overall` is `PASS`, and its `diffHash` equals the current hash → this EXACT change set is already reviewed. Run only the secret scan (step 2); if clean, print the results table from the stored `perAgent`, state the gate is green, and STOP — dispatch NO reviewers.
    - **Incremental** — attestation exists, `overall` is `PASS`, and it has a `commitSha`, but the hash differs → review only the delta. The files changed since the last review are `git diff --name-only <commitSha>..HEAD`. In step 3 dispatch ONLY the reviewers whose `zones` match at least one of those changed-since files (each still reviews the full current `base..HEAD` diff for its zone); CARRY FORWARD the stored `perAgent` verdict for every other reviewer. If the base branch has moved substantially (the range looks off) or there is no `commitSha`, fall back to a full review.
@@ -12,11 +14,11 @@ Run the mandatory pre-push review.
 
    Either way continue to steps 4–7 to score and (on PASS) rewrite the attestation over the current diff.
 
-1. Resolve the base and the change set. Base: `npx tsx -e "import('./scripts/review/diffHash.ts').then((m) => process.stdout.write(m.resolveBase()))"`. Then run `git diff <base>..HEAD` and `git diff --name-only <base>..HEAD`. If the diff is empty, tell the user there is nothing to review and stop.
+1. Resolve the base and the change set. Base = the `base` from review-info. Then run `git diff <base>..HEAD` and `git diff --name-only <base>..HEAD`. If the diff is empty, tell the user there is nothing to review and stop.
 
-2. Run the deterministic secret scan over the SAME change set: `npx tsx scripts/review/gate.ts --secrets-only --base <base>`. Capture any secret findings — they BLOCK regardless of the agent scores.
+2. Run the deterministic secret scan over the SAME change set: `npx -y -p bladeforge-review-harness@latest review-gate --secrets-only --base <base>`. Capture any secret findings — they BLOCK regardless of the agent scores.
 
-3. Load the active reviewer set: `npx tsx -e "import('./scripts/review/config.ts').then((m) => process.stdout.write(JSON.stringify(m.loadConfig())))"`. Then SELECT which reviewers to dispatch by zone: for each ENABLED agent, dispatch it ONLY if at least one changed file matches one of its `zones` globs. An enabled agent whose zones match NONE of the changed files is NOT dispatched — carry it forward as `{ "score": 10, "verdict": "PASS", "hasBlocker": false, "findings": [], "advisories": [] }` (nothing in its zone to review). Zone globs use standard `**`/`*` semantics; when unsure whether a path matches, DISPATCH the agent — never skip on doubt. If NO agent's zones match any changed file, skip agent dispatch entirely and proceed to scoring with every agent carried at PASS 10.
+3. The active reviewer set is `config` from review-info. Then SELECT which reviewers to dispatch by zone: for each ENABLED agent, dispatch it ONLY if at least one changed file matches one of its `zones` globs. An enabled agent whose zones match NONE of the changed files is NOT dispatched — carry it forward as `{ "score": 10, "verdict": "PASS", "hasBlocker": false, "findings": [], "advisories": [] }` (nothing in its zone to review). Zone globs use standard `**`/`*` semantics; when unsure whether a path matches, DISPATCH the agent — never skip on doubt. If NO agent's zones match any changed file, skip agent dispatch entirely and proceed to scoring with every agent carried at PASS 10.
 
    Dispatch the SELECTED reviewers IN PARALLEL (a single message with one Agent tool call each). The reviewer `subagent_type` for a config agent named `<name>` is the plugin-namespaced `review:review-<name>` (e.g. `review:review-conventions`) — that is how the marketplace surfaces them. Only if the framework's agents were vendored into the target repo's own `.claude/agents/` will the bare `review-<name>` resolve; when in doubt use the `review:`-prefixed form, and if a dispatch errors with "Agent type not found", retry it with the other form rather than skipping the reviewer. Give each agent: the cumulative diff, the changed-file list, and its config block (`zones`, `skills`, `rules`, `pairedDocs`, `threshold`, `extensionSkill`, and the top-level `persona` from the loaded config). Each returns its JSON verdict object `{ agent, score, verdict, hasBlocker, findings[], advisories[] }`.
 
@@ -39,7 +41,7 @@ Run the mandatory pre-push review.
 6. On OVERALL FAIL: do NOT write an attestation and do NOT edit code (reviewers report only). State plainly that the gate is RED, then stop (the table + recommendations are already printed).
 
 7. On OVERALL PASS: ALWAYS write and commit the attestation — automatically, without asking. This is not optional: the committed `.review/attestation.json` is the branch anchor that lets the NEXT `/review` short-circuit (step 0) instead of re-running the whole cycle. Build the per-agent JSON `{ "<agent>": {"score":N,"verdict":"PASS"}, ... }` (INCLUDING the carried-forward verdicts from step 0) and write it:
-   `npx tsx scripts/review/writeAttestation.ts '<perAgentJson>'`
+   `npx -y -p bladeforge-review-harness@latest review-attest '<perAgentJson>'`
    This stamps the current `diffHash` AND the `commitSha` (HEAD SHA the review covers) into `.review/attestation.json`. Then commit it to the branch:
    `git add .review/attestation.json && git commit -m "chore: review attestation"`
    Tell the user the gate is green and they can push.
