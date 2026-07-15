@@ -20,6 +20,11 @@ for f in "$SCRIPT_DIR"/scripts/review/*.ts; do
 done
 cp "$SCRIPT_DIR/scripts/review/package.json" "$TARGET/scripts/review/package.json"
 
+# Stamp the vendored harness with the plugin version so the SessionStart sync hook can detect drift
+# and re-vendor on the next version bump.
+PLUGIN_VERSION="$(jq -r '.version // empty' "$SCRIPT_DIR/.claude-plugin/plugin.json" 2>/dev/null || true)"
+[ -n "$PLUGIN_VERSION" ] && printf '%s\n' "$PLUGIN_VERSION" > "$TARGET/scripts/review/.plugin-version"
+
 # Config schema is plugin-owned — always refresh it.
 cp "$SCRIPT_DIR/review.config.schema.json" "$TARGET/.claude/review.config.schema.json"
 
