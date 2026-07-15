@@ -505,7 +505,7 @@
     {
       "name": "scout:scout",
       "plugin": "scout",
-      "plugin-version": "1.0.4",
+      "plugin-version": "1.0.5",
       "activates-when": "Use this skill when the user asks what skills exist in this marketplace, what could help with a task, to recommend or install a skill, or to browse the catalog \u2014 e.g. \\\"what skills are available for writing tests?\\\", \\\"recommend a skill for reviewing my SCSS\\\", \\\"install the skill that formats commit messages\\\", \\\"show me everything in this marketplace\\\". This skill is PASSIVE \u2014 it never runs code; it is instructions telling the agent to read the bundled catalog.json and act on it. NOT for authoring a brand-new skill (`meta:new-skill`), NOT for refreshing an existing skill's metadata.yaml (`meta:update-skill`), and NOT for ordinary unrelated coding tasks.",
       "purpose": "Guide the agent to discover, recommend, and install marketplace skills from the compiled catalog.",
       "best-for": "Any session where the user wants to browse what skills exist, get a fit recommendation for a task, or install a skill from this marketplace.",
