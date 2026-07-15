@@ -8,6 +8,10 @@ export interface AgentResult {
 
 export interface Attestation {
   diffHash: string;
+  /** HEAD SHA the review covered — a pointer for humans/bots and the anchor for the next
+   * incremental review. Optional for backward compatibility with attestations written before this
+   * field existed; the gate's validity check keys on diffHash, never on commitSha. */
+  commitSha?: string;
   perAgent: Record<string, AgentResult>;
   overall: 'PASS' | 'FAIL';
   timestamp: string;
