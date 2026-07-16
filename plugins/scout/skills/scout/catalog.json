@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-07-15",
+  "generated": "2026-07-16",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -395,7 +395,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "1.5.4",
+      "plugin-version": "1.5.7",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the 5-agent /review system in a new project.",
       "purpose": "Install and tailor the pre-push review framework (5 reviewer agents, /review, secret-scan + attestation gate) into a target repo.",
       "best-for": "A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the 5-agent pre-push review gate adopted and tuned to its stack.",
