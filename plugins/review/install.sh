@@ -6,7 +6,7 @@ set -euo pipefail
 # Vendors the harness + git hook + CI workflow + config schema, seeds a config, and wires the
 # marketplace + review plugin into the target repo's committed .claude/settings.json. Self-aware:
 # the marketplace name + source repo are derived from THIS plugin's own marketplace, so the same
-# script works unchanged from whatever marketplace it is vendored into.
+# script works unchanged from either marketplace (accountingseed / xaaalera).
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MARKET_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
