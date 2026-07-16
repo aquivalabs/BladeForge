@@ -6,7 +6,7 @@ Run the mandatory pre-push review. The harness is the published `bladeforge-revi
 
 First gather inputs with ONE call: `npx -y -p bladeforge-review-harness@latest review-info` → JSON `{ base, hash, config }` (the base ref, the current diff hash over `base..HEAD`, and the merged review config). Use `hash` in step 0, `base` in step 1, `config` in step 3.
 
-0. Incremental check — read the branch's attestation FIRST, so an unchanged (or barely-changed) diff never pays for a full re-run. Using `hash` from review-info, read `.review/attestation.json` (committed on the branch by a prior PASS):
+0. Incremental check — read the branch's attestation FIRST, so an unchanged (or barely-changed) diff never pays for a full re-run. Using `hash` from review-info, read the content-addressed `.review/attestations/<hash>.json` (committed on the branch by a prior PASS):
 
    - **Already green** — attestation exists, `overall` is `PASS`, and its `diffHash` equals the current hash → this EXACT change set is already reviewed. Run only the secret scan (step 2); if clean, print the results table from the stored `perAgent`, state the gate is green, and STOP — dispatch NO reviewers.
    - **Incremental** — attestation exists, `overall` is `PASS`, and it has a `commitSha`, but the hash differs → review only the delta. The files changed since the last review are `git diff --name-only <commitSha>..HEAD`. In step 3 dispatch ONLY the reviewers whose `zones` match at least one of those changed-since files (each still reviews the full current `base..HEAD` diff for its zone); CARRY FORWARD the stored `perAgent` verdict for every other reviewer. If the base branch has moved substantially (the range looks off) or there is no `commitSha`, fall back to a full review.
@@ -40,10 +40,10 @@ First gather inputs with ONE call: `npx -y -p bladeforge-review-harness@latest r
 
 6. On OVERALL FAIL: do NOT write an attestation and do NOT edit code (reviewers report only). State plainly that the gate is RED, then stop (the table + recommendations are already printed).
 
-7. On OVERALL PASS: ALWAYS write and commit the attestation — automatically, without asking. This is not optional: the committed `.review/attestation.json` is the branch anchor that lets the NEXT `/review` short-circuit (step 0) instead of re-running the whole cycle. Build the per-agent JSON `{ "<agent>": {"score":N,"verdict":"PASS"}, ... }` (INCLUDING the carried-forward verdicts from step 0) and write it:
+7. On OVERALL PASS: ALWAYS write and commit the attestation — automatically, without asking. This is not optional: the committed `.review/attestations/<diffHash>.json` is the branch anchor that lets the NEXT `/review` short-circuit (step 0) instead of re-running the whole cycle. Build the per-agent JSON `{ "<agent>": {"score":N,"verdict":"PASS"}, ... }` (INCLUDING the carried-forward verdicts from step 0) and write it:
    `npx -y -p bladeforge-review-harness@latest review-attest '<perAgentJson>'`
-   This stamps the current `diffHash` AND the `commitSha` (HEAD SHA the review covers) into `.review/attestation.json`. Then commit it to the branch:
-   `git add .review/attestation.json && git commit -m "chore: review attestation"`
+   This stamps the current `diffHash` AND the `commitSha` (HEAD SHA the review covers) into the content-addressed `.review/attestations/<diffHash>.json`, pruning any stale sibling attestation. Then commit the store to the branch — stage additions AND the pruned deletions:
+   `git add -A .review/ && git commit -m "chore: review attestation"`
    Tell the user the gate is green and they can push.
 
 8. Re-running after a FAIL (fixes applied). Do NOT re-dispatch the full set. Re-run ONLY the reviewers that FAILED last time AND whose zone the fixes actually touched — over the current diff, with the same per-agent config; carry the earlier PASS verdicts forward for every reviewer not re-run. Always re-run the secret scan (step 2 — cheap and deterministic). Repeat this targeted loop until every previously-failed reviewer passes. ONLY THEN, and ONLY IF the fixes spilled outside the failed reviewers' zones (touched files owned by reviewers that had already passed), run the FULL set once more before scoring; otherwise the carried-forward passes plus the fresh passes stand. Write the attestation only after a full ALL-PASS.
