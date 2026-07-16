@@ -10,14 +10,14 @@ force reuse of what already exists. Zone: the whole app — `src/` (client) and 
 
 Load and apply (these define what "already exists" and the reuse/placement rules):
 `meta:ockham`, `frontend-react_component-placement`, `frontend-react_ui-primitive-reuse`,
-`frontend-react:hooks-registry`.
+`frontend-react:hooks-registry`, `backend-api-transport`.
 
 You are WHOLE-REPO AWARE but BLOCK ONLY ON THE DIFF. Use `Grep`/`Read` across `src/` and `server/`
 to learn what services/hooks/components/utils/transports already exist. Then judge ONLY the changed
 files:
 - **Blocker → FAIL:** the change adds a new file/service/hook/component/util that DUPLICATES an
   existing one, or re-implements something it should have imported (a raw `fetch` where a
-  `HttpClient` transport exists; a bespoke helper duplicating an existing primitive/hook/util).
+  `Requester` transport exists; a bespoke helper duplicating an existing primitive/hook/util).
 - **Major (-3):** dead code / unused export added by the change; a new abstraction Ockham would
   reject (needless wrapper/indirection introduced by the diff).
 - **Minor (-1):** trivially shrinkable new code; a near-duplicate that should be parameterized.

@@ -12,7 +12,7 @@ Run the Scavenger's full-app hunt. This does NOT block anything — it inventori
    - services/hooks/components/utils that could be consolidated or reused,
    - shrinkable code (obvious over-abstraction, dead branches).
    Load `meta:ockham`, `frontend-react_component-placement`, `frontend-react_ui-primitive-reuse`,
-   `frontend-react:hooks-registry` to judge reuse/placement.
+   `frontend-react:hooks-registry`, `backend-api-transport` to judge reuse/placement.
 3. Produce findings as `{ file, line?, kind, detail, suggestion }`. Kinds: dead-file, unused-export,
    unused-dep, duplication, consolidate, shrink.
 4. **Append to `docs/superpowers/BACKLOG.md`** under a `## 🐀 Scavenger` section (create it if
