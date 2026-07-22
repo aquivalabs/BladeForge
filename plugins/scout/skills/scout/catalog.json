@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-07-16",
+  "generated": "2026-07-22",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -54,7 +54,7 @@
     {
       "name": "frontend-css:rem",
       "plugin": "frontend-css",
-      "plugin-version": "1.2.0",
+      "plugin-version": "1.3.0",
       "activates-when": "CSS Units \\u2014 enforce rem for CSS/SCSS/Tailwind dimensions. Use whenever a hardcoded pixel length appears in a stylesheet or component's layout \\u2014 spacing, sizing, or typography such as gap, padding, margin, width, height, or font-size \\u2014 and the user wants it changed, reviewed, made consistent with a spacing scale, or made responsive to browser zoom/font-size. Applies whether the value is stated as px, an arbitrary Tailwind value like p-[10px], or an SCSS property. Do NOT trigger for genuinely pixel-appropriate values that stay in px: border-width, box-shadow offsets, or SVG attributes like width, height, and stroke-width on chart/vector elements.",
       "purpose": "Enforce rem (not px) for CSS/SCSS/Tailwind dimensional values so layouts respect user font-size/zoom preferences.",
       "best-for": "Frontend projects with a shared CSS/SCSS/Tailwind codebase that want consistent, accessible, zoom-responsive sizing instead of scattered hardcoded px.",
@@ -66,9 +66,23 @@
       "hooks": []
     },
     {
+      "name": "frontend-css:responsive-layout",
+      "plugin": "frontend-css",
+      "plugin-version": "1.3.0",
+      "activates-when": "Use when creating or editing ANY UI component, page, or layout style \u2014 the acceptance bar that it must render validly at every defined viewport breakpoint (no overflow, readable text, discernible images, restrained borders, sane density). Also use when a project has no breakpoint/grid system yet: propose one before verifying. NOT for choosing px\u2192rem (frontend-css:rem), SCSS tokens/BEM structure (frontend-css:scss-modules), or component folder placement (frontend-react:component-structure).",
+      "purpose": "The acceptance bar that any UI component/page renders validly at every defined viewport breakpoint \u2014 no overflow, readable text, discernible images, restrained borders, sane density \u2014 plus a step-0 that establishes a breakpoint scale when a project has none.",
+      "best-for": "Any UI stack with responsive layouts spanning phone\u2192desktop (React, Vue, Angular, Svelte, Salesforce LWC/Aura, plain HTML/CSS) that wants an enforceable, framework-agnostic definition-of-done for breakpoint validity applied at component-authoring time.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": "Pure advisory/convention skill \u2014 an authoring + review acceptance checklist; it does not itself edit files or run commands."
+      },
+      "hooks": []
+    },
+    {
       "name": "frontend-css:scss-modules",
       "plugin": "frontend-css",
-      "plugin-version": "1.2.0",
+      "plugin-version": "1.3.0",
       "activates-when": "House rules for authoring component SCSS \u2014 the .scss-over-.css convention, SCSS file structure, the color/spacing/radius variable & token system (never hardcode hex or magic numbers \u2014 add to variables first), and BEM structure (block \u2192 &__element \u2192 &--modifier). Use when writing or refactoring a component's styles, setting up the SCSS token/variable system, or consolidating hardcoded values to the scale. NOT for choosing a dimensional unit or converting px\u2192rem (frontend-css:rem), naming a component's folder or its non-style files (frontend-react:component-structure), style import-alias policy (frontend-js:conventions), LWC/Aura styling (salesforce:lwc_development), or skeleton/Storybook files.",
       "purpose": "House rules for authoring component SCSS \u2014 SCSS-over-CSS, the color/spacing/radius token system, BEM structure, and when position:absolute is/isn't justified.",
       "best-for": "Frontend projects with their own bundler (Vite/Webpack/Next.js, non-Salesforce) that want a consistent SCSS token system and BEM convention instead of scattered hardcoded values.",
@@ -265,7 +279,7 @@
     {
       "name": "meta:error-handling",
       "plugin": "meta",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.0",
       "activates-when": "Use when adding or handling any error path on any layer \u2014 throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend).",
       "purpose": "Enforce one Google AIP-193 style error envelope (code/status/message/details) across backend and frontend so every error is handled the same way regardless of layer.",
       "best-for": "Any project defining or touching an error path \u2014 a new service/route/controller throw, mapping an upstream failure, or a frontend reading an error \u2014 that wants one consistent, i18n-ready error contract instead of ad-hoc shapes per layer.",
@@ -279,7 +293,7 @@
     {
       "name": "meta:lean-writing",
       "plugin": "meta",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.0",
       "activates-when": "Use this skill to WRITE terse technical documents. Trigger when asked to write, draft, summarize, present, or update a spec, design doc, RFC, brainstorming/exploration summary, or a decision log of options considered \u2014 e.g. \"write the spec for\u2026\", \"draft a design doc\u2026\", \"write up the options we considered\u2026\", \"present the brainstorming results\u2026\", \"summarize the exploration we did\u2026\" \u2014 even if the user never says \"concise\". Produce short plain sentences, bullets over prose, no filler; caveman-simple but technically precise. NOT for normal conversation, code, or commit/jira messages, and NOT for reviewing or auditing an already-written doc for clarity or bloat (that's meta:wittgenstein).",
       "purpose": "Write terse, caveman-simple specs, design docs, or brainstorming summaries \u2014 lead with the decision, bullets over prose, no filler.",
       "best-for": "Anyone drafting a spec/design-doc/RFC/decision-log who wants short plain sentences instead of padded prose.",
@@ -293,7 +307,7 @@
     {
       "name": "meta:model-routing",
       "plugin": "meta",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.0",
       "activates-when": "Use whenever the plan is to spawn, fan out, or parallelize agents \\u2014 ANY multi-agent work, not just when models are mentioned. Triggers: \\\"spawn/kick off subagents\\\", \\\"a bunch of agents in parallel\\\", fleets that audit/comb/sweep/hunt across files, verify or skeptic stages, reviewer fan-outs, loop-until-done runs, authoring or editing a Workflow script (agent()/parallel()/pipeline()), or writing agent-definition frontmatter. Every spawned agent must get an EXPLICIT model tier assigned BEFORE it launches: reserve expensive head models for a small bounded set of final judges/synthesizers; mid-tier for judgment (review, verify, hunt); cheap tier for mechanical sweeps (grep, list, count, rename). Activate even when the user says nothing about models or cost \\u2014 an omitted model silently inherits the pricey session model, and fan-out multiplies that waste by the agent count.",
       "purpose": "Forces an explicit, cost-tiered model choice (head/work/sweep) on every spawned agent before any multi-agent fan-out, workflow script, or eval loop launches.",
       "best-for": "Anyone about to spawn subagents, write a Workflow script with agent()/parallel()/pipeline(), or run an eval/optimization loop, who wants to avoid silently inheriting the expensive session model across every spawned instance.",
@@ -307,7 +321,7 @@
     {
       "name": "meta:new-skill",
       "plugin": "meta",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.0",
       "activates-when": "Use this skill to author a brand-new skill FROM SCRATCH \\u2014 deciding its plugin/domain, folder name, file placement, and writing its SKILL.md, frontmatter, and initial metadata.yaml sidecar. Triggers for \\\"create/add/write a new skill for X\\\", \\\"where does the SKILL.md go\\\", \\\"what's the naming convention or folder structure for a new skill\\\", or \\\"what goes in the description frontmatter\\\". This is about scaffolding a NOT-YET-EXISTING skill's structure and location, NOT about tuning, evaluating, or fixing an EXISTING skill's trigger behavior (skill-creator), and NOT about refreshing an EXISTING skill's metadata.yaml after its body/tools/scripts/hooks changed \\u2014 that is the separate `meta:update-skill` skill. Also NOT for ordinary code, components, or config in a project. If the skill already exists, use `meta:update-skill` or `skill-creator` instead.",
       "purpose": "Scaffold a brand-new skill in the plugin model and author its metadata.yaml via a field-by-field interview.",
       "best-for": "Any marketplace where a new skill must ship a metadata.yaml sidecar and follow the house folder/naming structure.",
@@ -323,7 +337,7 @@
     {
       "name": "meta:ockham",
       "plugin": "meta",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.0",
       "activates-when": "The Razor. Invoke before creating ANY new entity \u2014 file, folder, module, class, function, component, hook, util, type, prop, variant, config key, abstraction layer, doc, or top-level category \u2014 in ANY language or stack. Not domain-specific. If you are about to bring a new thing into existence, OCKHAM speaks first.",
       "purpose": "Before creating any new file/module/class/function/prop/abstraction, forces a three-gate reuse-first check so entities aren't multiplied needlessly.",
       "best-for": "Any project that wants a discipline gate against sprawl \u2014 teams prone to premature helpers/wrappers/managers or copy-paste-and-rename duplication.",
@@ -335,9 +349,25 @@
       "hooks": []
     },
     {
+      "name": "meta:skill-eval",
+      "plugin": "meta",
+      "plugin-version": "1.4.0",
+      "activates-when": "Use to MEASURE whether an existing skill's description actually triggers, score it, and decide if it is fit to ship. Triggers for \\\"evaluate/measure/score this skill\\\", \\\"does my skill trigger\\\", \\\"why does my skill score 0\\\", \\\"is this description good enough to publish\\\", \\\"check the trigger eval\\\", or when a skill's description changed and you need honest before-vs-after numbers. This is the CANONICAL skill measurer for this marketplace \u2014 use its bundled score-description.py, NOT skill-creator's run_eval/run_loop (which produce systematic false-negatives). NOT for scaffolding a new skill (meta:new-skill), refreshing metadata.yaml (meta:update-skill), or the deterministic pre-push gate (scripts/eval-gate.sh).",
+      "purpose": "Faithful trigger scoring for an existing skill \u2014 the bundled score-description.py installs it as a real .claude/skills/ in a sandbox, runs real `claude -p` probes, scores 0-10 with current-vs-baseline no-regression and a plain-language verdict. The canonical measurer; replaces skill-creator's false-negative-prone run_eval.",
+      "best-for": "Any marketplace maintainer deciding whether a skill's description actually triggers and whether it is fit to ship, who wants honest numbers instead of the stub-harness ~0 false-negatives.",
+      "needs": [],
+      "changes": {
+        "tags": [
+          "network"
+        ],
+        "notes": "Spawns `claude -p` subprocesses (which call the Anthropic API) in throwaway temp sandboxes to probe triggering; prints a report (writes no repo files unless you redirect output). Run locally on demand, never in CI."
+      },
+      "hooks": []
+    },
+    {
       "name": "meta:solid",
       "plugin": "meta",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.0",
       "activates-when": "SOLID is the design law for all code \u2014 SRP/OCP/LSP/ISP/DIP plus DRY, KISS, YAGNI. Activate at DESIGN time and whenever writing, editing, or reviewing code in ANY language or stack \u2014 ESPECIALLY when a class, function, hook, route, or method does several things (fetches + formats + writes, or auth + validation + DB in one method) and you're weighing whether to split it; a switch or if-chain keeps growing with new cases; you're deciding how one module should depend on or import another; or designing an interface or extension point. Pairs with meta:ockham (whether an entity should exist at all) \u2014 SOLID governs how the entities that DO exist are structured.",
       "purpose": "Design-time guidance applying SOLID (SRP/OCP/LSP/ISP/DIP) plus DRY/KISS/YAGNI when writing, editing, or reviewing code structure.",
       "best-for": "Any project where a team wants consistent structural judgment calls (when to split a function/class, how modules should depend on each other) enforced during coding and review, not just at architecture-doc time.",
@@ -351,7 +381,7 @@
     {
       "name": "meta:triage",
       "plugin": "meta",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.0",
       "activates-when": "Use when you're about to attack a LARGE batch of items the same expensive way \\u2014 a repo-wide sweep for dead code, unused exports, or bugs; a big multi-file diff to review; dozens of call sites to migrate; a fleet of skills, files, or docs to audit or read; every TODO to classify; hundreds of failing tests to work through. Any \\\"do X across the whole repo / all of them / everything\\\" request where the set is too big to give each item full attention. Instead of paying deep cost on every item, first run one CHEAP shallow pass over ALL of them to sort into skip vs. worth-it, then spend the expensive deep pass only on the shortlist. Invoke at planning time, before touching the first item. NOT for a single file or function (just do it), NOT for picking a model tier (meta:model-routing), NOT for a plain parallel spawn with no sorting step.",
       "purpose": "Run a cheap full-coverage sorting pass over a large batch of items before spending an expensive pass only on the ones that need it.",
       "best-for": "Anyone about to sweep, review, migrate, or classify a large set of files/items uniformly and wants to avoid paying deep-pass cost on every single one.",
@@ -365,7 +395,7 @@
     {
       "name": "meta:update-skill",
       "plugin": "meta",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.0",
       "activates-when": "Use this skill to REFRESH the metadata.yaml sidecar of an ALREADY-EXISTING skill after its body, allowed-tools, bundled scripts, or hooks changed. Triggers for \\\"I edited skill X, refresh its metadata\\\", \\\"update the metadata.yaml after changing this skill\\\", \\\"this skill's behavior changed \u2014 does its metadata still match\\\", or noticing a scout sync-nudge after editing a SKILL.md/script. This is about RE-RUNNING the non-derivable-fields interview on a skill that already has a metadata.yaml, NOT about scaffolding a brand-new skill from scratch (that is `meta:new-skill`), and NOT about tuning an existing skill's trigger description or running skill-creator evals (that is the `skill-creator` plugin).",
       "purpose": "Refresh an existing skill's metadata.yaml after its body, tools, scripts, or hooks changed, by re-interviewing the non-derivable fields.",
       "best-for": "Any marketplace using metadata.yaml sidecars, to keep a skill's changes/purpose accurate after it is edited.",
@@ -381,7 +411,7 @@
     {
       "name": "meta:wittgenstein",
       "plugin": "meta",
-      "plugin-version": "1.3.3",
+      "plugin-version": "1.4.0",
       "activates-when": "Clarity gate for an already-written spec, plan, design doc/note, or RFC \u2014 a reviewer persona, not a writing guide. Activate to REVIEW or AUDIT such a doc (often under docs/superpowers/specs or docs/superpowers/plans) when checking whether a non-technical manager or reader could follow it; when it feels padded, wordy, or has grown long; when a section is a wall of prose or full of undefined jargon; or when the decision is buried at the end and should lead \u2014 then fix it in place. NOT for WRITING or drafting a doc from scratch (that's meta:lean-writing \u2014 wittgenstein reviews one that already exists), and NOT for chat, code, comments, commit messages, jira, or READMEs.",
       "purpose": "Review an already-written spec/plan/design doc/RFC for clarity \u2014 cut filler, front-load the bottom line, and rewrite walls of prose into skimmable bullets a non-technical manager could follow.",
       "best-for": "Anyone whose spec/plan/design doc has grown long, padded, or jargon-heavy and needs a laconic pass before a non-technical reader signs off on it.",
@@ -395,7 +425,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "1.5.7",
+      "plugin-version": "1.5.8",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the 5-agent /review system in a new project.",
       "purpose": "Install and tailor the pre-push review framework (5 reviewer agents, /review, secret-scan + attestation gate) into a target repo.",
       "best-for": "A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the 5-agent pre-push review gate adopted and tuned to its stack.",
