@@ -93,5 +93,8 @@ skill for full guidance.
 - **`meta:new-skill`** scaffolds a brand-new skill and runs this same interview once, at creation
   time. This skill (`meta:update-skill`) re-runs it later, after the skill already exists and has
   changed.
-- **`skill-creator`** is for iterating on *trigger quality* (description wording, evals, benchmarks)
-  — orthogonal to whether `metadata.yaml` is stale. A single change set may need both.
+- **Trigger quality** (description wording / does it still fire) is orthogonal to whether
+  `metadata.yaml` is stale — a change set may need both. Measure it with **`meta:skill-eval`** (its
+  bundled `score-description.py`), NOT skill-creator's `run_eval`/`run_loop` (slash-command stub +
+  first-tool-only → systematic false-negatives). If `meta:skill-eval` isn't installed, warn that it
+  is required and ask the user to install it rather than falling back to the stub harness.

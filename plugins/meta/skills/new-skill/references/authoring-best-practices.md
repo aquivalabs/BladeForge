@@ -35,6 +35,7 @@ house-specific layer + a quick checklist; it does not repeat superpowers.
 
 - Description trimmed to triggering conditions (no workflow summary).
 - Body ≤ ~1000 words, or the excess is justified enforcement/ritual; detail relocated to `references/`.
-- If you changed a `description`, run it through `skill-creator`'s eval / `improve_description`
-  before merge (triggering is load-bearing).
+- If you changed a `description`, measure it with `meta:skill-eval` (`score-description.py`) before
+  merge (triggering is load-bearing). Do NOT use skill-creator's `run_eval` — its stub method gives
+  false zeros; if `meta:skill-eval` isn't installed, warn and ask to install it.
 - Add the skill's one-line entry to `README.md` by hand.

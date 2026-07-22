@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: The acceptance bar that any UI component/page renders validly at every defined viewport breakpoint — no overflow, readable text, discernible images, restrained borders, sane density — plus a step-0 that establishes a breakpoint scale when a project has none.
+best-for: Any UI stack with responsive layouts spanning phone→desktop (React, Vue, Angular, Svelte, Salesforce LWC/Aura, plain HTML/CSS) that wants an enforceable, framework-agnostic definition-of-done for breakpoint validity applied at component-authoring time.
+needs: []
+changes:
+  tags: []
+  notes: Pure advisory/convention skill — an authoring + review acceptance checklist; it does not itself edit files or run commands.

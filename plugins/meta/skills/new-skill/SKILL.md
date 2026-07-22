@@ -169,8 +169,16 @@ Full house checklist (naming, plugin.json, sync, before-you-finalize) → `refer
 
 ---
 
-## Improving an existing skill
+## Evaluating / improving an existing skill
 
-Use the **`skill-creator` plugin** for iterative improvement with test cases, evals, benchmarks, and
-description optimization. Invoke it via `/skill-creator` or let it trigger when you say "improve this
-skill", "optimize skill description", or "run evals on this skill".
+**Measure with `meta:skill-eval` — its bundled `score-description.py`. Do NOT use skill-creator's
+`run_eval`/`run_loop`.** That harness registers the skill as a transient slash-command and counts a
+trigger only if `Skill`/`Read` is the model's FIRST tool call, so real tasks (which open with
+`Bash`/`Write`) and advisory/chained skills score a false ~0. `meta:skill-eval` installs the skill as
+a REAL `.claude/skills/<name>/` and scores it honestly (0–10, current-vs-baseline, no-regression, with
+a plain-language verdict).
+
+**If `meta:skill-eval` is not installed**, do not fall back to skill-creator: emit a warning that
+`meta:skill-eval` is required and ask the user to install it (enable the `meta` plugin from this
+marketplace), then stop. See `meta:skill-eval` for how to read the score (context-dependent skills are
+judged by no-regression, not the absolute number).

@@ -19,8 +19,8 @@ says so. Apply the absolute >=7 bar to SELF-CONTAINED skills (the description al
 should pull the model to them).
 
 Usage:
-  python3.14 scripts/score-description.py --skill-path plugins/meta/skills/ockham
-  python3.14 scripts/score-description.py --from-result /path/to/run_eval.json   # free re-render
+  python3.14 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path plugins/meta/skills/ockham
+  python3.14 plugins/meta/skills/skill-eval/scripts/score-description.py --from-result /path/to/run_eval.json   # free re-render
 """
 import argparse
 import glob
