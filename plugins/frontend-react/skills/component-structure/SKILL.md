@@ -12,12 +12,13 @@ Any time a new React component is created, or an existing component is edited or
 
 ## Step 0 — Activate supporting skills first
 
-Before writing any component code or styles, activate both of these skills and apply their rules throughout:
+Before writing any component code or styles, activate these skills and apply their rules throughout:
 
 1. **Activate `frontend-css:scss-modules` skill** — governs colors, spacing, file extension, variables
 2. **Activate `frontend-css:rem` skill** — governs all dimensional values
+3. **Activate `frontend-css:responsive-layout` skill** — the acceptance bar that the component renders validly at every breakpoint (no overflow, readable text, discernible images, restrained borders, reflow-not-shrink)
 
-Everything in this skill assumes those two are already in effect.
+Everything in this skill assumes those are already in effect.
 
 ---
 
@@ -222,6 +223,7 @@ export type { FeatureBlockItemData } from './FeatureBlockItem';
 - [ ] Colors from `$color-*` or `var(--color-*)` (see `frontend-css:scss-modules`)
 - [ ] Spacing from `$space-*` / `$radius-*` (see `frontend-css:scss-modules`)
 - [ ] All sizes in rem (see `frontend-css:rem`)
+- [ ] Renders validly at every breakpoint — no overflow, readable text, discernible images, reflow not shrink (see `frontend-css:responsive-layout`)
 - [ ] All user-visible strings use `useTranslation` — no hardcoded text in JSX
 - [ ] Translation keys added to the correct JSON file in `src/i18n/locales/en/`
 - [ ] New page namespace registered in `src/i18n/index.ts` (if applicable)
