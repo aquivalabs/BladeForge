@@ -46,14 +46,14 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | cerberus | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer/client brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
 | cicero | House voice — an always-on output style (bottom-line-first, concise, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) |
-| frontend-css | CSS conventions — rem units, SCSS modules. | [rem](#rem), [scss-modules](#scss-modules) |
+| frontend-css | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
 | frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
 | frontend-react | React conventions — placement, structure, hooks, primitives, layout, stories. | [component-placement](#component-placement), [component-structure](#component-structure), [feature-components](#feature-components), [hooks-registry](#hooks-registry), [layout-components](#layout-components), [skeleton-components](#skeleton-components), [storybook-stories](#storybook-stories), [ui-primitive-reuse](#ui-primitive-reuse) |
 | frontend | Frontend dev-harness — types + tests runner. | [fe-check](#fe-check) |
 | git | Git workflow — atomic commit splitting. | [commit](#commit) |
 | i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | jira | Jira — comment style. | [comment-style](#comment-style) |
-| meta | Meta — design law, error handling, doc writing, skill authoring. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| meta | Meta — design law, error handling, doc writing, skill authoring. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [setup](#setup) |
 | salesforce | Salesforce — Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 
@@ -93,6 +93,7 @@ cuts the fluff. **See the difference:**
 ### frontend-css &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="rem"></a>**rem** — Enforce rem units over hardcoded px in CSS/SCSS/Tailwind.
 - <a id="scss-modules"></a>**scss-modules** — Component SCSS conventions: `.scss` over `.css`, the color/spacing/radius token system, BEM structure.
+- <a id="responsive-layout"></a>**responsive-layout** — The definition-of-done that a component/page renders validly at every breakpoint (no overflow, readable text, discernible images, restrained borders, sane density); proposes a breakpoint scale if the project has none. Stack-agnostic.
 
 ### frontend-js &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="conventions"></a>**conventions** — JS/TS style: arrow functions, single quotes, full variable names, braces everywhere, path aliases over deep relative imports.
@@ -125,6 +126,7 @@ cuts the fluff. **See the difference:**
 - <a id="model-routing"></a>**model-routing** — Assign an explicit model tier to every spawned agent before any fan-out.
 - <a id="new-skill"></a>**new-skill** — Author a brand-new skill: plugin/domain, folder placement, SKILL.md and frontmatter.
 - <a id="update-skill"></a>**update-skill** — Refresh an existing skill's `metadata.yaml` sidecar after its body, tools, scripts, or hooks changed.
+- <a id="skill-eval"></a>**skill-eval** — Faithfully measure whether a skill's description triggers and score it (bundled `score-description.py`, self-contained); the canonical measurer, replaces skill-creator's false-negative-prone run_eval.
 - <a id="ockham"></a>**ockham** — The Razor: justify before creating any new entity — file, module, class, abstraction.
 - <a id="solid"></a>**solid** — The design law: SRP/OCP/LSP/ISP/DIP plus DRY, KISS, YAGNI.
 - <a id="triage"></a>**triage** — Cheap shallow pass over a large batch first, then spend the expensive pass only on the shortlist.

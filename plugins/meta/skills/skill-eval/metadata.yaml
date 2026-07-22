@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Faithful trigger scoring for an existing skill — the bundled score-description.py installs it as a real .claude/skills/ in a sandbox, runs real `claude -p` probes, scores 0-10 with current-vs-baseline no-regression and a plain-language verdict. The canonical measurer; replaces skill-creator's false-negative-prone run_eval.
+best-for: Any marketplace maintainer deciding whether a skill's description actually triggers and whether it is fit to ship, who wants honest numbers instead of the stub-harness ~0 false-negatives.
+needs: []
+changes:
+  tags: [network]
+  notes: Spawns `claude -p` subprocesses (which call the Anthropic API) in throwaway temp sandboxes to probe triggering; prints a report (writes no repo files unless you redirect output). Run locally on demand, never in CI.

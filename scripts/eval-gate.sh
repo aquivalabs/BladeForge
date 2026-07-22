@@ -98,7 +98,7 @@ if [ -n "$warns" ]; then
   echo ""
   echo "  ⚠  deprecated/unmeasured evals (push allowed — refresh when you can):"
   printf '%s\n' "$warns"
-  echo "     → run:  python3 scripts/optimize_description.py --skill-path <dir> --apply"
+  echo "     → run:  python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path <dir> --suggest"
 fi
 if [ -n "$blocks" ]; then
   echo ""
