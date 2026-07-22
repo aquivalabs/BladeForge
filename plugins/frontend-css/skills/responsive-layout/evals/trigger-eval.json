@@ -1,0 +1,23 @@
+[
+  {"query": "im building a new PricingCard component in React with three tiers side by side, can you scaffold it with the price, feature list and a CTA button", "should_trigger": true},
+  {"query": "add a sidebar filter panel to the products page — checkboxes for category and a price range slider on the left, results grid on the right", "should_trigger": true},
+  {"query": "this InvoiceTable looks cramped on my laptop, the last two columns get cut off. can you fix the layout", "should_trigger": true},
+  {"query": "make the dashboard header responsive — logo left, nav center, user menu right, should collapse to a hamburger on mobile", "should_trigger": true},
+  {"query": "i wrote a hero section with a big heading, subtext and an image on the right but on my phone the image is tiny and the text overflows", "should_trigger": true},
+  {"query": "we dont have any breakpoints defined in this project yet, i want to start making the marketing page adapt to mobile and tablet", "should_trigger": true},
+  {"query": "restyle the settings form so the labels and inputs sit in two columns on desktop but stack on small screens", "should_trigger": true},
+  {"query": "creating a KpiTile that shows a number, a delta arrow and a sparkline — make sure it doesnt break on narrow widths", "should_trigger": true},
+  {"query": "the modal footer buttons wrap weirdly and overlap on a 320px screen, and the border eats half the dialog", "should_trigger": true},
+  {"query": "build a photo gallery grid, 4 across on desktop, 2 on tablet, 1 on phone", "should_trigger": true},
+
+  {"query": "convert all these hardcoded px values in card.scss to rem", "should_trigger": false},
+  {"query": "our BEM naming is inconsistent, can you refactor button.scss to use proper block__element--modifier structure", "should_trigger": false},
+  {"query": "where should i put a new useDebounce hook, is there a registry for custom hooks in this repo", "should_trigger": false},
+  {"query": "this react-query call refetches on every focus, how do i configure staleTime so the KPI cards stop hammering the API", "should_trigger": false},
+  {"query": "the /api/items endpoint returns a 502 sometimes, add proper error handling and a retry", "should_trigger": false},
+  {"query": "translate all the hardcoded english strings in the checkout flow into i18n keys", "should_trigger": false},
+  {"query": "write jest tests for the formatCurrency util covering negative numbers and zero", "should_trigger": false},
+  {"query": "my print stylesheet is wrong — the invoice should fit on one A4 page when printed, page-break after the totals", "should_trigger": false},
+  {"query": "the chart colors clash with our brand, update the palette tokens in _colors.scss", "should_trigger": false},
+  {"query": "set up a Storybook story for the existing Avatar component with size and status variants", "should_trigger": false}
+]

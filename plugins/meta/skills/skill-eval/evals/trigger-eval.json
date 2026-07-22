@@ -1,0 +1,12 @@
+[
+  { "query": "i just finished writing a new skill's description and i want to know if it actually triggers before i publish it — how do i measure that", "should_trigger": true },
+  { "query": "my skill scores 0 recall in the eval, it never seems to fire even though the description looks right. what's going on and how do i get honest numbers", "should_trigger": true },
+  { "query": "run the trigger eval on plugins/frontend-css/skills/responsive-layout and tell me the pass rate", "should_trigger": true },
+  { "query": "is this skill good enough to ship, or is its description too narrow to trigger on real queries", "should_trigger": true },
+  { "query": "i edited the description of an existing skill — measure whether it still triggers on the should-fire cases without firing on the near-misses", "should_trigger": true },
+  { "query": "which eval harness should i use to test skill triggering — skill-creator's run_eval keeps giving me zeros", "should_trigger": true },
+  { "query": "scaffold a brand new skill for parsing CSV files — where does the SKILL.md go and what's the folder naming", "should_trigger": false },
+  { "query": "refresh the metadata.yaml sidecar for this skill, i changed its bundled script and hooks", "should_trigger": false },
+  { "query": "the pre-push gate is blocking my push saying the trigger eval is missing — what file do i add", "should_trigger": false },
+  { "query": "write me a python script that measures cyclomatic complexity of a codebase", "should_trigger": false }
+]
