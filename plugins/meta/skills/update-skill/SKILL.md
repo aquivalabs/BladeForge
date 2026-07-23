@@ -65,6 +65,11 @@ Everything else is human judgment and must be re-interviewed:
    interviewed.
 5. Write the sidecar **atomically** (temp file + rename, or equivalent) so a crash mid-write never
    leaves a half-written `metadata.yaml`.
+6. **Body check — acceptance criteria.** While updating, confirm the skill still meets the quality
+   bar: if it produces or shapes an output (a generated artifact, a transformed file, a
+   compliance/adherence outcome), it MUST carry an **Acceptance criteria** section (see
+   `meta:new-skill`). If one is missing, add it in the same change. This skill refreshes the sidecar;
+   this check keeps the body honest too.
 
 ```yaml
 schema-version: 1

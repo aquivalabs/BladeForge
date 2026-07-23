@@ -158,6 +158,11 @@ before authoring anything non-trivial. Do not duplicate it here. The house-enfor
 - **Keep the body short; use `references/`.** Push deep tables/examples into `plugins/<domain>/skills/<name>/references/`
   and link one level deep — the SKILL.md stays an overview + quick-reference.
 - **One excellent example beats five mediocre ones.** Show the canonical case fully; don't enumerate.
+- **A result-producing skill MUST define acceptance criteria.** If the skill's point is to produce or
+  shape an output — a generated artifact, a transformed file, a compliance/adherence outcome — it ships an
+  explicit **Acceptance criteria** section: the checkable conditions that confirm the output is correct, so
+  an author or reviewer verifies adherence instead of guessing at it. A purely advisory/convention skill
+  that performs no measurable output may omit it (say so in its `changes` notes).
 - **Examples must be fictional & generic.** This is a PUBLIC marketplace. Every example identifier — in the
   body, `references/`, and the eval fixtures (class/object/field/org/ticket/repo/component/route names) —
   must be invented for a neutral demo product (`Order__c`, `WidgetConfig`, `myOrg`, `/api/items`), reused
