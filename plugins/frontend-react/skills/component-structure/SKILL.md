@@ -151,6 +151,12 @@ Namespace table, usage + nested-key examples, and the full "counts / doesn't cou
 
 ## Error boundaries — wrap every fallible component
 
+> **Scope split.** This section is the *per-component* mechanics — wrapping one fallible component in a
+> boundary. The app-wide error-handling **architecture** (the single code→UX policy table as the sole
+> classifier, the state-dispatcher, the shared error-tile renderer that owns escalation, boundary tiers
+> + the outer floor, framework bindings) lives in the **`error:architecture`** skill — consult it for
+> the overall pattern and adherence review. Use this section for the component-level wrap.
+
 Any component that fetches data or can otherwise throw at render (a data hook that re-throws its
 query error, a parse, a lazy import) MUST be isolated by an error boundary, so one failing block
 never blanks the whole page. Wrap it at its mount site, or export it wrapped:
