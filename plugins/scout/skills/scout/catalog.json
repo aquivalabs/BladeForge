@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-07-22",
+  "generated": "2026-07-23",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -32,6 +32,36 @@
           "files"
         ],
         "notes": "Writes a new docs/diagrams/<name>/ folder \u2014 atlas.md, diagram.html, and assets/ (graph.d2, page.html, copied CSS/JS/svg-pan-zoom, rendered SVG/PNG) \u2014 via the bundled references/build.sh script. Does not touch git, network, org, or money."
+      },
+      "hooks": []
+    },
+    {
+      "name": "error:architecture",
+      "plugin": "error",
+      "plugin-version": "1.0.0",
+      "activates-when": "Use when defining, adopting, or reviewing a client/UI app's WHOLE error-handling architecture \u2014 where every failure surfaces and how adherence is checked \u2014 across any framework (React, Vue, Angular, Svelte). Triggers on \\\"design our app-wide error handling\\\", \\\"is our error handling consistent / does this codebase follow one pattern\\\", \\\"audit how errors are shown\\\", \\\"we map error codes to UX in a dozen places\\\", \\\"one place to decide retry vs redirect vs toast\\\", or reviewing a diff for error-surfacing consistency. Foreground: the single code\u2192UX policy table that classifies every error once. NOT for wrapping one component in a boundary or styling one error tile (that is your framework's component/primitive skill), and NOT for the wire envelope or reason-code vocabulary (that is error:format).",
+      "purpose": "Codifies a single client/UI error-handling architecture \u2014 one code\u2192UX policy table classifies every error, and role-named consumers (dispatcher, shared tile renderer, boundary tiers, outer floor) surface it consistently across any framework.",
+      "best-for": "Any app team wanting one place to decide error copy/retry/redirect and a checkable adherence bar \u2014 especially codebases where each component reinvents its own error branch.",
+      "needs": [
+        "error:format"
+      ],
+      "changes": {
+        "tags": [],
+        "notes": "Pure advisory/convention skill \u2014 guides how errors are surfaced; performs no actions itself."
+      },
+      "hooks": []
+    },
+    {
+      "name": "error:format",
+      "plugin": "error",
+      "plugin-version": "1.0.0",
+      "activates-when": "Use when adding or handling any error path on any layer \u2014 throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend).",
+      "purpose": "Enforce one Google AIP-193 style error envelope (code/status/message/details) across backend and frontend so every error is handled the same way regardless of layer.",
+      "best-for": "Any project defining or touching an error path \u2014 a new service/route/controller throw, mapping an upstream failure, or a frontend reading an error \u2014 that wants one consistent, i18n-ready error contract instead of ad-hoc shapes per layer.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
       },
       "hooks": []
     },
@@ -110,7 +140,7 @@
     {
       "name": "frontend-react:component-placement",
       "plugin": "frontend-react",
-      "plugin-version": "1.1.0",
+      "plugin-version": "1.1.1",
       "activates-when": "Entry point BEFORE creating ANY React component, in any React codebase \u2014 search for an existing one first, decide placement (primitive / feature / layout / page-local), then route to the matching per-type skill. Framework-agnostic: governs component ARCHITECTURE, not any specific UI or styling library. Activate whenever about to add, scaffold, or hand-roll a component, panel, card, widget, or control.",
       "purpose": "Entry-point decision guide that makes you search for an existing React component before building a new one, then routes placement (primitive/feature/layout/page-local) to the matching per-type skill.",
       "best-for": "Any team building React UI that wants to stop duplicate components and enforce a consistent placement convention before scaffolding.",
@@ -124,7 +154,7 @@
     {
       "name": "frontend-react:component-structure",
       "plugin": "frontend-react",
-      "plugin-version": "1.1.0",
+      "plugin-version": "1.1.1",
       "activates-when": "Use when creating, editing, restructuring, or reviewing a React frontend component \\u2014 including its folder layout and file organization (tsx/scss/index), where a component or sub-component should live, BEM class naming, SCSS styling, rem sizing, i18n of user-visible strings, barrel exports, and replacing inline JS style/hover handlers (e.g. onMouseEnter toggling classes) with CSS. Covers \\\"this component file is in the wrong place \\u2014 fix the structure\\\", moving a flat .tsx into its own folder, and any question about how a component's files, styles, or markup should be organized.",
       "purpose": "Standardizes how a React component's files, folder, BEM classes, and styling conventions are organized so structure stays consistent across the codebase.",
       "best-for": "Teams building a React app who want every component (and sub-component) to follow the same folder/file/BEM/i18n/error-boundary conventions instead of drifting per-author.",
@@ -143,7 +173,7 @@
     {
       "name": "frontend-react:feature-components",
       "plugin": "frontend-react",
-      "plugin-version": "1.1.0",
+      "plugin-version": "1.1.1",
       "activates-when": "Rules for FEATURE components in a React codebase \u2014 domain-coupled blocks that compose primitives and hold business logic/data. Activate when building or editing a domain feature (a panel/table/editor tied to your business data), or adding a new domain area. Framework-agnostic. Reached via frontend-react:component-placement.",
       "purpose": "Rules for structuring domain-coupled \"feature\" components \u2014 composed from primitives, business logic kept out of primitives, data via the project's data layer.",
       "best-for": "Teams building a React app's domain/feature panels who want features assembled from primitives instead of hand-rolled controls duplicating the primitive library.",
@@ -157,7 +187,7 @@
     {
       "name": "frontend-react:hooks-registry",
       "plugin": "frontend-react",
-      "plugin-version": "1.1.0",
+      "plugin-version": "1.1.1",
       "activates-when": "Use when about to add, hand-roll, rename, move, or remove a custom React `use*` hook.",
       "purpose": "Keep custom React hooks deduplicated and discoverable by requiring reuse-first checks and a maintained docs/hooks-registry.md.",
       "best-for": "Teams with a growing React codebase where duplicate/overlapping use* hooks keep creeping in and need a single source of truth.",
@@ -173,7 +203,7 @@
     {
       "name": "frontend-react:layout-components",
       "plugin": "frontend-react",
-      "plugin-version": "1.1.0",
+      "plugin-version": "1.1.1",
       "activates-when": "Rules for LAYOUT / app-chrome components in a React codebase \u2014 the shell, top bar, sidebar, command palette, and global overlays that frame every page. Activate when editing or adding app chrome. Framework-agnostic. Reached via frontend-react:component-placement.",
       "purpose": "Rules for building app-chrome layout components (shell, top bar, sidebar, command palette, global overlays) that stay free of domain logic.",
       "best-for": "Teams building a React app shell/nav who want layout kept separate from feature/domain components and routed through project primitives and config.",
@@ -189,7 +219,7 @@
     {
       "name": "frontend-react:skeleton-components",
       "plugin": "frontend-react",
-      "plugin-version": "1.1.0",
+      "plugin-version": "1.1.1",
       "activates-when": "When building or editing a React component that renders asynchronously-loaded data, decide whether it needs a loading skeleton \u2014 and if so, build a separate skeleton component colocated next to it from the shared Skeleton primitive. Activate whenever a component gains a loading state, shows a blank/\"Loading\u2026\" gap, or you are reviewing async data UI.",
       "purpose": "Decide whether an async-loading React component actually needs a loading skeleton, and if so, house rules for building it as a colocated sibling composed from the shared Skeleton primitive.",
       "best-for": "React codebases with async data-fetching components (TanStack Query, await, isLoading) that want a consistent, non-duplicated approach to loading states instead of ad hoc blank screens or hand-rolled pulse markup.",
@@ -203,7 +233,7 @@
     {
       "name": "frontend-react:storybook-stories",
       "plugin": "frontend-react",
-      "plugin-version": "1.1.0",
+      "plugin-version": "1.1.1",
       "activates-when": "Use this skill whenever writing, adding, or asking about a Storybook story for a React/UI component \\u2014 including \\\"add a story for X\\\", \\\"write a .stories file\\\", questions about which states/variants a story should cover (default, empty, error, loading, disabled), how to show a component's skeleton alongside it in a story, what mock data a story should use, or whether a just-finished component needs a story at all. Also use right after creating any new React component to decide whether a story is warranted: on the first component in a project, explain Storybook and ask the user yes/no, record the choice in CLAUDE.md, then honor it for every component after. Do NOT use for general code review, component file placement, hooks, i18n, or repo/CI setup scripts.",
       "purpose": "Writes a colocated Storybook story (with a separate mock-data file) covering a component's key states, after asking once per project whether stories are wanted at all.",
       "best-for": "Projects using Storybook where the team wants every new/finished React component to get a reviewable, state-driving story without re-litigating the yes/no decision each time.",
@@ -221,7 +251,7 @@
     {
       "name": "frontend-react:ui-primitive-reuse",
       "plugin": "frontend-react",
-      "plugin-version": "1.1.0",
+      "plugin-version": "1.1.1",
       "activates-when": "Before creating ANY shared/reusable UI primitive in a React codebase (button, input, checkbox, radio, switch, select, textarea, dialog, tooltip, dropdown, badge, card, separator\u2026), search the project's primitive library first to avoid duplicates \u2014 reuse or extend what exists; build new only when truly absent. Framework-agnostic (no specific UI or styling library assumed). Activate whenever about to add or hand-roll a reusable field/control/primitive.",
       "purpose": "Before hand-rolling a shared UI primitive (button, input, dialog, tooltip, etc.), search the project's existing primitive library and reuse or extend it instead of creating a duplicate.",
       "best-for": "React codebases with (or growing) a shared primitives folder, pulled in whenever someone is about to add a new reusable field/control/overlay component.",
@@ -269,20 +299,6 @@
       "activates-when": "Use whenever writing or posting a comment on a Jira issue/ticket \u2014 a status update, decision note, handoff, or \"what's done / what's left\" note, including via the Atlassian MCP addCommentToJiraIssue tool. Keeps comments short, essence-first, and understandable on the first read.",
       "purpose": "Keeps Jira ticket comments short, essence-first, and readable on the first pass instead of rambling status narration.",
       "best-for": "Teams that post frequent Jira status/handoff comments and want a consistent, scannable house style.",
-      "needs": [],
-      "changes": {
-        "tags": [],
-        "notes": ""
-      },
-      "hooks": []
-    },
-    {
-      "name": "meta:error-handling",
-      "plugin": "meta",
-      "plugin-version": "1.4.1",
-      "activates-when": "Use when adding or handling any error path on any layer \u2014 throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend).",
-      "purpose": "Enforce one Google AIP-193 style error envelope (code/status/message/details) across backend and frontend so every error is handled the same way regardless of layer.",
-      "best-for": "Any project defining or touching an error path \u2014 a new service/route/controller throw, mapping an upstream failure, or a frontend reading an error \u2014 that wants one consistent, i18n-ready error contract instead of ad-hoc shapes per layer.",
       "needs": [],
       "changes": {
         "tags": [],
