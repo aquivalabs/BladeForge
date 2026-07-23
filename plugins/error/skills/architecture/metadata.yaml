@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Codifies a single client/UI error-handling architecture — one code→UX policy table classifies every error, and role-named consumers (dispatcher, shared tile renderer, boundary tiers, outer floor) surface it consistently across any framework.
+best-for: Any app team wanting one place to decide error copy/retry/redirect and a checkable adherence bar — especially codebases where each component reinvents its own error branch.
+needs: [error:format]
+changes:
+  tags: []
+  notes: "Pure advisory/convention skill — guides how errors are surfaced; performs no actions itself."

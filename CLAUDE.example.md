@@ -32,7 +32,7 @@ starts) — do not duplicate them here:
 - JS / TS style → skill `frontend-js:conventions`
 - React components (placement, structure, hooks, primitives) → skill `frontend-react:component-placement`
 - CSS / SCSS — rem units, modules, tokens → skills `frontend-css:rem`, `frontend-css:scss-modules`
-- Error handling / error codes (any layer) → skill `meta:error-handling`
+- Error handling / error codes (any layer) → skill `error:format`
 - User-facing strings (i18n) → skill `i18n:ui-strings`
 - Design law before creating an entity → skills `meta:ockham`, `meta:solid`
 

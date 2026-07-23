@@ -90,6 +90,10 @@ cuts the fluff. **See the difference:**
 ### diagram &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="diagram"></a>**diagram** — Turn a spec or raw code into a readable, clickable architecture/flow diagram: a D2 graph laid out by ELK, each class showing its real methods, objects with fields, and permission sets, rendered as a browsable HTML page under `docs/diagrams/<name>/`. Node contents come from an **Atlas** entity list that parallel **Sextant** reviewer agents harden to zero edits; bidirectional click-to-jump between diagram and its notes, pan/zoom via svg-pan-zoom.
 
+### error &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="format"></a>**format** — The unified error envelope + reason-code vocabulary: uniform error paths across layers — throwing from a service/route/controller and reading errors on the client.
+- <a id="architecture"></a>**architecture** — The framework-agnostic client-side error-handling architecture: one code→UX policy table as the sole classifier, a state-dispatcher, a shared error-tile renderer that owns escalation, boundary tiers + a single outer floor; role-named with per-framework bindings.
+
 ### frontend-css &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="rem"></a>**rem** — Enforce rem units over hardcoded px in CSS/SCSS/Tailwind.
 - <a id="scss-modules"></a>**scss-modules** — Component SCSS conventions: `.scss` over `.css`, the color/spacing/radius token system, BEM structure.
@@ -121,7 +125,6 @@ cuts the fluff. **See the difference:**
 - <a id="comment-style"></a>**comment-style** — Keep Jira comments short, essence-first, and clear on the first read.
 
 ### meta &nbsp;·&nbsp; [↑ Plugins](#plugins)
-- <a id="error-handling"></a>**error-handling** — Uniform error paths across layers: throwing from a service/route/controller and reading errors on the client.
 - <a id="lean-writing"></a>**lean-writing** — Write terse technical documents: specs, design docs, RFCs, decision logs.
 - <a id="model-routing"></a>**model-routing** — Assign an explicit model tier to every spawned agent before any fan-out.
 - <a id="new-skill"></a>**new-skill** — Author a brand-new skill: plugin/domain, folder placement, SKILL.md and frontmatter.
