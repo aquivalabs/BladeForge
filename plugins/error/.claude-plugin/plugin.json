@@ -1,0 +1,17 @@
+{
+  "name": "error",
+  "description": "Error skills — the unified error envelope + reason-code vocabulary (format) and the framework-agnostic client-side error-handling architecture (architecture).",
+  "version": "1.0.0",
+  "keywords": [
+    "error",
+    "error-handling",
+    "error-format",
+    "error-architecture",
+    "envelope",
+    "resilience"
+  ],
+  "author": {
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
+  }
+}

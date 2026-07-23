@@ -1,0 +1,18 @@
+[
+  {"query": "we map error codes to messages in like a dozen components — how do i get one place that decides copy and retry?", "should_trigger": true},
+  {"query": "design the app-wide error handling architecture for our Vue dashboard", "should_trigger": true},
+  {"query": "review this diff for error-surfacing consistency — is every failure shown the same way?", "should_trigger": true},
+  {"query": "does this codebase follow one error-handling pattern or does each view roll its own?", "should_trigger": true},
+  {"query": "i want a single classifier table that decides toast vs block vs redirect per error code", "should_trigger": true},
+  {"query": "audit how errors are displayed across the whole Angular app and tell me where it drifts", "should_trigger": true},
+  {"query": "where should the session-expiry redirect fire — every catch site calls it right now and it feels wrong", "should_trigger": true},
+  {"query": "adding a new error reason PAYMENT_REQUIRED — how much of the UI do i have to touch?", "should_trigger": true},
+  {"query": "our Svelte app blanks the whole page when one widget throws — how do we tier boundaries so siblings survive?", "should_trigger": true},
+  {"query": "just wrap this OrderTable component in an error boundary so it doesn't crash the parent", "should_trigger": false},
+  {"query": "style the error tile — the retry button spacing is off and the icon is too big", "should_trigger": false},
+  {"query": "what should the ErrorInfo.reason envelope look like on the wire and which status enum do i use?", "should_trigger": false},
+  {"query": "add a new reason code to the backend registry and map it to an http status", "should_trigger": false},
+  {"query": "translate these error strings into French", "should_trigger": false},
+  {"query": "my useOrders hook is fetching twice on mount — debug the query", "should_trigger": false},
+  {"query": "write a storybook story for the EmptyState component", "should_trigger": false}
+]

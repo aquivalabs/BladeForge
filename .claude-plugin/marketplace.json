@@ -19,6 +19,16 @@
       "category": "engineering"
     },
     {
+      "name": "error",
+      "description": "Error skills — the unified error envelope + reason-code vocabulary (format) and the framework-agnostic client-side error-handling architecture (architecture).",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/error",
+      "category": "engineering"
+    },
+    {
       "name": "cerberus",
       "description": "CERBERUS — leak guard for a public skills marketplace. A PostToolUse hook reminds you to run the cerberus:leak-check skill on every skill/reference/eval edit; that agent pass rewrites anything pointing to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an employer brand, or the aggregate product flavor) into a neutral fictional demo. No denylist by design.",
       "author": {
