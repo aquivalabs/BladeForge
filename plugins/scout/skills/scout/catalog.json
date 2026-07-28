@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-07-23",
+  "generated": "2026-07-28",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -309,7 +309,7 @@
     {
       "name": "meta:lean-writing",
       "plugin": "meta",
-      "plugin-version": "1.4.2",
+      "plugin-version": "1.4.3",
       "activates-when": "Use this skill to WRITE terse technical documents. Trigger when asked to write, draft, summarize, present, or update a spec, design doc, RFC, brainstorming/exploration summary, or a decision log of options considered \u2014 e.g. \"write the spec for\u2026\", \"draft a design doc\u2026\", \"write up the options we considered\u2026\", \"present the brainstorming results\u2026\", \"summarize the exploration we did\u2026\" \u2014 even if the user never says \"concise\". Produce short plain sentences, bullets over prose, no filler; caveman-simple but technically precise. NOT for normal conversation, code, or commit/jira messages, and NOT for reviewing or auditing an already-written doc for clarity or bloat (that's meta:wittgenstein).",
       "purpose": "Write terse, caveman-simple specs, design docs, or brainstorming summaries \u2014 lead with the decision, bullets over prose, no filler.",
       "best-for": "Anyone drafting a spec/design-doc/RFC/decision-log who wants short plain sentences instead of padded prose.",
@@ -323,7 +323,7 @@
     {
       "name": "meta:model-routing",
       "plugin": "meta",
-      "plugin-version": "1.4.2",
+      "plugin-version": "1.4.3",
       "activates-when": "Use whenever the plan is to spawn, fan out, or parallelize agents \\u2014 ANY multi-agent work, not just when models are mentioned. Triggers: \\\"spawn/kick off subagents\\\", \\\"a bunch of agents in parallel\\\", fleets that audit/comb/sweep/hunt across files, verify or skeptic stages, reviewer fan-outs, loop-until-done runs, authoring or editing a Workflow script (agent()/parallel()/pipeline()), or writing agent-definition frontmatter. Every spawned agent must get an EXPLICIT model tier assigned BEFORE it launches: reserve expensive head models for a small bounded set of final judges/synthesizers; mid-tier for judgment (review, verify, hunt); cheap tier for mechanical sweeps (grep, list, count, rename). Activate even when the user says nothing about models or cost \\u2014 an omitted model silently inherits the pricey session model, and fan-out multiplies that waste by the agent count.",
       "purpose": "Forces an explicit, cost-tiered model choice (head/work/sweep) on every spawned agent before any multi-agent fan-out, workflow script, or eval loop launches.",
       "best-for": "Anyone about to spawn subagents, write a Workflow script with agent()/parallel()/pipeline(), or run an eval/optimization loop, who wants to avoid silently inheriting the expensive session model across every spawned instance.",
@@ -337,7 +337,7 @@
     {
       "name": "meta:new-skill",
       "plugin": "meta",
-      "plugin-version": "1.4.2",
+      "plugin-version": "1.4.3",
       "activates-when": "Use this skill to author a brand-new skill FROM SCRATCH \\u2014 deciding its plugin/domain, folder name, file placement, and writing its SKILL.md, frontmatter, and initial metadata.yaml sidecar. Triggers for \\\"create/add/write a new skill for X\\\", \\\"where does the SKILL.md go\\\", \\\"what's the naming convention or folder structure for a new skill\\\", or \\\"what goes in the description frontmatter\\\". This is about scaffolding a NOT-YET-EXISTING skill's structure and location, NOT about tuning, evaluating, or fixing an EXISTING skill's trigger behavior (skill-creator), and NOT about refreshing an EXISTING skill's metadata.yaml after its body/tools/scripts/hooks changed \\u2014 that is the separate `meta:update-skill` skill. Also NOT for ordinary code, components, or config in a project. If the skill already exists, use `meta:update-skill` or `skill-creator` instead.",
       "purpose": "Scaffold a brand-new skill in the plugin model and author its metadata.yaml via a field-by-field interview.",
       "best-for": "Any marketplace where a new skill must ship a metadata.yaml sidecar and follow the house folder/naming structure.",
@@ -353,7 +353,7 @@
     {
       "name": "meta:ockham",
       "plugin": "meta",
-      "plugin-version": "1.4.2",
+      "plugin-version": "1.4.3",
       "activates-when": "The Razor. Invoke before creating ANY new entity \u2014 file, folder, module, class, function, component, hook, util, type, prop, variant, config key, abstraction layer, doc, or top-level category \u2014 in ANY language or stack. Not domain-specific. If you are about to bring a new thing into existence, OCKHAM speaks first.",
       "purpose": "Before creating any new file/module/class/function/prop/abstraction, forces a three-gate reuse-first check so entities aren't multiplied needlessly.",
       "best-for": "Any project that wants a discipline gate against sprawl \u2014 teams prone to premature helpers/wrappers/managers or copy-paste-and-rename duplication.",
@@ -367,7 +367,7 @@
     {
       "name": "meta:skill-eval",
       "plugin": "meta",
-      "plugin-version": "1.4.2",
+      "plugin-version": "1.4.3",
       "activates-when": "Use to MEASURE whether an existing skill's description actually triggers, score it, and decide if it is fit to ship. Triggers for \\\"evaluate/measure/score this skill\\\", \\\"does my skill trigger\\\", \\\"why does my skill score 0\\\", \\\"is this description good enough to publish\\\", \\\"check the trigger eval\\\", or when a skill's description changed and you need honest before-vs-after numbers. This is the CANONICAL skill measurer for this marketplace \u2014 use its bundled score-description.py, NOT skill-creator's run_eval/run_loop (which produce systematic false-negatives). NOT for scaffolding a new skill (meta:new-skill), refreshing metadata.yaml (meta:update-skill), or the deterministic pre-push gate (scripts/eval-gate.sh).",
       "purpose": "Faithful trigger scoring for an existing skill \u2014 the bundled score-description.py installs it as a real .claude/skills/ in a sandbox, runs real `claude -p` probes, scores 0-10 with current-vs-baseline no-regression and a plain-language verdict. The canonical measurer; replaces skill-creator's false-negative-prone run_eval.",
       "best-for": "Any marketplace maintainer deciding whether a skill's description actually triggers and whether it is fit to ship, who wants honest numbers instead of the stub-harness ~0 false-negatives.",
@@ -383,7 +383,7 @@
     {
       "name": "meta:solid",
       "plugin": "meta",
-      "plugin-version": "1.4.2",
+      "plugin-version": "1.4.3",
       "activates-when": "SOLID is the design law for all code \u2014 SRP/OCP/LSP/ISP/DIP plus DRY, KISS, YAGNI. Activate at DESIGN time and whenever writing, editing, or reviewing code in ANY language or stack \u2014 ESPECIALLY when a class, function, hook, route, or method does several things (fetches + formats + writes, or auth + validation + DB in one method) and you're weighing whether to split it; a switch or if-chain keeps growing with new cases; you're deciding how one module should depend on or import another; or designing an interface or extension point. Pairs with meta:ockham (whether an entity should exist at all) \u2014 SOLID governs how the entities that DO exist are structured.",
       "purpose": "Design-time guidance applying SOLID (SRP/OCP/LSP/ISP/DIP) plus DRY/KISS/YAGNI when writing, editing, or reviewing code structure.",
       "best-for": "Any project where a team wants consistent structural judgment calls (when to split a function/class, how modules should depend on each other) enforced during coding and review, not just at architecture-doc time.",
@@ -397,7 +397,7 @@
     {
       "name": "meta:triage",
       "plugin": "meta",
-      "plugin-version": "1.4.2",
+      "plugin-version": "1.4.3",
       "activates-when": "Use when you're about to attack a LARGE batch of items the same expensive way \\u2014 a repo-wide sweep for dead code, unused exports, or bugs; a big multi-file diff to review; dozens of call sites to migrate; a fleet of skills, files, or docs to audit or read; every TODO to classify; hundreds of failing tests to work through. Any \\\"do X across the whole repo / all of them / everything\\\" request where the set is too big to give each item full attention. Instead of paying deep cost on every item, first run one CHEAP shallow pass over ALL of them to sort into skip vs. worth-it, then spend the expensive deep pass only on the shortlist. Invoke at planning time, before touching the first item. NOT for a single file or function (just do it), NOT for picking a model tier (meta:model-routing), NOT for a plain parallel spawn with no sorting step.",
       "purpose": "Run a cheap full-coverage sorting pass over a large batch of items before spending an expensive pass only on the ones that need it.",
       "best-for": "Anyone about to sweep, review, migrate, or classify a large set of files/items uniformly and wants to avoid paying deep-pass cost on every single one.",
@@ -411,7 +411,7 @@
     {
       "name": "meta:update-skill",
       "plugin": "meta",
-      "plugin-version": "1.4.2",
+      "plugin-version": "1.4.3",
       "activates-when": "Use this skill to REFRESH the metadata.yaml sidecar of an ALREADY-EXISTING skill after its body, allowed-tools, bundled scripts, or hooks changed. Triggers for \\\"I edited skill X, refresh its metadata\\\", \\\"update the metadata.yaml after changing this skill\\\", \\\"this skill's behavior changed \u2014 does its metadata still match\\\", or noticing a scout sync-nudge after editing a SKILL.md/script. This is about RE-RUNNING the non-derivable-fields interview on a skill that already has a metadata.yaml, NOT about scaffolding a brand-new skill from scratch (that is `meta:new-skill`), and NOT about tuning an existing skill's trigger description or running skill-creator evals (that is the `skill-creator` plugin).",
       "purpose": "Refresh an existing skill's metadata.yaml after its body, tools, scripts, or hooks changed, by re-interviewing the non-derivable fields.",
       "best-for": "Any marketplace using metadata.yaml sidecars, to keep a skill's changes/purpose accurate after it is edited.",
@@ -427,7 +427,7 @@
     {
       "name": "meta:wittgenstein",
       "plugin": "meta",
-      "plugin-version": "1.4.2",
+      "plugin-version": "1.4.3",
       "activates-when": "Clarity gate for an already-written spec, plan, design doc/note, or RFC \u2014 a reviewer persona, not a writing guide. Activate to REVIEW or AUDIT such a doc (often under docs/superpowers/specs or docs/superpowers/plans) when checking whether a non-technical manager or reader could follow it; when it feels padded, wordy, or has grown long; when a section is a wall of prose or full of undefined jargon; or when the decision is buried at the end and should lead \u2014 then fix it in place. NOT for WRITING or drafting a doc from scratch (that's meta:lean-writing \u2014 wittgenstein reviews one that already exists), and NOT for chat, code, comments, commit messages, jira, or READMEs.",
       "purpose": "Review an already-written spec/plan/design doc/RFC for clarity \u2014 cut filler, front-load the bottom line, and rewrite walls of prose into skimmable bullets a non-technical manager could follow.",
       "best-for": "Anyone whose spec/plan/design doc has grown long, padded, or jargon-heavy and needs a laconic pass before a non-technical reader signs off on it.",
