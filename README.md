@@ -44,7 +44,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 |---|---|---|
 | scout | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data; never runs code itself. | [scout](#scout) |
 | cerberus | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer/client brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
-| cicero | House voice — an always-on output style (bottom-line-first, concise, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
+| cicero | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) |
 | frontend-css | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
 | frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
@@ -77,9 +77,10 @@ Grouped by plugin. Each group links back to [Plugins](#plugins).
   **PostToolUse** hook nudges it on every skill/eval edit; there is no denylist by design.
 
 ### cicero &nbsp;·&nbsp; [↑ Plugins](#plugins)
-Not a skill — the house communication style. The **14 rules** (answer first, size to the ask, gloss
-jargon, recommend don't survey, push back with reasons, calibrated honesty, … end with a one-line joke)
-ship as a **force-for-plugin output style**
+Not a skill — the house communication style. The **22 rules** under one governing readability rule
+(result first, plain words, avoid a specialized term instead of glossing it, recommend one option,
+push back, honesty, work silently by default; a closing joke is optional) ship as a
+**force-for-plugin output style**
 ([output-styles/cicero.md](plugins/cicero/output-styles/cicero.md)), applied at the system-prompt level
 whenever the plugin is on. Two hooks carry the runtime bits: a **SessionStart** hook shows a banner and
 picks the conversation language; a **UserPromptSubmit** hook (`language-nudge`) re-asserts the reply

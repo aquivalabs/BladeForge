@@ -1,13 +1,13 @@
-# CICERO — before / after on one real question
+# CICERO — before / after on real questions
 
-The same coding question, answered twice: once by vanilla Claude, once with the
-CICERO output style active. Both answers are **real transcripts**, not mock-ups.
+The same coding questions, each answered twice: once by vanilla Claude, once under
+the CICERO output style. All answers are **real transcripts**, not mock-ups.
 
 The point of the example is honest: CICERO does **not** make the model *more correct*
-— both answers reach the same architecture (idempotency table + OCC + transactional
-outbox). CICERO changes the *delivery*: verdict first, jargon glossed, far shorter,
-readable in one pass. The visible height difference between the two columns below is
-the whole pitch.
+— both answers reach the same core architecture (deduplicate in the database, guard the
+state change with a version check, make the side effects safe to retry). CICERO changes
+the *delivery*: the verdict lands in the first sentence, plain words carry the reasoning,
+and the whole thing reads in one pass — a third shorter than vanilla on this question.
 
 ## The question
 
@@ -102,30 +102,26 @@ these three layers.
 </td>
 <td>
 
-**Neither Redlock nor the version column alone. The root is idempotency-key dedup**
-*(a table of processed `event_id`s with a unique constraint; the repeat insert fails →
-the effect applies once)*.
+Use the version column — but as a state claim, not classic read-modify-write OCC. Redlock should not be your correctness mechanism.
 
-- **Redlock** *(a distributed lock over Redis)* — not for correctness. On a GC pause
-  *(process stalled by the garbage collector)* the lock's TTL lapses, a second instance
-  enters — double processing under a formally live lock. Only fencing tokens
-  *(a monotonic counter; the resource rejects stale ones)* fix it, and checking those
-  needs a version column anyway. So Redlock is at most an optimization "don't run the
-  expensive handler twice", never a guarantee.
-- **OCC** *(optimistic concurrency control — don't lock the row; at write time check
-  `WHERE version = N`; exactly one commits)* — a real DB-level guarantee, no external
-  moving parts.
-- **at-least-once** *(deliver "at least once" → duplicates are inevitable)* hits repeat
-  processing minutes later, when no lock exists — a lock can't close that. The dedup
-  table can.
-- **The handler is not referentially transparent** *(it has side effects — mail, an
-  external call)* — this decides it. OCC guards only the row; a side effect outside the
-  transaction repeats on retry. You need a **transactional outbox** *(write the intent in
-  the same transaction as the state transition; a separate worker emits it off the
-  committed state)*.
+**Why not Redlock.** A distributed lock gives you mutual exclusion for a time window, not idempotency. Under autoscaling you will hit the classic failure: a node acquires the lock, stalls on GC or a slow downstream call, the lock TTL expires, another node acquires it, and both run the handler. Redlock has no fencing tokens, so the storage layer can't reject the stale holder. Martin Kleppmann's critique of Redlock is exactly about this case. You can shorten the window with longer TTLs and watchdog renewal, but you can't close it — and with at-least-once delivery the window gets exercised constantly, not rarely.
 
-**Verdict:** idempotency table + OCC + an outbox for side effects. The Redis lock is
-optional — only against wasted work, never as the safety guarantee.
+**Why the version-column approach wins.** Make the durable store the arbiter. On receipt, atomically claim the event before doing any side effects:
+
+- A `processed_events` row keyed by the delivery's idempotency key, with a state machine: `INSERT ... ON CONFLICT DO NOTHING` (or a conditional update `SET state='processing' WHERE state='pending' AND version=?`).
+- Exactly one worker wins the claim. Losers drop the delivery immediately — no lock wait, no contention cost, which matters at high throughput.
+- On success, transition to `done` in the same store. On crash, a lease timestamp on the `processing` state lets a reaper re-open it.
+
+This is atomic, has no clock-drift dependency, survives Redis loss, and adds no extra infrastructure hop per event.
+
+**The hard part is the non-referentially-transparent handler, and neither option fixes it.** If a worker claims the event, fires the side effect (email, external API call), and dies before recording `done`, the reaper will retry and the side effect runs twice. A lock has the same hole. The only real fixes:
+
+1. Push the idempotency key downstream — most payment/email/API providers accept one, making the external call safe to retry.
+2. If the downstream can't dedupe, record intent (`side_effect_started`) before firing, and on retry treat "started but unconfirmed" as requiring reconciliation rather than blind re-execution.
+
+**One legitimate use for Redis here:** a short-TTL `SET NX` as a cheap *pre-filter* to cut wasted DB claims when the webhook provider sends bursts of duplicates. That's an optimization on top of the DB claim, never a substitute — if Redis lies, the DB claim still guarantees correctness.
+
+So: version-column claim in your primary store for correctness, downstream idempotency keys for the side effects, Redis at most as a best-effort dedup cache.
 
 </td>
 </tr>
@@ -135,13 +131,13 @@ optional — only against wasted work, never as the safety guarantee.
 
 | Rule | Vanilla | With CICERO |
 |------|---------|-------------|
-| **1 · Answer first** | verdict lives in a "Recommendation" section at the very bottom | verdict is the first sentence |
-| **2 · Size to ask** | ~600 words, six headed sections | ~200 words, one list |
-| **3 · Gloss** | Redlock, OCC, fencing tokens, at-least-once used raw | each glossed in-line on first use |
-| **4 · Recommend, don't survey** | lays out the full analysis, then recommends | leads with the pick, detail follows |
-| **0 · Readable first** | nested sub-lists and cross-references | flat points, one idea each |
+| **1 · Result first** | verdict lives in a "Recommendation" section at the very bottom | verdict is the first sentence |
+| **9 · Match the answer** | ~650 words, six headed sections, a closing offer of more | ~410 words, four tight blocks, then it stops |
+| **4 · Avoid the term** | leans on raw jargon and parenthetical asides the reader must unpack | plain words carry the point; a term appears only where it does real work, and no jargon is glossed in parentheses |
+| **15 · Recommend one option** | lays out the full analysis, then recommends | leads with the pick, detail follows |
+| **0 · Readability first** | nested sub-lists and cross-references | short paragraphs, one idea each |
 
-Same conclusion, a third of the length, and you know the answer from line one.
+Same core answer, a third shorter, and you know the verdict from line one.
 
 ---
 
@@ -222,18 +218,11 @@ commented exception — not the default.
 </td>
 <td>
 
-Yes — `any` disables type-checking on that value, so it silently defeats the reason you're
-using TypeScript. Every property access and call on an `any` becomes unchecked.
+Mostly yes. `any` turns off type checking for that value, and it spreads: anything you derive from an `any` value becomes `any` too, so one annotation can silently un-type a whole call chain. Bugs the compiler would catch become runtime errors.
 
-**Use instead:**
+The usual fix is `unknown`. It also means "could be anything", but forces you to narrow the type before using the value, so you keep the safety.
 
-- `unknown` *(the safe counterpart — accepts anything, but forces a check before use)* when
-  you truly don't know the type.
-- A real type or generic when you do.
-
-**When `any` is fine:** quick migration of old JS, or a genuinely dynamic boundary you'll
-validate at runtime anyway. Turn on `noImplicitAny` so it's always a deliberate choice,
-never an accident.
+`any` is defensible in a few narrow spots: migrating a large JS codebase incrementally, gluing over a badly typed third-party library, or generic constraints like `(...args: any[]) => any` where the type genuinely doesn't matter. Even then, keep it contained at the boundary instead of letting it leak into your own signatures. Many teams enforce this with the `@typescript-eslint/no-explicit-any` lint rule.
 
 </td>
 </tr>
@@ -249,8 +238,9 @@ It's about what the answer is like to *live with*:
 - **There's less to hold in your head.** One idea per point, no nested cross-references. The
   shorter answer isn't missing anything here; it just doesn't make you carry what you
   didn't ask for.
-- **Terms are explained as they arrive.** `unknown`, `noImplicitAny` — glossed in passing,
-  so you're never quietly assumed to already know.
+- **Plain words instead of glossed jargon.** A specialized term shows up only where it does
+  real work, and gets its own short sentence of explanation when it needs one — no jargon
+  glossed in parentheses.
 - **It's gentler with your attention and your codebase.** It sizes the reply to the size of
   the question, and on a risky request it pushes back before acting rather than racing
   ahead.
