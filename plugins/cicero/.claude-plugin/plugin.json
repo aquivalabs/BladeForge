@@ -1,6 +1,6 @@
 {
   "name": "cicero",
-  "description": "CICERO — the house voice. A SessionStart hook injects the always-on communication style (bottom line first, concise, plain language, recommend-don't-survey, push back, honesty, stay in scope) + a start banner; a Stop hook enforces principles 12/2/3 (reply in the user's language, concise, gloss/translate jargon) by blocking an off-voice reply so it gets rewritten.",
+  "description": "CICERO — the house voice. The 22 communication rules under one governing readability rule (result first, plain words, avoid a specialized term instead of glossing it, recommend one option, push back with reasons, honesty about verification, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level. A SessionStart hook shows a banner and picks the conversation language; a UserPromptSubmit hook keeps the reply language current.",
   "version": "1.1.1",
   "keywords": [
     "communication",

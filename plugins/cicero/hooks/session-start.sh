@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # CICERO SessionStart hook — shows a one-time banner and, on first run, asks which language the
-# house voice should converse in, then persists it. The static voice RULES (Rule 0-14) do NOT
+# house voice should converse in, then persists it. The static voice RULES (Rule 0-22) do NOT
 # live here — they ship as the force-for-plugin output style output-styles/cicero.md, applied at
 # the system-prompt level whenever the plugin is on. This hook only carries what needs runtime
 # logic (banner, version, language pick).
@@ -60,8 +60,8 @@ injected into the system prompt and OVERRIDES your own outputStyle setting. You 
   heads-up: /config keeps showing YOUR saved style (often \"default\") — the plugin overrides that
   slot without changing what it displays, so \"default\" there does NOT mean the voice is off.
   confirm it is live → send me this exact line:
-      Quote Rule 0 and Rule 14 of your active output style, verbatim.
-    active   = I reply with the real rules (Rule 0 \"Readability first…\", Rule 14 \"end with a joke\").
+      Quote Rule 0 and Rule 13 of your active output style, verbatim.
+    active   = I reply with the real rules (Rule 0 \"Readability first…\", Rule 13 \"a joke is optional, final message only\").
     NOT active = I don't know them, or answer in generic terms.
   truly missing (older Claude Code, or a stale plugin)? run in order:
     /reload-plugins         — reload plugins in this session

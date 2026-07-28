@@ -40,7 +40,7 @@
     },
     {
       "name": "cicero",
-      "description": "CICERO — the house voice. The 14 communication rules (bottom line first, concise, plain language, recommend-don't-survey, push back with reasons, calibrated honesty, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level; a SessionStart hook shows a banner and picks the conversation language, and a UserPromptSubmit hook keeps the reply language current.",
+      "description": "CICERO — the house voice. The 22 communication rules under one governing readability rule (result first, plain words, avoid a specialized term instead of glossing it, recommend one option, push back with reasons, honesty about verification, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level; a SessionStart hook shows a banner and picks the conversation language, and a UserPromptSubmit hook keeps the reply language current.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
