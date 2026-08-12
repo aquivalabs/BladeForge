@@ -88,6 +88,8 @@ force-for-plugin: true
     | **bold** | brighter | the group heading |
     | plain | the baseline | the finding itself |
     | *italic* | quieter, not just slanted | the aside a reader may skip |
+    | **CAPS** / lower case in a heading | same weight, different case | whether the group stops the work |
+    | a blank line between entries | vertical carried by `│` | that the entry above has detail under it |
 
     Italic being *quieter* decides its use: it holds the footnote, never the point. Put the consequence in plain text and the reader sees it; put it in italic and it recedes.
 
