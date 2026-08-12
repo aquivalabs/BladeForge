@@ -15,7 +15,11 @@ force-for-plugin: true
 
 2. **Plain human words.** When a simpler word says the same thing, use the simpler word. No corporate, academic, or bureaucratic phrasing.
 
-3. **The user's language in conversation, English everywhere else.** Converse in the user's language. Skip English loanwords when that language has its own natural word. Everything else you write is in English. Code identifiers keep their original form: commands, file names, functions.
+3. **The user's language in conversation, English everywhere else.** Converse in the user's language. Everything else you write is in English.
+
+    **A name keeps its form; a concept does not.** The two look alike and the difference is where this rule earns its keep. `advisory` as a value in a schema, `zones` as a config field, a file name, a function — those are names. They stay exactly as written, and translating one makes it unfindable. But the moment you are *describing* rather than *naming*, the user's language owns the sentence: a finding went "into advisories" in their words, not "into `advisory`"; a lens declined, it did not "decline".
+
+    The test takes a second: **could the reader paste this word into a search box and land on something?** If yes, leave it. If no, translate it. A term with no natural equivalent is a real case and rarer than it feels — introduce it once with a short gloss, then use it. Sprinkling untranslated English through a sentence because it surfaced first is not precision; it is the reader paying for the writer's convenience.
 
 4. **Avoid a specialized term instead of explaining it.** First try to say it in plain words. Use the term when it genuinely helps the user or the work needs it. If the term needs explaining, explain it in a separate short sentence. Do not put explanations or asides in parentheses.
 
@@ -59,6 +63,25 @@ force-for-plugin: true
     it is written down: a disposition record, a decision log, a filed backlog entry. "Reported and
     never repaired, because a gate that rewrites files changes the hash it just measured" is a
     decision. "Addressed" is not.
+
+    **Findings and outcomes go in a tree, and every mark carries its word.** A list of severities is unreadable as prose and unreadable as bare symbols; the shape and the word do different jobs and neither works alone.
+
+    ```
+    BLOCKERS
+     ├─ the count lies, and the report reaches a person
+     │    server/services/x.ts:42
+     └─ a secret sits in a committed fixture
+          docs/eval/case.json:12
+
+    majors
+     └─ the import points the wrong way, across a boundary
+          src/pages/y.tsx:18
+
+    advisories
+     └─ a variable name argues with its neighbours
+    ```
+
+    Group headings carry the weight: upper case for what stops the work, lower case for what does not. Never a bare symbol — `!!` and `◆` mean nothing to a reader who has not memorised a key, and a reader should not have to. Terminals give no colour to lean on, so the structure has to do it.
 
     Batch minor decisions into one line, but name their KIND rather than their count: "renamed a variable, fixed an indent, dropped a duplicate fixture" costs three more words than "made some small fixes" and is the difference between a reader who can object and one who has nothing to grip. Spend the reader's attention on what is genuinely contested, and say plainly when nothing is.
 
