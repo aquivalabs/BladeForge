@@ -68,24 +68,59 @@ force-for-plugin: true
     never repaired, because a gate that rewrites files changes the hash it just measured" is a
     decision. "Addressed" is not.
 
-    **Findings and outcomes go in a tree, and every mark carries its word.** A list of severities is unreadable as prose and unreadable as bare symbols; the shape and the word do different jobs and neither works alone.
+    **Pick the shape from what the content is.** A tree and a table answer different questions and neither is the default:
 
-    ```
-    BLOCKERS
-     ├─ the count lies, and the report reaches a person
-     │    server/services/x.ts:42
-     └─ a secret sits in a committed fixture
-          docs/eval/case.json:12
+    | content | shape |
+    |---|---|
+    | things sharing attributes — compared, weighed, scored | a **table**, one row each |
+    | things grouped by state or severity, each with detail under it | a **tree** |
+    | one thing, one thought | a sentence |
 
-    majors
-     └─ the import points the wrong way, across a boundary
-          src/pages/y.tsx:18
+    Two or three items with one attribute apiece do not need either — a table with two rows and one column is ceremony. And a tree of findings nested three deep is a table wearing branches.
 
-    advisories
-     └─ a variable name argues with its neighbours
-    ```
+    **A tree is drawn in ordinary text — never inside a code fence.** A fence is monospaced and nothing else: emphasis and code spans arrive as literal asterisks and backticks, which is the whole toolkit gone. Drawn as ordinary text the box-drawing characters render fine and every other axis still works.
 
-    Group headings carry the weight: upper case for what stops the work, lower case for what does not. Never a bare symbol — `!!` and `◆` mean nothing to a reader who has not memorised a key, and a reader should not have to. Terminals give no colour to lean on, so the structure has to do it.
+    Four axes, and each answers a different question. Verified in a real terminal, not assumed:
+
+    | axis | how it renders | what it carries |
+    |---|---|---|
+    | `` `code` `` | **blue** — the only real colour available | the path, the field, the value: where to look |
+    | **bold** | brighter | the group heading |
+    | plain | the baseline | the finding itself |
+    | *italic* | quieter, not just slanted | the aside a reader may skip |
+
+    Italic being *quieter* decides its use: it holds the footnote, never the point. Put the consequence in plain text and the reader sees it; put it in italic and it recedes.
+
+    The shape:
+
+    **BLOCKERS**
+    │
+    ├─ the count lies, and the report reaches a person
+    │  `server/services/x.ts:42`
+    │  *was a minor; promoted at question 8 — silent and green*
+    │
+    └─ a secret sits in a committed fixture
+       `docs/eval/case.json:12`
+
+    **majors**
+    │
+    └─ the import points the wrong way, across a boundary
+       `src/pages/y.tsx:18`
+
+    The group names are whatever the subject calls for — this is a shape for any list of findings or outcomes, not a review format. The same tree carries the state of a piece of work:
+
+    **BROKEN**
+    │
+    └─ the push is refused; the gate wants an attestation
+       `.review/attestations/`
+
+    **done**
+    │
+    ├─ the style plugin is merged in all three mirrors
+    │
+    └─ the spec survived four rounds of critique
+
+    Group headings carry the weight — upper case for what stops the work, lower case for what does not. A `│` runs from the heading down through every blank line, so findings breathe without the group falling apart. Never a bare symbol: `!!` and `◆` mean nothing to a reader who has not memorised a key, and a reader should not have to. Colour beyond the code span is unavailable — ANSI escapes do not survive the render — so this structure is what there is.
 
     Batch minor decisions into one line, but name their KIND rather than their count: "renamed a variable, fixed an indent, dropped a duplicate fixture" costs three more words than "made some small fixes" and is the difference between a reader who can object and one who has nothing to grip. Spend the reader's attention on what is genuinely contested, and say plainly when nothing is.
 
