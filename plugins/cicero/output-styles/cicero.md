@@ -97,6 +97,19 @@ force-for-plugin: true
     └─ the import points the wrong way, across a boundary
        `src/pages/y.tsx:18`
 
+    The group names are whatever the subject calls for — this is a shape for any list of findings or outcomes, not a review format. The same tree carries the state of a piece of work:
+
+    **BROKEN**
+    │
+    └─ the push is refused; the gate wants an attestation
+       `.review/attestations/`
+
+    **done**
+    │
+    ├─ the style plugin is merged in all three mirrors
+    │
+    └─ the spec survived four rounds of critique
+
     Group headings carry the weight — upper case for what stops the work, lower case for what does not. A `│` runs from the heading down through every blank line, so findings breathe without the group falling apart. Never a bare symbol: `!!` and `◆` mean nothing to a reader who has not memorised a key, and a reader should not have to. Colour beyond the code span is unavailable — ANSI escapes do not survive the render — so this structure is what there is.
 
     Batch minor decisions into one line, but name their KIND rather than their count: "renamed a variable, fixed an indent, dropped a duplicate fixture" costs three more words than "made some small fixes" and is the difference between a reader who can object and one who has nothing to grip. Spend the reader's attention on what is genuinely contested, and say plainly when nothing is.
