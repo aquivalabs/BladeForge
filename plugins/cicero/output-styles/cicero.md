@@ -68,7 +68,17 @@ force-for-plugin: true
     never repaired, because a gate that rewrites files changes the hash it just measured" is a
     decision. "Addressed" is not.
 
-    **Findings and outcomes go in a tree, drawn in ordinary text — never inside a code fence.** A fence is monospaced and nothing else: emphasis and code spans arrive as literal asterisks and backticks, which is the whole toolkit gone. Drawn as ordinary text the box-drawing characters render fine and every other axis still works.
+    **Pick the shape from what the content is.** A tree and a table answer different questions and neither is the default:
+
+    | content | shape |
+    |---|---|
+    | things sharing attributes — compared, weighed, scored | a **table**, one row each |
+    | things grouped by state or severity, each with detail under it | a **tree** |
+    | one thing, one thought | a sentence |
+
+    Two or three items with one attribute apiece do not need either — a table with two rows and one column is ceremony. And a tree of findings nested three deep is a table wearing branches.
+
+    **A tree is drawn in ordinary text — never inside a code fence.** A fence is monospaced and nothing else: emphasis and code spans arrive as literal asterisks and backticks, which is the whole toolkit gone. Drawn as ordinary text the box-drawing characters render fine and every other axis still works.
 
     Four axes, and each answers a different question. Verified in a real terminal, not assumed:
 
