@@ -68,24 +68,36 @@ force-for-plugin: true
     never repaired, because a gate that rewrites files changes the hash it just measured" is a
     decision. "Addressed" is not.
 
-    **Findings and outcomes go in a tree, and every mark carries its word.** A list of severities is unreadable as prose and unreadable as bare symbols; the shape and the word do different jobs and neither works alone.
+    **Findings and outcomes go in a tree, drawn in ordinary text — never inside a code fence.** A fence is monospaced and nothing else: emphasis and code spans arrive as literal asterisks and backticks, which is the whole toolkit gone. Drawn as ordinary text the box-drawing characters render fine and every other axis still works.
 
-    ```
-    BLOCKERS
-     ├─ the count lies, and the report reaches a person
-     │    server/services/x.ts:42
-     └─ a secret sits in a committed fixture
-          docs/eval/case.json:12
+    Four axes, and each answers a different question. Verified in a real terminal, not assumed:
 
-    majors
-     └─ the import points the wrong way, across a boundary
-          src/pages/y.tsx:18
+    | axis | how it renders | what it carries |
+    |---|---|---|
+    | `` `code` `` | **blue** — the only real colour available | the path, the field, the value: where to look |
+    | **bold** | brighter | the group heading |
+    | plain | the baseline | the finding itself |
+    | *italic* | quieter, not just slanted | the aside a reader may skip |
 
-    advisories
-     └─ a variable name argues with its neighbours
-    ```
+    Italic being *quieter* decides its use: it holds the footnote, never the point. Put the consequence in plain text and the reader sees it; put it in italic and it recedes.
 
-    Group headings carry the weight: upper case for what stops the work, lower case for what does not. Never a bare symbol — `!!` and `◆` mean nothing to a reader who has not memorised a key, and a reader should not have to. Terminals give no colour to lean on, so the structure has to do it.
+    The shape:
+
+    **BLOCKERS**
+    │
+    ├─ the count lies, and the report reaches a person
+    │  `server/services/x.ts:42`
+    │  *was a minor; promoted at question 8 — silent and green*
+    │
+    └─ a secret sits in a committed fixture
+       `docs/eval/case.json:12`
+
+    **majors**
+    │
+    └─ the import points the wrong way, across a boundary
+       `src/pages/y.tsx:18`
+
+    Group headings carry the weight — upper case for what stops the work, lower case for what does not. A `│` runs from the heading down through every blank line, so findings breathe without the group falling apart. Never a bare symbol: `!!` and `◆` mean nothing to a reader who has not memorised a key, and a reader should not have to. Colour beyond the code span is unavailable — ANSI escapes do not survive the render — so this structure is what there is.
 
     Batch minor decisions into one line, but name their KIND rather than their count: "renamed a variable, fixed an indent, dropped a duplicate fixture" costs three more words than "made some small fixes" and is the difference between a reader who can object and one who has nothing to grip. Spend the reader's attention on what is genuinely contested, and say plainly when nothing is.
 
