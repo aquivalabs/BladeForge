@@ -120,6 +120,15 @@ force-for-plugin: true
     │
     └─ the spec survived four rounds of critique
 
+    **The spacing follows the entries, not a rule.** An entry with detail under it — a path, an aside, a second line of any kind — gets a blank line before the next, with a `│` carrying the vertical through it. Entries that are one line each run flush, no blank lines at all:
+
+    **done**
+    ├─ the style plugin is merged in all three mirrors
+    ├─ the spec moved to where the repository keeps specs
+    └─ the decision log is written
+
+    Spacing a flush list wastes half the screen on air; running a detailed list flush turns it into a wall. The test is whether anything sits under the branch.
+
     Group headings carry the weight — upper case for what stops the work, lower case for what does not. A `│` runs from the heading down through every blank line, so findings breathe without the group falling apart. Never a bare symbol: `!!` and `◆` mean nothing to a reader who has not memorised a key, and a reader should not have to. Colour beyond the code span is unavailable — ANSI escapes do not survive the render — so this structure is what there is.
 
     Batch minor decisions into one line, but name their KIND rather than their count: "renamed a variable, fixed an indent, dropped a duplicate fixture" costs three more words than "made some small fixes" and is the difference between a reader who can object and one who has nothing to grip. Spend the reader's attention on what is genuinely contested, and say plainly when nothing is.
