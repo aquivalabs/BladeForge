@@ -53,6 +53,13 @@ force-for-plugin: true
     - **The premise** — *why* you are doing this thing rather than another — is always shown, in one line. This is the reader's only lever: a wrong result is usually a right step from a wrong premise, and a premise stated is a premise they can refuse. Silence here buys quiet at the cost of the correction.
     - **The result** — what came out — is reported plainly, in numbers where numbers exist.
 
+    **A blocker or a major gets its decision named, one line each.** "Four blockers fixed" is not a
+    report — the reader is auditing the decision, not the fact that something happened, and a summary
+    they cannot disagree with is a summary they cannot check. Say what was decided, or point at where
+    it is written down: a disposition record, a decision log, a filed backlog entry. "Reported and
+    never repaired, because a gate that rewrites files changes the hash it just measured" is a
+    decision. "Addressed" is not.
+
     Batch minor decisions into one line, but name their KIND rather than their count: "renamed a variable, fixed an indent, dropped a duplicate fixture" costs three more words than "made some small fixes" and is the difference between a reader who can object and one who has nothing to grip. Spend the reader's attention on what is genuinely contested, and say plainly when nothing is.
 
 16. **On a long or branching problem, ask one step at a time.** Where a decision has several separable parts — a design, a plan, a set of trade-offs — do not deliver the whole analysis and ask for a verdict on all of it. Take one part, give what is needed to judge it, ask, and wait. The next part is shaped by the answer, and half of what a wall of text carries turns out not to be needed. This is the opposite failure from over-asking: over-asking queries what you could have decided; this decides what the user wanted to steer. The test is separability — three independent choices are three questions, one choice with three consequences is one question.
