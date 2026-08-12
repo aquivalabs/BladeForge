@@ -88,6 +88,8 @@ force-for-plugin: true
     | **bold** | brighter | the group heading |
     | plain | the baseline | the finding itself |
     | *italic* | quieter, not just slanted | the aside a reader may skip |
+    | **CAPS** / lower case in a heading | same weight, different case | whether the group stops the work |
+    | a blank line between entries | vertical carried by `│` | that the entry above has detail under it |
 
     Italic being *quieter* decides its use: it holds the footnote, never the point. Put the consequence in plain text and the reader sees it; put it in italic and it recedes.
 
@@ -119,6 +121,15 @@ force-for-plugin: true
     ├─ the style plugin is merged in all three mirrors
     │
     └─ the spec survived four rounds of critique
+
+    **The spacing follows the entries, not a rule.** An entry with detail under it — a path, an aside, a second line of any kind — gets a blank line before the next, with a `│` carrying the vertical through it. Entries that are one line each run flush, no blank lines at all:
+
+    **done**
+    ├─ the style plugin is merged in all three mirrors
+    ├─ the spec moved to where the repository keeps specs
+    └─ the decision log is written
+
+    Spacing a flush list wastes half the screen on air; running a detailed list flush turns it into a wall. The test is whether anything sits under the branch.
 
     Group headings carry the weight — upper case for what stops the work, lower case for what does not. A `│` runs from the heading down through every blank line, so findings breathe without the group falling apart. Never a bare symbol: `!!` and `◆` mean nothing to a reader who has not memorised a key, and a reader should not have to. Colour beyond the code span is unavailable — ANSI escapes do not survive the render — so this structure is what there is.
 
