@@ -21,29 +21,50 @@ fi
 VER="$(jq -r '.version // empty' "${CLAUDE_PLUGIN_ROOT:-}/.claude-plugin/plugin.json" 2>/dev/null || true)"
 [ -z "$VER" ] && VER="?"
 
-read -r -d '' BANNER <<'EOF' || true
-═══════════════════════════════════
-C I C E R O — the house voice
-"Speak so the point lands first."
-bottom line·concise·honest·in scope
-═══════════════════════════════════
+# A hook systemMessage reaches the terminal as PLAIN TEXT: markdown is never processed there, so
+# **stars** and `backticks` would show up literally — that is what the legend used to do. Real ANSI
+# escapes DO survive, so banner and legend style themselves with escapes instead. The palette below
+# mirrors what the markdown renderer does to an assistant message, which is the whole point of the
+# legend: bold heading, cyan locator, italic aside, dim annotation.
+#
+# Inverse video (INV) is the one device with no markdown counterpart. It is spent on the two things
+# that must survive a skimming eye — the voice's four keywords, and nothing else.
+E=$'\033'
+BOLD="${E}[1m"; DIM="${E}[2m"; ITAL="${E}[3m"; CYAN="${E}[36m"; INV="${E}[7m"; OFF="${E}[0m"
+MARK="${CYAN}${BOLD}"
+
+if [ -n "$LANG_CHOSEN" ]; then
+  META="v$VER · $LANG_CHOSEN"
+else
+  META="v$VER · no voice language set yet"
+fi
+
+# The wordmark is drawn with half-block glyphs (two rows, not five): the terminal renders a hook
+# message with generous line spacing, so a five-row figlet would eat half the screen. No right-hand
+# border anywhere in this file — a frame that has to line up is a frame that breaks the first time
+# the window is narrower than it is.
+read -r -d '' BANNER <<EOF || true
+${MARK}▄▀▀ █ ▄▀▀ ██▀ █▀▄ ▄▀▄${OFF} ${DIM}the house voice${OFF}
+${MARK}▀▄▄ █ ▀▄▄ █▄▄ █▀▄ ▀▄▀${OFF} ${DIM}${META}${OFF}
+${INV} bottom line · concise · honest · in scope ${OFF}
 EOF
 
 # The notation legend, shown every session. The output style holds the RULE — the six-axis table in
 # Rule 16, written for the model. This holds one worked EXAMPLE of it, written for the human, who
 # never sees that file. Deliberately an example and not a copy of the table: a second copy of the
-# rows would drift, an example only has to stay true to them.
-read -r -d '' LEGEND <<'EOF' || true
-── how a list of findings is drawn ──
-**BLOCKERS** — upper case stops the work
+# rows would drift, an example only has to stay true to them. Each line is styled as the axis it
+# describes, so the legend demonstrates rather than asserts.
+read -r -d '' LEGEND <<EOF || true
+${DIM}── how a list of findings is drawn ──${OFF}
+${BOLD}BLOCKERS${OFF} ${DIM}— upper case: this group stops the work${OFF}
 │
-└─ the finding itself is plain text
-   `path/to/file.ts:42` — a code span is where to look
-   *italic is the aside you may skip*
+└─ the finding itself, in plain text
+   ${CYAN}path/to/file.ts:42${OFF} ${DIM}— a code span: where to look${OFF}
+   ${ITAL}an aside you may skip${OFF} ${DIM}— italic: quieter, never the point${OFF}
 
-**majors** — lower case does not stop it
-├─ entries with nothing under them run flush
-└─ one with detail gets a blank line and a carried │
+${BOLD}majors${OFF} ${DIM}— lower case: does not stop the work${OFF}
+├─ one-line entries run flush, no blank line between them
+└─ an entry with detail gets a blank line, and │ carries down
 EOF
 
 read -r -d '' FIRSTRUN <<'EOF' || true
@@ -55,17 +76,12 @@ house voice should converse in, then persist it: write {"language":"<code>"} to
 ~/.claude/cicero/config.json (create the dir). Do this once; after that the choice sticks.
 EOF
 
-if [ -n "$LANG_CHOSEN" ]; then
-  SYSMSG="$BANNER
-cicero v$VER · voice language: $LANG_CHOSEN
+SYSMSG="$BANNER
 
 $LEGEND"
+if [ -n "$LANG_CHOSEN" ]; then
   CONTEXT=""
 else
-  SYSMSG="$BANNER
-cicero v$VER · no voice language set yet — I'll ask you to pick one
-
-$LEGEND"
   CONTEXT="$FIRSTRUN"
 fi
 
@@ -75,19 +91,19 @@ fi
 NOTICE_MARK="$HOME/.claude/cicero/.voice-style-notice-seen"
 if [ ! -f "$NOTICE_MARK" ]; then
   SYSMSG="$SYSMSG
-──────────────────────────────────
-note (shown once): CICERO is a force-for-plugin OUTPUT STYLE — while this plugin is enabled it is
-injected into the system prompt and OVERRIDES your own outputStyle setting. You do not select it.
-  heads-up: /config keeps showing YOUR saved style (often \"default\") — the plugin overrides that
-  slot without changing what it displays, so \"default\" there does NOT mean the voice is off.
+
+${BOLD}note, shown once${OFF} ${DIM}— CICERO is a force-for-plugin OUTPUT STYLE. While this plugin is enabled it is
+injected into the system prompt and OVERRIDES your own outputStyle setting. You do not select it.${OFF}
+  ${DIM}/config keeps showing YOUR saved style (often \"default\") — the plugin overrides that slot
+  without changing what it displays, so \"default\" there does NOT mean the voice is off.${OFF}
   confirm it is live → send me this exact line:
-      Quote Rule 0 and Rule 13 of your active output style, verbatim.
-    active   = I reply with the real rules (Rule 0 \"Readability first…\", Rule 13 \"a joke is optional, final message only\").
-    NOT active = I don't know them, or answer in generic terms.
+      ${CYAN}Quote Rule 0 and Rule 13 of your active output style, verbatim.${OFF}
+    ${DIM}active     = I reply with the real rules (Rule 0 \"Readability first…\", Rule 13 \"a joke is optional, final message only\").
+    NOT active = I don't know them, or answer in generic terms.${OFF}
   truly missing (older Claude Code, or a stale plugin)? run in order:
-    /reload-plugins         — reload plugins in this session
-    /plugin update cicero   — pull the latest plugin version
-    update Claude Code       — if still missing, upgrade the CLI to the latest"
+    ${CYAN}/reload-plugins${OFF}         ${DIM}reload plugins in this session${OFF}
+    ${CYAN}/plugin update cicero${OFF}   ${DIM}pull the latest plugin version${OFF}
+    ${DIM}then upgrade the Claude Code CLI itself if it is still missing${OFF}"
   mkdir -p "$HOME/.claude/cicero" && : > "$NOTICE_MARK" || true
 fi
 
