@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# CICERO SessionStart hook — shows a one-time banner and, on first run, asks which language the
-# house voice should converse in, then persists it. The static voice RULES (Rule 0-22) do NOT
-# live here — they ship as the force-for-plugin output style output-styles/cicero.md, applied at
-# the system-prompt level whenever the plugin is on. This hook only carries what needs runtime
-# logic (banner, version, language pick).
+# CICERO SessionStart hook — shows a banner with the notation legend and, on first run, asks which
+# language the house voice should converse in, then persists it. The static voice RULES (Rule 0 and
+# the numbered rules) do NOT live here — they ship as the force-for-plugin output style
+# output-styles/cicero.md, applied at the system-prompt level whenever the plugin is on. This hook
+# only carries what needs runtime logic (banner, version, legend, language pick).
 #
 # Heredocs are read via `read -r -d ''` rather than $(cat <<EOF): macOS ships bash 3.2,
 # which mis-parses a heredoc nested inside $(...) when the body contains quotes/apostrophes.
@@ -29,6 +29,23 @@ bottom line·concise·honest·in scope
 ═══════════════════════════════════
 EOF
 
+# The notation legend, shown every session. The output style holds the RULE — the six-axis table in
+# Rule 16, written for the model. This holds one worked EXAMPLE of it, written for the human, who
+# never sees that file. Deliberately an example and not a copy of the table: a second copy of the
+# rows would drift, an example only has to stay true to them.
+read -r -d '' LEGEND <<'EOF' || true
+── how a list of findings is drawn ──
+**BLOCKERS** — upper case stops the work
+│
+└─ the finding itself is plain text
+   `path/to/file.ts:42` — a code span is where to look
+   *italic is the aside you may skip*
+
+**majors** — lower case does not stop it
+├─ entries with nothing under them run flush
+└─ one with detail gets a blank line and a carried │
+EOF
+
 read -r -d '' FIRSTRUN <<'EOF' || true
 
 ## First run — pick a voice language
@@ -40,11 +57,15 @@ EOF
 
 if [ -n "$LANG_CHOSEN" ]; then
   SYSMSG="$BANNER
-cicero v$VER · voice language: $LANG_CHOSEN"
+cicero v$VER · voice language: $LANG_CHOSEN
+
+$LEGEND"
   CONTEXT=""
 else
   SYSMSG="$BANNER
-cicero v$VER · no voice language set yet — I'll ask you to pick one"
+cicero v$VER · no voice language set yet — I'll ask you to pick one
+
+$LEGEND"
   CONTEXT="$FIRSTRUN"
 fi
 
