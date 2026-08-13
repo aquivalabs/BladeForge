@@ -55,6 +55,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | jira | Jira — comment style. | [comment-style](#comment-style) |
 | meta | Meta — design law, error handling, doc writing, skill authoring. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [setup](#setup) |
+| review-workflow | Workflow script that dispatches the review plugin's five lenses in parallel, reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | salesforce | Salesforce — Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 
 ## Skills
