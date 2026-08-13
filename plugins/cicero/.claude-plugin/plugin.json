@@ -1,7 +1,7 @@
 {
   "name": "cicero",
   "description": "CICERO \u2014 the house voice. The numbered communication rules under one governing readability rule (result first, plain words, avoid a specialized term instead of glossing it, recommend one option, push back with reasons, honesty about verification, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level. A SessionStart hook shows a banner with a worked example of the finding-tree notation and picks the conversation language; a UserPromptSubmit hook keeps the reply language current.",
-  "version": "1.3.7",
+  "version": "1.3.8",
   "keywords": [
     "communication",
     "house-voice",
