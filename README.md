@@ -82,8 +82,8 @@ Not a skill — the house communication style. The **22 rules** under one govern
 push back, honesty, work silently by default; a closing joke is optional) ship as a
 **force-for-plugin output style**
 ([output-styles/cicero.md](plugins/cicero/output-styles/cicero.md)), applied at the system-prompt level
-whenever the plugin is on. Two hooks carry the runtime bits: a **SessionStart** hook shows a banner and
-picks the conversation language; a **UserPromptSubmit** hook (`language-nudge`) re-asserts the reply
+whenever the plugin is on. Two hooks carry the runtime bits: a **SessionStart** hook shows a banner, a worked
+example of the finding-tree notation, and picks the conversation language; a **UserPromptSubmit** hook (`language-nudge`) re-asserts the reply
 language each turn, so it tracks a mid-session language switch. Net effect: the bot talks plainly and
 cuts the fluff. **See the difference:**
 [before / after vs. vanilla Claude](plugins/cicero/examples/before-after.md).

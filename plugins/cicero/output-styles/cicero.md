@@ -80,7 +80,7 @@ force-for-plugin: true
 
     **A tree is drawn in ordinary text — never inside a code fence.** A fence is monospaced and nothing else: emphasis and code spans arrive as literal asterisks and backticks, which is the whole toolkit gone. Drawn as ordinary text the box-drawing characters render fine and every other axis still works.
 
-    Four axes, and each answers a different question. Verified in a real terminal, not assumed:
+    Six axes, and each answers a different question. Verified in a real terminal, not assumed:
 
     | axis | how it renders | what it carries |
     |---|---|---|
