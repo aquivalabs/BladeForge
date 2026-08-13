@@ -4,7 +4,7 @@
     "name": "aquivalabs"
   },
   "metadata": {
-    "description": "BladeForge — aquivalabs Claude Code skills marketplace.",
+    "description": "BladeForge \u2014 aquivalabs Claude Code skills marketplace.",
     "version": "1.0.0"
   },
   "plugins": [
@@ -20,7 +20,7 @@
     },
     {
       "name": "error",
-      "description": "Error skills — the unified error envelope + reason-code vocabulary (format) and the framework-agnostic client-side error-handling architecture (architecture).",
+      "description": "Error skills \u2014 the unified error envelope + reason-code vocabulary (format) and the framework-agnostic client-side error-handling architecture (architecture).",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -30,7 +30,7 @@
     },
     {
       "name": "cerberus",
-      "description": "CERBERUS — leak guard for a public skills marketplace. A PostToolUse hook reminds you to run the cerberus:leak-check skill on every skill/reference/eval edit; that agent pass rewrites anything pointing to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an employer brand, or the aggregate product flavor) into a neutral fictional demo. No denylist by design.",
+      "description": "CERBERUS \u2014 leak guard for a public skills marketplace. A PostToolUse hook reminds you to run the cerberus:leak-check skill on every skill/reference/eval edit; that agent pass rewrites anything pointing to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an employer brand, or the aggregate product flavor) into a neutral fictional demo. No denylist by design.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -40,7 +40,7 @@
     },
     {
       "name": "cicero",
-      "description": "CICERO — the house voice. The numbered communication rules under one governing readability rule (result first, plain words, avoid a specialized term instead of glossing it, recommend one option, push back with reasons, honesty about verification, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level; a SessionStart hook shows a banner with a worked example of the finding-tree notation and picks the conversation language, and a UserPromptSubmit hook keeps the reply language current.",
+      "description": "CICERO \u2014 the house voice. The numbered communication rules under one governing readability rule (result first, plain words, avoid a specialized term instead of glossing it, recommend one option, push back with reasons, honesty about verification, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level; a SessionStart hook shows a banner with a worked example of the finding-tree notation and picks the conversation language, and a UserPromptSubmit hook keeps the reply language current.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -49,7 +49,7 @@
     },
     {
       "name": "diagram",
-      "description": "Architecture / flow diagram authoring — turn a spec or raw code into a readable, clickable D2→ELK diagram (classes with methods, objects, permission sets, relations) as a browsable HTML page under docs/diagrams/<name>/. Node contents come from an Atlas entity list that parallel Sextant reviewer agents harden to zero edits.",
+      "description": "Architecture / flow diagram authoring \u2014 turn a spec or raw code into a readable, clickable D2\u2192ELK diagram (classes with methods, objects, permission sets, relations) as a browsable HTML page under docs/diagrams/<name>/. Node contents come from an Atlas entity list that parallel Sextant reviewer agents harden to zero edits.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -58,7 +58,7 @@
     },
     {
       "name": "frontend-css",
-      "description": "Personal frontend CSS skills — rem units, SCSS modules.",
+      "description": "Personal frontend CSS skills \u2014 rem units, SCSS modules.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -76,7 +76,7 @@
     },
     {
       "name": "frontend-react",
-      "description": "Frontend React skills — component structure, hooks registry, skeleton components, Storybook stories.",
+      "description": "Frontend React skills \u2014 component structure, hooks registry, skeleton components, Storybook stories.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -85,7 +85,7 @@
     },
     {
       "name": "frontend",
-      "description": "Personal frontend dev-harness skills — types + tests runner.",
+      "description": "Personal frontend dev-harness skills \u2014 types + tests runner.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -94,7 +94,7 @@
     },
     {
       "name": "git",
-      "description": "Personal Git workflow skills — atomic commit splitting.",
+      "description": "Personal Git workflow skills \u2014 atomic commit splitting.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -121,7 +121,7 @@
     },
     {
       "name": "meta",
-      "description": "Personal meta skills — authoring new skills.",
+      "description": "Personal meta skills \u2014 authoring new skills.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -130,7 +130,7 @@
     },
     {
       "name": "review",
-      "description": "Stack-agnostic pre-push review framework — 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
+      "description": "Stack-agnostic pre-push review framework \u2014 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -138,8 +138,18 @@
       "source": "./plugins/review"
     },
     {
+      "name": "review-workflow",
+      "description": "Workflow script for the pre-push review gate \u2014 dispatches the review plugin's lenses in parallel with a forced response schema, reconciles findings, recomputes each lens's score with the round-aware formula, and checks the eight gate criteria before the review command may attest. No skill; invoked directly by the review plugin's /review command.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/review-workflow",
+      "category": "engineering"
+    },
+    {
       "name": "salesforce",
-      "description": "Personal Salesforce skills — Apex test authoring standard and salesforce-dx MCP usage.",
+      "description": "Personal Salesforce skills \u2014 Apex test authoring standard and salesforce-dx MCP usage.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"

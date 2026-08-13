@@ -18,6 +18,12 @@ done
 grep -q 'review-gate' "$T/.husky/pre-push" || { echo "pre-push does not invoke review-gate"; exit 1; }
 grep -q 'bladeforge-review-harness' "$T/.github/workflows/review-gate.yml" || { echo "CI does not invoke the harness package"; exit 1; }
 
+# Fresh install must enable both review@<marketplace> and review-workflow@<marketplace>.
+jq -e '.enabledPlugins | keys | map(select(startswith("review@"))) | length > 0' "$T/.claude/settings.json" >/dev/null \
+  || { echo "MISSING: review@<marketplace> not enabled in settings.json"; exit 1; }
+jq -e '.enabledPlugins | keys | map(select(startswith("review-workflow@"))) | length > 0' "$T/.claude/settings.json" >/dev/null \
+  || { echo "MISSING: review-workflow@<marketplace> not enabled in settings.json"; exit 1; }
+
 # Idempotency: a custom config must survive a re-run.
 echo '{"custom":true}' > "$T/.claude/review.config.json"
 bash "$HERE/install.sh" "$T" >/dev/null
