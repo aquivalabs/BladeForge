@@ -1,0 +1,16 @@
+{
+  "name": "review-workflow",
+  "description": "Workflow script for the pre-push review gate \u2014 dispatches the review plugin's lenses in parallel with a forced response schema, reconciles findings, recomputes each lens's score with the round-aware formula, and checks the eight gate criteria before the review command may attest. No skill; invoked directly by the review plugin's /review command.",
+  "version": "1.0.3",
+  "keywords": [
+    "workflow",
+    "review",
+    "gate",
+    "lens-dispatch",
+    "orchestration"
+  ],
+  "author": {
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
+  }
+}

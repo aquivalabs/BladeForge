@@ -7,4 +7,4 @@ framework:
 - `docs` pairs any change under `src/**` with a required `README.md` update.
 - `EXAMPLE` is allowlisted so doc/code samples are not flagged by the secret scan.
 
-Everything not listed falls back to `DEFAULT_CONFIG` (see `scripts/review/config.ts`).
+Everything not listed falls back to `DEFAULT_CONFIG` in the published `bladeforge-review-harness` package.

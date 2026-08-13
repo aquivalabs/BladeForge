@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Review framework per-project config",
-  "description": "Targets the generic review plugin to a specific repo. Place at .claude/review.config.json. Anything omitted falls back to DEFAULT_CONFIG in scripts/review/config.ts.",
+  "description": "Targets the generic review plugin to a specific repo. Place at .claude/review.config.json. Anything omitted falls back to DEFAULT_CONFIG in the published bladeforge-review-harness package.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -9,7 +9,7 @@
       "type": "string",
       "enum": ["twitch", "plain"],
       "default": "twitch",
-      "description": "Voice/flavor toggle for reviewer agents that support it (e.g. scavenger). 'twitch' = themed Twitch plague-rat voice; 'plain' = neutral prose. Substance (verdict/findings) is identical either way."
+      "description": "Voice/flavor toggle for reviewer agents that support it, notably the craft lens. 'twitch' = themed Twitch plague-rat voice; 'plain' = neutral prose. Substance (verdict/findings) is identical either way."
     },
     "base": {
       "type": "string",
@@ -33,15 +33,10 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "Reviewer id. The 5 built-ins are conventions, architecture, tests, docs, security; others are appended."
+          "description": "Reviewer id. The 5 built-ins are craft, architecture, tests, docs, security; others are appended."
         },
         "enabled": { "type": "boolean" },
         "threshold": { "type": "number", "minimum": 0, "maximum": 10 },
-        "zones": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Globs this agent restricts its review to."
-        },
         "skills": {
           "type": "array",
           "items": { "type": "string" },
@@ -67,7 +62,7 @@
       "required": ["id", "pattern", "severity"],
       "properties": {
         "id": { "type": "string" },
-        "pattern": { "type": "string", "description": "Regex grepped across changed files in zones." },
+        "pattern": { "type": "string", "description": "Regex grepped across the whole changed set." },
         "severity": { "type": "string", "enum": ["blocker", "major", "minor"] }
       }
     },

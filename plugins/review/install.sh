@@ -88,9 +88,10 @@ SETTINGS="$TARGET/.claude/settings.json"
 tmp="$(mktemp)"
 jq --arg m "$MARKET_NAME" --arg r "$REPO" \
   '.extraKnownMarketplaces[$m] = {source:{source:"github", repo:$r}}
-   | .enabledPlugins["review@" + $m] = true' \
+   | .enabledPlugins["review@" + $m] = true
+   | .enabledPlugins["review-workflow@" + $m] = true' \
   "$SETTINGS" > "$tmp" && mv "$tmp" "$SETTINGS"
-echo "wired $MARKET_NAME ($REPO) + review@$MARKET_NAME into .claude/settings.json"
+echo "wired $MARKET_NAME ($REPO) + review@$MARKET_NAME + review-workflow@$MARKET_NAME into .claude/settings.json"
 
 echo ""
 echo "------------------------------------------------------------------"
