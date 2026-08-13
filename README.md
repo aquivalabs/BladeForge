@@ -77,7 +77,7 @@ Grouped by plugin. Each group links back to [Plugins](#plugins).
   **PostToolUse** hook nudges it on every skill/eval edit; there is no denylist by design.
 
 ### cicero &nbsp;·&nbsp; [↑ Plugins](#plugins)
-Not a skill — the house communication style. The **22 rules** under one governing readability rule
+Not a skill — the house communication style. The **numbered rules** under one governing readability rule
 (result first, plain words, avoid a specialized term instead of glossing it, recommend one option,
 push back, honesty, work silently by default; a closing joke is optional) ship as a
 **force-for-plugin output style**
