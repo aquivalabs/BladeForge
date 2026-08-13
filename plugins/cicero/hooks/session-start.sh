@@ -28,7 +28,8 @@ VER="$(jq -r '.version // empty' "${CLAUDE_PLUGIN_ROOT:-}/.claude-plugin/plugin.
 # legend: bold heading, cyan locator, italic aside, dim annotation.
 #
 # Inverse video (INV) is the one device with no markdown counterpart. It is spent on the two things
-# that must survive a skimming eye — the voice's four keywords, and nothing else.
+# that must survive a skimming eye — the voice's four keywords, and nothing else. It paints a filled
+# bar, so the rule above it is cut to the bar's padded width and the two read as one unit.
 E=$'\033'
 BOLD="${E}[1m"; DIM="${E}[2m"; ITAL="${E}[3m"; CYAN="${E}[36m"; INV="${E}[7m"; OFF="${E}[0m"
 MARK="${CYAN}${BOLD}"
@@ -43,9 +44,22 @@ fi
 # message with generous line spacing, so a five-row figlet would eat half the screen. No right-hand
 # border anywhere in this file — a frame that has to line up is a frame that breaks the first time
 # the window is narrower than it is.
+#
+# TWO RULES KEEP THE TWO ROWS UNDER ONE LEFT EDGE, and breaking either one sprays the letters across
+# the screen. The terminal prints the first line of a hook message AFTER the "SessionStart:… says:"
+# label and indents every following line to that label's column — so:
+#   1. The art NEVER occupies the first line. Line one is the meta text, which reads naturally right
+#      after the label; the two art rows are lines two and three, sharing one left edge.
+#   2. NOTHING sits to the right of an art row. A tail there wraps on a narrow window and shifts one
+#      half of the letters out from under the other.
+# The rows still do not quite touch — the terminal sets its lines with a gap and the font insets its
+# block glyphs — so the letters carry a hairline seam. That is a font trait, not a bug to redraw
+# around, and the wordmark is kept because it is the wordmark.
 read -r -d '' BANNER <<EOF || true
-${MARK}▄▀▀ █ ▄▀▀ ██▀ █▀▄ ▄▀▄${OFF} ${DIM}the house voice${OFF}
-${MARK}▀▄▄ █ ▀▄▄ █▄▄ █▀▄ ▀▄▀${OFF} ${DIM}${META}${OFF}
+${DIM}the house voice · ${META}${OFF}
+${MARK}▄▀▀ █ ▄▀▀ ██▀ █▀▄ ▄▀▄${OFF}
+${MARK}▀▄▄ █ ▀▄▄ █▄▄ █▀▄ ▀▄▀${OFF}
+${DIM}───────────────────────────────────────────${OFF}
 ${INV} bottom line · concise · honest · in scope ${OFF}
 EOF
 
