@@ -1,0 +1,17 @@
+{
+  "name": "tests",
+  "description": "Test standard as an installable plugin — the execution-tier split, the test contract, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent and the config a repository states its own numbers in.",
+  "version": "2.0.0",
+  "keywords": [
+    "testing",
+    "unit-tests",
+    "coverage",
+    "mutation-testing",
+    "test-standard",
+    "vitest"
+  ],
+  "author": {
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
+  }
+}

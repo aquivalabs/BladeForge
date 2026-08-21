@@ -1,0 +1,17 @@
+schema-version: 1
+purpose: The test standard — which execution tier a test file belongs to and how its name declares it, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates.
+best-for: A repo whose test suite is slow, or green while the code under it is wrong, or has no written contract for what a test owes. Also a repo adopting the standard end to end, since the transition section states what is in force before every mechanism exists.
+needs: []
+changes:
+  tags: [files, network]
+  notes: >
+    The skill body is read-only advice: it states rules and names the command that checks each one.
+    Two things in the plugin around it do mutate, and they are declared here because the skill points
+    at them. install.sh seeds .claude/tests.config.json and its schema into the target repo and merges
+    the marketplace plus this plugin into the target's .claude/settings.json — it seeds and never
+    overwrites, so a second run cannot reset a ratchet somebody spent a release lowering, and it wires
+    no git hook because the deterministic layer for tests is the repo's existing linter, type check and
+    runner rather than a new gate. tests-recommend.py reads package.json and two config files and
+    prints; with --apply it runs `npm install --save-dev` for the packages named on the command line
+    and nothing else, which is the only network access and the only dependency change. There is no
+    --apply-all on the documented path: a recommendation that installs itself is not a recommendation.

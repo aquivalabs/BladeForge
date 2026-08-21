@@ -175,6 +175,16 @@
       },
       "source": "./plugins/scout",
       "category": "engineering"
+    },
+    {
+      "name": "tests",
+      "description": "Test standard as an installable plugin \u2014 the execution-tier split, the test contract, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent and the config a repository states its own numbers in.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/tests",
+      "category": "engineering"
     }
   ]
 }

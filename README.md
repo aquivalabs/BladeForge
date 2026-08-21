@@ -59,6 +59,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [setup](#setup) |
 | review-workflow | Workflow script that dispatches the review plugin's five lenses in parallel, reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | salesforce | Salesforce — Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
+| tests | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
 
 ## Skills
 
@@ -159,6 +160,12 @@ Plus the `/review` orchestrator, the reviewer agents, and the secret-scan + atte
 
 See [CLAUDE.example.md](CLAUDE.example.md) for a reference `CLAUDE.md` — how to
 wire these plugins into a repo and keep the config thin (rules live in skills).
+
+### tests &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="architecture"></a>**architecture** — The standard itself: which execution tier a test file belongs to and how its filename declares it, the numbered rules a test must satisfy, the fixed axis list a case space is derived from, one factory per entity, assertions that state the rule rather than its encoding, a JSON failure envelope every custom matcher fills in, and the coverage ratchet plus the mutation bar that keeps a coverage floor from being decoration. Carries a transition section, so a repository adopting it knows what is in force before every mechanism exists.
+- <a id="apex"></a>**apex** — The Apex delta of the same standard: what that runtime does differently, and nothing the shared rules already say. Loads `architecture` first by design.
+
+Also in the plugin, and neither is a skill: a read-only whole-tree audit agent that answers for every numbered rule — including the ones nothing runs unattended — and `tests-recommend`, which reports what the recommended environment is missing and what its absence costs, installing only what you name.
 
 ## Contributing
 

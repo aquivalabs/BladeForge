@@ -38,7 +38,7 @@
     {
       "name": "docs:standard",
       "plugin": "docs",
-      "plugin-version": "2.0.0",
+      "plugin-version": "2.0.1",
       "activates-when": "Use when deciding where a piece of documentation belongs \u2014 a decision, a mechanism, a rule, or a frozen record \u2014 when project docs are drifting from the code they describe, when writing or updating AGENTS.md, or when adopting or installing this documentation standard in a repo.",
       "purpose": "Teach the four-layer documentation standard \u2014 decision, mechanism, rule, frozen record \u2014 and how to install it in a target repo.",
       "best-for": "A repo whose docs are drifting from its code, or that wants a first opinion on where a decision/mechanism/rule belongs, or is adopting this documentation standard end to end.",
@@ -459,7 +459,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "2.0.0",
+      "plugin-version": "2.0.1",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the 5-agent /review system in a new project.",
       "purpose": "Install and tailor the pre-push review framework (5 reviewer agents, /review, secret-scan + attestation gate) into a target repo.",
       "best-for": "A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the 5-agent pre-push review gate adopted and tuned to its stack.",
@@ -582,6 +582,39 @@
         "PostToolUse",
         "UserPromptSubmit"
       ]
+    },
+    {
+      "name": "tests:apex",
+      "plugin": "tests",
+      "plugin-version": "2.0.0",
+      "activates-when": "Use when writing, fixing, or extending an Apex test \u2014 a test class for a new or changed Apex class, a negative or bulk path, a `@TestSetup` factory, swapping `System.assertEquals` for `Assert.*`, removing a hardcoded record Id, mocking a `RestRequest` for a `@RestResource`, covering a `WITH USER_MODE` or `System.runAs` path, or updating a test after changing the class under test. Also whenever you create or edit any Apex `.cls`, and when reviewing an Apex test somebody else wrote. Apex only \u2014 a test in any other runtime needs `tests:architecture` and not this page.",
+      "purpose": "The Apex delta of the shared test standard. States only what the platform changes \u2014 Assert.* with a message, @IsTest(SeeAllData=false), @TestSetup and the rollback, Test.startTest/stopTest, factory DML terminals, System.runAs with a permission set for user-mode and FLS, governor limits and the 200-record boundary, RestContext mocking \u2014 and cites tests:architecture for every rule the two runtimes share.\n",
+      "best-for": "A Salesforce project that has adopted tests:architecture and needs the Apex-side rules on top of it. Not readable alone: the shared clauses, the axis walk and the factory rule live in tests:architecture, and this page is the delta rather than a second standard.\n",
+      "needs": [
+        "tests:architecture"
+      ],
+      "changes": {
+        "tags": [],
+        "notes": "Read-only advice. The page names deploy and test-run tools in other plugins (salesforce:dx_mcp, salesforce:sf-deploy-test) but requires neither and runs nothing itself.\n"
+      },
+      "hooks": []
+    },
+    {
+      "name": "tests:architecture",
+      "plugin": "tests",
+      "plugin-version": "2.0.0",
+      "activates-when": "Use when writing, reviewing, moving, or speeding up a unit test \u2014 deciding which execution tier a test file belongs to, what a test must satisfy to be accepted, or how coverage and mutation-score gates apply. Also when a test is slow, flaky, or green while the code under it is wrong.",
+      "purpose": "The test standard \u2014 which execution tier a test file belongs to and how its name declares it, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates.",
+      "best-for": "A repo whose test suite is slow, or green while the code under it is wrong, or has no written contract for what a test owes. Also a repo adopting the standard end to end, since the transition section states what is in force before every mechanism exists.",
+      "needs": [],
+      "changes": {
+        "tags": [
+          "files",
+          "network"
+        ],
+        "notes": "The skill body is read-only advice: it states rules and names the command that checks each one. Two things in the plugin around it do mutate, and they are declared here because the skill points at them. install.sh seeds .claude/tests.config.json and its schema into the target repo and merges the marketplace plus this plugin into the target's .claude/settings.json \u2014 it seeds and never overwrites, so a second run cannot reset a ratchet somebody spent a release lowering, and it wires no git hook because the deterministic layer for tests is the repo's existing linter, type check and runner rather than a new gate. tests-recommend.py reads package.json and two config files and prints; with --apply it runs `npm install --save-dev` for the packages named on the command line and nothing else, which is the only network access and the only dependency change. There is no --apply-all on the documented path: a recommendation that installs itself is not a recommendation.\n"
+      },
+      "hooks": []
     }
   ]
 }
