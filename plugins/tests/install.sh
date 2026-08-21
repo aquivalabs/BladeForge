@@ -118,5 +118,10 @@ Installed. Two things the standard asks you to do rather than inherit:
      belongs in blockedRules with what it waits on, so the audit reports the block once instead of
      the same violation in forty files.
 
+  3. Check you were seeded the right config. The default suits a JavaScript runner with two
+     environments. A repository whose tests are Apex wants templates/apex.tests.config.json instead —
+     it marks three rules inapplicable rather than blocked, because they wait on nothing that will
+     arrive. Copy it over .claude/tests.config.json; templates/README.md says why.
+
   Audit the tree with the test-auditor agent. It runs nothing expensive and writes nothing.
 EOF
