@@ -58,7 +58,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | meta | Meta — design law, error handling, doc writing, skill authoring. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [setup](#setup) |
 | review-workflow | Workflow script that dispatches the review plugin's five lenses in parallel, reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
-| salesforce | Salesforce — Apex tests, LWC, security, deploy/run harness. | [apex_test-authoring](#apex_test-authoring), [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
+| salesforce | Salesforce — LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 | tests | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
 
 ## Skills
@@ -149,7 +149,6 @@ cuts the fluff. **See the difference:**
 Plus the `/review` orchestrator, the reviewer agents, and the secret-scan + attestation gate.
 
 ### salesforce &nbsp;·&nbsp; [↑ Plugins](#plugins)
-- <a id="apex_test-authoring"></a>**apex_test-authoring** — Apex test standards: `Assert.*`, `@TestSetup` data factories, FLS/user-mode, bulk/positive/negative coverage.
 - <a id="dx_mcp"></a>**dx_mcp** — Use the salesforce-dx MCP (not the raw `sf` CLI) for org ops: SOQL, deploy/retrieve, run tests.
 - <a id="lwc_development"></a>**lwc_development** — House rules for building Salesforce LWC/Aura bundles and Salesforce-side frontend JS.
 - <a id="security_review-rules"></a>**security_review-rules** — Security rules: secret leakage, route auth, SOQL injection, XSS, WITH USER_MODE/FLS.
