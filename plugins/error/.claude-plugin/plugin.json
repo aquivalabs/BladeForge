@@ -1,7 +1,7 @@
 {
   "name": "error",
   "description": "Error skills \u2014 the unified error envelope + reason-code vocabulary (format) and the framework-agnostic client-side error-handling architecture (architecture).",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "keywords": [
     "error",
     "error-handling",

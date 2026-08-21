@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "docs standard per-project config",
+  "description": "Validates .claude/docs.config.json \u2014 which paths hold which layer, the mechanism list, the declared exemptions, and the surface-rules cap. Refreshed on every installer re-run; the config it validates is seeded once.",
+  "version": "1",
+  "$comment": "This schema's own version. A config records the schemaVersion it was seeded against; the check compares the two and reports 'config schema version mismatch' when they differ.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Points back at this file, conventionally './docs.config.schema.json'."
+    },
+    "schemaVersion": {
+      "type": "string",
+      "description": "The schema version this config was seeded against, copied in by the installer at seed time and never updated afterward. A config with no schemaVersion at all is reported as skew, with the config's side printed as 'absent'."
+    },
+    "layers": {
+      "type": "object",
+      "description": "Maps a layer name to its directory root. A value is either a string (the root \u2014 no index agreement, no required fields, no numbering; only relative-link resolution applies) or an object with a required root and optional index/requiredFields/numbered. Exactly one root per layer; a value is never a list. The key 'frozen' is reserved: the layer it names is the frozen layer, exempt from the structure job and from the section-README rule, because a frozen record is never edited and never accepted.",
+      "additionalProperties": {
+        "$ref": "#/definitions/layer"
+      }
+    },
+    "mechanisms": {
+      "type": "array",
+      "description": "Explicit declarations resolving a changed path to the doc it must keep current. Every matching mechanism fires; last-match-wins is deliberately not used, so a path claimed by two mechanisms obliges both docs.",
+      "items": {
+        "$ref": "#/definitions/mechanism"
+      }
+    },
+    "acknowledgedEmptyMechanisms": {
+      "type": "boolean",
+      "default": false,
+      "description": "The deliberate acknowledgement that the mechanism list is empty. Without it, an empty list makes the check fail loudly with 'no mechanisms declared' rather than passing because it covers nothing."
+    },
+    "surfaceRules": {
+      "$ref": "#/definitions/surfaceRules"
+    },
+    "base": {
+      "type": "string",
+      "description": "Optional git ref that overrides the computed diff base (merge-base(origin/main, HEAD), or the repo's root commit when origin/main does not resolve)."
+    }
+  },
+  "definitions": {
+    "layer": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "The layer root as a bare path. No index agreement, no required fields, no numbering."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "root"
+          ],
+          "properties": {
+            "root": {
+              "type": "string",
+              "description": "The layer's single directory root. Exactly one per layer, never a list."
+            },
+            "index": {
+              "type": "string",
+              "description": "Path to the layer's index file, relative to root \u2014 conventionally README.md."
+            },
+            "requiredFields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Section headings every document in this layer must carry."
+            },
+            "numbered": {
+              "type": "boolean",
+              "description": "Whether filenames in this layer carry a leading sequence number, checked for filename-to-number agreement."
+            }
+          }
+        }
+      ]
+    },
+    "mechanism": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "paths",
+        "doc"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable identifier for this mechanism, also used as its doc's conventional filename stem."
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Patterns matched against repo-relative POSIX paths with Python fnmatch, NOT minimatch or bash globstar. `*` and `**` are both plain wildcards over the whole string, so `**` has no zero-segment meaning: `src/**/hooks/**` requires a directory between them and never matches `src/hooks/useThing.ts`. Declare both shapes when you mean both. A leading '!' excludes within this mechanism, and an exclusion whose include never reached the file is dead config that advertises coverage the matcher does not deliver."
+        },
+        "doc": {
+          "type": "string",
+          "description": "Repo-relative path to the doc a matching change must keep current. Checked whole-tree for existence, independent of the diff."
+        },
+        "exempt": {
+          "type": "string",
+          "description": "Optional reason THIS WHOLE MECHANISM is exempt from the paired-docs check \u2014 every path it declares, not one of them. The check prints the reason and skips the pair entirely. Setting it to record that one uncovered path was left out is the mistake it invites: that releases the covered paths too, so the doc a reader trusts most becomes the one nothing enforces. Record a deliberately-uncovered path in the doc's own update-trigger prose instead, where it disables nothing. There is no equivalent skip route on any structure rule."
+        }
+      }
+    },
+    "surfaceRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lineCap",
+        "paths"
+      ],
+      "properties": {
+        "lineCap": {
+          "type": "integer",
+          "description": "Maximum line count for a file matched by paths."
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Files or globs the line cap applies to \u2014 typically AGENTS.md and skill bodies."
+        }
+      }
+    }
+  }
+}

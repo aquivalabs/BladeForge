@@ -1,0 +1,34 @@
+{
+  "note": "Written expectation for the derivation procedure (SKILL.md, 'The derivation procedure') run by hand against the repo built by scratch_repo.py's build_derivation_repo. Compare a fresh operator run against this file side by side; do not diff them with a script.",
+  "harness": "plugins/docs/fixtures/scratch_repo.py:build_derivation_repo",
+  "mechanisms": [
+    {
+      "id": "format-money",
+      "paths": ["shared/format_money.py"],
+      "doc": "docs/mechanisms/format-money.md"
+    }
+  ],
+  "considered": [
+    {
+      "candidate": "shared.legacy_parser",
+      "step1RepeatCount": 3,
+      "step1Files": [
+        "ingest/csv_reader.py",
+        "ingest/xml_reader.py",
+        "ingest/json_reader.py"
+      ],
+      "verdict": "dropped-by-step-2",
+      "reason": "Meets the step 1 three-file threshold, but shared/legacy_parser is already the sole subject of docs/adr/0001-example.md ('Keep shared/legacy_parser as the one shared parser; do not re-derive it'). Step 2 drops any candidate an existing ADR already covers."
+    },
+    {
+      "candidate": "shared.rare_util",
+      "step1RepeatCount": 2,
+      "step1Files": [
+        "ingest/rare_a.py",
+        "ingest/rare_b.py"
+      ],
+      "verdict": "excluded-by-step-1",
+      "reason": "Imported by only 2 files, one short of step 1's three-or-more-file repeat rule, so it never becomes a candidate step 2 or step 3 sees."
+    }
+  ]
+}

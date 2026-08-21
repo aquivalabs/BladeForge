@@ -46,6 +46,8 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | cerberus | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer/client brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
 | cicero | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) |
+| docs | Documentation standard — four layers with one duty each, a per-section README that states that section's own rules, and one deterministic check that blocks a push when a declared mechanism changes without its doc. | [standard](#standard) |
+| plan-gate | *(project)* PreToolUse hook — blocks Edit/Write to code unless you are off `main` and a plan matching the branch task-id exists. | — (hook only) |
 | frontend-css | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
 | frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
 | frontend-react | React conventions — placement, structure, hooks, primitives, layout, stories. | [component-placement](#component-placement), [component-structure](#component-structure), [feature-components](#feature-components), [hooks-registry](#hooks-registry), [layout-components](#layout-components), [skeleton-components](#skeleton-components), [storybook-stories](#storybook-stories), [ui-primitive-reuse](#ui-primitive-reuse) |
@@ -91,6 +93,9 @@ cuts the fluff. **See the difference:**
 
 ### diagram &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="diagram"></a>**diagram** — Turn a spec or raw code into a readable, clickable architecture/flow diagram: a D2 graph laid out by ELK, each class showing its real methods, objects with fields, and permission sets, rendered as a browsable HTML page under `docs/diagrams/<name>/`. Node contents come from an **Atlas** entity list that parallel **Sextant** reviewer agents harden to zero edits; bidirectional click-to-jump between diagram and its notes, pan/zoom via svg-pan-zoom.
+### docs &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="standard"></a>**standard** — Where a document belongs and whether anything keeps it honest: four layers separated by update discipline (decision, mechanism, rule, frozen record), a `README.md` in every layer root answering five fixed questions about that section's own rules, and a vendored `docs-check.py` that fails a push when a declared mechanism changes and its doc does not. Installs into a target repo with its own hook and CI workflow.
+
 
 ### error &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="format"></a>**format** — The unified error envelope + reason-code vocabulary: uniform error paths across layers — throwing from a service/route/controller and reading errors on the client.
