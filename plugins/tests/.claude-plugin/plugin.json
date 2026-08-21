@@ -1,7 +1,7 @@
 {
   "name": "tests",
-  "description": "Test standard as an installable plugin — the execution-tier split, the test contract, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent and the config a repository states its own numbers in.",
-  "version": "2.0.0",
+  "description": "Test standard as an installable plugin \u2014 the execution-tier split, the test contract, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent and the config a repository states its own numbers in.",
+  "version": "2.0.1",
   "keywords": [
     "testing",
     "unit-tests",
