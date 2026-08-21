@@ -2,9 +2,20 @@
 
 Shapes a repository copies in, and the values it then measures for itself.
 
-| file | what it is |
+| file | for a repository whose tests are |
 |---|---|
-| `starter.tests.config.json` | the config with recommended defaults; `install.sh` seeds it and never overwrites |
+| `starter.tests.config.json` | run by a JavaScript test runner with two environments — the default `install.sh` seeds |
+| `apex.tests.config.json` | Apex, on the platform's own runtime |
+
+**Pick before you edit.** The two differ in more than globs: the Apex variant marks three rules
+inapplicable rather than blocked, because they wait on nothing that will ever arrive. There is one
+execution environment, so the tier rule has nothing to declare. The platform enforces its own
+coverage floor per class and refuses a deploy below it, so the ratchet has no job. And no mutation
+runner exists for that runtime, so rule 10 is met by reading rather than by a tool.
+
+Seeding the JavaScript config into an Apex repository is not a small mismatch — it declares tiers
+that match no file, so the audit reports every rule as unevaluable and the config teaches the reader
+nothing. Copy the right one over `.claude/tests.config.json` after installing.
 
 ## Two values in the starter config are placeholders, not recommendations
 
