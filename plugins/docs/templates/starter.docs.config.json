@@ -1,0 +1,16 @@
+{
+  "$schema": "./docs.config.schema.json",
+  "schemaVersion": "1",
+  "layers": {
+    "adr": {
+      "root": "docs/adr/",
+      "index": "README.md",
+      "requiredFields": ["Status", "Context", "Decision", "Consequences"],
+      "numbered": true
+    },
+    "mechanisms": "docs/mechanisms/"
+  },
+  "mechanisms": [],
+  "acknowledgedEmptyMechanisms": false,
+  "surfaceRules": { "lineCap": 200, "paths": ["AGENTS.md"] }
+}

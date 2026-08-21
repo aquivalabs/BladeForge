@@ -1,7 +1,7 @@
 {
   "name": "frontend",
-  "description": "Personal frontend dev-harness skills — types + tests runner.",
-  "version": "1.0.0",
+  "description": "Personal frontend dev-harness skills \u2014 types + tests runner.",
+  "version": "2.0.0",
   "keywords": [
     "frontend",
     "tooling",

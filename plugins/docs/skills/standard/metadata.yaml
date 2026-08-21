@@ -1,0 +1,18 @@
+schema-version: 1
+purpose: Teach the four-layer documentation standard — decision, mechanism, rule, frozen record — and how to install it in a target repo.
+best-for: A repo whose docs are drifting from its code, or that wants a first opinion on where a decision/mechanism/rule belongs, or is adopting this documentation standard end to end.
+needs: []
+changes:
+  tags: [files, network, git]
+  notes: >
+    Points readers at the installer one-liner, which is what actually mutates the target repo: it
+    writes scripts/docs-check.py, .claude/docs.config.schema.json and a seeded
+    .claude/docs.config.json, docs/README.md plus the layer READMEs and one worked mechanism doc, the
+    .githooks/pre-push hook, the .github/workflows/docs-check.yml CI workflow, and a jq merge into the
+    target repo's .claude/settings.json. It fetches the bootstrap over the network via `gh api`, and
+    writes git config directly (`git config core.hooksPath .githooks/`) to wire the hook — but only
+    when that setting is unset. Where a project already points core.hooksPath elsewhere, the installer
+    leaves the setting alone and appends the invocation to the pre-push hook at that path, which can sit
+    outside the target repo. It also runs `gh repo clone` into a temporary directory during bootstrap.
+    The skill body itself is read-only advice; these are the installer's side effects, declared here
+    because the skill's Install section points readers at it.

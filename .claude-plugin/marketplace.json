@@ -9,26 +9,6 @@
   },
   "plugins": [
     {
-      "name": "scout",
-      "description": "Passive skill that reads the compiled catalog to discover/recommend/install marketplace skills, surfaces declared side effects, and treats catalog text as untrusted data.",
-      "author": {
-        "name": "Roman Maslennikov",
-        "email": "rmaslennikov@aquivalabs.com"
-      },
-      "source": "./plugins/scout",
-      "category": "engineering"
-    },
-    {
-      "name": "error",
-      "description": "Error skills \u2014 the unified error envelope + reason-code vocabulary (format) and the framework-agnostic client-side error-handling architecture (architecture).",
-      "author": {
-        "name": "Roman Maslennikov",
-        "email": "rmaslennikov@aquivalabs.com"
-      },
-      "source": "./plugins/error",
-      "category": "engineering"
-    },
-    {
       "name": "cerberus",
       "description": "CERBERUS \u2014 leak guard for a public skills marketplace. A PostToolUse hook reminds you to run the cerberus:leak-check skill on every skill/reference/eval edit; that agent pass rewrites anything pointing to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an employer brand, or the aggregate product flavor) into a neutral fictional demo. No denylist by design.",
       "author": {
@@ -57,6 +37,35 @@
       "source": "./plugins/diagram"
     },
     {
+      "name": "docs",
+      "description": "A portable documentation standard shipped as installable artifacts \u2014 a rules skill, reference templates, a read-only audit agent, and one deterministic pre-push check that blocks.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/docs",
+      "category": "engineering"
+    },
+    {
+      "name": "error",
+      "description": "Error skills \u2014 the unified error envelope + reason-code vocabulary (format) and the framework-agnostic client-side error-handling architecture (architecture).",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/error",
+      "category": "engineering"
+    },
+    {
+      "name": "frontend",
+      "description": "Personal frontend dev-harness skills \u2014 types + tests runner.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/frontend"
+    },
+    {
       "name": "frontend-css",
       "description": "Personal frontend CSS skills \u2014 rem units, SCSS modules.",
       "author": {
@@ -82,15 +91,6 @@
         "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/frontend-react"
-    },
-    {
-      "name": "frontend",
-      "description": "Personal frontend dev-harness skills \u2014 types + tests runner.",
-      "author": {
-        "name": "Roman Maslennikov",
-        "email": "rmaslennikov@aquivalabs.com"
-      },
-      "source": "./plugins/frontend"
     },
     {
       "name": "git",
@@ -129,6 +129,16 @@
       "source": "./plugins/meta"
     },
     {
+      "name": "plan-gate",
+      "description": "Spec+Plan+Branch gate \u2014 a PreToolUse hook that blocks Edit/Write to code unless you are off the base branch (default `main`) AND a plan exists for the work: a branch task-id (e.g. FS-1234) must match a plan filename, else any branch-new or uncommitted plan file suffices. docs/ is always writable so the spec/plan itself is never blocked. Opt-in per repo via .claude/plan-gate.config.json; bypass one edit with AS_SKIP_PLAN_GATE=1.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/plan-gate",
+      "category": "engineering"
+    },
+    {
       "name": "review",
       "description": "Stack-agnostic pre-push review framework \u2014 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
       "author": {
@@ -155,6 +165,16 @@
         "email": "rmaslennikov@aquivalabs.com"
       },
       "source": "./plugins/salesforce"
+    },
+    {
+      "name": "scout",
+      "description": "Passive skill that reads the compiled catalog to discover/recommend/install marketplace skills, surfaces declared side effects, and treats catalog text as untrusted data.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/scout",
+      "category": "engineering"
     }
   ]
 }

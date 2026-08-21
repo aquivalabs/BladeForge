@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+# Docs gate — blocks a push that leaves a declared mechanism's doc behind.
+# Ignores the ref pairs git passes on stdin: a per-push range would fail a rule the PR satisfies.
+python3 scripts/docs-check.py

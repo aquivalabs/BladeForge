@@ -1,0 +1,22 @@
+[
+  {"query": "where should a decision like 'we're moving the retry queue off cron and onto a webhook' live — a doc, an ADR, or what?", "should_trigger": true},
+  {"query": "our specs and plans folder is 20k lines long and there's no live description of how the system actually works anywhere", "should_trigger": true},
+  {"query": "we just wrote a mechanism doc for the pagination cursor helper — does it belong in docs/mechanisms or somewhere else?", "should_trigger": true},
+  {"query": "AGENTS.md has ballooned to 400 lines with a full architecture diagram pasted in, is that even the right file for this?", "should_trigger": true},
+  {"query": "i want to adopt a documentation standard for this repo so decisions, mechanisms and specs stop getting mixed together", "should_trigger": true},
+  {"query": "can we set up a pre-push gate that blocks a PR when someone changes the retry-backoff code but doesn't touch its doc?", "should_trigger": true},
+  {"query": "the onboarding doc says one thing about the checkout flow and the code does something completely different now", "should_trigger": true},
+  {"query": "should this design decision go into a numbered ADR file or just get written up as a regular markdown page?", "should_trigger": true},
+  {"query": "how do we derive a first list of mechanisms worth documenting when the project has never tracked any of this before?", "should_trigger": true},
+  {"query": "install the docs standard plugin in this repo and wire up the check", "should_trigger": true},
+  {"query": "our root README, the runbook, and the glossary don't fit any doc category we have — where do those even go?", "should_trigger": true},
+  {"query": "is a project backlog file supposed to be documentation, or does it live somewhere else entirely?", "should_trigger": true},
+  {"query": "write the actual prose for the payments-webhook mechanism doc, describing what it does step by step", "should_trigger": false},
+  {"query": "review this spec for clarity — could a non-technical manager follow the argument, or is it padded and jargon-heavy?", "should_trigger": false},
+  {"query": "draw a diagram of how the order-processing queue, the worker, and the retry table connect", "should_trigger": false},
+  {"query": "generate an API reference page from the OpenAPI schema for the billing service", "should_trigger": false},
+  {"query": "fix the typo in the README where it says 'recieve' instead of 'receive'", "should_trigger": false},
+  {"query": "tidy up the wording on this Jira comment before I post it to the ticket", "should_trigger": false},
+  {"query": "summarize the options we considered in yesterday's brainstorming session into a short design doc", "should_trigger": false},
+  {"query": "convert this hand-drawn whiteboard photo of our architecture into an editable diagram file", "should_trigger": false}
+]
