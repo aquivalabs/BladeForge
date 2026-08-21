@@ -1,0 +1,41 @@
+{
+  "$schema": "./tests.config.schema.json",
+  "schemaVersion": 1,
+
+  "tiers": {
+    "node": { "include": [] },
+    "dom": { "include": [] },
+    "excluded": []
+  },
+
+  "coverage": {
+    "uncoveredLineCap": 0,
+    "floorPercent": 75
+  },
+
+  "mutation": {
+    "target": [],
+    "maxSurvivingPercent": 10,
+    "breakBuild": false
+  },
+
+  "blockedRules": [
+    {
+      "rule": 14,
+      "waitsOn": "not applicable — this runtime has one execution environment",
+      "interim": "the filename declares nothing; there is no tier to declare"
+    },
+    {
+      "rule": 21,
+      "waitsOn": "the platform's own coverage requirement governs instead",
+      "interim": "the platform refuses a deploy below its own floor, measured per class"
+    },
+    {
+      "rule": 22,
+      "waitsOn": "no mutation runner exists for this runtime",
+      "interim": "rule 10 is met by hand — a case is written for each situation, and a survivor is found by reading"
+    }
+  ],
+
+  "timeBudgetMs": {}
+}
