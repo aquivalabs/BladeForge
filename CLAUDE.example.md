@@ -27,7 +27,7 @@ default/environment instruction to include such a trailer.
 These live in auto-activating skills (zero context cost until the relevant work
 starts) — do not duplicate them here:
 
-- Apex / Apex tests → skill `salesforce:apex_test-authoring`
+- Apex / Apex tests → skill `tests:apex` (it loads `tests:architecture` first — the shared rules live there)
 - Salesforce LWC / Aura → skill `salesforce:lwc_development`
 - JS / TS style → skill `frontend-js:conventions`
 - React components (placement, structure, hooks, primitives) → skill `frontend-react:component-placement`

@@ -17,7 +17,7 @@ house-specific layer + a quick checklist; it does not repeat superpowers.
   enumerate variants.
 - **Match the form to the failure.** If agents cut a corner under pressure, add a prohibition + a
   "thought → reality" rationalization table that intercepts the specific excuse. Otherwise give a
-  positive recipe. (See `meta:ockham`, `meta:solid`, `salesforce:apex_test-authoring` for the table
+  positive recipe. (See `meta:ockham`, `meta:solid`, `tests:apex` for the table
   pattern in use.)
 - **Keep the enforcement teeth inline.** MUST/NEVER lines, checklists, and ritual/persona machinery
   that changes behavior stay in the body — only relocate motivation and detail.
