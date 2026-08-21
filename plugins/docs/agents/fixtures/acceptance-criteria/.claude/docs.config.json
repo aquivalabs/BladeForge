@@ -1,0 +1,14 @@
+{
+  "$schema": "./docs.config.schema.json",
+  "schemaVersion": "1",
+  "layers": {
+    "mechanisms": "docs/mechanisms/"
+  },
+  "mechanisms": [
+    {
+      "id": "widget-cache",
+      "paths": ["src/widgets/**"],
+      "doc": "docs/mechanisms/widget-cache.md"
+    }
+  ]
+}

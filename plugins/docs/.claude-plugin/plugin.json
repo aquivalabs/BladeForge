@@ -1,0 +1,16 @@
+{
+  "name": "docs",
+  "description": "A portable documentation standard shipped as installable artifacts \u2014 a rules skill, reference templates, a read-only audit agent, and one deterministic pre-push check that blocks.",
+  "version": "2.0.0",
+  "keywords": [
+    "documentation",
+    "adr",
+    "docs-standard",
+    "pre-push",
+    "agents-md"
+  ],
+  "author": {
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
+  }
+}
