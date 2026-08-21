@@ -474,20 +474,6 @@
       "hooks": []
     },
     {
-      "name": "salesforce:apex_test-authoring",
-      "plugin": "salesforce",
-      "plugin-version": "2.0.0",
-      "activates-when": "Use when writing, fixing, or extending an Apex test \u2014 writing a test class for a new or changed Apex class, covering a negative or bulk path, adding a @TestSetup data factory, replacing System.assertEquals with Assert.*, removing a hardcoded record Id, mocking a RestRequest for a REST resource, or updating a test after you changed the class under test. Also whenever you create or edit any Apex `.cls` \u2014 every new class must get a matching test class in the same change. Covers data factories, @TestSetup, Assert.* assertions, FLS/user-mode testing, REST resource mocking, and bulk/positive/negative coverage.",
-      "purpose": "Enforces a house standard for writing Apex test classes \u2014 Assert.* only, one-behavior-per-method, data factories, @TestSetup, FLS/user-mode coverage, REST mocking, and a mandatory adversarial/negative suite.",
-      "best-for": "Salesforce projects that want every new or edited Apex class to ship with a rigorous, consistently-structured test class instead of ad-hoc or happy-path-only tests.",
-      "needs": [],
-      "changes": {
-        "tags": [],
-        "notes": ""
-      },
-      "hooks": []
-    },
-    {
       "name": "salesforce:dx_mcp",
       "plugin": "salesforce",
       "plugin-version": "2.0.0",
@@ -586,7 +572,7 @@
     {
       "name": "tests:apex",
       "plugin": "tests",
-      "plugin-version": "2.0.0",
+      "plugin-version": "2.0.1",
       "activates-when": "Use when writing, fixing, or extending an Apex test \u2014 a test class for a new or changed Apex class, a negative or bulk path, a `@TestSetup` factory, swapping `System.assertEquals` for `Assert.*`, removing a hardcoded record Id, mocking a `RestRequest` for a `@RestResource`, covering a `WITH USER_MODE` or `System.runAs` path, or updating a test after changing the class under test. Also whenever you create or edit any Apex `.cls`, and when reviewing an Apex test somebody else wrote. Apex only \u2014 a test in any other runtime needs `tests:architecture` and not this page.",
       "purpose": "The Apex delta of the shared test standard. States only what the platform changes \u2014 Assert.* with a message, @IsTest(SeeAllData=false), @TestSetup and the rollback, Test.startTest/stopTest, factory DML terminals, System.runAs with a permission set for user-mode and FLS, governor limits and the 200-record boundary, RestContext mocking \u2014 and cites tests:architecture for every rule the two runtimes share.\n",
       "best-for": "A Salesforce project that has adopted tests:architecture and needs the Apex-side rules on top of it. Not readable alone: the shared clauses, the axis walk and the factory rule live in tests:architecture, and this page is the delta rather than a second standard.\n",
@@ -602,7 +588,7 @@
     {
       "name": "tests:architecture",
       "plugin": "tests",
-      "plugin-version": "2.0.0",
+      "plugin-version": "2.0.1",
       "activates-when": "Use when writing, reviewing, moving, or speeding up a unit test \u2014 deciding which execution tier a test file belongs to, what a test must satisfy to be accepted, or how coverage and mutation-score gates apply. Also when a test is slow, flaky, or green while the code under it is wrong.",
       "purpose": "The test standard \u2014 which execution tier a test file belongs to and how its name declares it, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates.",
       "best-for": "A repo whose test suite is slow, or green while the code under it is wrong, or has no written contract for what a test owes. Also a repo adopting the standard end to end, since the transition section states what is in force before every mechanism exists.",
