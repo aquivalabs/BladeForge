@@ -121,6 +121,41 @@ injected into the system prompt and OVERRIDES your own outputStyle setting. You 
   mkdir -p "$HOME/.claude/cicero" && : > "$NOTICE_MARK" || true
 fi
 
+# One-time colour-capability notice. CICERO's terminal channel — this very message, and the
+# statusline — styles itself with real ANSI escapes, and the harness syntax-highlights code and
+# diffs. Both degrade when the emulator does not advertise 24-bit colour, and most emulators that
+# SUPPORT it do not set COLORTERM themselves: tools then fall back to 256 colours or to none, with
+# nothing on screen saying why. Measured on JetBrains JediTerm — TERM=xterm-256color, COLORTERM
+# unset, and code stopped being coloured.
+#
+# NO marker file here, deliberately — unlike the output-style notice above, which needs one because
+# nothing about it self-clears. This condition does: the moment COLORTERM is set the check fails and
+# the block stops appearing, so the fix silences it and nothing else has to. A marker would instead
+# mean that a user who scrolled past it once never sees it again while the problem persists — which
+# is the opposite of what a one-line, still-broken, still-fixable condition wants. The hook fires
+# once per session by construction, so once per session is what this is.
+#
+# Gated on an emulator we can name: an unknown terminal may genuinely lack truecolor, and telling its
+# user to claim otherwise would be worse than silence.
+if [ -z "${COLORTERM:-}" ]; then
+  KNOWN=""
+  case "${TERMINAL_EMULATOR:-}${TERM_PROGRAM:-}" in
+    *JediTerm*|*iTerm*|*Apple_Terminal*|*vscode*|*WezTerm*|*ghostty*|*kitty*|*Alacritty*|*Hyper*)
+      KNOWN="${TERMINAL_EMULATOR:-${TERM_PROGRAM:-}}" ;;
+  esac
+  if [ -n "$KNOWN" ]; then
+    SYSMSG="$SYSMSG
+
+${BOLD}colour is degraded in this terminal${OFF} ${DIM}— shown once${OFF}
+  ${DIM}\$COLORTERM is unset, so tools fall back to 256 colours or none. Code and diffs stop being
+  syntax-highlighted, and this banner loses its palette. Your emulator (${KNOWN}) supports 24-bit
+  colour — it just does not advertise it.${OFF}
+  fix, one line in your shell profile:
+      ${CYAN}export COLORTERM=truecolor${OFF}
+    ${DIM}then open a NEW terminal tab and check: echo \$COLORTERM${OFF}"
+  fi
+fi
+
 # systemMessage -> shown to the user once at session start.
 # additionalContext -> dynamic voice context (first-run language pick only).
 # The static rules are the output style, not this injection.
