@@ -69,14 +69,32 @@ if market not in markets:
     markets[market] = {"source": {"source": "github", "repo": f"<owner>/{market}"}}
     print(f"NOTE: extraKnownMarketplaces.{market}.source.repo is a placeholder — set the real owner.")
 
-enabled = d.setdefault("enabledPlugins", [])
+# enabledPlugins is a dict of "plugin@marketplace" -> bool in a live config, and a list in some
+# older ones. Read the shape rather than assuming it: an installer that assumes gets tested against
+# a scratch repo it created itself, which agrees with the assumption and proves nothing.
 entry = f"tests@{market}"
-if entry not in enabled:
-    enabled.append(entry)
-    enabled.sort()
+enabled = d.get("enabledPlugins")
+if isinstance(enabled, dict):
+    if entry in enabled:
+        print(f"keep   {entry} (already listed)")
+    else:
+        enabled[entry] = True
+        print(f"enable {entry}")
+elif isinstance(enabled, list):
+    if entry in enabled:
+        print(f"keep   {entry} (already listed)")
+    else:
+        enabled.append(entry)
+        enabled.sort()
+        print(f"enable {entry}")
+elif enabled is None:
+    d["enabledPlugins"] = {entry: True}
     print(f"enable {entry}")
 else:
-    print(f"keep   {entry} (already enabled)")
+    raise SystemExit(
+        f"ERROR: .claude/settings.json has enabledPlugins as {type(enabled).__name__}; "
+        "this installer knows a dict and a list. Add it by hand and re-run."
+    )
 
 (stage / ".claude" / "settings.json").write_text(json.dumps(d, indent=2) + "\n")
 PY
