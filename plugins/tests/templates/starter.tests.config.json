@@ -1,0 +1,39 @@
+{
+  "$schema": "../../plugins/tests/tests.config.schema.json",
+  "schemaVersion": 1,
+
+  "tiers": {
+    "node": {
+      "include": ["{src,server,shared,scripts}/**/*.test.ts"],
+      "environment": "node"
+    },
+    "dom": {
+      "include": [
+        "{src,server,shared,scripts}/**/*.test.tsx",
+        "{src,server,shared,scripts}/**/*.dom.test.ts"
+      ],
+      "environment": "jsdom",
+      "setupFile": "vitest.setup.ts"
+    },
+    "excluded": ["**/*.integration.test.ts"]
+  },
+
+  "coverage": {
+    "uncoveredLineCap": 0,
+    "floorPercent": 70,
+    "perPath": {}
+  },
+
+  "mutation": {
+    "target": [],
+    "maxSurvivingPercent": 10,
+    "breakBuild": false
+  },
+
+  "blockedRules": [],
+
+  "timeBudgetMs": {
+    "node": 50,
+    "dom": 1000
+  }
+}

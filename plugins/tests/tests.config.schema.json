@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Test standard per-project config",
+  "description": "Where a repository states its own numbers. The standard carries rules; every value that is specific to one codebase lives here. Place at .claude/tests.config.json. Anything omitted falls back to the standard's default, and a repository with no file at all is audited against defaults.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "type": "integer", "const": 1 },
+    "tiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The execution tiers and the globs that decide membership. The rule is that the filename declares the tier, so these globs must partition the test set: no file in two tiers, none in neither.",
+      "properties": {
+        "node": { "$ref": "#/definitions/tier" },
+        "dom": { "$ref": "#/definitions/tier" },
+        "excluded": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Test files the standard does not govern — an environment-gated integration suite is the usual case. Naming them here is what keeps them from being audited as violations."
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Two mechanisms, and each is blind to the other's case. The ratchet catches slow erosion; the floor catches a collapse the ratchet would tolerate if it were ever loosened.",
+      "properties": {
+        "uncoveredLineCap": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The ratchet: the most uncovered lines the repository tolerates. Derived from a measured run, never chosen. Lowering it is the only sanctioned edit."
+        },
+        "floorPercent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "The absolute floor. Not a target — the number below which the suite stops meaning anything. Meaningless on its own: tests that execute code and assert nothing satisfy it, which is why it is paired with a mutation bar."
+        },
+        "perPath": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 },
+          "description": "A tighter cap for a path that earns one — a pure calculation core is the usual case. Per-path entries do not inherit the global set."
+        }
+      }
+    },
+    "mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The only mechanical check that a covered line is asserted on, and what stops the coverage floor from being decoration.",
+      "properties": {
+        "target": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Globs the mutation run covers. Narrow on purpose: the run costs minutes per module, and a pure calculation core is where a survivor means a real defect rather than an equivalent mutant."
+        },
+        "maxSurvivingPercent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "The bar. Deliberately harder than the published orientation, because a coverage floor it is paired with is satisfiable by tests that assert nothing. Two things make it work rather than tune: an equivalent mutant cannot be killed by any test and must be annotated one at a time, and an uncovered line produces a survivor for free."
+        },
+        "breakBuild": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether a score below the bar fails a run. Leave false until a real score exists — the first score is a measurement, not a verdict."
+        }
+      }
+    },
+    "blockedRules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule", "waitsOn"],
+        "properties": {
+          "rule": { "type": "integer", "minimum": 1, "description": "The rule number from the standard's canonical table." },
+          "waitsOn": { "type": "string", "description": "What has to exist before the rule can be met. A task id, a path, a sentence — whatever the repository can point at." },
+          "interim": { "type": "string", "description": "What a test author does in the meantime. An interim written down is a decision; the same code with no interim is a violation nobody authorised." }
+        }
+      },
+      "description": "Rules this repository cannot meet yet. The auditor does not report a blocked rule's violations as findings — it reports the block once. An entry with no `waitsOn` is a rule quietly abandoned, which is why the field is required."
+    },
+    "timeBudgetMs": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 1 },
+      "description": "Per-tier budget for a single case, keyed by tier name. Reported, never failed: the number moves with the machine, and a budget that fails a build gets tuned into uselessness on the first slow runner."
+    }
+  },
+  "definitions": {
+    "tier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include"],
+      "properties": {
+        "include": { "type": "array", "items": { "type": "string" } },
+        "environment": { "type": "string", "description": "The runner's environment for this tier." },
+        "setupFile": { "type": "string", "description": "This tier's setup file. Keep it small: a setup file that imports a module which instantiates the transport graph at load defeats every per-file substitution in the tier." }
+      }
+    }
+  }
+}
