@@ -1,0 +1,17 @@
+schema-version: 1
+purpose: >
+  The Apex delta of the shared test standard. States only what the platform changes — Assert.* with a
+  message, @IsTest(SeeAllData=false), @TestSetup and the rollback, Test.startTest/stopTest, factory
+  DML terminals, System.runAs with a permission set for user-mode and FLS, governor limits and the
+  200-record boundary, RestContext mocking — and cites tests:architecture for every rule the two
+  runtimes share.
+best-for: >
+  A Salesforce project that has adopted tests:architecture and needs the Apex-side rules on top of it.
+  Not readable alone: the shared clauses, the axis walk and the factory rule live in tests:architecture,
+  and this page is the delta rather than a second standard.
+needs: [tests:architecture]
+changes:
+  tags: []
+  notes: >
+    Read-only advice. The page names deploy and test-run tools in other plugins (salesforce:dx_mcp,
+    salesforce:sf-deploy-test) but requires neither and runs nothing itself.

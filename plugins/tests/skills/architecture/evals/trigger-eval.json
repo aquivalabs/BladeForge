@@ -1,0 +1,25 @@
+[
+  {"query": "write a unit test for the discount calculator", "should_trigger": true},
+  {"query": "this test file is slow, can we speed it up", "should_trigger": true},
+  {"query": "the suite is green but the bug shipped anyway — what did the tests miss", "should_trigger": true},
+  {"query": "does this test file belong in the node project or the jsdom one", "should_trigger": true},
+  {"query": "what should I name a test that needs a DOM but has no JSX", "should_trigger": true},
+  {"query": "review this test — is it actually asserting anything", "should_trigger": true},
+  {"query": "set a coverage threshold for this repo", "should_trigger": true},
+  {"query": "what should the mutation score bar be", "should_trigger": true},
+  {"query": "this test passes on a rerun and fails on CI, what do I do with it", "should_trigger": true},
+  {"query": "which cases should I write for a function that takes an optional amount", "should_trigger": true},
+  {"query": "move these test files into the right tier", "should_trigger": true},
+  {"query": "should this component have a test or just a story", "should_trigger": true},
+  {"query": "add a retry to the flaky test so CI stops failing", "should_trigger": true},
+
+  {"query": "write the discount calculator itself", "should_trigger": false},
+  {"query": "why is the production build 40 seconds slower than last week", "should_trigger": false},
+  {"query": "rename this component and update its imports", "should_trigger": false},
+  {"query": "set up a GitHub Actions workflow to deploy on tag", "should_trigger": false},
+  {"query": "the eslint config has a duplicate rule, clean it up", "should_trigger": false},
+  {"query": "document the data model for the order and its line items", "should_trigger": false},
+  {"query": "our Apex tests still use System.assertEquals, switch them to Assert.*", "should_trigger": false},
+  {"query": "add a Storybook story showing the empty state", "should_trigger": false},
+  {"query": "why does this SQL query take 8 seconds", "should_trigger": false}
+]
