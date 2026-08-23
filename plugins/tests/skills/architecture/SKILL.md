@@ -142,7 +142,19 @@ than what its name claims. Each clause's check and its state today are one row o
    pinned. `toHaveBeenCalledWith` is legitimate only where there is no observable state to assert
    — fire-and-forget: analytics, logging, navigation, and a callback prop whose call is the whole
    effect, `onSave` or `onSelect` → `references/component-tests.md`.
-   The fake layer does not exist yet → §8 step 4.
+   How to build one, and the four ways the layer goes wrong → `references/fakes.md`.
+
+   Two requirements ride along with any substitute, and both were learned from a green suite that was
+   testing nothing. **A double whose return value is fed to the code under test must be TYPED**
+   (`vi.fn<() => Result>()`, or the framework's equivalent): a bare double returns `unknown`, so the
+   type checker verifies none of the fixtures handed through it. Measured on one suite: 249 untyped
+   doubles against 7 typed, and the first two annotations added found two fixtures the system could
+   never produce — one missing five of seven required fields. **And a substitute must reproduce the
+   real MECHANISM, not a convenient one.** A widget that attaches a native listener cannot be stood in
+   for by a framework-level handler: the framework may delegate its events elsewhere, so a
+   `stopPropagation` in a child runs after the native parent listener has already fired. A stub that
+   uses the convenient path inverts that — and makes the production guard against it unreachable by
+   every case in the file, while all of them pass.
 6. **Install the substitute through the seam the architecture already has, not by mocking the
    module.** Where a dependency exposes no seam at all — a third-party widget, a browser API —
    module substitution is the sanctioned form, and the comment clause 4 requires names why no seam
@@ -152,8 +164,8 @@ than what its name claims. Each clause's check and its state today are one row o
    // src/test/fakes/installFakeDataClient.ts — imported by the files that install a fake
    import { setDataClient, HttpDataClient } from '@/lib/data/client';
 
-   // FakeDataClient ships with §8 step 4. Until it does, a Pick<DataClient, …> stub with one
-   // explicit cast is the sanctioned interim — see §8.
+   // A fake typed `implements DataClient` — a Pick<> stub with a cast drifts the moment the
+   // interface grows a method, and `tsc` cannot tell you. See `references/fakes.md`.
    export const installFakeDataClient = (): FakeDataClient => {
      const fake = new FakeDataClient();
      beforeEach(() => setDataClient(fake));
@@ -364,9 +376,9 @@ The column words, used precisely:
 | 2 | in force | one reason to fail | review: unrelated facts asserted in one case | no |
 | 3 | in force | assert the outcome, not that code ran | review gate pattern `test-limp-assertion` | yes — the gate, on the diff |
 | 4 | new tests only | substitute only at a boundary you do not own, and name it | review: a substitution with no boundary comment | no |
-| 5 | blocked → §8 step 4; on `server/http/**` no seam exists and §8's interim governs (§2) | prefer a fake; assert on state, not on calls | review: `toHaveBeenCalledWith` outside the fire-and-forget list | no |
+| 5 | in force → `references/fakes.md` | prefer a fake; assert on state, not on calls; type any double whose return reaches the code under test | review: `toHaveBeenCalledWith` outside the fire-and-forget list, and `grep -rn "mockReturnValue({\|mockResolvedValue({"` against a bare `vi.fn()` | no |
 | 6 | in force where a seam exists (§2) | install the substitute through the architecture's own seam | `grep -rl "vi\.mock(['\"][^'\"]*data/client" --include='*.test.ts*' src` for the data seam; gate pattern `test-mocks-own-component` for a module we own | partly — the gate runs the own-module pattern; the seam grep is hand-run |
-| 7 | in force for the key; the per-tier double is not in a setup file yet, so §8's interim governs where it lives | assert the key, not the copy; substitute the translation layer once per tier | `grep -rl "vi\.mock('react-i18next'" --include='*.test.ts*' src server shared scripts` | partly — gate pattern `test-i18n-mocked-locally` runs on the diff; this grep is hand-run |
+| 7 | in force for the key; the per-tier double is not in a setup file yet, so §8's interim governs where it lives | assert the key, not the copy, EXCEPT where the copy is what is under test — then opt out to the real catalogue with a stated reason, never a hand-copied map (`references/copy-and-i18n.md`); substitute the translation layer once per tier | `grep -rl "vi\.mock('react-i18next'" --include='*.test.ts*' src server shared scripts` | partly — gate pattern `test-i18n-mocked-locally` runs on the diff; this grep is hand-run |
 | 8 | in force | no state shared between cases, and no `it.concurrent` | review: a case that depends on its neighbour | no |
 | 9 | in force | deterministic — no real timer, network or database | review: a case that reaches a real clock, a real socket or a real database | no |
 | 10 | in force by hand; mechanised by rule 22 inside the mutation gate's target module, and by hand everywhere else | seen red once | review: the PR says the line was broken and the test went red | no |
@@ -483,8 +495,8 @@ transition cannot end while its author still has no sanctioned move.
 deletes it. A transition marker left behind sends every later reader here for a transition that
 finished.
 
-**The order the blocked mechanisms land in.** The rows of §5 that read `blocked` are 5, 11, 17, 22
-and 23 — 21 has left the list, the coverage ratchet being armed on CI — the state column is
+**The order the blocked mechanisms land in.** The rows of §5 that read `blocked` are 11, 17 and 22 —
+21 left with the coverage ratchet, and 5 and 23 left with steps 4 and 5 below — the state column is
 authoritative and this list is today's reading of it — and each step
 below clears at least one of them. Finishing the list empties the interim table with it, save for one
 row: rule 7's translation double retires with the sweep that moves it into the DOM tier's setup file,
@@ -509,9 +521,12 @@ anything on the list below; it unblocks steps 1 and 3 by giving them a node proj
    creates `src/test/`, so the query-client helper `src/test/renderWithProviders.tsx` lands beside
    the factories and clears `component-tests.md` criterion 10;
 3. the matcher layer, then `vitest.setup.node.ts`, then its `setupFiles` line — unblocks rule 11;
-4. the fakes framework, both the client seam and the server injection point — unblocks rule 5,
-   retires the two transport interims below, and lands the DOM-tier exemplar beside the node one;
-5. `docs/test-boundaries.md`, describing the seams steps 2 to 4 built — unblocks rule 23.
+4. ~~the fakes framework, both the client seam and the server injection point~~ — **landed.** Rule 5
+   is in force, the two transport interims are retired, and the mechanism — including the four
+   failures the first build hit — is `references/fakes.md`;
+5. ~~a test-boundaries page describing the seams steps 2 to 4 built~~ — **landed.** Rule 23 is in
+   force. The page names each seam, what it substitutes, and the migration order; the repository
+   chooses its own path for it.
 
 **The list was six steps and is five.** The sixth was the coverage ratchet, and it landed with the
 tier split rather than waiting its turn — which is exactly what the note below predicted, since it
@@ -533,12 +548,15 @@ a reference page — one home for both levels, because a missing mechanism reads
 
 | rule or criterion | what a test author does until the mechanism lands |
 |---|---|
-| 5 · the client fake | substitute at the same seam with a stub, and assert on state wherever state exists. `DataClient` is a wide interface, so the stub is a `Pick<DataClient, …>` with **one** explicit cast at the `setDataClient()` call — sanctioned here and nowhere else, and it comes out when the fake lands. The reset the helper would own goes in the test file meanwhile: a `beforeEach`/`afterEach` pair at suite scope, installing the stub and putting `new HttpDataClient()` back |
-| 5 · the server transports | `server/http/` offers no seam at all (§2), so a transport test stubs `global.fetch` at suite scope, with a comment naming the boundary it crosses and the missing injection point. Sanctioned on those files and nowhere else, and it comes out with step 4. Rule 4 is met by the comment; rules 5 and 6 are unreachable there until the seam exists |
 | 11 · the envelope | all eight fields are required today too. A matcher registered with `expect.extend` in the file that uses it needs no setup file, so it inlines the `JSON.stringify` the shared writer would have done — nine lines. Copy `failure()`'s body rather than writing those lines fresh: two of its replacements are load-bearing and easy to leave out. The describe chain's `' > '` has to become a space, or `-t` matches nothing and Vitest exits 0 on "1 skipped"; a quote has to become a dot, or a title with an apostrophe breaks the pattern → `references/failure-envelope.md`. What is blocked is the shared writer and the directory it lives in, not any field, and the inline copy comes out with step 3 |
 | 7 · the translation double | `vitest.setup.ts` carries no `react-i18next` mock today, so the double is per file: a new DOM test writes its own copy, in the shape `copy-and-i18n.md` gives. Moving it into the DOM tier's setup file and removing the copies is one task. The gate pattern `test-i18n-mocked-locally` reports every copy as a minor, this one included — the `// INTERIM rule 7` marker is what tells a reviewer which it is |
 | 17 · the factory | until `src/test/factories/` lands, a record literal in the test file is the legal form — that is what `blocked` means. It is what step 2 sweeps, so keep it in one place per file rather than one per case |
-| `component-tests.md` criterion 10 · the query client | `src/test/renderWithProviders.tsx` does not exist, so the case constructs the client in its own file with `retry: false` — one construction per file, not one per case, because that is what step 2's helper sweeps |
+
+**Three rows have retired.** Both rule-5 interims — the `Pick<DataClient, …>` stub and the
+`global.fetch` substitution on the server transports — came out with step 4, and
+`component-tests.md` criterion 10's hand-built query client came out with step 2's helper. They are
+recorded as retired rather than deleted because a row that vanishes silently reads as a row that was
+dropped. The mechanism that replaced the first two is `references/fakes.md`.
 
 **Every interim carries a marker where it is used, naming what it is interim to: `// INTERIM rule 5`,
 or `// INTERIM component-tests.md criterion 10`** — inside the comment clause 4 already demands where
