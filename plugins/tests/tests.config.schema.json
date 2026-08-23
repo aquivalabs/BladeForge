@@ -5,19 +5,30 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "$schema": { "type": "string" },
-    "schemaVersion": { "type": "integer", "const": 1 },
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
     "tiers": {
       "type": "object",
       "additionalProperties": false,
       "description": "The execution tiers and the globs that decide membership. The rule is that the filename declares the tier, so these globs must partition the test set: no file in two tiers, none in neither.",
       "properties": {
-        "node": { "$ref": "#/definitions/tier" },
-        "dom": { "$ref": "#/definitions/tier" },
+        "node": {
+          "$ref": "#/definitions/tier"
+        },
+        "dom": {
+          "$ref": "#/definitions/tier"
+        },
         "excluded": {
           "type": "array",
-          "items": { "type": "string" },
-          "description": "Test files the standard does not govern — an environment-gated integration suite is the usual case. Naming them here is what keeps them from being audited as violations."
+          "items": {
+            "type": "string"
+          },
+          "description": "Test files the standard does not govern \u2014 an environment-gated integration suite is the usual case. Naming them here is what keeps them from being audited as violations."
         }
       }
     },
@@ -35,12 +46,15 @@
           "type": "number",
           "minimum": 0,
           "maximum": 100,
-          "description": "The absolute floor. Not a target — the number below which the suite stops meaning anything. Meaningless on its own: tests that execute code and assert nothing satisfy it, which is why it is paired with a mutation bar."
+          "description": "The absolute floor. Not a target \u2014 the number below which the suite stops meaning anything. Meaningless on its own: tests that execute code and assert nothing satisfy it, which is why it is paired with a mutation bar."
         },
         "perPath": {
           "type": "object",
-          "additionalProperties": { "type": "integer", "minimum": 0 },
-          "description": "A tighter cap for a path that earns one — a pure calculation core is the usual case. Per-path entries do not inherit the global set."
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "description": "A tighter cap for a path that earns one \u2014 a pure calculation core is the usual case. Per-path entries do not inherit the global set."
         }
       }
     },
@@ -51,7 +65,9 @@
       "properties": {
         "target": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Globs the mutation run covers. Narrow on purpose: the run costs minutes per module, and a pure calculation core is where a survivor means a real defect rather than an equivalent mutant."
         },
         "maxSurvivingPercent": {
@@ -63,7 +79,7 @@
         "breakBuild": {
           "type": "boolean",
           "default": false,
-          "description": "Whether a score below the bar fails a run. Leave false until a real score exists — the first score is a measurement, not a verdict."
+          "description": "Whether a score below the bar fails a run. Leave false until a real score exists \u2014 the first score is a measurement, not a verdict."
         }
       }
     },
@@ -72,18 +88,64 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["rule", "waitsOn"],
+        "required": [
+          "rule",
+          "waitsOn"
+        ],
         "properties": {
-          "rule": { "type": "integer", "minimum": 1, "description": "The rule number from the standard's canonical table." },
-          "waitsOn": { "type": "string", "description": "What has to exist before the rule can be met. A task id, a path, a sentence — whatever the repository can point at." },
-          "interim": { "type": "string", "description": "What a test author does in the meantime. An interim written down is a decision; the same code with no interim is a violation nobody authorised." }
+          "rule": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The rule number from the standard's canonical table."
+          },
+          "waitsOn": {
+            "type": "string",
+            "description": "What has to exist before the rule can be met. A task id, a path, a sentence \u2014 whatever the repository can point at."
+          },
+          "interim": {
+            "type": "string",
+            "description": "What a test author does in the meantime. An interim written down is a decision; the same code with no interim is a violation nobody authorised."
+          }
         }
       },
-      "description": "Rules this repository cannot meet yet. The auditor does not report a blocked rule's violations as findings — it reports the block once. An entry with no `waitsOn` is a rule quietly abandoned, which is why the field is required."
+      "description": "Rules this repository cannot meet yet. The auditor does not report a blocked rule's violations as findings \u2014 it reports the block once. An entry with no `waitsOn` is a rule quietly abandoned, which is why the field is required."
+    },
+    "armedRules": {
+      "type": "array",
+      "description": "Rules whose mechanism has LANDED, with what armed them. The counterpart of blockedRules: a rule that moves out of blocked leaves no trace otherwise, so the transition's history disappears and the next reader cannot tell an armed rule from one that was never blocked.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "rule",
+          "mechanism"
+        ],
+        "properties": {
+          "rule": {
+            "type": "integer",
+            "description": "The rule number from the standard's \u00a75 table."
+          },
+          "mechanism": {
+            "type": "string",
+            "description": "What enforces it now \u2014 a lint rule, a gate, a script."
+          },
+          "armedAt": {
+            "type": "string",
+            "description": "ISO date the mechanism landed."
+          },
+          "note": {
+            "type": "string",
+            "description": "Why this shape, and any measurement that decided it."
+          }
+        }
+      }
     },
     "timeBudgetMs": {
       "type": "object",
-      "additionalProperties": { "type": "integer", "minimum": 1 },
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 1
+      },
       "description": "Per-tier budget for a single case, keyed by tier name. Reported, never failed: the number moves with the machine, and a budget that fails a build gets tuned into uselessness on the first slow runner."
     }
   },
@@ -91,11 +153,24 @@
     "tier": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["include"],
+      "required": [
+        "include"
+      ],
       "properties": {
-        "include": { "type": "array", "items": { "type": "string" } },
-        "environment": { "type": "string", "description": "The runner's environment for this tier." },
-        "setupFile": { "type": "string", "description": "This tier's setup file. Keep it small: a setup file that imports a module which instantiates the transport graph at load defeats every per-file substitution in the tier." }
+        "include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "environment": {
+          "type": "string",
+          "description": "The runner's environment for this tier."
+        },
+        "setupFile": {
+          "type": "string",
+          "description": "This tier's setup file. Keep it small: a setup file that imports a module which instantiates the transport graph at load defeats every per-file substitution in the tier."
+        }
       }
     }
   }

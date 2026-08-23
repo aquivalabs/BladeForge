@@ -1,28 +1,28 @@
 {
   "$schema": "./tests.config.schema.json",
   "schemaVersion": 1,
-
   "tiers": {
-    "node": { "include": [] },
-    "dom": { "include": [] },
+    "node": {
+      "include": []
+    },
+    "dom": {
+      "include": []
+    },
     "excluded": []
   },
-
   "coverage": {
     "uncoveredLineCap": 0,
     "floorPercent": 75
   },
-
   "mutation": {
     "target": [],
     "maxSurvivingPercent": 10,
     "breakBuild": false
   },
-
   "blockedRules": [
     {
       "rule": 14,
-      "waitsOn": "not applicable — this runtime has one execution environment",
+      "waitsOn": "not applicable \u2014 this runtime has one execution environment",
       "interim": "the filename declares nothing; there is no tier to declare"
     },
     {
@@ -33,9 +33,9 @@
     {
       "rule": 22,
       "waitsOn": "no mutation runner exists for this runtime",
-      "interim": "rule 10 is met by hand — a case is written for each situation, and a survivor is found by reading"
+      "interim": "rule 10 is met by hand \u2014 a case is written for each situation, and a survivor is found by reading"
     }
   ],
-
+  "armedRules": [],
   "timeBudgetMs": {}
 }

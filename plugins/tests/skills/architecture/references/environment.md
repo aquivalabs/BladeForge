@@ -99,10 +99,18 @@ export default [
       ...jestDom.configs['flat/recommended'].rules,
       // Upstream records are built by a factory, never written as a literal. Two selectors,
       // because `key.name` misses a quoted or computed key → factories.md
+      //
+      // NARROWED, and the narrowing is the whole point. Requiring only a namespaced KEY matched 339
+      // sites on one real repo and most were not records at all: the namespace also appears as a
+      // filter-model key, a query column name and a pivot-field alias, none of which a factory can
+      // build. Requiring an `Id`/`attributes` SIBLING is what separates an entity literal from those,
+      // and on the same repo it matched ZERO — the broad form's four remaining hits were all a typed
+      // list-view record shape, correctly ignored. Armed at zero, it catches the next hand-rolled
+      // literal instead of a backlog of correct code.
       'no-restricted-syntax': ['error',
-        { selector: "ObjectExpression > Property[key.name=/^Pkg__/]",
+        { selector: "ObjectExpression:has(Property[key.value=/^Pkg__/]):has(Property[key.name=/^(Id|attributes)$/])",
           message: 'Build upstream records through a factory in src/test/factories/, not as a literal.' },
-        { selector: "ObjectExpression > Property[key.value=/^Pkg__/]",
+        { selector: "ObjectExpression:has(Property[key.value=/^Pkg__/]):has(Property[key.value=/^(Id|attributes)$/])",
           message: 'Build upstream records through a factory in src/test/factories/, not as a literal.' },
       ],
       // storybook/test is legitimate in a story and wrong in a unit test → component-tests.md
@@ -115,11 +123,35 @@ export default [
 ];
 ```
 
-**The block is not in `eslint.config.js` yet.** Arm it when the test-rewrite work starts, so
-violations are fixed as part of that work rather than as a retroactive sweep.
-
 `npm run lint` is already on the pre-push path, so adding this block is what converts the criteria
-into a gate. Turning it on will surface existing violations in bulk — count them per rule first, then
-land the block and the cleanups together, or land the block with those rules as `warn` and a filed
-task to clear them; do not land it with the rules deleted, which is how a gate quietly becomes
-decoration.
+into a gate. Arm it when the test-rewrite work starts, so violations are fixed as part of that work
+rather than as a retroactive sweep. Count them per rule first, then land the block and the cleanups
+together — never land it with the rules deleted, which is how a gate quietly becomes decoration.
+
+### What arming it actually costs, measured
+
+On one repo, the whole of `flat/react` plus `flat/recommended`: **503 violations, taken to zero, and
+FIXED rather than suppressed.** The families that were genuinely clean once fixed —
+`prefer-find-by`, `prefer-screen-queries`, `render-result-naming-convention`, `no-manual-cleanup`,
+`await-async-queries` and the whole `jest-dom` set — went in one pass. Two of the fixes were worth
+having on their own merits: a case that rendered twice with a manual `cleanup()` between became two
+cases, and so did one that rendered twice to compare two class-queried lists.
+
+**Two rules need their own pass and should start `off` with a stated count.** `no-container` (31 sites)
+and `no-node-access` (67) are a different population: not every hit is a defect. A skeleton is
+`aria-hidden` by design, a grid library's internals expose no roles, a hidden `input[name]` is
+deliberately outside the accessibility tree. Each needs a judgement, and the honest fix for a
+legitimate one is a per-site disable naming why the tree cannot reach it. Worked through, 59 of the 98
+were rewritten to an accessible query, a handful of components gained a `data-testid`, and one gained a
+real `aria-label` — an icon-only button that had no accessible name at all, which is a genuine
+accessibility fix the rule surfaced as a side effect. Both then armed at zero.
+
+**Do not run a bulk `--fix` on a test suite.** `prefer-find-by` and `await-async-queries` match by
+NAME, not by type: a local helper called `findByPath` looks like an async query to them. Measured — a
+single `eslint --fix` inserted TEN `await`s into a synchronous test file, producing `await await` in
+places. The file had to be reverted and the helper renamed. Read the fixes, or rename anything that
+collides with the plugins' naming conventions first.
+
+**A suppression that outnumbers the rule is the failure mode**, not the violations. That is why the two
+hard rules stay `off` with a real count beside them rather than `error` with 98 disables: the count is
+honest and it shrinks, where a disable list teaches the next reader that disabling is the convention.

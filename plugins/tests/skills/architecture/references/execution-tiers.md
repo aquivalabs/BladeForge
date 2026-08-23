@@ -322,8 +322,31 @@ the flake policy in the main skill.
 **After the split, the dom tier is most of the suite's wall clock and the node tier is a rounding
 error.** That is not a leftover to be noticed later; it is the whole remaining cost, and it now sits
 behind one project name. `isolate: false` and `happy-dom` are the two further levers, and neither is
-a config flip — one trades away per-file isolation, the other trades DOM fidelity. Both are measured
-and decided in one filed task, with `environment.md` for `happy-dom`'s trade.
+a config flip — one trades away per-file isolation, the other trades DOM fidelity.
+
+**Both are now measured, and both are rejected.** One machine, quiet tree, 849 dom-tier tests:
+
+| configuration | wall clock | result |
+|---|---|---|
+| baseline — jsdom, `forks`, isolation on | **82.4 s** | all pass |
+| jsdom + `poolOptions.forks.isolate: false` | **92.6 s** | all pass |
+| `happy-dom`, isolation on | **63.4 s** | one file fails |
+
+`isolate: false` is **ten seconds SLOWER**, which is the opposite of the assumption it is usually
+reached for, and worth stating plainly so it is not assumed again: with isolation off, one long-lived
+fork accumulates every suite's modules and DOM state, and carrying that heap past a point costs more
+than a fresh fork does. It is worse on both axes — slower AND without isolation — so there is nothing
+to trade.
+
+`happy-dom` is genuinely faster: a 23 % cut, nineteen seconds a run. It also breaks one file, which is
+not a verdict on happy-dom but the start of an investigation into what that suite uses and happy-dom
+does not implement (`environment.md` records that its surface is narrower by design). Nineteen seconds
+does not buy that investigation, nor the standing cost of a second DOM implementation whose divergences
+are found one test at a time — in a suite where a component test IS the specification.
+
+**Set a re-open trigger rather than leaving it open.** On this suite it is "when the dom tier crosses
+roughly three minutes". A residual with a number and a trigger is owned; one with neither is a
+recurring argument.
 
 **Name the owner, and check the pointer resolves.** This sentence used to claim both levers were
 "filed rather than described here" while nothing anywhere mentioned either. A pointer to nothing is
