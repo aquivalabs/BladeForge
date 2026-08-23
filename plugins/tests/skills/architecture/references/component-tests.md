@@ -275,6 +275,35 @@ Where a repository requires a story per component, that is not duplicate work: a
 the story, behaviour to the test. A purely presentational component gets a story and **no** test. The
 boundary, and everything else that should not be tested → `what-not-to-test.md`.
 
+## Accessibility: assert it where the engine already is
+
+This standard queries by role and accessible name, and treats a component reachable only by class or
+test id as reporting an accessibility defect. So it DEPENDS on the markup being accessible — and
+nothing in it asserts that. That looks like a clean gap, and usually is not one.
+
+**Check what already runs the engine before adding a second copy of it.** Where a repository requires
+a story per component and has a Storybook accessibility addon installed, the axe engine is already
+present and its coverage of the component set is already near complete. What is missing is not the
+engine — it is that nothing runs it unattended.
+
+| route | cost | what it catches that the others do not |
+|---|---|---|
+| run the story addon in CI | one workflow step | nothing new — but it makes the existing check binding |
+| an axe matcher in component tests | a dependency, plus an assertion per test file | a violation only in a state no story renders |
+| both | both | little; the overlap is large |
+
+**Take the first.** The second adds a second copy of the same engine and an assertion to every
+component test file, to catch a strictly narrow addition. If a real defect ever ships in a state no
+story covers, the answer is a story for that state, not a second axe.
+
+Two notes on the first run, and both are the same rule as the lint block's: expect it to be red,
+because nothing has enforced it; and fix the violations rather than suppressing them in bulk, with a
+per-story disable and a stated reason where a violation is deliberate.
+
+One thing worth knowing before wiring it: running stories as tests usually means a THIRD runner
+project beside the tiers. Give it its own name — folded into the DOM tier it hides inside a number
+that page already calls the suite's whole remaining cost → `execution-tiers.md`.
+
 ## Acceptance criteria
 
 ### Mechanically checked
@@ -285,7 +314,7 @@ executes it without being asked.
 | # | criterion | check | runs unattended |
 |---|---|---|---|
 | 1 | No test file imports from `storybook/test` | `grep -rn "from 'storybook/test'" --include='*.test.ts*' src` | no — hand-run; it becomes `no-restricted-imports` when the lint block is armed |
-| 2 | No test reaches the DOM through `container` or `querySelector` | `grep -rn -e 'container\.' -e 'querySelector' --include='*.test.tsx' src` | no — hand-run; it becomes `no-container` / `no-node-access` with the same block |
+| 2 | No test reaches the DOM through `container` or `querySelector`, except per-site with a stated reason | `no-container` / `no-node-access` once armed; until then `grep -rn -e 'container\.' -e 'querySelector' --include='*.test.tsx' src`. **Both rules need their own pass** — not every hit is a defect, and `environment.md` carries the measured population | yes, once the block is armed |
 | 3 | No test substitutes a component we own | `grep -rn -e "vi\.mock('\./" -e "vi\.mock('\.\./" --include='*.test.tsx' src` | yes — review gate pattern `test-mocks-own-component`, on the diff |
 | 4 | Every `userEvent` call is awaited | `eslint-plugin-testing-library`, rule `await-async-events` | no — the plugin is installed, the config block is not armed |
 | 5 | No `getBy*` inside `waitFor` | same plugin, rule `prefer-find-by` | no — same block |
@@ -298,6 +327,12 @@ is stated once, in the main skill's §5.
 Criteria 4 and 5 of this page are one config block away from being gates: both plugins are installed, and the
 block is written out in `environment.md`. Arming it also enforces criterion 2 of this page through
 `no-container`, `no-node-access` and `prefer-screen-queries`.
+
+**Arming it is a measured quantity, not a leap.** On one repo the full preset was 503 violations taken
+to zero and fixed rather than suppressed; `no-container` and `no-node-access` needed a second pass over
+98 sites because not every hit there is a defect. `environment.md` carries the numbers, the two
+families' different character, and the one hazard: never run a bulk `--fix`, because two of these rules
+match by identifier NAME and will rewrite a synchronous helper that merely looks like an async query.
 
 ### Reviewed
 

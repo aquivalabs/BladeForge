@@ -58,7 +58,15 @@ GROUPS: list[tuple[str, str | None, list[tuple[str, str, str]]]] = [
 # months not knowing it was already considered.
 REFUSED = [
     ("msw", "intercepts at the network layer, below the seam this standard substitutes at"),
-    ("happy-dom", "faster than jsdom and a narrower DOM; every component test would need re-verifying"),
+    ("happy-dom", "MEASURED on one suite: 23% faster (63s vs 82s over 849 DOM tests) and it broke a "
+                  "test file; a narrower DOM whose divergences surface one test at a time. Nineteen "
+                  "seconds a run does not buy that. Re-open only if the DOM tier crosses ~3 minutes"),
+    ("vitest-axe", "a second copy of the axe engine plus an assertion per component test file, where a "
+                   "Storybook a11y addon already runs the same engine over the stories. Run the one you "
+                   "have unattended in CI instead"),
+    ("poolOptions isolate:false", "not a package, listed because it is the other thing people reach for: "
+                                  "MEASURED 10s SLOWER (93s vs 82s), because one long-lived worker "
+                                  "accumulates every suite's modules and DOM state. Worse on both axes"),
     ("a coverage comment bot", "the threshold already gates; a number nobody can act on is noise"),
 ]
 

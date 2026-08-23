@@ -186,6 +186,47 @@ time:
 So the output of a mutation run is not "write more assertions". It is a list of **situations the
 suite never put the code in**. That is a different and much more useful instruction.
 
+## Two questions, not one — and only one of them is about the gate
+
+After writing a case for a survivor there are two things you might mean by "it works", they feel
+identical, and conflating them produces a report that overstates the work.
+
+| question | how it is answered | what it proves |
+|---|---|---|
+| Is my case non-vacuous? | plant the mutant in the source, run the case, watch it go red, revert | the case has teeth |
+| Did my case kill a **survivor**? | read that mutant's `status` in the BASELINE report | the case moved the number |
+
+A case can pass the first and fail the second, because the mutant may have been `Killed` all along by
+some other test. Measured: five cases written for a boundary that "looked uncovered", each verified
+red-under-mutation, killing **zero** mutants — both targets were already killed in the baseline. The
+cases were worth keeping (they document a boundary that existing coverage reached only incidentally)
+but the claim was wrong.
+
+The check is one filter, and it is the same one used to find the work in the first place:
+
+```python
+alive = [m for m in report['files'][path]['mutants']
+         if m['status'] in ('Survived', 'NoCoverage')]
+```
+
+**A mutant is identified by its column range, not its line** — several mutants share a line, and
+reproducing "the mutant on line 40" by hand compares the wrong thing.
+
+## Planting a mutant safely when you are not alone in the tree
+
+The plant-and-revert loop above edits a tracked source file. That is fine alone and unsafe the moment a
+second worker — another agent, another terminal, a watcher — is in the same checkout: an in-flight
+mutation makes every result anyone gets unattributable, including the ones that look green.
+
+Two safe forms:
+
+- **Mutate a disposable copy** of the module and point the run at it, then delete it.
+- **Never leave the file mutated across two commands.** `cp` it aside, plant, run ONLY the one test
+  file, `cp` it back in the same command. Checksum it afterwards if the run was long.
+
+Real cost of skipping this: one agent caught a mutant that was not its own, and a `kill -9` sweep
+aimed at a stuck worker took out another party's. An hour of numbers had to be thrown away.
+
 ## Using it while writing, not only as a gate
 
 The gate is periodic. The more valuable use is local and immediate: run it on the one file you are
@@ -211,6 +252,49 @@ defend. This is the cheapest feedback in the whole standard and it needs no cere
    where this belongs. A mutation script in `package.json` is added by the change that arms the
    gate, alongside the config above.
 
+## Count the unkillable before you set the bar
+
+The step above says the threshold follows reality. This is how to find out what reality is, and it is
+one afternoon that saves a quarter of arguing.
+
+**A mutation score is a ratio, and its denominator is a choice.** Before setting `break`, run once and
+sort every survivor into three buckets — not the three piles above, which are about what to DO, but
+about what is POSSIBLE:
+
+| bucket | can any test kill it? |
+|---|---|
+| reachable and killable | yes — this is the work |
+| reachable but equivalent | **no** — no input distinguishes the mutant |
+| in code that cannot execute at all | **no** — dead by construction |
+
+Sum the last two. **That sum is the distance between 100 % and your real ceiling**, and if it is not
+near zero the bar is being set against the wrong denominator.
+
+Measured on one real target, and the shape is the lesson rather than the numbers: 2353 mutants, a bar
+of 90 %, a score that two exhaustive passes could not push past 88.2 %. Of 278 survivors, **187 sat in
+code that could not run** — a port that kept its reference implementation's branches verbatim, so the
+guards reading them were always false — and **~82 more were equivalent**. Nine were killable. The same
+suite measured against only executable code scored **95.4 %**.
+
+The gate had never been measuring the tests. It was measuring how much unreachable code the target
+carried, and it would have stayed red no matter how good the tests got.
+
+**Three consequences worth stating, because each one was learned the expensive way.**
+
+A gate that cannot go green trains people that red is the normal colour. That is worse than no gate:
+a disarmed gate is honestly absent, a permanently-red one is present and ignored.
+
+**Excluding dead code from the denominator is not lowering the bar** — it is the difference between
+"90 % of the code" and "90 % of the code that runs". The second is a stricter promise, and the only
+one a test can keep. Say which one the number means, next to the threshold.
+
+**Excluding it region-by-region is harder than it looks.** A heuristic scan for the dead identifiers
+over-reached badly on the real case — 48 disjoint ranges covering 319 mutants against the 187 actually
+dead, because it also caught live blocks adjacent to dead ones and a file header that merely mentioned
+the identifier. Fencing with it would have ignored mutants the tests legitimately killed, inflating the
+score. If the dead regions are large, DELETING them is the safer operation, because the suite verifies
+it: delete something reachable and the tests say so immediately, where a wrong fence is silent.
+
 ## The target: fewer than 10 % of mutants survive
 
 **The bar is a mutation score above 90 %**, and it is deliberately higher than the published
@@ -227,6 +311,27 @@ so it survives forever and counts against the score until it is annotated with
 `// Stryker disable next-line <Mutator>: reason`. Reaching a high score therefore requires finding and
 signing every equivalent mutant, one at a time. A perfect score is not available at all.
 
+**An equivalence claim needs a checkable reason, and "no test can reach this" is not one.** The reason
+must name the DOMAIN fact that makes the two versions indistinguishable, so a reader can verify it
+without re-deriving the analysis. Three real ones, and the third is why this is skilled work:
+
+> `join(' UNION ALL ')` separator emptied: the array always has exactly one element here, and `join`
+> on a one-element array never consults the separator.
+
+> `a > b ? a : b` → `a >= b`: the two operators disagree only when `a === b`, and then both branches
+> return the same value.
+
+> `values.filter(Boolean)` → `values` in the AND branch: this branch has no null-guard, so the array
+> CAN contain nulls — but the read is `.sort()[0]`, the FRONT. Default string sort places `"null"`
+> after any `YYYY-MM-DD` (`'n' > '2'`), so nulls land at the end and `[0]` is the smallest real value
+> either way. **The mirror line, `.pop()` on the same array, reads the BACK and therefore DOES observe
+> the unfiltered null — that one is killable, and was killed.**
+
+Two adjacent lines, the same mutation, one equivalent and one a real gap. "These are untestable" would
+have missed the second; "write a test for every survivor" would have produced six worthless cases to
+reach the one that mattered. **Write the proofs down where the tests live**, in a named section at the
+top of the file — they are permanent, and the next person does not have to re-derive them.
+
 And **an uncovered line produces a surviving mutant automatically.** Whatever share of the target
 module is uncovered generates survivors before any assertion is considered, so the score cannot
 approach the target until those lines are covered — which is coverage work, discovered by the
@@ -235,6 +340,32 @@ mutation run rather than done by it.
 So the target is a target. **`break` is still not set until a real score exists**, and the first score
 is a measurement rather than a verdict. If it comes back well short, the distance to the bar is work;
 it is never a reason to lower the bar.
+
+## A helper that parses the code's output can be defeated by a mutant
+
+This is a failure mode with no equivalent in ordinary testing, and it makes the suite look strongest
+where it is weakest.
+
+When the thing under test generates structured text — SQL, a query, a serialised document — assertions
+usually go through a local helper that extracts one region of it. If that helper PARSES rather than
+matches, a mutant can break the parse.
+
+Measured: a helper that found a named region by counting brackets forward. The generated document
+contained several near-identical regions. A mutant that deleted a closing bracket inside the region
+under test desynchronised the count, so the helper ran past that region's end and returned a span
+containing the NEXT one — which held an un-mutated copy of the very fragment the assertion looked for.
+The assertion passed. The mutant survived. Every other assertion built on that helper was sound only
+for mutants that happened to leave the bracket balance intact, and nobody could say how many survivors
+survived for that reason rather than on their merits.
+
+**The rule.** A helper that extracts a region from generated output must not depend on a property the
+mutation operators can change — bracket balance, quote pairing, a delimiter count. Locate the region by
+its boundary markers, or slice by index. And when a stubborn survivor sits inside a region such a
+helper reads, suspect the helper before concluding the mutant is equivalent.
+
+**Fixing one costs a re-measurement, and the score may go DOWN.** A mutant that was only ever killed
+by a false pass will surface as a survivor. That is the number becoming honest, not a regression — say
+so when it happens, or the next reader reads it as one.
 
 ## Sources
 
