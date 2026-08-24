@@ -100,7 +100,7 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
 | `config` | the loaded config from `review-info` |
 | `agentsDir` | the ABSOLUTE directory holding `review-<lens>.md`, resolved by `/review` alongside `workflow.js` in step 3 — the `agents/` sibling of whichever `plugins/review/` won there. The script cannot resolve it: it reads nothing, by design. Passing a relative path instead is the defect this key exists to close (see below) |
 | `machineFacts` | the results of step 2.5's per-lens checks, `{"<lens>": [{name, command, exitCode, output}]}` — `null` when no lens configures any. Computed by `/review`, once per round; the script only renders them into the lens prompts |
-| `priorPerAgent` | the `perAgent` array this command received on the previous round — this is what makes the round a DELTA, dispatching only the lenses that failed. Pass it while iterating; pass `null` for the final, attestable full round. It survives a hash change on purpose (see the round shape above): a fix that changes the diff does not un-pass an unrelated lens |
+| `priorPerAgent` | the `perAgent` array this command received on the previous round — this is what makes the round a DELTA, dispatching only the lenses that failed. Pass it WHOLE, findings included: a re-dispatched lens is prompted to verify its own prior findings rather than cold-review the diff again, which is where repeat rounds mint noise. Pass `null` for the final, attestable full round. It survives a hash change on purpose (see the round shape above): a fix that changes the diff does not un-pass an unrelated lens |
 
 Resolve `workflow.js` before calling anything. Two layouts hold it, and a single relative hop from `${CLAUDE_PLUGIN_ROOT}` reaches neither — that path points at the versioned install cache, `…/cache/<marketplace>/review/<version>/`, whose sibling directory is another version of `review`, not another plugin. Try these in order and use the first that exists:
 
@@ -129,6 +129,25 @@ The script hands back exactly `{ attest, refusedCriterion, failedLenses, perAgen
 - When `attest` is `false`, say which gate refused and go to step 6. `failedLenses` is non-empty when a lens did — name each one as `<lens> <score>/<threshold>`, with its blocker count when it has one. `refusedCriterion` is the number, 1 through 8, when a criterion did. Both can be set; report both. Never read a `null` `refusedCriterion` as a pass — check `attest` itself.
 
 **The script decides; `/review` persists.** `attest`, `refusedCriterion`, `failedLenses`, `perAgent`, and `report` are a verdict, not a write — the script touches no disk anywhere in its run. Step 7 below is the only step in this whole system that writes and commits an attestation.
+
+## Step 5.5 — the uniqueness log
+
+After every run, append one line per DISPATCHED lens to `.review/lens-stats.jsonl` (create it if
+absent):
+
+```json
+{"at":"<ISO timestamp>","hash":"<diffHash>","round":N,"lens":"docs","verdict":"PASS","score":9,"findings":2,"unique":1,"refuted":0}
+```
+
+`findings` and `unique` come straight off that lens's `perAgent` entry (`findingsTotal`,
+`findingsUnique`); `refuted` is its findings carrying a `refuted` marker. Skip carried entries — they
+judged nothing.
+
+This log is the non-redundancy record: over enough rounds it answers "does this lens ever say
+anything nobody else says" with a number instead of a feeling. The decision to trim or keep a lens is
+made FROM THIS FILE after tens of rounds — never from one round, where a quiet lens may simply have
+had no subject in the diff. The file rides in the same `git add -A .review/` the attestation commit
+already does, so it accumulates on the branch without its own commit.
 
 ## Rules the run must satisfy
 
