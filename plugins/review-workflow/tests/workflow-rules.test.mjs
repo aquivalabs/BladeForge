@@ -521,8 +521,9 @@ console.log("\nnever writes");
     "refusedCriterion",
     "report"
   ]);
-  checkEqual("the seven phases run, in order, for an ordinary pass", run.phases, [
+  checkEqual("the eight phases run, in order, for an ordinary pass", run.phases, [
     "Dispatch",
+    "Evidence critic",
     "Reconcile",
     "Untouched set",
     "Score",
@@ -735,6 +736,110 @@ console.log("\nmachine facts");
   const prompt = run.calls.find((c) => c.label === "lens:docs")?.prompt || "";
   check("a zero exit renders as PASS", prompt.includes("docs-check — PASS"));
   check("empty output says so rather than fencing nothing", prompt.includes("(no output)"));
+}
+
+// ── Group: uniqueness ─────────────────────────────────────────────────
+console.log("\nuniqueness");
+
+{
+  // Two lenses at the same location → neither is unique there; a lens alone at its location is.
+  const args = baseArgs({ round: 1, config: { agents: [lensEntry("alpha"), lensEntry("beta")], evidenceCritic: false } });
+  const run = await runWorkflow({
+    args,
+    agents: {
+      "lens:alpha": lensResponse({ agentName: "alpha", findings: [
+        finding({ where: "src/shared.ts:5" }),
+        finding({ where: "src/only-alpha.ts:9" })
+      ], score: 8, verdict: "PASS" }),
+      "lens:beta": lensResponse({ agentName: "beta", findings: [
+        finding({ where: "src/shared.ts:5" })
+      ], score: 9, verdict: "PASS" })
+    }
+  });
+  const alpha = run.result?.perAgent?.find((e) => e.name === "alpha");
+  const beta = run.result?.perAgent?.find((e) => e.name === "beta");
+  checkEqual("alpha: one of two findings is unique", alpha?.findingsUnique, 1);
+  checkEqual("alpha: total is two", alpha?.findingsTotal, 2);
+  checkEqual("beta: its only finding is shared, zero unique", beta?.findingsUnique, 0);
+  check("the report carries the uniqueness line", (run.result?.report || "").includes("uniqueness: alpha 1/2 unique"));
+}
+
+// ── Group: evidence critic ───────────────────────────────────────────
+console.log("\nevidence critic");
+
+{
+  // A refuted finding is demoted to advisory with the reason attached; the score recovers.
+  const args = baseArgs({ round: 1, config: { agents: [lensEntry("solo")] } });
+  const run = await runWorkflow({
+    args,
+    agents: {
+      "lens:solo": lensResponse({ agentName: "solo", findings: [finding({ severity: "major", where: "src/x.ts:1", scenario: "the wrong value reaches src/consumer.ts and renders there" })], score: 7, verdict: "PASS" }),
+      "critic:solo:0": { verdict: "refuted", reason: "the cited function does not exist in the diff" }
+    }
+  });
+  const entry = run.result?.perAgent?.[0];
+  const f = entry?.findings?.[0];
+  checkEqual("the refuted finding is now advisory", f?.severity, "advisory");
+  check("the critic's reason rides on the finding", f?.refuted?.reason?.includes("does not exist"));
+  checkEqual("the demoted finding no longer moves the score", entry?.score, 10);
+  check("the report counts the refutation", (run.result?.report || "").includes("refuted by the evidence critic: 1"));
+}
+
+{
+  // A confirmed finding is untouched, and an advisory is never sent to the critic.
+  const args = baseArgs({ round: 1, config: { agents: [lensEntry("solo")] } });
+  const run = await runWorkflow({
+    args,
+    agents: {
+      "lens:solo": lensResponse({ agentName: "solo", findings: [
+        finding({ severity: "major", where: "src/x.ts:1", scenario: "the wrong value reaches src/consumer.ts and renders there" }),
+        finding({ severity: "advisory", where: "src/y.ts:2" })
+      ], score: 7, verdict: "PASS" }),
+      "critic:solo:0": { verdict: "confirmed", reason: "holds against the diff" }
+    }
+  });
+  const entry = run.result?.perAgent?.[0];
+  checkEqual("a confirmed major stays a major", entry?.findings?.[0]?.severity, "major");
+  const criticCalls = run.calls.filter((c) => c.label.startsWith("critic:"));
+  checkEqual("only the score-moving finding got a critic, not the advisory", criticCalls.length, 1);
+}
+
+{
+  // The kill-switch: evidenceCritic false → no critic wave at all.
+  const args = baseArgs({ round: 1, config: { agents: [lensEntry("solo")], evidenceCritic: false } });
+  const run = await runWorkflow({
+    args,
+    agents: { "lens:solo": lensResponse({ agentName: "solo", findings: [finding({ severity: "major", scenario: "the wrong value reaches src/consumer.ts and renders there" })], score: 7, verdict: "PASS" }) }
+  });
+  const criticCalls = run.calls.filter((c) => c.label.startsWith("critic:"));
+  checkEqual("evidenceCritic:false sends nothing to the critic", criticCalls.length, 0);
+  checkEqual("the finding stands as reported", run.result?.perAgent?.[0]?.findings?.[0]?.severity, "major");
+}
+
+// ── Group: fix verification ──────────────────────────────────────────
+console.log("\nfix verification");
+
+{
+  // A re-dispatched failed lens gets its own prior findings and the narrowing instruction;
+  // a full round gets neither.
+  const priorFinding = finding({ severity: "major", where: "src/prior.ts:7", problem: "the prior problem" });
+  const args = baseArgs({
+    round: 2,
+    config: { agents: [lensEntry("solo")], evidenceCritic: false },
+    priorPerAgent: [{ name: "solo", verdict: "FAIL", score: 7, findings: [priorFinding] }]
+  });
+  const run = await runWorkflow({ args, agents: { "lens:solo": lensResponse({ agentName: "solo" }) } });
+  const prompt = run.calls.find((c) => c.label === "lens:solo")?.prompt || "";
+  check("the delta prompt says this is fix verification", prompt.includes("Fix verification"));
+  check("the lens sees its own prior finding", prompt.includes("src/prior.ts:7"));
+  check("the narrowing instruction is present", prompt.includes("needs NEW evidence to fail now"));
+}
+
+{
+  const args = baseArgs({ round: 1, config: { agents: [lensEntry("solo")], evidenceCritic: false }, priorPerAgent: null });
+  const run = await runWorkflow({ args, agents: { "lens:solo": lensResponse({ agentName: "solo" }) } });
+  const prompt = run.calls.find((c) => c.label === "lens:solo")?.prompt || "";
+  check("a full round carries no fix-verification block", !prompt.includes("Fix verification"));
 }
 
 // ── Summary ──────────────────────────────────────────────────────────

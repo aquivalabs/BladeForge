@@ -226,6 +226,32 @@ to re-litigate, only to weigh.
 ${rendered}`;
 }
 
+// A re-dispatched lens verifies its own prior findings instead of re-reviewing from scratch.
+// Measured ground for this: re-reviewing an already-seen artifact is where repeat rounds mint new
+// noise — each fresh scan of unchanged territory invents fresh material. The prior findings ride in
+// from `priorPerAgent` when the caller kept them; an older caller that passed only name and verdict
+// gets the narrowing sentence without the list, which still bounds the scan.
+function fixVerificationBlock(entry) {
+  const prior = priorByName.get(entry.name);
+  if (!isDelta || !prior || prior.verdict === "PASS") return "";
+  const priorFindings = Array.isArray(prior.findings) ? prior.findings : [];
+  const list = priorFindings
+    .map((f) => `- [${f?.severity}] ${f?.where}: ${String(f?.problem || "").slice(0, 200)}`)
+    .join("\n");
+  return `
+
+## Fix verification — you failed the previous round
+This round verifies the fix; it is not a fresh cold review. ${priorFindings.length > 0 ? `These are YOUR findings from that round:
+
+${list}
+
+For EACH: verify it was addressed and cite where, or report it still standing. ` : ""}Then review what
+CHANGED since. Territory you already passed needs NEW evidence to fail now — do not re-scan it for
+fresh material; a finding you newly raise there must name what changed in it. Re-reading unchanged
+code until something looks wrong is how repeat rounds mint noise, and it is the one thing this round
+must not do.`;
+}
+
 function lensPrompt(entry) {
   const changedList =
     changedFileList
@@ -252,7 +278,7 @@ ${changedList}
 - pairedDocs: ${JSON.stringify(entry.pairedDocs || {})}
 - extensionSkill: ${entry.extensionSkill || "(none)"}
 - persona: ${persona || "(none)"}
-${machineFactsBlock(entry)}
+${machineFactsBlock(entry)}${fixVerificationBlock(entry)}
 Return your verdict against the forced response schema.`;
 }
 
@@ -345,6 +371,76 @@ const carriedResults = carrySet.map((entry) => {
     retried: false
   };
 });
+
+// ── Phase 1.5: Evidence critic ───────────────────────────────────────
+// Every score-moving finding gets one adversarial reader whose only job is to REFUTE it against the
+// code it cites. Grounding: a three-agent panel whose third member audits the reviewer's evidence
+// beats five independent reviewers on every benchmark it was measured on — the win comes from
+// checking the evidence, not from adding a sixth opinion. A refuted finding is DEMOTED to advisory
+// with the critic's reason attached, never silently dropped: it stays in the report, it stops moving
+// the score. Advisories are not sent — they already move nothing. Config kill-switch:
+// `evidenceCritic: false`; default on.
+phase("Evidence critic");
+
+const CRITIC_RESPONSE_SCHEMA = {
+  type: "object",
+  properties: {
+    verdict: { type: "string", enum: ["confirmed", "refuted"] },
+    reason: { type: "string" }
+  },
+  required: ["verdict", "reason"]
+};
+
+// A runaway lens could mint dozens of findings; the cap keeps the critic wave one wave. Findings
+// past the cap stay AS REPORTED — unexamined is the safe direction, since the critic only demotes.
+const CRITIC_CAP = 12;
+
+const criticTargets = [];
+if (config?.evidenceCritic !== false) {
+  for (const entry of dispatchResults) {
+    const findings = Array.isArray(entry.response?.findings) ? entry.response.findings : [];
+    for (const finding of findings) {
+      if (finding?.severity === "advisory") continue;
+      if (criticTargets.length >= CRITIC_CAP) break;
+      criticTargets.push({ lensName: entry.name, finding });
+    }
+  }
+}
+
+if (criticTargets.length > 0) {
+  log(`Evidence critic: examining ${criticTargets.length} score-moving finding(s)`);
+  const verdicts = await parallel(
+    criticTargets.map(({ lensName, finding }, index) => () =>
+      agent(
+        `You are an evidence critic. One review lens ("${lensName}") raised the finding below against
+the diff at \`${diffPath}\` (base \`${base}\`). Your ONLY job is to try to REFUTE it against the actual
+code. Read the diff and the files the finding cites. Refuted means one of: the cited evidence does not
+support the claim; the cited code does not exist or does not behave as claimed; the scenario cannot
+occur as described. Wrong SEVERITY is not refutation — severity is the lens's call, not yours. If the
+finding survives your best attempt, return confirmed. Do not propose fixes.
+
+${JSON.stringify(finding, null, 2)}`,
+        {
+          label: `critic:${lensName}:${index}`,
+          phase: "Evidence critic",
+          schema: CRITIC_RESPONSE_SCHEMA,
+          // Work tier: refuting one claim by reading cited code — never the head tier.
+          model: "sonnet"
+        }
+      )
+    )
+  );
+  verdicts.forEach((verdict, index) => {
+    if (!verdict || verdict.verdict !== "refuted") return;
+    const target = criticTargets[index];
+    // Demote in place, BEFORE reconcile — disputes, counts and scores all read the demoted severity.
+    target.finding.refuted = { by: "evidence-critic", reason: String(verdict.reason || "") };
+    target.finding.severity = "advisory";
+    log(`Evidence critic REFUTED ${target.lensName}'s finding at ${target.finding.where}: ${String(verdict.reason || "").slice(0, 160)}`);
+  });
+  const refutedCount = verdicts.filter((v) => v?.verdict === "refuted").length;
+  log(`Evidence critic: ${refutedCount} refuted, ${criticTargets.length - refutedCount} confirmed`);
+}
 
 // ── Phase 2: Reconcile ───────────────────────────────────────────────
 // Group every finding by `where`, across every dispatched lens. Nothing is
@@ -560,6 +656,14 @@ function scoreLens(entry) {
     return decorated;
   });
   const claims = Array.isArray(entry.response.claims) ? entry.response.claims : [];
+  // The non-redundancy measure: a finding is UNIQUE when no other lens landed on its location. This
+  // is what decides, over enough rounds, whether a lens ever says anything nobody else says — the
+  // question "do we need all five" answered by a number instead of a feeling. Carried entries have
+  // no findings and correctly report 0/0.
+  const findingsUnique = findings.filter((finding) => {
+    const group = findingsByWhere.get(whereKey(finding)) || [];
+    return group.every((item) => item.lens === entry.name);
+  }).length;
   const counts = countBySeverity(findings);
   const score = scoreFromCounts(counts);
   // The lens's own claimed score, kept alongside the recomputed one. Criterion
@@ -577,6 +681,8 @@ function scoreLens(entry) {
     retried: entry.retried,
     threshold,
     findings,
+    findingsTotal: findings.length,
+    findingsUnique,
     claims,
     demotions,
     counts,
@@ -924,8 +1030,22 @@ const carriedNotice =
       `refuses to attest while any of them is — run once more with \`priorPerAgent\` omitted, and ` +
       `that full round is the one an attestation can rest on.`
     : "";
+// One line per round on who earned their dispatch. Only lenses WITH findings appear — a quiet lens
+// on a diff outside its subject proves nothing either way; the log /review keeps is what accumulates
+// the real answer across rounds.
+const uniquenessLine = (() => {
+  const parts = roundAdjustedAgents
+    .filter((entry) => (entry.findingsTotal ?? 0) > 0)
+    .map((entry) => `${entry.name} ${entry.findingsUnique}/${entry.findingsTotal} unique`);
+  const refuted = roundAdjustedAgents
+    .flatMap((entry) => entry.findings || [])
+    .filter((finding) => finding?.refuted).length;
+  const tail = refuted > 0 ? ` · refuted by the evidence critic: ${refuted}` : "";
+  return parts.length > 0 ? `\nuniqueness: ${parts.join(" · ")}${tail}` : "";
+})();
+
 const report =
-  (notice ? `${preliminaryReport}\n${notice}` : preliminaryReport) + carriedNotice;
+  (notice ? `${preliminaryReport}\n${notice}` : preliminaryReport) + uniquenessLine + carriedNotice;
 
 // ── Result ───────────────────────────────────────────────────────────
 
@@ -941,6 +1061,8 @@ const perAgent = roundAdjustedAgents.map((entry) => ({
   score: entry.score,
   verdict: entry.verdict,
   counts: entry.counts,
+  findingsTotal: entry.findingsTotal ?? 0,
+  findingsUnique: entry.findingsUnique ?? 0,
   findings: entry.findings,
   claims: entry.claims,
   demotions: entry.demotions,
