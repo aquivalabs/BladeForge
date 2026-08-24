@@ -43,7 +43,7 @@ export const meta = {
 };
 
 const parsedArgs = typeof args === "string" ? JSON.parse(args) : args;
-const { base, hash, round, changedFiles, diffPath, config, priorPerAgent } =
+const { base, hash, round, changedFiles, diffPath, config, agentsDir, priorPerAgent } =
   parsedArgs;
 
 const changedFileList = Array.isArray(changedFiles) ? changedFiles : [];
@@ -178,9 +178,26 @@ async function withRetry(label, fn) {
 // below, so this script never carries five lenses' worth of prose. The
 // forced schema is what actually holds the lens to contract; the file only
 // tells it what to judge.
+// The ABSOLUTE path to a lens's contract, from the `agentsDir` /review resolved. The fallback is the
+// old relative form, kept only so an older /review still dispatches — but it is the defect this key
+// closes, so it is named as one in the prompt rather than passed off as fine.
+//
+// Why the script cannot resolve this itself: it reads nothing, by design, and a directory probe is a
+// read. Only the caller knows which of the two plugin layouts won.
 function lensAgentFilePath(entry) {
-  return `plugins/review/agents/review-${entry.name}.md`;
+  // Trimmed BEFORE the trailing-slash strip, and by the same test `contractPathIsAGuess` uses — a
+  // whitespace-only value once produced "   /review-docs.md" here while the flag correctly called it
+  // a guess, so the prompt and the path disagreed about the same input.
+  const dir = typeof agentsDir === "string" ? agentsDir.trim().replace(/\/+$/, "") : "";
+  return dir
+    ? `${dir}/review-${entry.name}.md`
+    : `plugins/review/agents/review-${entry.name}.md`;
 }
+
+// True when the caller gave us nothing to build an absolute path from. The lens is told, in that case,
+// that its path is a guess — because a lens that silently fails to find its contract judges anyway,
+// and a judgment with no contract behind it came back as PASS 10 in a measured round.
+const contractPathIsAGuess = !(typeof agentsDir === "string" && agentsDir.trim());
 
 function lensPrompt(entry) {
   const changedList =
@@ -189,7 +206,9 @@ function lensPrompt(entry) {
       .join("\n") || "(none reported)";
   return `You are the ${entry.name} review lens.
 
-Read your full instructions from \`${lensAgentFilePath(entry)}\` first — its Subject, Duty and severity questionnaire are what govern your judgment here. This call is what forces your response onto the schema; follow the file's Subject and Duty exactly, and claim or decline every changed file you looked at. A file you say nothing about is read as pass.
+Read your full instructions from \`${lensAgentFilePath(entry)}\` first — its Subject, Duty and severity questionnaire are what govern your judgment here. That path is absolute and exact${contractPathIsAGuess ? ", EXCEPT that this caller passed no `agentsDir`, so it is a guess relative to a working directory that is the project repository — expect it to be wrong" : ""}.
+
+**If you cannot read that file, stop and return a FAIL.** Put one blocker in \`findings\` whose \`problem\` is that your contract was unreadable, with the path you tried as \`evidence\`, and set \`summary.verdict\` to "FAIL". Do NOT go looking for it elsewhere, and do NOT judge the diff without it: a copy you find by searching may be a different edition of the rules, and a verdict reached with no contract at all is indistinguishable from a real pass. Both have happened — three lenses in one round hunted for their own contract and landed in three different places, one of which did not exist. This call is what forces your response onto the schema; follow the file's Subject and Duty exactly, and claim or decline every changed file you looked at. A file you say nothing about is read as pass.
 
 ## Diff
 The full diff is at: \`${diffPath}\`

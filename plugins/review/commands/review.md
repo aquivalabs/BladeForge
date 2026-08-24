@@ -53,7 +53,7 @@ Run the deterministic secret scan over the SAME change set: `npx -y -p bladeforg
 
 ## Step 3 — build the args and invoke the Workflow script
 
-Build the following object and hand it to the `Workflow` tool as `args`. This is the whole contract: exactly seven keys, flat, no nested quoted keys — the shapes belong in the table beside it, not in the block itself.
+Build the following object and hand it to the `Workflow` tool as `args`. This is the whole contract: exactly eight keys, flat, no nested quoted keys — the shapes belong in the table beside it, not in the block itself.
 
 ```json
 {
@@ -63,6 +63,7 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
   "changedFiles": "<see table below>",
   "diffPath": "<see table below>",
   "config": "<see table below>",
+  "agentsDir": "<see table below>",
   "priorPerAgent": null
 }
 ```
@@ -75,12 +76,17 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
 | `changedFiles` | `git diff --numstat <base>..HEAD`, reshaped to `[{path, added, removed}]` (step 1) |
 | `diffPath` | the file `/review` wrote in step 1 holding `git diff <base>..HEAD`; the lens prompts the script builds name this path, and each lens reads it itself |
 | `config` | the loaded config from `review-info` |
+| `agentsDir` | the ABSOLUTE directory holding `review-<lens>.md`, resolved by `/review` alongside `workflow.js` in step 3 — the `agents/` sibling of whichever `plugins/review/` won there. The script cannot resolve it: it reads nothing, by design. Passing a relative path instead is the defect this key exists to close (see below) |
 | `priorPerAgent` | the `perAgent` array this command received on the previous round — this is what makes the round a DELTA, dispatching only the lenses that failed. Pass it while iterating; pass `null` for the final, attestable full round. It survives a hash change on purpose (see the round shape above): a fix that changes the diff does not un-pass an unrelated lens |
 
 Resolve `workflow.js` before calling anything. Two layouts hold it, and a single relative hop from `${CLAUDE_PLUGIN_ROOT}` reaches neither — that path points at the versioned install cache, `…/cache/<marketplace>/review/<version>/`, whose sibling directory is another version of `review`, not another plugin. Try these in order and use the first that exists:
 
 1. `~/.claude/plugins/marketplaces/<marketplace>/plugins/review-workflow/workflow.js` — the marketplace clone. It holds the whole repository, so the two plugins really do sit side by side here, and `/plugin marketplace update` keeps it current. Take `<marketplace>` from the plugin id in the project's `.claude/settings.json` — the part after `@` in `review@<marketplace>`.
 2. `${CLAUDE_PLUGIN_ROOT}/../../review-workflow/<version>/workflow.js` — the install cache, two hops up and a version segment down. Take the highest version present.
+
+**Resolve `agentsDir` in the same step, from the same winner.** The lens contracts sit in `plugins/review/agents/`, the sibling of `review-workflow` in layout 1 and a sibling version tree in layout 2. Pass the ABSOLUTE path, and never a relative one.
+
+Why this is a key rather than something the script derives: a lens's working directory is the PROJECT repository, where no `plugins/review/agents/` exists. Handed the relative path, three lenses in one measured round went hunting for their own contract and landed in three different places — one in the marketplace clone, one in the install cache at an OLDER version, and one at a path that does not exist. That last lens judged the diff with no contract at all and returned PASS 10. Two of the three were judging against different editions of the same rules, and nothing reported either fact.
 
 **Not-installed fallback.** If neither resolves, the `review-workflow` plugin is not available. Say so plainly, name both paths you tried, and stop — do not fall back to dispatching lenses by hand. A hand dispatch cannot force the response schema the way the script does, and an unforced dispatch is exactly the failure this script exists to close off.
 
