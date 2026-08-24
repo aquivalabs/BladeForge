@@ -43,7 +43,7 @@ export const meta = {
 };
 
 const parsedArgs = typeof args === "string" ? JSON.parse(args) : args;
-const { base, hash, round, changedFiles, diffPath, config, agentsDir, priorPerAgent } =
+const { base, hash, round, changedFiles, diffPath, config, agentsDir, machineFacts, priorPerAgent } =
   parsedArgs;
 
 const changedFileList = Array.isArray(changedFiles) ? changedFiles : [];
@@ -199,6 +199,33 @@ function lensAgentFilePath(entry) {
 // and a judgment with no contract behind it came back as PASS 10 in a measured round.
 const contractPathIsAGuess = !(typeof agentsDir === "string" && agentsDir.trim());
 
+// The machine-verified facts /review computed for this lens, rendered for its prompt. A lens told a
+// fact by a command does not spend judgment calls re-deriving it — measured: one round's docs lens
+// spent 25 tool calls, most of them re-proving what `docs-check` had already decided in seconds, and
+// the tests lens went hunting for whether required checks exist on main, a fact `gh` answers directly.
+// Facts are per-lens because they are the DETERMINISTIC half of that lens's subject; a fact no lens
+// is configured for simply is not computed.
+function machineFactsBlock(entry) {
+  const facts = machineFacts && typeof machineFacts === "object" ? machineFacts[entry.name] : null;
+  if (!Array.isArray(facts) || facts.length === 0) return "";
+  const rendered = facts
+    .map((fact) => {
+      const status = Number(fact?.exitCode) === 0 ? "PASS" : `FAIL (exit ${fact?.exitCode})`;
+      const output = String(fact?.output || "").trim();
+      return `### ${fact?.name || "(unnamed check)"} — ${status}\n\`${fact?.command || ""}\`\n${output ? "```\n" + output + "\n```" : "(no output)"}`;
+    })
+    .join("\n\n");
+  return `
+
+## Machine-verified facts
+Each fact below was computed THIS ROUND by the named command, over this same change set. Treat them as
+authoritative: do not re-run these commands and do not re-derive their answers by reading — spend your
+calls on what only judgment can decide. A FAIL here is evidence you may cite directly; it is not yours
+to re-litigate, only to weigh.
+
+${rendered}`;
+}
+
 function lensPrompt(entry) {
   const changedList =
     changedFileList
@@ -225,7 +252,7 @@ ${changedList}
 - pairedDocs: ${JSON.stringify(entry.pairedDocs || {})}
 - extensionSkill: ${entry.extensionSkill || "(none)"}
 - persona: ${persona || "(none)"}
-
+${machineFactsBlock(entry)}
 Return your verdict against the forced response schema.`;
 }
 

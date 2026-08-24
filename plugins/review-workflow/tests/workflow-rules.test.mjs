@@ -683,6 +683,60 @@ console.log("\nbackstop");
   );
 }
 
+// ── Group: machine facts ───────────────────────────────────────────────
+console.log("\nmachine facts");
+
+{
+  // A lens with facts gets them rendered into its prompt; a lens without gets no block. The whole
+  // point is per-lens: a fact is the deterministic half of ONE lens's subject, not round furniture.
+  const args = baseArgs({
+    round: 1,
+    config: { agents: [lensEntry("docs"), lensEntry("craft")] },
+    machineFacts: {
+      docs: [
+        { name: "docs-check", command: "python3 scripts/docs-check.py", exitCode: 1, output: "mechanism data-router changed without its doc" }
+      ]
+    }
+  });
+  const run = await runWorkflow({
+    args,
+    agents: {
+      "lens:docs": lensResponse({ agentName: "docs" }),
+      "lens:craft": lensResponse({ agentName: "craft" })
+    }
+  });
+  const docsPrompt = run.calls.find((c) => c.label === "lens:docs")?.prompt || "";
+  const craftPrompt = run.calls.find((c) => c.label === "lens:craft")?.prompt || "";
+  check("the docs lens sees its machine facts", docsPrompt.includes("Machine-verified facts"));
+  check("the fact carries its command", docsPrompt.includes("python3 scripts/docs-check.py"));
+  check("a non-zero exit renders as FAIL with the code", docsPrompt.includes("FAIL (exit 1)"));
+  check("the fact's output is in the prompt", docsPrompt.includes("mechanism data-router changed without its doc"));
+  check("the prompt forbids re-running the command", docsPrompt.includes("do not re-run these commands"));
+  check("a lens with no facts gets no block", !craftPrompt.includes("Machine-verified facts"));
+}
+
+{
+  // Backwards compatibility: an older /review passes no machineFacts at all. No block, no crash.
+  const args = baseArgs({ round: 1, config: { agents: [lensEntry("solo")] } });
+  const run = await runWorkflow({ args, agents: { "lens:solo": lensResponse({ agentName: "solo" }) } });
+  check("no machineFacts key → no exception", run.error === null, String(run.error));
+  const prompt = run.calls.find((c) => c.label === "lens:solo")?.prompt || "";
+  check("no machineFacts key → no facts block", !prompt.includes("Machine-verified facts"));
+}
+
+{
+  // A zero exit renders as PASS — the lens cites it instead of re-proving it.
+  const args = baseArgs({
+    round: 1,
+    config: { agents: [lensEntry("docs")] },
+    machineFacts: { docs: [{ name: "docs-check", command: "python3 scripts/docs-check.py", exitCode: 0, output: "" }] }
+  });
+  const run = await runWorkflow({ args, agents: { "lens:docs": lensResponse({ agentName: "docs" }) } });
+  const prompt = run.calls.find((c) => c.label === "lens:docs")?.prompt || "";
+  check("a zero exit renders as PASS", prompt.includes("docs-check — PASS"));
+  check("empty output says so rather than fencing nothing", prompt.includes("(no output)"));
+}
+
 // ── Summary ──────────────────────────────────────────────────────────
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -7,7 +7,10 @@
   "properties": {
     "persona": {
       "type": "string",
-      "enum": ["twitch", "plain"],
+      "enum": [
+        "twitch",
+        "plain"
+      ],
       "default": "twitch",
       "description": "Voice/flavor toggle for reviewer agents that support it, notably the craft lens. 'twitch' = themed Twitch plague-rat voice; 'plain' = neutral prose. Substance (verdict/findings) is identical either way."
     },
@@ -17,63 +20,135 @@
     },
     "secretAllowlist": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Extra markers (matched against the secret VALUE) that suppress secret-scan false positives."
     },
     "agents": {
       "type": "array",
-      "items": { "$ref": "#/definitions/agent" }
+      "items": {
+        "$ref": "#/definitions/agent"
+      }
     }
   },
   "definitions": {
     "agent": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name"],
+      "required": [
+        "name"
+      ],
       "properties": {
         "name": {
           "type": "string",
           "description": "Reviewer id. The 5 built-ins are craft, architecture, tests, docs, security; others are appended."
         },
-        "enabled": { "type": "boolean" },
-        "threshold": { "type": "number", "minimum": 0, "maximum": 10 },
+        "enabled": {
+          "type": "boolean"
+        },
+        "threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
         "skills": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Skill ids the agent loads (encode the project's rules)."
         },
         "rules": {
           "type": "array",
-          "items": { "$ref": "#/definitions/rule" }
+          "items": {
+            "$ref": "#/definitions/rule"
+          }
         },
         "pairedDocs": {
           "type": "array",
-          "items": { "$ref": "#/definitions/docPair" }
+          "items": {
+            "$ref": "#/definitions/docPair"
+          }
         },
         "extensionSkill": {
           "type": "string",
           "description": "Optional prose skill for rules too complex for config fields (the escape hatch)."
+        },
+        "checks": {
+          "type": "array",
+          "description": "Deterministic commands /review runs ONCE per round (step 2.5), whose results are handed to this lens as machine-verified facts. The deterministic half of the lens's subject \u2014 a paired-doc gate, a typecheck \u2014 so the lens spends judgment calls only on what a command cannot decide. A failing check is evidence for the lens to weigh, never a gate by itself.",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "command"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Short label the lens cites, e.g. docs-check"
+              },
+              "command": {
+                "type": "string",
+                "description": "The exact shell command, run from the repo root"
+              }
+            }
+          }
         }
       }
     },
     "rule": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "pattern", "severity"],
+      "required": [
+        "id",
+        "pattern",
+        "severity"
+      ],
       "properties": {
-        "id": { "type": "string" },
-        "pattern": { "type": "string", "description": "Regex grepped across the whole changed set." },
-        "severity": { "type": "string", "enum": ["blocker", "major", "minor"] }
+        "id": {
+          "type": "string"
+        },
+        "pattern": {
+          "type": "string",
+          "description": "Regex grepped across the whole changed set."
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "blocker",
+            "major",
+            "minor"
+          ]
+        }
       }
     },
     "docPair": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["code", "doc", "severity"],
+      "required": [
+        "code",
+        "doc",
+        "severity"
+      ],
       "properties": {
-        "code": { "type": "string", "description": "Glob; when a changed path matches it, the doc must also change." },
-        "doc": { "type": "string", "description": "Path/fragment of the required doc/artifact." },
-        "severity": { "type": "string", "enum": ["blocker", "major"] }
+        "code": {
+          "type": "string",
+          "description": "Glob; when a changed path matches it, the doc must also change."
+        },
+        "doc": {
+          "type": "string",
+          "description": "Path/fragment of the required doc/artifact."
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "blocker",
+            "major"
+          ]
+        }
       }
     }
   }
