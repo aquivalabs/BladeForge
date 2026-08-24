@@ -11,9 +11,33 @@ First gather inputs with ONE call: `npx -y -p bladeforge-review-harness@latest r
 Read the branch's attestation FIRST, so an unchanged diff never pays for a full re-run. Using `hash` from review-info, read the content-addressed `.review/attestations/<hash>.json` (committed on the branch by a prior PASS):
 
 - **Already green** — attestation exists, `overall` is `PASS`, and its `diffHash` equals the current hash → this exact change set is already reviewed. Run only the secret scan (step 2); if clean, print the results table from the stored `perAgent`, state the gate is green, and STOP — do not invoke the Workflow script.
-- **Anything else** — no attestation, `overall` was `FAIL` last time, or the hash differs → this is a full run. Proceed to step 1.
+- **Anything else** — no attestation, `overall` was `FAIL` last time, or the hash differs → proceed to step 1. Whether the round is FULL or DELTA is decided by `priorPerAgent`, per the round shape below: a first look at a change set is full, a round following a FAIL you have just fixed is delta.
 
-A full run means every enabled lens the config names is dispatched. There is no delta dispatch and no carrying an unmatched lens forward at a fixed score — that mechanic is gone; the script decides who runs from `config.agents` alone.
+## The round shape: one lens at a time, then one full run
+
+**A round dispatches only the lenses that failed the previous one.** Pass `priorPerAgent` and the
+script carries every prior PASS forward, provisionally, and re-judges only what was red. Drive that
+lens green, then the next, then pay for ONE full round — and only that full round can attest.
+
+Why, measured: a five-lens round costs roughly 820k subagent tokens. Three rounds where a single lens
+failed each time spent 2.4M re-judging four lenses that had already passed. The delta round is a fifth
+of the price for the same guarantee, because the guarantee lives in the final full round rather than in
+repeating every round.
+
+**A carried verdict can never be attested.** The script refuses on its own — `attest` is false while
+any entry is `carried`, however green the table looks — and the report names which lenses were carried.
+So the cheap rounds cannot leak into the record: an attestation always rests on five lenses judging one
+diff.
+
+**Two things make a round full**, and both are about not trusting a stale verdict: omitting
+`priorPerAgent`, which is what you do deliberately for the final round; and a lens present in
+`config.agents` that `priorPerAgent` does not name, which is dispatched rather than assumed passing.
+
+**A changed diff does NOT reset the delta.** It resets the `round` COUNTER — the minor-scoring clock —
+but the prior verdicts stay usable, because fixing a docs finding does not un-pass the security lens.
+That is the point: fixing findings changes the hash every time, so a rule that discarded prior verdicts
+on a hash change would make every round a full round. The final full round is what covers the risk that
+a fix in one place broke another lens's concern.
 
 ## Step 1 — resolve the base and the change set
 
@@ -51,7 +75,7 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
 | `changedFiles` | `git diff --numstat <base>..HEAD`, reshaped to `[{path, added, removed}]` (step 1) |
 | `diffPath` | the file `/review` wrote in step 1 holding `git diff <base>..HEAD`; the lens prompts the script builds name this path, and each lens reads it itself |
 | `config` | the loaded config from `review-info` |
-| `priorPerAgent` | the `perAgent` array this same command received on the previous round against this hash; `null` on round 1 |
+| `priorPerAgent` | the `perAgent` array this command received on the previous round — this is what makes the round a DELTA, dispatching only the lenses that failed. Pass it while iterating; pass `null` for the final, attestable full round. It survives a hash change on purpose (see the round shape above): a fix that changes the diff does not un-pass an unrelated lens |
 
 Resolve `workflow.js` before calling anything. Two layouts hold it, and a single relative hop from `${CLAUDE_PLUGIN_ROOT}` reaches neither — that path points at the versioned install cache, `…/cache/<marketplace>/review/<version>/`, whose sibling directory is another version of `review`, not another plugin. Try these in order and use the first that exists:
 
@@ -81,13 +105,15 @@ The script hands back exactly `{ attest, refusedCriterion, failedLenses, perAgen
 
 **The round rule.** Rounds 1 and 2 score normally and open on any Blocker, Major, or Minor. From round 3, a Minor is still reported, still recorded in `report`, and still filed, but it deducts nothing and re-opens nothing — only a Blocker or a Major still moves a score or forces another round, and at most three Majors carry into the fix round (the rest are listed as deferred-this-round, never dropped). The scoring formula, applied once per lens inside the script: `10 − 20×blocker − 3×major − 1×countedMinor`, where `countedMinor` is every Minor in rounds 1 and 2 and zero from round 3 onward.
 
-**The full-run rule.** A full run of all five lenses precedes every attestation, and it is that run — never a mix of runs against different diffs — that gets attested. No lens's verdict is carried forward from an earlier round once the diff has changed.
+**The full-run rule.** A full run of all five lenses precedes every attestation, and it is that run — never a mix of runs against different diffs — that gets attested. A delta round may carry a prior PASS forward to save re-judging it, but the script marks it `carried` and refuses to attest while any entry is; the final round, run with `priorPerAgent` omitted, is the attestable one.
+
+**The delta rule.** After a FAIL, the next invocation passes `priorPerAgent` and re-runs ONLY the failed lens(es). Repeat until a delta round comes back clean, then run once with `priorPerAgent` omitted — that full round attests. Never attest a round whose `perAgent` holds a `carried` entry; the script already refuses, and this states the same rule where a reader looks for it.
 
 **The reconcile duty.** `/review` groups the findings in `report` by `where` and treats a location where two lenses reached opposite conclusions as disputed rather than silently picking one. A lens proposes no remedy for its own finding — deciding what to do about it is `/review`'s job.
 
 ## Results table
 
-Print this FIRST, whatever the outcome — one row per lens the script dispatched, `craft` first, then the rest in the order the config lists them, then a secret-scan row, then a bold OVERALL row:
+Print this FIRST, whatever the outcome — one row per lens in the `perAgent` array, `craft` first, then the rest in the order the config lists them, then a secret-scan row, then a bold OVERALL row. **A row whose entry has `carried: true` is marked `PASS (carried)`** — it was not re-judged this round, and a reader who cannot see that would take a delta round for a full one:
 
 | # | Lens | Score | Threshold | Verdict |
 |---|------|:-----:|:---------:|:-------:|
@@ -106,7 +132,15 @@ Then a **Recommendations** section: for each lens with any findings, list each a
 
 ## Step 6 — on FAIL
 
-State plainly that the gate is RED, then stop. Do not write an attestation and do not edit code — the lenses and the script both report only. The next `/review` invocation against the same diff is the next round: rebuild `args` with `round` incremented by one and `priorPerAgent` set to this run's `perAgent`, then invoke the Workflow script again from step 3. A change to the diff itself resets `round` to 1 and `priorPerAgent` to `null`.
+State plainly that the gate is RED, then stop. Do not write an attestation and do not edit code — the lenses and the script both report only.
+
+The next `/review` invocation is the next round, and it is a DELTA: rebuild `args` with `round`
+incremented by one and `priorPerAgent` set to **this run's `perAgent`**, then invoke the script again
+from step 3. It dispatches only what failed. Keep passing `priorPerAgent` across rounds — including
+across the hash changes that fixing findings causes — until a delta round returns every lens green.
+Then run ONE more time with `priorPerAgent` omitted; that full round is the attestable one.
+
+A changed diff resets `round` to 1 (the minor-scoring clock) and leaves `priorPerAgent` alone.
 
 ## Step 7 — on PASS, attest immediately
 
