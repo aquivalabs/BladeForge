@@ -757,13 +757,17 @@ function checkCriterion6(agents) {
   return null;
 }
 
-// Criterion 7 — the attested verdict comes from a run over the current
-// diff: every entry in perAgent was produced by an agent call in this
-// invocation. A lens with no response this run fails here, never at
-// criterion 1. `priorPerAgent` feeds round-over-round reporting only and
-// settles nothing here.
+// Criterion 7 — a lens that was ASKED and did not answer. That is an output-honesty
+// failure: perAgent would carry a verdict no agent produced.
+//
+// A CARRIED entry is not that, and must not be reported as it. It was deliberately not
+// dispatched, the delta round says so in its own log and report, and the separate
+// `carried` check on the gate is what refuses the attestation — with a message that
+// tells the reader to run one full round, rather than one that reads as a malfunction.
+// Conflating the two made every delta round refuse as "has no response from this run",
+// which is the wrong diagnosis of a working feature.
 function checkCriterion7(agents) {
-  const missing = agents.find((entry) => !entry.dispatched);
+  const missing = agents.find((entry) => !entry.dispatched && entry.carried !== true);
   return missing ? `criterion 7: ${missing.name} has no response from this run` : null;
 }
 
