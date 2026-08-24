@@ -216,13 +216,46 @@ phase("Dispatch");
 // Enabled means `enabled !== false`, not `enabled === true` — an agent with
 // no `enabled` field at all is dispatched, because that is exactly the
 // shape of a freshly appended, not-yet-wired agent.
-const dispatchSet = configAgents.filter((entry) => entry?.enabled !== false);
+const enabledSet = configAgents.filter((entry) => entry?.enabled !== false);
+
+// ── DELTA DISPATCH ────────────────────────────────────────────────────
+// When `priorPerAgent` names verdicts from an earlier round, dispatch ONLY the
+// lenses that failed it. The ones that passed are carried forward PROVISIONALLY
+// and the gate below refuses to attest while any of them is — so this buys cheap
+// iteration without ever attesting a mix of runs.
+//
+// Measured, which is why it exists: a five-lens round costs ~820k subagent
+// tokens. Three rounds where one lens failed each time spent 2.4M re-judging
+// four lenses that had already passed. Driving one lens to green at a time and
+// then paying for ONE full round is the same guarantee at a fifth of the price.
+//
+// A lens absent from `priorPerAgent` is dispatched — a config that gained a lens
+// between rounds must not have it carried as passing.
+const priorByName = new Map(
+  (Array.isArray(priorPerAgent) ? priorPerAgent : [])
+    .filter((entry) => entry && typeof entry.name === "string")
+    .map((entry) => [entry.name, entry])
+);
+const isDelta = priorByName.size > 0;
+
+const dispatchSet = isDelta
+  ? enabledSet.filter((entry) => (priorByName.get(entry.name)?.verdict ?? "FAIL") !== "PASS")
+  : enabledSet;
+const carrySet = isDelta
+  ? enabledSet.filter((entry) => (priorByName.get(entry.name)?.verdict ?? "FAIL") === "PASS")
+  : [];
 
 log(
   dispatchSet.length > 0
-    ? `Dispatching ${dispatchSet.length} lens(es): ${dispatchSet.map((entry) => entry.name).join(", ")}`
+    ? `Dispatching ${dispatchSet.length} lens(es): ${dispatchSet.map((entry) => entry.name).join(", ")}` +
+        (carrySet.length > 0
+          ? ` — carrying ${carrySet.length} provisionally: ${carrySet.map((entry) => entry.name).join(", ")}`
+          : "")
     : "No enabled lens in config — nothing to dispatch"
 );
+if (carrySet.length > 0) {
+  log("A carried verdict CANNOT be attested — one full round is still owed before the gate can open.");
+}
 
 async function dispatchLens(entry) {
   const label = `lens:${entry.name}`;
@@ -250,6 +283,22 @@ async function dispatchLens(entry) {
 const dispatchResults = await parallel(
   dispatchSet.map((entry) => () => dispatchLens(entry))
 );
+
+// A carried lens produces the same shape as a dispatched one, flagged so the gate
+// and the report can tell them apart. Its findings are NOT carried: they belong to
+// the diff that produced them, and that diff has moved.
+const carriedResults = carrySet.map((entry) => {
+  const prior = priorByName.get(entry.name);
+  return {
+    name: entry.name,
+    entry,
+    response: { findings: [], claims: [], summary: "" },
+    dispatched: false,
+    carried: true,
+    carriedScore: Number(prior?.score ?? 0),
+    retried: false
+  };
+});
 
 // ── Phase 2: Reconcile ───────────────────────────────────────────────
 // Group every finding by `where`, across every dispatched lens. Nothing is
@@ -417,6 +466,25 @@ function countBySeverity(findings) {
 }
 
 function scoreLens(entry) {
+  // Carried: not re-judged this round, so it keeps its prior score and its prior
+  // PASS. It is NOT evidence for an attestation — the gate checks `carried` itself.
+  if (entry.carried) {
+    return {
+      name: entry.name,
+      dispatched: false,
+      carried: true,
+      retried: false,
+      threshold: Number(entry.entry?.threshold ?? 0),
+      findings: [],
+      claims: [],
+      demotions: [],
+      counts: { blocker: 0, major: 0, minor: 0, advisory: 0 },
+      score: entry.carriedScore,
+      reportedScore: entry.carriedScore,
+      verdict: "PASS",
+      oneLine: "carried from the previous round — not re-judged, and not attestable"
+    };
+  }
   if (!entry.dispatched) {
     return {
       name: entry.name,
@@ -473,7 +541,13 @@ function scoreLens(entry) {
   };
 }
 
-const scoredAgents = dispatchResults.map((entry) => scoreLens(entry));
+// Carried entries join the scored set in config order, so the results table reads
+// the same whether a round was full or delta.
+const allResults = [...dispatchResults, ...carriedResults].sort(
+  (a, b) =>
+    enabledSet.findIndex((e) => e.name === a.name) - enabledSet.findIndex((e) => e.name === b.name)
+);
+const scoredAgents = allResults.map((entry) => scoreLens(entry));
 
 // ── Phase 5: Round rules ─────────────────────────────────────────────
 // Rounds 1 and 2 open on a Blocker, a Major, or a Minor. From round 3 a
@@ -747,7 +821,19 @@ const failedLenses = roundAdjustedAgents
     blockers: entry.counts?.blocker || 0
   }));
 
-const attest = failedLenses.length === 0 && refusedCriterion === null;
+// A carried lens was not judged against THIS diff, so a round holding one is not a
+// full run and cannot be attested however green it looks. This is the other half of
+// the delta dispatch: cheap rounds are allowed, cheap attestations are not.
+const carriedNames = roundAdjustedAgents.filter((entry) => entry.carried).map((entry) => entry.name);
+const attest =
+  failedLenses.length === 0 && refusedCriterion === null && carriedNames.length === 0;
+if (carriedNames.length > 0 && failedLenses.length === 0 && refusedCriterion === null) {
+  log(
+    `Gate: every dispatched lens passed, but ${carriedNames.length} verdict(s) were CARRIED ` +
+      `(${carriedNames.join(", ")}). Run once more with priorPerAgent omitted — a full round is ` +
+      `what an attestation rests on.`
+  );
+}
 if (failedLenses.length > 0) {
   const named = failedLenses
     .map((lens) => `${lens.name} ${lens.score}/${lens.threshold}${lens.blockers > 0 ? ` with ${lens.blockers} blocker(s)` : ""}`)
@@ -778,13 +864,28 @@ function belowFloorNotice() {
 const notice = belowFloorNotice();
 if (notice) log(notice);
 
-const report = notice ? `${preliminaryReport}\n${notice}` : preliminaryReport;
+// A carried round says so IN the report, not only in the log — the report is what
+// `/review` prints verbatim, and a reader who cannot see that four lenses were not
+// re-judged would read a delta round as a full one.
+const carriedNotice =
+  carriedNames.length > 0
+    ? `\n**CARRIED, NOT RE-JUDGED:** ${carriedNames.join(", ")}. This round dispatched only the ` +
+      `lens(es) that failed the previous one. The carried verdicts are provisional and the gate ` +
+      `refuses to attest while any of them is — run once more with \`priorPerAgent\` omitted, and ` +
+      `that full round is the one an attestation can rest on.`
+    : "";
+const report =
+  (notice ? `${preliminaryReport}\n${notice}` : preliminaryReport) + carriedNotice;
 
 // ── Result ───────────────────────────────────────────────────────────
 
 const perAgent = roundAdjustedAgents.map((entry) => ({
   name: entry.name,
   dispatched: entry.dispatched,
+  // Travels back to `/review`, which hands it to the next round as `priorPerAgent`.
+  // A carried entry must stay marked, or the next round would carry a carry and no
+  // full run would ever happen.
+  carried: entry.carried === true,
   retried: entry.retried,
   threshold: entry.threshold,
   score: entry.score,
