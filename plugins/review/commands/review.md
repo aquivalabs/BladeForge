@@ -51,9 +51,30 @@ Base = `base` from review-info. Then:
 
 Run the deterministic secret scan over the SAME change set: `npx -y -p bladeforge-review-harness@latest review-gate --secrets-only --base <base>`. Capture any secret findings — they BLOCK regardless of the lens scores, on every round.
 
+## Step 2.5 — machine facts, once per round
+
+A lens's config may carry a `checks` array: `[{ "name": "...", "command": "..." }]`. These are the
+DETERMINISTIC half of that lens's subject — a paired-doc gate, a typecheck, anything a command proves
+in seconds that the lens would otherwise spend judgment calls re-deriving. Measured before this
+existed: one docs lens spent 25 tool calls, most of them re-proving what the repo's own `docs-check`
+script had already decided.
+
+For each enabled lens with a non-empty `checks`, run each command once, over the SAME change set,
+capturing the exit code and the LAST 60 lines of combined output. Build
+`machineFacts = { "<lens>": [{name, command, exitCode, output}] }` and pass it in step 3. No lens
+configures checks → pass `machineFacts: null` and skip this step entirely.
+
+Two rules, both load-bearing:
+
+- **Run them ONCE, here — never inside a lens.** The whole point is that the fact is computed one
+  time and handed to the judge; a lens re-running them is the waste this step removes, and the prompt
+  the script builds tells the lens so.
+- **A failing check is a fact, not a gate.** Its FAIL goes to the lens as evidence to weigh and cite;
+  it does not block the run by itself. The lens decides severity — that is the judgment half.
+
 ## Step 3 — build the args and invoke the Workflow script
 
-Build the following object and hand it to the `Workflow` tool as `args`. This is the whole contract: exactly eight keys, flat, no nested quoted keys — the shapes belong in the table beside it, not in the block itself.
+Build the following object and hand it to the `Workflow` tool as `args`. This is the whole contract: exactly nine keys, flat, no nested quoted keys — the shapes belong in the table beside it, not in the block itself.
 
 ```json
 {
@@ -64,6 +85,7 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
   "diffPath": "<see table below>",
   "config": "<see table below>",
   "agentsDir": "<see table below>",
+  "machineFacts": "<see table below>",
   "priorPerAgent": null
 }
 ```
@@ -77,6 +99,7 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
 | `diffPath` | the file `/review` wrote in step 1 holding `git diff <base>..HEAD`; the lens prompts the script builds name this path, and each lens reads it itself |
 | `config` | the loaded config from `review-info` |
 | `agentsDir` | the ABSOLUTE directory holding `review-<lens>.md`, resolved by `/review` alongside `workflow.js` in step 3 — the `agents/` sibling of whichever `plugins/review/` won there. The script cannot resolve it: it reads nothing, by design. Passing a relative path instead is the defect this key exists to close (see below) |
+| `machineFacts` | the results of step 2.5's per-lens checks, `{"<lens>": [{name, command, exitCode, output}]}` — `null` when no lens configures any. Computed by `/review`, once per round; the script only renders them into the lens prompts |
 | `priorPerAgent` | the `perAgent` array this command received on the previous round — this is what makes the round a DELTA, dispatching only the lenses that failed. Pass it while iterating; pass `null` for the final, attestable full round. It survives a hash change on purpose (see the round shape above): a fix that changes the diff does not un-pass an unrelated lens |
 
 Resolve `workflow.js` before calling anything. Two layouts hold it, and a single relative hop from `${CLAUDE_PLUGIN_ROOT}` reaches neither — that path points at the versioned install cache, `…/cache/<marketplace>/review/<version>/`, whose sibling directory is another version of `review`, not another plugin. Try these in order and use the first that exists:

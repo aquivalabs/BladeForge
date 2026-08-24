@@ -65,6 +65,11 @@ For anything the questionnaire doesn't cover, hand-edit `.claude/review.config.j
 `tests`, `docs`, `security`), fill in what is project-specific — anything omitted falls back to sane
 defaults:
 
+- **checks** — deterministic commands `/review` runs once per round and hands to the lens as
+  machine-verified facts, e.g. `{"name": "docs-check", "command": "python3 scripts/docs-check.py"}`
+  on the docs lens. Wire the repo's own gate scripts here rather than letting the lens re-derive
+  their verdicts by reading — measured: a docs lens spent 25 tool calls re-proving what the repo's
+  paired-doc script decides in seconds. A failing check is evidence the lens weighs, never a gate.
 - **skills** — project skill ids that encode its rules; the agent loads each. Discover from the repo's
   CLAUDE.md / available skills.
 - **rules** — deterministic `{id, pattern, severity}` greps (forbidden patterns, required namespaces).
