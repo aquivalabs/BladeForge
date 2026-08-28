@@ -3,6 +3,11 @@
 The same coding questions, each answered twice: once by vanilla Claude, once under
 the CICERO output style. All answers are **real transcripts**, not mock-ups.
 
+*Recorded under CICERO 2.2.x. Version 2.3.0 inverts the shape default — prose unless a
+trigger fires — so the same questions answered today would carry less structure in the
+right-hand column. The transcripts are left as recorded rather than rewritten, because a
+rewritten "transcript" is not one.*
+
 The point of the example is honest: CICERO does **not** make the model *more correct*
 — both answers reach the same core architecture (deduplicate in the database, guard the
 state change with a version check, make the side effects safe to retry). CICERO changes
