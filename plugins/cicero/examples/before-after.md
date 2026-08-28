@@ -131,10 +131,10 @@ So: version-column claim in your primary store for correctness, downstream idemp
 
 | Rule | Vanilla | With CICERO |
 |------|---------|-------------|
-| **1 · Result first** | verdict lives in a "Recommendation" section at the very bottom | verdict is the first sentence |
-| **9 · Match the answer** | ~650 words, six headed sections, a closing offer of more | ~410 words, four tight blocks, then it stops |
-| **4 · Avoid the term** | leans on raw jargon and parenthetical asides the reader must unpack | plain words carry the point; a term appears only where it does real work, and no jargon is glossed in parentheses |
-| **15 · Recommend one option** | lays out the full analysis, then recommends | leads with the pick, detail follows |
+| **5 · Result first** | verdict lives in a "Recommendation" section at the very bottom | verdict is the first sentence |
+| **12 · Match the answer** | ~650 words, six headed sections, a closing offer of more | ~410 words, four tight blocks, then it stops |
+| **6 · Plain human words** | leans on raw jargon and parenthetical asides the reader must unpack | plain words carry the point; a term appears only where it does real work, and no jargon is glossed in parentheses |
+| **17 · Decide, then recommend one** | lays out the full analysis, then recommends | leads with the pick, detail follows |
 | **0 · Readability first** | nested sub-lists and cross-references | short paragraphs, one idea each |
 
 Same core answer, a third shorter, and you know the verdict from line one.

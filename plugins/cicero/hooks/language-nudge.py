@@ -4,7 +4,7 @@
 SessionStart injects the voice once per session; over a long session the model can drift,
 and the user may switch languages mid-session (SessionStart can't react to that). This
 fires on each prompt, detects the prompt's dominant script (latin / cyrillic / cjk), and
-injects a one-line reminder to reply in that language (CICERO 3). Cheap (~15 tokens), and
+injects a one-line reminder to reply in that language (CICERO 7). Cheap (~15 tokens), and
 silent when the script is Latin or ambiguous — English is the model default and needs no
 nudge. The static voice rules ship as an output style; this hook only keeps the reply language current.
 """
@@ -47,7 +47,7 @@ def main():
     script = dominant_script(prompt)
     if script in SCRIPT_LABEL:
         ctx = (
-            f"[CICERO 3] The user's latest message is in {SCRIPT_LABEL[script]} script — "
+            f"[CICERO 7] The user's latest message is in {SCRIPT_LABEL[script]} script — "
             "reply in that language. Keep code, paths, and identifiers in English."
         )
         print(json.dumps(
