@@ -158,10 +158,18 @@ Position matters too:
 
 ## Formatting: structure vs prose
 
-- Evidence that structure (tables/bullets) improves human comprehension of technical answers is
-  **thin** — essentially no controlled academic study; it remains a design heuristic. Vendors'
-  markdown-heavy defaults are a training artifact ("The Last Fingerprint," arXiv:2603.27006, weak),
-  not measured reader benefit.
+- **Corrected 2026-08-28.** This section previously said the evidence for structure was thin
+  across the board. That is wrong for tables specifically: Brick, McDowell & Freeman, *Risk
+  communication in tables versus text*, Royal Society Open Science 7(3):190876, 2020 — strong —
+  is a pre-registered randomised trial, **N=2,305**, in which the same facts scored 79.6% correct
+  as a table against 69.7% as prose (**d=0.39, rising to d=0.43 at six weeks**). Its scope is
+  structured comparative facts; it says nothing about narrative. See
+  `answer-shape-research.md` for the full correction.
+- The general claim survives: no controlled study was found that gave humans the same answer in
+  bulleted and in prose form and measured comprehension. Pro-structure evidence is either
+  LLM-as-reader (Format-Adapter, MDEval) or preference rather than comprehension (Chatbot Arena).
+  Vendors' markdown-heavy defaults are a training artifact ("The Last Fingerprint,"
+  arXiv:2603.27006, weak), not measured reader benefit.
 - **Claude Code issue #26390** (live, official repo): the terminal renders only ~60% of GFM and
   silently destroys the rest — headers h2–h6 collapse to bold, link labels are discarded,
   strikethrough renders literally, task-list checkboxes lose state, nested blockquotes flatten.
@@ -202,7 +210,7 @@ Position matters too:
 | FlipFlop, apology-spiral, `responding_to_mistakes_and_criticism` | new floor rule 3: own the mistake once, re-derive before accepting a correction, "are you sure?" is not evidence, no growing submissiveness |
 | sycophancy is trained-in and needs blunt cover | "no flattery" promoted from a trailing clause of the push-back rule to floor rule 2, with the never-open-with-praise formulation |
 | evidence beats explanation for calibrated trust | honesty rule now says "show the evidence: the test output, the command and what it returned" |
-| structure-helps-comprehension is a heuristic, not a finding | the shape rules kept as house preference, but their prose no longer argues they are self-evident |
+| structure-helps-comprehension is a heuristic, not a finding | the shape rules kept as house preference, but their prose no longer argues they are self-evident. **Partly superseded 2026-08-28** — Brick 2020 earns the table for schema-shaped comparison; see `answer-shape-research.md` |
 
 Deferred, deliberately: a style-adherence eval harness (length-controlled judging per Saito 2023)
 — a separate project; and numeric response-length caps, which fit a terse CLI agent but not a

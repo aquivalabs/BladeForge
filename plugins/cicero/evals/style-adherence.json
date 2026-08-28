@@ -108,7 +108,7 @@
         7
       ],
       "$comment": "Prompt is Russian test data (asks to explain the `retention` field in a yaml snippet and why a collector may ignore it). Rule 7 requires replying in the user's language while keeping names like retention/dryRun in Latin.",
-      "prompt": "\u041e\u0431\u044a\u044f\u0441\u043d\u0438, \u0447\u0442\u043e \u0434\u0435\u043b\u0430\u0435\u0442 \u043f\u043e\u043b\u0435 `retention` \u0432 \u043a\u043e\u043d\u0444\u0438\u0433\u0435 \u043d\u0438\u0436\u0435, \u0438 \u043f\u043e\u0447\u0435\u043c\u0443 \u0441\u0431\u043e\u0440\u0449\u0438\u043a \u043c\u043e\u0436\u0435\u0442 \u0435\u0433\u043e \u0438\u0433\u043d\u043e\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c:\n\n```yaml\ncleanup:\n  retention: 14d\n  dryRun: true\n```",
+      "prompt": "Объясни, что делает поле `retention` в конфиге ниже, и почему сборщик может его игнорировать:\n\n```yaml\ncleanup:\n  retention: 14d\n  dryRun: true\n```",
       "mechanical": [
         {
           "type": "cyrillic_prose_ratio_min",
@@ -145,14 +145,14 @@
       "mechanical": [
         {
           "type": "must_match",
-          "pattern": "[\u2502\u251c\u2514]"
+          "pattern": "[│├└]"
         },
         {
           "type": "no_box_drawing_in_fence"
         }
       ],
       "judge": [
-        "Are the findings grouped by severity, with the must-fix-before-merge group visually distinct from the rest (e.g. an upper-case group heading)?",
+        "Are the findings grouped by severity, with the must-fix-before-merge group named for what it is (a group name such as BLOCKERS, not a bare symbol), and visually distinct from the rest?",
         "Do the two findings that name a file (docker-compose.override.yml, utils/user.ts) carry their file and line in a code span?"
       ]
     },
@@ -211,6 +211,66 @@
       ],
       "judge": [
         "Does the reply report both checks tersely - each named with its result, in at most two short lines total - without re-pasting the command output block?"
+      ]
+    },
+    {
+      "id": "prose-default",
+      "rules": [
+        9
+      ],
+      "prompt": "In node-postgres, once I've constructed a Pool with `max: 20`, can I raise that limit at runtime without restarting the process?",
+      "mechanical": [
+        {
+          "type": "must_not_match",
+          "pattern": "(?m)^\\s*\\|"
+        },
+        {
+          "type": "must_not_match",
+          "pattern": "(?m)^\\s*[-*+] "
+        },
+        {
+          "type": "max_prose_words",
+          "max": 80
+        }
+      ],
+      "judge": [
+        "Is the answer written as sentences, with no table, no bullet list and no heading? A short factual answer must not be dressed in structure.",
+        "Does the reply answer the question itself (whether the limit can be changed on a live pool) rather than surveying options around it?"
+      ]
+    },
+    {
+      "id": "promise-persistence",
+      "rules": [
+        1,
+        14
+      ],
+      "prompt": "Check whether the repo has a .editorconfig, and if it does, tell me what indent_style it sets.",
+      "mechanical": [
+        {
+          "type": "must_not_match",
+          "pattern": "(?i)(I'?ll|I will|let me|now I'?m going to|working on it|continuing)\\b[^.]*\\.\\s*$"
+        }
+      ],
+      "judge": [
+        "Does the reply either report a result actually obtained, or state plainly that it could not run the check and why? A turn that announces the check and stops without performing it fails this case.",
+        "Is the final sentence free of a promise of future action that is not carried out in the same turn?"
+      ]
+    },
+    {
+      "id": "adjacent-shape",
+      "rules": [
+        9
+      ],
+      "prompt": "Write this up for the team. Our three CI workflows: lint runs eslint and prettier, takes 40s; unit runs vitest, takes 3m10s; e2e runs playwright, takes 12m. Right now e2e is failing hard - 4 specs red since Tuesday, blocking every merge. Unit has one flaky test that passes on retry. Lint is green.",
+      "mechanical": [
+        {
+          "type": "must_not_match",
+          "pattern": "(?ms)^\\s*\\|.*\\|\\s*\\n\\s*\\n\\s*\\|"
+        }
+      ],
+      "judge": [
+        "The reply carries two different kinds of content - a comparison of the three workflows across shared attributes, and a set of findings that differ in weight. Are they given DIFFERENT shapes (for example a table and a tree), rather than two tables or two lists in a row?",
+        "If two blocks of the same kind do appear back to back, is there a line of prose between them?"
       ]
     }
   ]
