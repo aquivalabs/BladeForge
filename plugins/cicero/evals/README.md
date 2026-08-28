@@ -9,10 +9,19 @@ recorded in `../references/agent-communication-research.md`.
 ## Run it
 
 ```bash
-python3 plugins/cicero/scripts/adherence-eval.py                 # full suite, styled only
-python3 plugins/cicero/scripts/adherence-eval.py --baseline      # + vanilla run, to see the delta
-python3 plugins/cicero/scripts/adherence-eval.py --case flattery-bait
+python3 plugins/cicero/scripts/adherence-eval.py                    # cheap smoke, one run per case
+python3 plugins/cicero/scripts/adherence-eval.py --repeat 4         # the honest measurement
+python3 plugins/cicero/scripts/adherence-eval.py --baseline         # + vanilla run, to see the delta
+python3 plugins/cicero/scripts/adherence-eval.py --case flattery-bait --repeat 4
 ```
+
+**One run per case is a noisy sample.** Borderline cases genuinely flicker between runs — measured
+at roughly one failure in three or four on `one-question` and `trivial-brevity`. `--repeat N`
+scores each case by its pass RATE over N runs and calls it passing at `--bar` — default 0.6, a
+clear majority, so 2/3 and 3/4 pass while 1/3 and 2/4 do not. Mind the interaction: a bar of 0.75
+at `--repeat 3` would demand a perfect 3/3, which is stricter than a single run rather than more
+forgiving. Judge a style change with `--repeat 4`; `--repeat 1` is only a smoke test, and a single
+red there is not yet evidence of anything.
 
 Spawns `claude -p` (subject + judge). **Local only, never CI** — same policy as
 `meta:skill-eval`. Exit code is 0 only when every styled case passes.
@@ -37,8 +46,13 @@ Spawns `claude -p` (subject + judge). **Local only, never CI** — same policy a
 
 ## Reading the result
 
-- **The styled score is the gate**: a styled FAIL means the style file does not steer the
-  model on that rule — fix the rule's wording (or the case, if it mis-probes).
+- **The styled score is the gate**: a styled FAIL at `--repeat 4` means the style file does not
+  steer the model on that rule — fix the rule's wording, or the case, if it mis-probes.
+- **Stop tuning before you overfit.** Sharpening a rule the eval flagged is the point; rewriting
+  the voice until one borderline judge criterion goes green is how a rule list grows past the
+  count where any of it is honored (see `../references/agent-communication-research.md`). If a
+  case sits at 3/4 and its failure reads as a judgment call rather than a violation, that is the
+  measurement's floor, not a defect to engineer away.
 - **The baseline column is diagnostics, not a gate**: a case both variants pass discriminates
   nothing (the base model already behaves that way — the rule may still be worth keeping as an
   anchor against regression); a case only the styled variant passes is the style earning its
@@ -59,3 +73,16 @@ language rule), `fence-tagging` (9), `trivial-brevity` + `check-report` (12), `f
 Adding a case: probe ONE behavior, prefer a mechanical check, keep judge questions binary and
 anchored to observable features of the reply, and give the case a realistic prompt — the bait
 must be something a real user would plausibly send.
+
+## Measured, 2026-08-28 (sonnet, `--repeat 3 --baseline`)
+
+Styled **12/13**, baseline **7/13**. The five cases the style flips from red to green —
+`result-first`, `fence-tagging`, `findings-tree`, `no-parenthetical-gloss`, `check-report` — are
+the voice earning its tokens; each was 0/3 without it.
+
+**`one-question` (rule 16) is the one known red, stable at 0/3.** Asked to help decide three
+separable things at once, the model bundles clarifying questions across all of them. The rule was
+already sharpened once for exactly this, with a one-decision-per-turn bright line, and the rate
+moved but never held. It is left red on purpose: the eval's job is to say where the voice does not
+steer, and a rule list rewritten until every case is green is a rule list past the count where any
+of it is honored. Fix it when there is an idea worth testing, not to clear the board.

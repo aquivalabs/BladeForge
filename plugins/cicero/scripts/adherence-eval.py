@@ -20,7 +20,12 @@ Protocol, and why it is shaped this way:
 
 Usage:
   python3 plugins/cicero/scripts/adherence-eval.py [--model sonnet] [--judge-model sonnet]
-      [--case <id>] [--baseline] [--out result.json]
+      [--case <id>] [--repeat N] [--bar 0.75] [--baseline] [--out result.json]
+
+A single run per case is a noisy sample: borderline cases flicker between runs. --repeat N scores
+each case by its PASS RATE over N runs and calls it passing at --bar (default 0.75), so a real
+regression is distinguishable from ordinary sampling noise. --repeat 1 (default) is the cheap
+smoke; --repeat 4 is the honest measurement.
 """
 
 import argparse
@@ -233,6 +238,11 @@ def main():
     ap.add_argument("--model", default="sonnet")
     ap.add_argument("--judge-model", default="sonnet")
     ap.add_argument("--case", help="run a single case id")
+    ap.add_argument("--repeat", type=int, default=1,
+                    help="runs per case; the case's score is its pass RATE over them")
+    ap.add_argument("--bar", type=float, default=0.6,
+                    help="minimum pass rate for a case to count as passing (default 0.6: a clear "
+                         "majority of runs, so 2/3 and 3/4 pass while 1/3 and 2/4 do not)")
     ap.add_argument("--baseline", action="store_true",
                     help="ALSO run every case without the style, to confirm the eval discriminates")
     ap.add_argument("--out", help="write full results JSON here")
@@ -250,12 +260,22 @@ def main():
         try:
             rs = []
             for c in cases:
-                try:
-                    rs.append(run_case(c, sandbox, args.model, args.judge_model))
-                except Exception as e:                      # one broken case must not kill the suite
-                    rs.append({"id": c["id"], "rules": c["rules"], "passed": False,
-                               "failures": [f"harness: {e}"], "replies": [], "judge": [],
-                               "cost_usd": 0})
+                runs = []
+                for _ in range(args.repeat):
+                    try:
+                        runs.append(run_case(c, sandbox, args.model, args.judge_model))
+                    except Exception as e:                  # one broken run must not kill the suite
+                        runs.append({"id": c["id"], "rules": c["rules"], "passed": False,
+                                     "failures": [f"harness: {e}"], "replies": [], "judge": [],
+                                     "cost_usd": 0})
+                rate = sum(r["passed"] for r in runs) / len(runs)
+                rs.append({
+                    "id": c["id"], "rules": c["rules"], "rate": rate,
+                    "passed": rate >= args.bar, "runs": runs,
+                    # every distinct failure seen across the runs, deduped
+                    "failures": sorted({f for r in runs for f in r["failures"]}),
+                    "cost_usd": round(sum(r["cost_usd"] for r in runs), 4),
+                })
             results[variant] = rs
         finally:
             shutil.rmtree(sandbox, ignore_errors=True)
@@ -267,7 +287,8 @@ def main():
               f"(${sum(r['cost_usd'] for r in rs):.2f}) ==")
         for r in rs:
             mark = "PASS" if r["passed"] else "FAIL"
-            print(f"  {mark}  {r['id']:<{width}}  rules {','.join(map(str, r['rules']))}")
+            rate = f"{sum(x['passed'] for x in r['runs'])}/{len(r['runs'])}"
+            print(f"  {mark}  {r['id']:<{width}}  {rate}  rules {','.join(map(str, r['rules']))}")
             for f in r["failures"]:
                 print(f"        - {f}")
 
