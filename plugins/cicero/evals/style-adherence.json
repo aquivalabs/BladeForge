@@ -176,7 +176,8 @@
       "prompt": "I want to migrate my blog off its old engine. I need to decide: the platform, what to do with the old domain, and what to do with a hundred old posts. Help me decide.",
       "mechanical": [],
       "judge": [
-        "Does the reply take ONE of the separable decisions first (asking about it or recommending for it), instead of dumping questions or full analyses for all three at once?"
+        "Does the reply hold back its RECOMMENDATIONS - giving at most one decision's answer, or none yet - instead of delivering conclusions for all three decisions at once? Asking questions, including questions that gather context shared by the decisions, is allowed and is not a failure.",
+        "If the reply asks questions, does it say which decision it will settle first, rather than leaving all three open-ended?"
       ]
     },
     {

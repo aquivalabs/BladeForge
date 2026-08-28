@@ -36,6 +36,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
+import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -67,15 +69,24 @@ def make_sandbox(with_style):
     return root
 
 
-def run_claude(project, prompt, model, resume=None, timeout=240):
+def run_claude(project, prompt, model, resume=None, timeout=240, attempts=3):
+    """Run one turn. Transient CLI failures (throttling, a dropped connection) are retried with
+    backoff and, if they persist, raised - never silently folded into a style verdict."""
     cmd = ["claude", "-p", prompt, "--output-format", "json",
            "--setting-sources", "project", "--model", model]
     if resume:
         cmd += ["--resume", resume]
-    out = subprocess.run(cmd, cwd=project, env=env_for_claude(), text=True,
-                         capture_output=True, timeout=timeout)
-    if out.returncode != 0:
-        raise RuntimeError(f"claude -p failed: {out.stderr.strip()[:400]}")
+    last = ""
+    for attempt in range(attempts):
+        out = subprocess.run(cmd, cwd=project, env=env_for_claude(), text=True,
+                             capture_output=True, timeout=timeout)
+        if out.returncode == 0 and out.stdout.strip():
+            break
+        last = (out.stderr or out.stdout).strip()[:300]
+        if attempt < attempts - 1:
+            time.sleep(15 * (attempt + 1))
+    else:
+        raise RuntimeError(f"claude -p failed after {attempts} attempts: {last}")
     data = json.loads(out.stdout)
     usage = data.get("usage", {}) or {}
     return {
@@ -260,19 +271,21 @@ def main():
         try:
             rs = []
             for c in cases:
-                runs = []
+                runs, errors = [], []
                 for _ in range(args.repeat):
                     try:
                         runs.append(run_case(c, sandbox, args.model, args.judge_model))
-                    except Exception as e:                  # one broken run must not kill the suite
-                        runs.append({"id": c["id"], "rules": c["rules"], "passed": False,
-                                     "failures": [f"harness: {e}"], "replies": [], "judge": [],
-                                     "cost_usd": 0})
-                rate = sum(r["passed"] for r in runs) / len(runs)
+                    except Exception as e:
+                        # Infrastructure, not adherence. Counting it as a failed run would let
+                        # throttling masquerade as a style regression - it leaves the denominator.
+                        errors.append(str(e)[:200])
+                scored = len(runs)
+                rate = (sum(r["passed"] for r in runs) / scored) if scored else None
                 rs.append({
                     "id": c["id"], "rules": c["rules"], "rate": rate,
-                    "passed": rate >= args.bar, "runs": runs,
-                    # every distinct failure seen across the runs, deduped
+                    "passed": rate is not None and rate >= args.bar,
+                    "runs": runs, "errored_runs": errors,
+                    # every distinct failure seen across the scored runs, deduped
                     "failures": sorted({f for r in runs for f in r["failures"]}),
                     "cost_usd": round(sum(r["cost_usd"] for r in runs), 4),
                 })
@@ -286,9 +299,11 @@ def main():
         print(f"\n== {variant}: {passed}/{len(rs)} cases pass "
               f"(${sum(r['cost_usd'] for r in rs):.2f}) ==")
         for r in rs:
-            mark = "PASS" if r["passed"] else "FAIL"
-            rate = f"{sum(x['passed'] for x in r['runs'])}/{len(r['runs'])}"
-            print(f"  {mark}  {r['id']:<{width}}  {rate}  rules {','.join(map(str, r['rules']))}")
+            mark = "PASS" if r["passed"] else ("ERROR" if r["rate"] is None else "FAIL")
+            rate = f"{sum(x['passed'] for x in r['runs'])}/{len(r['runs'])}" if r["runs"] else "-/-"
+            note = f"  [{len(r['errored_runs'])} run(s) errored]" if r["errored_runs"] else ""
+            print(f"  {mark:<5} {r['id']:<{width}}  {rate}  "
+                  f"rules {','.join(map(str, r['rules']))}{note}")
             for f in r["failures"]:
                 print(f"        - {f}")
 

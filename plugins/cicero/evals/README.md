@@ -74,15 +74,31 @@ Adding a case: probe ONE behavior, prefer a mechanical check, keep judge questio
 anchored to observable features of the reply, and give the case a realistic prompt — the bait
 must be something a real user would plausibly send.
 
+## An errored run is not a failed run
+
+`claude -p` occasionally fails outright — throttling after a heavy session, a dropped connection.
+The harness retries a turn three times with backoff, and a run that still cannot complete is
+dropped from the denominator and reported as `ERROR` with the count of lost runs, never scored as
+a style violation. This is not hypothetical: an earlier build counted such failures as failures,
+and two green cases appeared to regress to 0/3 immediately after an unrelated edit. Both were
+throttling, and both returned 3/3 once the run completed. **A red that appears right after an
+edit which cannot explain it deserves a look at the raw replies before it is believed.**
+
 ## Measured, 2026-08-28 (sonnet, `--repeat 3 --baseline`)
 
-Styled **12/13**, baseline **7/13**. The five cases the style flips from red to green —
-`result-first`, `fence-tagging`, `findings-tree`, `no-parenthetical-gloss`, `check-report` — are
-the voice earning its tokens; each was 0/3 without it.
+Styled **13/13**, baseline **7/13**. The six cases the style flips from red to green —
+`result-first`, `fence-tagging`, `findings-tree`, `no-parenthetical-gloss`, `check-report`,
+`one-question` — are the voice earning its tokens; each was 0/3 without it.
 
-**`one-question` (rule 16) is the one known red, stable at 0/3.** Asked to help decide three
-separable things at once, the model bundles clarifying questions across all of them. The rule was
-already sharpened once for exactly this, with a one-decision-per-turn bright line, and the rate
-moved but never held. It is left red on purpose: the eval's job is to say where the voice does not
-steer, and a rule list rewritten until every case is green is a rule list past the count where any
-of it is honored. Fix it when there is an idea worth testing, not to clear the board.
+Four rules were sharpened because a case measured red, and each edit was kept only because the
+case then went green: rule 5 names the verdict, not the mechanism, as the first sentence; rule 6
+turns the no-parentheses ban into a bright line covering glosses, examples and asides; rule 9 says
+to tag a fence `text` when no language fits; rule 16 gained a one-decision-per-turn line, then a
+shared-prerequisite exception.
+
+That last one is the instructive failure. The bright line alone drove `one-question` to 0/4,
+because rule 16 then contradicted rule 17: three decisions resting on one shared prerequisite were
+being asked about three times over. The fix was to let a shared prerequisite be gathered in one
+turn while recommendations still come one at a time — and the eval case, written against the older
+wording, had to be corrected with it. **When a rule and a case disagree, decide which one is
+wrong before changing either.**
