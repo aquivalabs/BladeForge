@@ -63,8 +63,8 @@ ${DIM}────────────────────────�
 ${INV} bottom line · concise · honest · in scope ${OFF}
 EOF
 
-# The notation legend, shown every session. The output style holds the RULE — the six-axis table in
-# Rule 16, written for the model. This holds one worked EXAMPLE of it, written for the human, who
+# The notation legend, shown every session. The output style holds the RULE — the axis tables in
+# Rule 15, written for the model. This holds one worked EXAMPLE of it, written for the human, who
 # never sees that file. Deliberately an example and not a copy of the table: a second copy of the
 # rows would drift, an example only has to stay true to them. Each line is styled as the axis it
 # describes, so the legend demonstrates rather than asserts.
