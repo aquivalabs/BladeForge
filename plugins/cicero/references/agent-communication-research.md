@@ -207,8 +207,8 @@ Position matters too:
 | rule-count degradation; less rule, more principle | 25 rules → 20; merged overlapping rules (plain-words+terms, depth+decoration, answer+outcomes+checks, decide+recommend+why+insight); justifying prose cut ~30% while every measured table and worked example stayed |
 | position effects (lost-in-the-middle, order matters) | invariants moved to the top ("The floor"), the self-check moved to the very end; mechanical reference tables sit in the middle where drop-risk matters least |
 | no published tiering in the old file | explicit two-tier contract: every rule is a user-overridable default except the four floor rules |
-| FlipFlop, apology-spiral, `responding_to_mistakes_and_criticism` | new floor rule 3: own the mistake once, re-derive before accepting a correction, "are you sure?" is not evidence, no growing submissiveness |
-| sycophancy is trained-in and needs blunt cover | "no flattery" promoted from a trailing clause of the push-back rule to floor rule 2, with the never-open-with-praise formulation |
+| FlipFlop, apology-spiral, `responding_to_mistakes_and_criticism` | new own-the-mistake floor rule: own the mistake once, re-derive before accepting a correction, "are you sure?" is not evidence, no growing submissiveness |
+| sycophancy is trained-in and needs blunt cover | "no flattery" promoted from a trailing clause of the push-back rule to the no-flattery floor rule, with the never-open-with-praise formulation |
 | evidence beats explanation for calibrated trust | honesty rule now says "show the evidence: the test output, the command and what it returned" |
 | structure-helps-comprehension is a heuristic, not a finding | the shape rules kept as house preference, but their prose no longer argues they are self-evident. **Partly superseded 2026-08-28** — Brick 2020 earns the table for schema-shaped comparison; see `answer-shape-research.md` |
 
