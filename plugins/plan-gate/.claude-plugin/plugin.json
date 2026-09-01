@@ -1,7 +1,7 @@
 {
   "name": "plan-gate",
   "description": "Spec+Plan+Branch gate \u2014 a PreToolUse hook that blocks Edit/Write to code unless you are off the base branch (default `main`) AND a plan exists for the work: a branch task-id (e.g. FS-1234) must match a plan filename, else any branch-new or uncommitted plan file suffices. docs/ is always writable so the spec/plan itself is never blocked. Opt-in per repo via .claude/plan-gate.config.json; bypass one edit with AS_SKIP_PLAN_GATE=1.",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "keywords": [
     "workflow",
     "pre-tool-use",

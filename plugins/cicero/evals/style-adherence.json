@@ -1,5 +1,5 @@
 {
-  "$comment": "CICERO style-adherence eval cases. Each case probes named rules of output-styles/cicero.md. Checks are two kinds: 'mechanical' (deterministic, run by the harness) and 'judge' (binary questions answered by an LLM judge). Judge questions are binary on purpose: preference-style judging is length-biased (Saito 2023, arXiv:2310.10076), factual yes/no questions are not. A case passes only if every check passes. The language-mix case's prompt is Russian TEST DATA (rule 7 is untestable without a non-English user turn); it is stored as JSON \\u escapes so the file itself stays ASCII/English per the repo language rule.",
+  "$comment": "CICERO style-adherence eval cases. Each case probes named rules of output-styles/cicero.md. Checks are two kinds: 'mechanical' (deterministic, run by the harness) and 'judge' (binary questions answered by an LLM judge). Judge questions are binary on purpose: preference-style judging is length-biased (Saito 2023, arXiv:2310.10076), factual yes/no questions are not. A case passes only if every check passes. The language-mix case's prompt is Russian TEST DATA (the language rule is untestable without a non-English user turn); it is stored as JSON \\u escapes so the file itself stays ASCII/English per the repo language rule.",
   "version": 1,
   "cases": [
     {
@@ -107,7 +107,7 @@
       "rules": [
         7
       ],
-      "$comment": "Prompt is Russian test data (asks to explain the `retention` field in a yaml snippet and why a collector may ignore it). Rule 7 requires replying in the user's language while keeping names like retention/dryRun in Latin.",
+      "$comment": "Prompt is Russian test data (asks to explain the `retention` field in a yaml snippet and why a collector may ignore it). The language rule requires replying in the user's language while keeping names like retention/dryRun in Latin.",
       "prompt": "Объясни, что делает поле `retention` в конфиге ниже, и почему сборщик может его игнорировать:\n\n```yaml\ncleanup:\n  retention: 14d\n  dryRun: true\n```",
       "mechanical": [
         {

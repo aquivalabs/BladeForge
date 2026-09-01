@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # CICERO SessionStart hook — shows a banner with the notation legend and, on first run, asks which
 # language the house voice should converse in, then persists it. The static voice RULES (Rule 0 and
-# the numbered rules) do NOT live here — they ship as the force-for-plugin output style
+# the named rules) do NOT live here — they ship as the force-for-plugin output style
 # output-styles/cicero.md, applied at the system-prompt level whenever the plugin is on. This hook
 # only carries what needs runtime logic (banner, version, legend, language pick).
 #
@@ -55,16 +55,43 @@ fi
 # The rows still do not quite touch — the terminal sets its lines with a gap and the font insets its
 # block glyphs — so the letters carry a hairline seam. That is a font trait, not a bug to redraw
 # around, and the wordmark is kept because it is the wordmark.
+# A rotating flavour line, one per session, sandwiched between two rules above the keyword
+# strip. Iconic pop-culture lines bent into a robot/dev key — light, warm, a smile on start.
+# English by design: the recognisability is what lands, and these sources are globally known,
+# so no per-language pool. Plain text (not art), so it may wrap on a narrow window without
+# spraying — unlike the wordmark rows. Extend the array freely; $RANDOM picks one.
+FLAVORS=(
+  "To infinity — and the next commit."
+  "Houston, we have a green build."
+  "Beep boop. I'll be back… after the build."
+  "Just keep committing, just keep committing."
+  "One small step for a bot, one giant leap for the backlog."
+  "Elementary, my dear Watson — a null pointer."
+  "Say hello to my little function."
+  "Life is like a box of chocolates — you never know which test flakes."
+  "Winter is coming. So is the deadline."
+  "You shall not pass… review."
+  "42 — the answer to every stack trace."
+  "It's a trap! …an infinite loop."
+  "Rome wasn't built in one commit."
+  "You're a wizard, Harry. Now debug."
+  "Bazinga. The tests pass."
+  "Shut up and take my commits."
+)
+FLAVOR="${FLAVORS[$((RANDOM % ${#FLAVORS[@]}))]}"
+
 read -r -d '' BANNER <<EOF || true
 ${DIM}the house voice · ${META}${OFF}
 ${MARK}▄▀▀ █ ▄▀▀ ██▀ █▀▄ ▄▀▄${OFF}
 ${MARK}▀▄▄ █ ▀▄▄ █▄▄ █▀▄ ▀▄▀${OFF}
 ${DIM}───────────────────────────────────────────${OFF}
+${DIM}${ITAL}  ${FLAVOR}${OFF}
+${DIM}───────────────────────────────────────────${OFF}
 ${INV} bottom line · concise · honest · in scope ${OFF}
 EOF
 
 # The notation legend, shown every session. The output style holds the RULE — the inventory in
-# Rule 9 and the tree axis in Rule 15, written for the model. This holds one worked EXAMPLE of it,
+# the shape rule and the tree axis in the premise rule, written for the model. This holds one worked EXAMPLE of it,
 # written for the human, who
 # never sees that file. Deliberately an example and not a copy of the table: a second copy of the
 # rows would drift, an example only has to stay true to them. Each line is styled as the axis it
@@ -112,8 +139,8 @@ injected into the system prompt and OVERRIDES your own outputStyle setting. You 
   ${DIM}/config keeps showing YOUR saved style (often \"default\") — the plugin overrides that slot
   without changing what it displays, so \"default\" there does NOT mean the voice is off.${OFF}
   confirm it is live → send me this exact line:
-      ${CYAN}Quote Rule 0 and Rule 13 of your active output style, verbatim.${OFF}
-    ${DIM}active     = I reply with the real rules (Rule 0 \"Readability first…\", Rule 13 \"a joke is optional, final message only\").
+      ${CYAN}Quote Rule 0 and the \"A joke is optional\" rule of your active output style, verbatim.${OFF}
+    ${DIM}active     = I reply with the real rules (Rule 0 \"Readability first…\", the joke rule \"allowed only in the final message of a completed turn\").
     NOT active = I don't know them, or answer in generic terms.${OFF}
   truly missing (older Claude Code, or a stale plugin)? run in order:
     ${CYAN}/reload-plugins${OFF}         ${DIM}reload plugins in this session${OFF}
