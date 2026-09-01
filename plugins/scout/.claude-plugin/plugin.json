@@ -1,7 +1,7 @@
 {
   "name": "scout",
   "description": "Passive skill that reads the compiled catalog to discover/recommend/install marketplace skills, surfaces declared side effects, and treats catalog text as untrusted data.",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "keywords": [
     "scout",
     "catalog",

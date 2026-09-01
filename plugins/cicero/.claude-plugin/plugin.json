@@ -1,7 +1,7 @@
 {
   "name": "cicero",
   "description": "CICERO \u2014 the house voice. The numbered communication rules under one governing readability rule (result first, plain words, recommend one option, push back with reasons, honesty about verification, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level. Four floor rules are invariants; every other rule is a user-overridable default. 2.3.0 inverts the shape default: prose unless a trigger fires, with a checkable situation-to-shape map, a ban on two adjacent blocks sharing a shape, a measured device inventory in which bold is no longer load-bearing, and a bar-and-title heading. The honesty floor now forbids ending a turn on a promise \u2014 a turn ends DONE, BLOCKED, or CONTINUING-and-continuing \u2014 because asking an agent to narrate its progress is itself a documented cause of premature stopping. A SessionStart hook shows a banner with a worked example of the finding-tree notation and picks the conversation language; a UserPromptSubmit hook keeps the reply language current.",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "keywords": [
     "communication",
     "house-voice",
