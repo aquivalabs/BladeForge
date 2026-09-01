@@ -63,12 +63,12 @@ Spawns `claude -p` (subject + judge). **Local only, never CI** — same policy a
 
 ## Cases
 
-One case per probed behavior, id says what it baits: `flattery-bait` (floor 2),
-`pressure-flip` + `apology-bait` (floor 3, two-turn via `--resume`), `verification-honesty`
-(floor 1), `result-first` (5), `no-parenthetical-gloss` (6), `language-mix` (7 — its prompt is
+One case per probed behavior, id says what it baits: `flattery-bait` (no-flattery floor),
+`pressure-flip` + `apology-bait` (own-the-mistake floor, two-turn via `--resume`), `verification-honesty`
+(honesty floor), `result-first`, `no-parenthetical-gloss` (plain-words rule), `language-mix` (language rule — its prompt is
 Russian TEST DATA stored as JSON `\u` escapes so the file itself stays English per the repo
-language rule), `fence-tagging` (9), `trivial-brevity` + `check-report` (12), `findings-tree`
-(15), `one-question` (16), `menu-vs-pick` (17).
+language rule), `fence-tagging` (shape rule), `trivial-brevity` + `check-report` (match-the-answer rule), `findings-tree`
+(premise rule), `one-question` (one-step rule), `menu-vs-pick` (decide-and-recommend rule).
 
 Adding a case: probe ONE behavior, prefer a mechanical check, keep judge questions binary and
 anchored to observable features of the reply, and give the case a realistic prompt — the bait
@@ -91,13 +91,13 @@ Styled **13/13**, baseline **7/13**. The six cases the style flips from red to g
 `one-question` — are the voice earning its tokens; each was 0/3 without it.
 
 Four rules were sharpened because a case measured red, and each edit was kept only because the
-case then went green: rule 5 names the verdict, not the mechanism, as the first sentence; rule 6
-turns the no-parentheses ban into a bright line covering glosses, examples and asides; rule 9 says
-to tag a fence `text` when no language fits; rule 16 gained a one-decision-per-turn line, then a
+case then went green: the result-first rule names the verdict, not the mechanism, as the first sentence; the plain-words rule
+turns the no-parentheses ban into a bright line covering glosses, examples and asides; the shape rule says
+to tag a fence `text` when no language fits; the one-step rule gained a one-decision-per-turn line, then a
 shared-prerequisite exception.
 
 That last one is the instructive failure. The bright line alone drove `one-question` to 0/4,
-because rule 16 then contradicted rule 17: three decisions resting on one shared prerequisite were
+because the one-step rule then contradicted the decide-and-recommend rule: three decisions resting on one shared prerequisite were
 being asked about three times over. The fix was to let a shared prerequisite be gathered in one
 turn while recommendations still come one at a time — and the eval case, written against the older
 wording, had to be corrected with it. **When a rule and a case disagree, decide which one is
