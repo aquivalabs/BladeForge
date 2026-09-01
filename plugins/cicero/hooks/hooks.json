@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/language-nudge.py\"",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/language-nudge.js\"",
             "timeout": 10
           }
         ]
