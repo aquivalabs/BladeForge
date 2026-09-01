@@ -55,10 +55,37 @@ fi
 # The rows still do not quite touch — the terminal sets its lines with a gap and the font insets its
 # block glyphs — so the letters carry a hairline seam. That is a font trait, not a bug to redraw
 # around, and the wordmark is kept because it is the wordmark.
+# A rotating flavour line, one per session, sandwiched between two rules above the keyword
+# strip. Iconic pop-culture lines bent into a robot/dev key — light, warm, a smile on start.
+# English by design: the recognisability is what lands, and these sources are globally known,
+# so no per-language pool. Plain text (not art), so it may wrap on a narrow window without
+# spraying — unlike the wordmark rows. Extend the array freely; $RANDOM picks one.
+FLAVORS=(
+  "To infinity — and the next commit."
+  "Houston, we have a green build."
+  "Beep boop. I'll be back… after the build."
+  "Just keep committing, just keep committing."
+  "One small step for a bot, one giant leap for the backlog."
+  "Elementary, my dear Watson — a null pointer."
+  "Say hello to my little function."
+  "Life is like a box of chocolates — you never know which test flakes."
+  "Winter is coming. So is the deadline."
+  "You shall not pass… review."
+  "42 — the answer to every stack trace."
+  "It's a trap! …an infinite loop."
+  "Rome wasn't built in one commit."
+  "You're a wizard, Harry. Now debug."
+  "Bazinga. The tests pass."
+  "Shut up and take my commits."
+)
+FLAVOR="${FLAVORS[$((RANDOM % ${#FLAVORS[@]}))]}"
+
 read -r -d '' BANNER <<EOF || true
 ${DIM}the house voice · ${META}${OFF}
 ${MARK}▄▀▀ █ ▄▀▀ ██▀ █▀▄ ▄▀▄${OFF}
 ${MARK}▀▄▄ █ ▀▄▄ █▄▄ █▀▄ ▀▄▀${OFF}
+${DIM}───────────────────────────────────────────${OFF}
+${DIM}${ITAL}  ${FLAVOR}${OFF}
 ${DIM}───────────────────────────────────────────${OFF}
 ${INV} bottom line · concise · honest · in scope ${OFF}
 EOF
