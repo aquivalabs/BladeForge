@@ -1,0 +1,16 @@
+{
+  "name": "critique",
+  "description": "Adversarial critique — the house method for red-teaming a design, spec, or plan with diverse independent lenses so a critique detects real defects instead of laundering a green stamp.",
+  "version": "1.0.0",
+  "keywords": [
+    "critique",
+    "adversarial",
+    "red-team",
+    "review",
+    "design-review"
+  ],
+  "author": {
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
+  }
+}

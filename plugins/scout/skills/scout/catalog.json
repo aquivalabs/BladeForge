@@ -1,12 +1,12 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-09-01",
+  "generated": "2026-09-03",
   "skills": [
     {
       "name": "cerberus:leak-check",
       "plugin": "cerberus",
-      "plugin-version": "2.0.1",
+      "plugin-version": "2.0.2",
       "activates-when": "Use before committing a NEW or EDITED skill, its references, or its eval fixtures to this PUBLIC marketplace \u2014 review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate \"this is one specific company's product\" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/eval edit.",
       "purpose": "Agent judgment pass that reviews a skill/reference/eval change for anything pointing to a real work codebase \u2014 secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate \"one company's product\" flavor \u2014 and rewrites it to a neutral fictional demo.",
       "best-for": "Any contributor to this public skills marketplace, right before committing a new or edited skill, reference, or eval fixture \u2014 also triggered automatically by the cerberus PostToolUse hook on skill edits.",
@@ -18,6 +18,22 @@
       "hooks": [
         "PostToolUse"
       ]
+    },
+    {
+      "name": "critique:critique",
+      "plugin": "critique",
+      "plugin-version": "1.0.0",
+      "activates-when": "Use when someone wants an existing design, spec, or plan ATTACKED for soundness before it is built from \u2014 \\\"tear this apart\\\", \\\"assume it is wrong and show me where\\\", \\\"find what breaks\\\", \\\"critique this hard\\\", \\\"red-team it\\\", \\\"poke holes in it\\\" \u2014 whether they want one hard pass or several independent critics each from a different angle. It sets HOW the attack runs so it catches real defects instead of agreeing with the author. It attacks an idea on paper that already exists \u2014 NOT writing or drawing one, NOT polishing a document\\'s wording (`meta:wittgenstein`), NOT already-written code. A pipeline with a critique phase \u2014 speccy, a Sprut critic role \u2014 invokes this method.",
+      "purpose": "The house method for running an adversarial critique of a design, spec, or plan \u2014 diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize \u2014 so the critique detects real defects instead of laundering a green stamp.",
+      "best-for": "Any team or pipeline that runs critique or red-team passes over designs, specs, and plans and wants the critique to actually catch defects rather than agree with the author.",
+      "needs": [
+        "meta:model-routing"
+      ],
+      "changes": {
+        "tags": [],
+        "notes": "Advisory only: gives the rules, biases, and anti-patterns for structuring an adversarial critique. It does not itself spawn critic agents, call APIs, or write files \u2014 the fan-out happens in whatever Workflow or agent-spawning code invokes the method (which is why it needs meta:model-routing)."
+      },
+      "hooks": []
     },
     {
       "name": "diagram:diagram",
@@ -555,7 +571,7 @@
     {
       "name": "scout:scout",
       "plugin": "scout",
-      "plugin-version": "2.0.1",
+      "plugin-version": "2.0.2",
       "activates-when": "Use this skill when the user asks what skills exist in this marketplace, what could help with a task, to recommend or install a skill, or to browse the catalog \u2014 e.g. \\\"what skills are available for writing tests?\\\", \\\"recommend a skill for reviewing my SCSS\\\", \\\"install the skill that formats commit messages\\\", \\\"show me everything in this marketplace\\\". This skill is PASSIVE \u2014 it never runs code; it is instructions telling the agent to read the bundled catalog.json and act on it. NOT for authoring a brand-new skill (`meta:new-skill`), NOT for refreshing an existing skill's metadata.yaml (`meta:update-skill`), and NOT for ordinary unrelated coding tasks.",
       "purpose": "Guide the agent to discover, recommend, and install marketplace skills from the compiled catalog.",
       "best-for": "Any session where the user wants to browse what skills exist, get a fit recommendation for a task, or install a skill from this marketplace.",
