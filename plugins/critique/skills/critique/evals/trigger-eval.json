@@ -1,0 +1,14 @@
+[
+  {"query": "i've drafted a spec for the new billing pipeline — tear it apart before we build it", "should_trigger": true},
+  {"query": "run an adversarial critique of this architecture design and find what breaks", "should_trigger": true},
+  {"query": "set up a few critics to review this plan from different angles before I commit to it", "should_trigger": true},
+  {"query": "i want independent reviewers to poke holes in my RFC, not just one opinion", "should_trigger": true},
+  {"query": "how should I structure a red-team pass over this design doc so it actually catches problems", "should_trigger": true},
+  {"query": "critique this migration plan hard — assume it's wrong and show me where", "should_trigger": true},
+  {"query": "the spec passed our critique round but I don't trust the green — how do I make the critique real", "should_trigger": true},
+  {"query": "clean up the wording in this design doc so a manager can follow it", "should_trigger": false},
+  {"query": "review my pull request diff for bugs before I push", "should_trigger": false},
+  {"query": "run the pre-push review gate on this branch", "should_trigger": false},
+  {"query": "write a new skill for parsing widget import errors", "should_trigger": false},
+  {"query": "is creating this new helper file justified or is it over-engineering", "should_trigger": false}
+]

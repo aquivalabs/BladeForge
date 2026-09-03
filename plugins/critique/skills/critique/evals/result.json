@@ -1,0 +1,111 @@
+{
+  "skill": "critique",
+  "measured_at": "2026-09-03T10:28:41",
+  "model": "sonnet",
+  "runs_per_query": 5,
+  "best_score": "10/12",
+  "accuracy": 0.833,
+  "baseline_accuracy": null,
+  "description_hash": "a18527b19b8d3077484d3cd7341e4199b35467dc4d031dec667c0b4b1e3052e7",
+  "queryset_hash": "9e258e7324c02aa330cc54d2eca7eddf494c90285b0c7c2f34ef86b6371b25cb",
+  "eval_type": "description-triggering",
+  "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+  "results": [
+    {
+      "query": "i've drafted a spec for the new billing pipeline \u2014 tear it apart before we build it",
+      "should_trigger": true,
+      "triggers": 5,
+      "runs": 5,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "run an adversarial critique of this architecture design and find what breaks",
+      "should_trigger": true,
+      "triggers": 0,
+      "runs": 5,
+      "trigger_rate": 0.0,
+      "pass": false
+    },
+    {
+      "query": "set up a few critics to review this plan from different angles before I commit to it",
+      "should_trigger": true,
+      "triggers": 4,
+      "runs": 5,
+      "trigger_rate": 0.8,
+      "pass": true
+    },
+    {
+      "query": "i want independent reviewers to poke holes in my RFC, not just one opinion",
+      "should_trigger": true,
+      "triggers": 5,
+      "runs": 5,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "how should I structure a red-team pass over this design doc so it actually catches problems",
+      "should_trigger": true,
+      "triggers": 5,
+      "runs": 5,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "critique this migration plan hard \u2014 assume it's wrong and show me where",
+      "should_trigger": true,
+      "triggers": 1,
+      "runs": 5,
+      "trigger_rate": 0.2,
+      "pass": false
+    },
+    {
+      "query": "the spec passed our critique round but I don't trust the green \u2014 how do I make the critique real",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 5,
+      "trigger_rate": 0.6,
+      "pass": true
+    },
+    {
+      "query": "clean up the wording in this design doc so a manager can follow it",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 5,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "review my pull request diff for bugs before I push",
+      "should_trigger": false,
+      "triggers": 2,
+      "runs": 5,
+      "trigger_rate": 0.4,
+      "pass": true
+    },
+    {
+      "query": "run the pre-push review gate on this branch",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 5,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "write a new skill for parsing widget import errors",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 5,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "is creating this new helper file justified or is it over-engineering",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 5,
+      "trigger_rate": 0.0,
+      "pass": true
+    }
+  ]
+}

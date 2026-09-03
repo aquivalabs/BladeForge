@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: The house method for running an adversarial critique of a design, spec, or plan — diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize — so the critique detects real defects instead of laundering a green stamp.
+best-for: Any team or pipeline that runs critique or red-team passes over designs, specs, and plans and wants the critique to actually catch defects rather than agree with the author.
+needs: [meta:model-routing]
+changes:
+  tags: []
+  notes: "Advisory only: gives the rules, biases, and anti-patterns for structuring an adversarial critique. It does not itself spawn critic agents, call APIs, or write files — the fan-out happens in whatever Workflow or agent-spawning code invokes the method (which is why it needs meta:model-routing)."
