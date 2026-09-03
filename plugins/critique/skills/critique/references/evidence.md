@@ -50,3 +50,15 @@ the diversity. This is rule 6.
 - The Deliberative Illusion (debate degradation) — https://arxiv.org/pdf/2606.03032
 - LLM-as-Judge bias mitigation (2026) — https://futureagi.com/blog/evaluating-llm-judge-bias-mitigation-2026/
 - Self-Preference Bias in LLM-as-a-Judge — https://arxiv.org/pdf/2410.21819
+
+## Stopping — why convergence must be imposed
+
+A design critique has no external oracle: no tests to run, no execution to fail. A critic asked to
+"find problems" therefore never runs dry — an LLM produces plausible findings even on correct text —
+and an iterating loop can settle on a **false fixed point**, a confidently-wrong stable state. So the
+exit condition is imposed, not awaited: a fixed round cap (some 2025 methods make it literal —
+"identify exactly N flaws, then revise" — to keep the exit checkable), stopping on severity (a round
+with no new structural finding) rather than on the critic falling silent, and a human as the
+oracle-substitute. The real oracle of a design is building it: after two or three rounds the return
+drops, and a round that still surfaces structural holes is a signal to prototype, not to run another
+round.
