@@ -1,0 +1,10 @@
+[
+  "at least three critics ran, each carrying a distinct named lens; two critics of the same angle count as one",
+  "every critic was a separate agent from the artifact's author, and no critic debated another before synthesis",
+  "critics ran in parallel and exactly one synthesizer merged their output",
+  "each critic was scoped to one layer or section with an explicit rubric, not told to 'find any problems'",
+  "every finding cites an exact location and states its failure mode; ungrounded findings were stripped",
+  "findings on the same location are merged into one entry weighted up by convergence",
+  "when all critics share the artifact's model family, the self-preference caveat is stated in the output",
+  "the output ends at findings for a human to dispose; nothing was auto-fixed"
+]
