@@ -168,33 +168,45 @@ finding earns the full four-part unpack; a trivial S3 nitpick does not need a co
 
 ## The answer — a JSON of findings
 
-Each critic returns its findings as JSON, and the synthesizer merges them into ONE JSON object. A
-structured answer is what lets the checks read a run instead of a human eyeballing prose. Prose (in
-the session's voice) is rendered FROM this JSON for the reader; the JSON is the source of truth.
+Each critic returns its findings as JSON; the synthesizer merges them into ONE object. A structured
+answer is what lets a check read a run instead of a human eyeballing prose. The JSON is the source of
+truth; the prose a developer reads is rendered from it, in the session's voice.
 
-A single finding:
+**One critic returns `{ lens, findings: [...] }`.** A single finding:
 
 ```json
 {
-  "lens": "coherence",
-  "location": "docs/design.md §4 / the retry loop",
+  "location": "§3, orchestrator ↔ worker",
   "severity": "S1",
-  "what": "one short, technically exact sentence — what is wrong",
-  "why": "the ordinary engineering reason it bites",
-  "example": "a concrete, deliberately hyperbolic scene that keeps the SAME cause-and-effect",
-  "fix": "the corrected shape",
-  "convergence": 1
+  "what": "the orchestrator spells out each worker's internal steps",
+  "why": "change a worker and you have to change the orchestrator too",
+  "rationale": "flagged §3 because it lists the worker's own steps — that is the worker's job, not the orchestrator's",
+  "evidence": "hide the part that can change inside the module, don't expose it (Information Hiding, Parnas 1972)",
+  "example": "a director screaming 'TURN NOODLE #17 TWELVE DEGREES' at the cook; a new cook means a new rulebook",
+  "fix": "the orchestrator says what result it wants; the worker decides how",
+  "fix_rationale": "removes the cause; a flag in the orchestrator just keeps the tie and breeds more flags",
+  "confidence": "high",
+  "falsifier": "wrong if the workers never change independently"
 }
 ```
 
-- `location`, `what`, `why`, `fix`, `severity`, `lens` are REQUIRED on every finding — an entry
-  missing any of them is the ungrounded noise rule 7 strips.
-- `severity` is `S1` | `S2` | `S3`. `example` is REQUIRED for `S1`/`S2` (the four-part unpack) and MAY
-  be omitted for a trivial `S3`.
-- `convergence` is how many independent lenses landed on this location — set by the synthesizer during
-  dedup (rule 8), `1` when only one lens hit it.
+The evidence base is the point — but write every field as **one short sentence in plain words**, so a
+developer reading hundreds of these grasps each in a single pass. No stacked clauses, no jargon walls.
 
-The synthesizer's whole output:
+- **Required on every finding:** `location`, `severity`, `what`, `why`, `rationale`, `evidence`,
+  `fix`, `fix_rationale`.
+- `severity` is `S1` | `S2` | `S3`. `example` (the deliberately absurd scene that teaches the cause) is
+  required for `S1`/`S2`, and may be dropped for a trivial `S3`.
+- **`evidence` — what you lean on, not a vibe.** A plain sentence stating the rule the finding rests
+  on. If a named law, pattern, or documented case backs it, name it in parentheses so it can be looked
+  up — `(SRP)`, `(Information Hiding, Parnas 1972)`, `(the 2021 retry-storm post-mortem)`. If nothing
+  external backs it, DON'T invent a source: just state the reasoning plainly. A fabricated citation is
+  worse than an honest "this is judgement".
+- `confidence` (`high`/`medium`/`low`) and `falsifier` (what evidence would overturn the finding) are
+  optional — add them when the call is not obvious. They keep the critic honest, not dogmatic.
+- **No `convergence` here** — a lone critic cannot know how many others agree; the synthesizer adds it.
+
+**The synthesizer merges all the critics into the whole output:**
 
 ```json
 {
@@ -206,11 +218,20 @@ The synthesizer's whole output:
 }
 ```
 
-- `findings` holds the merged, deduped, weighted findings, each in the single-finding shape above.
-- `stopped_because` is `"no new S1"` | `"cap reached"` | `"entangled — parked to <layer>"` — the
-  stopping rule, made explicit so the reader sees WHY it ended (never "the critic went quiet").
+- `findings` holds the merged, deduped findings, each in the shape above PLUS a `convergence` field —
+  how many independent lenses landed on that location (rule 8). `convergence` is the real approval: one
+  lens is an argument, three lenses agreeing is corroboration.
+- `stopped_because` is `"no new S1"` | `"cap reached"` | `"entangled — parked to <layer>"` — never
+  "the critic went quiet".
 - `self_preference_caveat` is a string when every critic shares the artifact's model family, else
-  `null` (rule 7 / the bias note).
+  `null`.
+
+**How a developer reads it — one line per finding, worst-first.** The default view is a flat list,
+sorted by `severity` then `convergence`; each finding is ONE line — `severity · location · what → fix ·
+×convergence`. The full card (why, rationale, evidence, example, fix_rationale) opens on demand or for
+the top S1s only. A hundred findings is a hundred scannable lines, not a hundred essays. If a single
+round throws many S1, the headline says so — "the design is unsound, prototype before continuing" —
+instead of enumerating every one.
 
 ## Before you finish
 
@@ -228,8 +249,11 @@ The synthesizer's whole output:
 7. Every finding is written in the session's governing language and register, not a tone this skill
    imposed; each S1/S2 finding carries the four-part unpack whose example explains the technical
    cause rather than decorating it.
-8. The answer is valid JSON in the shape above: every finding has `location`, `what`, `why`, `fix`,
-   `severity`, `lens`; every S1/S2 has an `example`; the top level names `lenses`, `rounds` and
-   `stopped_because`. A finding missing a field is the ungrounded noise step 3 already stripped.
-9. The output ends at findings for a human to dispose; nothing was auto-fixed.
-10. Any line failing? Fix it and start again from 1.
+8. The answer is valid JSON in the shape above: every finding carries `location`, `severity`, `what`,
+   `why`, `rationale`, `evidence`, `fix`, `fix_rationale`; every S1/S2 has an `example`; the
+   synthesizer added `convergence`; the top level names `lenses`, `rounds` and `stopped_because`.
+9. Every field is one short sentence in plain words — a developer grasps the finding in one pass.
+   `evidence` names its law/pattern/case in parentheses when one backs it, and states plain reasoning
+   when none does — never a fabricated source.
+10. The output ends at findings for a human to dispose; nothing was auto-fixed.
+11. Any line failing? Fix it and start again from 1.
