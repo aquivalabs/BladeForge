@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "critique/run",
+  "title": "The synthesizer's whole output — the critics merged",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["lenses", "rounds", "stopped_because", "findings"],
+  "properties": {
+    "lenses":  { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 3, "description": ">= 3 distinct lenses ran" },
+    "rounds":  { "type": "integer", "minimum": 1, "maximum": 3, "description": "the per-layer cap" },
+    "stopped_because": { "type": "string", "pattern": "^(no new S1|cap reached|entangled — parked to .+)$" },
+    "self_preference_caveat": { "type": ["string", "null"] },
+    "findings": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          { "$ref": "critique/finding" },
+          {
+            "type": "object",
+            "required": ["convergence"],
+            "properties": { "convergence": { "type": "integer", "minimum": 1, "description": "how many independent lenses hit this location; set by the synthesizer" } }
+          }
+        ]
+      }
+    }
+  }
+}
