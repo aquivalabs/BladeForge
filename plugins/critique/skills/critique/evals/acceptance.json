@@ -11,5 +11,6 @@
   "the target was frozen within each round — fixes were batched between rounds, not applied mid-round",
   "every finding is written in the session's governing language and register, inherited from the behavioural model above, not a tone the skill imposed",
   "each substantial (S1/S2) finding is unpacked in four parts — what is wrong, why it is a problem, a deliberately absurd example preserving the same cause-and-effect, and the corrected shape — with the example explaining the technical cause rather than decorating it",
-  "the answer is valid JSON: each finding carries location, what, why, fix, severity and lens (and an example for S1/S2), and the top level names the lenses run, the round count, and stopped_because"
+  "each finding is valid JSON carrying location, severity, what, why, rationale, evidence, fix and fix_rationale (plus an example for S1/S2), and the synthesizer output adds convergence per finding and names lenses, rounds and stopped_because",
+  "every field is one short plain sentence a developer reads in one pass; evidence states the rule it rests on and names a law/pattern/case in parentheses when one backs it, never a fabricated source"
 ]
