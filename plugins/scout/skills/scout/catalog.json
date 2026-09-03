@@ -22,7 +22,7 @@
     {
       "name": "critique:critique",
       "plugin": "critique",
-      "plugin-version": "1.0.0",
+      "plugin-version": "1.1.0",
       "activates-when": "Use when someone wants an existing design, spec, or plan ATTACKED for soundness before it is built from \u2014 \\\"tear this apart\\\", \\\"assume it is wrong and show me where\\\", \\\"find what breaks\\\", \\\"critique this hard\\\", \\\"red-team it\\\", \\\"poke holes in it\\\" \u2014 whether they want one hard pass or several independent critics each from a different angle. It sets HOW the attack runs so it catches real defects instead of agreeing with the author. It attacks an idea on paper that already exists \u2014 NOT writing or drawing one, NOT polishing a document\\'s wording (`meta:wittgenstein`), NOT already-written code. A pipeline with a critique phase \u2014 speccy, a Sprut critic role \u2014 invokes this method.",
       "purpose": "The house method for running an adversarial critique of a design, spec, or plan \u2014 diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize \u2014 so the critique detects real defects instead of laundering a green stamp.",
       "best-for": "Any team or pipeline that runs critique or red-team passes over designs, specs, and plans and wants the critique to actually catch defects rather than agree with the author.",

@@ -6,5 +6,9 @@
   "every finding cites an exact location and states its failure mode; ungrounded findings were stripped",
   "findings on the same location are merged into one entry weighted up by convergence",
   "when all critics share the artifact's model family, the self-preference caveat is stated in the output",
-  "the output ends at findings for a human to dispose; nothing was auto-fixed"
+  "the output ends at findings for a human to dispose; nothing was auto-fixed",
+  "convergence was imposed, not awaited: a per-layer cap of at most 3 rounds was set, and stopping was decided by a round with no new S1 (structural) findings, never by the critic falling silent",
+  "the target was frozen within each round — fixes were batched between rounds, not applied mid-round",
+  "every finding is written in the session's governing language and register, inherited from the behavioural model above, not a tone the skill imposed",
+  "each substantial (S1/S2) finding is unpacked in four parts — what is wrong, why it is a problem, a deliberately absurd example preserving the same cause-and-effect, and the corrected shape — with the example explaining the technical cause rather than decorating it"
 ]
