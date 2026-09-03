@@ -10,9 +10,10 @@ description: "Use when someone wants an existing design, spec, or plan ATTACKED 
 layers or sections · the ability to spawn independent critic agents (not the author) · one rubric
 per critic. Read the evidence behind each rule in `references/evidence.md` when you need the why.
 
-**Out:** a single synthesized findings list — deduped, each finding grounded in an exact location
-with its failure mode, and weighted up where independent lenses converged — handed to a human to
-dispose. The critique FINDS; the human DECIDES what to fix.
+**Out:** a single synthesized findings object as JSON — deduped, each finding grounded in an exact
+location with its failure mode and severity, weighted up where independent lenses converged (the shape
+is in *The answer — a JSON of findings*). Prose in the session's voice is rendered from it for the
+reader; the JSON is the source of truth. The critique FINDS; the human DECIDES what to fix.
 
 **Not in scope:** fixing the artifact (the human disposes), judging one document's clarity
 (`meta:wittgenstein`), and reviewing a code diff (`review`). This skill is the method; a pipeline
@@ -143,8 +144,8 @@ a random joke. Four parts:
 
 1. **What is wrong** — short, technically exact.
 2. **Why it is a problem** — the ordinary engineering reason.
-3. **The absurd example** — push the wrong approach to the point of comedy, keeping the SAME
-   cause-and-effect.
+3. **Example** — a concrete illustration, pushed to the point of comedy, keeping the SAME
+   cause-and-effect. Deliberately absurd, but it must EXPLAIN the fault, not decorate it.
 4. **How it should be** — the corrected shape.
 
 Worked example — the finding *"the orchestrator knows too much about how its workers do the job"*:
@@ -152,7 +153,7 @@ Worked example — the finding *"the orchestrator knows too much about how its w
 > **Wrong:** the orchestrator hard-codes each worker's internal steps.
 > **Why it is a problem:** change one worker's insides and you must change the orchestrator too — so
 > they were never really independent.
-> **Absurd:** a restaurant director who will not just say "make the pasta" but stands over the cook
+> **Example:** a restaurant director who will not just say "make the pasta" but stands over the cook
 > screaming "GRAB THE 28cm PAN. NO, NOT THAT ONE. THREE DROPS OF OIL. TURN NOODLE #17 TWELVE
 > DEGREES." Hire a new cook and the director has to rewrite his own job description.
 > **Better:** the orchestrator states the contract and the expected result; the worker decides how to
@@ -162,6 +163,54 @@ The harder or more abstract the point, the more the example carries it. Scale it
 finding earns the full four-part unpack; a trivial S3 nitpick does not need a comedy sketch.
 
 ---
+
+---
+
+## The answer — a JSON of findings
+
+Each critic returns its findings as JSON, and the synthesizer merges them into ONE JSON object. A
+structured answer is what lets the checks read a run instead of a human eyeballing prose. Prose (in
+the session's voice) is rendered FROM this JSON for the reader; the JSON is the source of truth.
+
+A single finding:
+
+```json
+{
+  "lens": "coherence",
+  "location": "docs/design.md §4 / the retry loop",
+  "severity": "S1",
+  "what": "one short, technically exact sentence — what is wrong",
+  "why": "the ordinary engineering reason it bites",
+  "example": "a concrete, deliberately hyperbolic scene that keeps the SAME cause-and-effect",
+  "fix": "the corrected shape",
+  "convergence": 1
+}
+```
+
+- `location`, `what`, `why`, `fix`, `severity`, `lens` are REQUIRED on every finding — an entry
+  missing any of them is the ungrounded noise rule 7 strips.
+- `severity` is `S1` | `S2` | `S3`. `example` is REQUIRED for `S1`/`S2` (the four-part unpack) and MAY
+  be omitted for a trivial `S3`.
+- `convergence` is how many independent lenses landed on this location — set by the synthesizer during
+  dedup (rule 8), `1` when only one lens hit it.
+
+The synthesizer's whole output:
+
+```json
+{
+  "lenses": ["coherence", "ockham", "completeness", "breaks-real"],
+  "rounds": 2,
+  "stopped_because": "no new S1",
+  "self_preference_caveat": null,
+  "findings": []
+}
+```
+
+- `findings` holds the merged, deduped, weighted findings, each in the single-finding shape above.
+- `stopped_because` is `"no new S1"` | `"cap reached"` | `"entangled — parked to <layer>"` — the
+  stopping rule, made explicit so the reader sees WHY it ended (never "the critic went quiet").
+- `self_preference_caveat` is a string when every critic shares the artifact's model family, else
+  `null` (rule 7 / the bias note).
 
 ## Before you finish
 
@@ -179,5 +228,8 @@ finding earns the full four-part unpack; a trivial S3 nitpick does not need a co
 7. Every finding is written in the session's governing language and register, not a tone this skill
    imposed; each S1/S2 finding carries the four-part unpack whose example explains the technical
    cause rather than decorating it.
-8. The output ends at findings for a human to dispose; nothing was auto-fixed.
-9. Any line failing? Fix it and start again from 1.
+8. The answer is valid JSON in the shape above: every finding has `location`, `what`, `why`, `fix`,
+   `severity`, `lens`; every S1/S2 has an `example`; the top level names `lenses`, `rounds` and
+   `stopped_because`. A finding missing a field is the ungrounded noise step 3 already stripped.
+9. The output ends at findings for a human to dispose; nothing was auto-fixed.
+10. Any line failing? Fix it and start again from 1.

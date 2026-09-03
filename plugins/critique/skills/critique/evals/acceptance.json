@@ -10,5 +10,6 @@
   "convergence was imposed, not awaited: a per-layer cap of at most 3 rounds was set, and stopping was decided by a round with no new S1 (structural) findings, never by the critic falling silent",
   "the target was frozen within each round — fixes were batched between rounds, not applied mid-round",
   "every finding is written in the session's governing language and register, inherited from the behavioural model above, not a tone the skill imposed",
-  "each substantial (S1/S2) finding is unpacked in four parts — what is wrong, why it is a problem, a deliberately absurd example preserving the same cause-and-effect, and the corrected shape — with the example explaining the technical cause rather than decorating it"
+  "each substantial (S1/S2) finding is unpacked in four parts — what is wrong, why it is a problem, a deliberately absurd example preserving the same cause-and-effect, and the corrected shape — with the example explaining the technical cause rather than decorating it",
+  "the answer is valid JSON: each finding carries location, what, why, fix, severity and lens (and an example for S1/S2), and the top level names the lenses run, the round count, and stopped_because"
 ]
