@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "critique/finding",
+  "title": "A single critique finding, as one lens returns it",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["location", "severity", "what", "why", "rationale", "evidence", "fix", "fix_rationale"],
+  "properties": {
+    "location":      { "type": "string", "minLength": 1, "description": "exact place: file/section/field" },
+    "severity":      { "enum": ["S1", "S2", "S3"], "description": "S1 structural, S2 significant, S3 cosmetic" },
+    "what":          { "type": "string", "minLength": 1, "description": "what is wrong, one plain sentence" },
+    "why":           { "type": "string", "minLength": 1, "description": "why it is a problem, one plain sentence" },
+    "rationale":     { "type": "string", "minLength": 1, "description": "why this exact point was flagged" },
+    "evidence":      { "type": "string", "minLength": 1, "description": "the rule it rests on; name a law/pattern/case in parentheses when one backs it, else plain reasoning — never a fabricated source" },
+    "example":       { "type": "string", "minLength": 1, "description": "a deliberately absurd scene that teaches the cause; required for S1/S2" },
+    "fix":           { "type": "string", "minLength": 1, "description": "the corrected shape, one plain sentence" },
+    "fix_rationale": { "type": "string", "minLength": 1, "description": "why this fix removes the cause and beats the alternative" },
+    "confidence":    { "enum": ["high", "medium", "low"], "description": "optional; add when the call is not obvious" },
+    "falsifier":     { "type": "string", "minLength": 1, "description": "optional; what evidence would overturn the finding" }
+  },
+  "allOf": [
+    {
+      "if":   { "properties": { "severity": { "enum": ["S1", "S2"] } } },
+      "then": { "required": ["example"] }
+    }
+  ]
+}
