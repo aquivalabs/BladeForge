@@ -74,6 +74,38 @@ Ten rules. The first six shape the run; the last four keep the findings honest.
 
 ---
 
+## Stopping — imposed, never awaited
+
+A critique over a design has no oracle — no tests, no execution — so a critic asked to "find problems"
+NEVER runs dry: it will invent plausible ones on correct text, and an iterating loop can lock onto a
+false fixed point, confidently wrong and stable. Convergence is imposed, not awaited. Severity drives
+it: **S1** structural (the idea is wrong or breaks), **S2** significant, **S3** cosmetic.
+
+- **A fixed cap, not "until clean".** At most 3 rounds per layer, then stop whatever remains. Make the
+  exit checkable — some methods go as far as "find exactly N flaws, then revise".
+- **Stop by severity, not silence.** Convergence is a round that surfaces no new S1. A round returning
+  only S2/S3 is DONE — park the cosmetics. Waiting for the critic to fall quiet chases a false fixed
+  point; it never falls quiet on its own.
+- **Freeze the target within a round.** Do not edit mid-round: synthesize, batch the round's fixes,
+  then run the next round against the frozen new text. Each fix opens new surface — bounded only by
+  the cap.
+- **The human is the oracle-substitute.** With no machine ground truth, a human calls "real hole vs
+  nitpick" and calls done. Not optional — it is what replaces the missing oracle.
+- **Building is the real oracle.** After 2–3 rounds the return drops; if round 3 still finds S1, that
+  says PROTOTYPE, not run round 4. A spike is the test a design lacks.
+- **Right-size effort.** Three rounds on a high-risk layer where a structural error is expensive, one
+  on a low-risk one. Not every layer earns three.
+- **Entanglement is a stop signal.** When a round's new findings belong to an ADJACENT layer, this one
+  cannot fully close in isolation: fix the self-contained items, PARK the entangled ones to their own
+  layer (they re-test there as natives), and move on. Past that, isolation-critique is diminishing
+  returns dressed as diligence.
+- **Log the precondition, not just the decision.** A decision entry that stores the choice and the why
+  but omits the assumption it rests on ("sound only if the guarantees are complete") lets the next
+  round re-discover that limit and re-litigate a settled call. Write the precondition into the entry —
+  an unstated assumption is re-found every round, wasting a whole pass.
+
+---
+
 ## Biases to name, not pretend away
 
 - **Self-preference.** A critic of its own model family inflates its judgment. The real fix is a
@@ -94,6 +126,43 @@ Ten rules. The first six shape the run; the last four keep the findings honest.
 
 ---
 
+## How the findings read — the voice
+
+Two rules for how a finding reaches the reader, on top of everything above.
+
+**Inherit the voice from above; impose none.** The critic speaks in the SAME language and register as
+the behavioural model governing the session — its output style, its language. If the session runs in
+Russian under the house voice, the findings come back in Russian at that register. The critic never
+sets a tone of its own on top of the one already in force.
+
+**Unpack every substantial finding through a grounded, deliberately absurd example.** An abstract "this
+couples X to Y" slides off the reader; a concrete, hyperbolic, slightly cringe example makes the same
+fault obvious and sticky. This is a deliberate exception to the house voice's "no decorative
+metaphors", authorised for critique output — so the analogy must EXPLAIN the technical cause, never be
+a random joke. Four parts:
+
+1. **What is wrong** — short, technically exact.
+2. **Why it is a problem** — the ordinary engineering reason.
+3. **The absurd example** — push the wrong approach to the point of comedy, keeping the SAME
+   cause-and-effect.
+4. **How it should be** — the corrected shape.
+
+Worked example — the finding *"the orchestrator knows too much about how its workers do the job"*:
+
+> **Wrong:** the orchestrator hard-codes each worker's internal steps.
+> **Why it is a problem:** change one worker's insides and you must change the orchestrator too — so
+> they were never really independent.
+> **Absurd:** a restaurant director who will not just say "make the pasta" but stands over the cook
+> screaming "GRAB THE 28cm PAN. NO, NOT THAT ONE. THREE DROPS OF OIL. TURN NOODLE #17 TWELVE
+> DEGREES." Hire a new cook and the director has to rewrite his own job description.
+> **Better:** the orchestrator states the contract and the expected result; the worker decides how to
+> reach it.
+
+The harder or more abstract the point, the more the example carries it. Scale it to weight: an S1
+finding earns the full four-part unpack; a trivial S3 nitpick does not need a comedy sketch.
+
+---
+
 ## Before you finish
 
 1. Count the critics that actually ran: `>= 3`, and name the DISTINCT lens each carried. Two lenses
@@ -105,5 +174,10 @@ Ten rules. The first six shape the run; the last four keep the findings honest.
 4. Findings on the same location are merged into one weighted entry, not scattered.
 5. If every critic shares the artifact's model family, the self-preference caveat is stated in the
    output — not omitted.
-6. The output ends at findings for a human to dispose; nothing was auto-fixed.
-7. Any line failing? Fix it and start again from 1.
+6. A per-layer round cap (<= 3) was set and the run stopped on it or on a round with no new S1 —
+   never on the critic falling silent — and the target was frozen within each round.
+7. Every finding is written in the session's governing language and register, not a tone this skill
+   imposed; each S1/S2 finding carries the four-part unpack whose example explains the technical
+   cause rather than decorating it.
+8. The output ends at findings for a human to dispose; nothing was auto-fixed.
+9. Any line failing? Fix it and start again from 1.
