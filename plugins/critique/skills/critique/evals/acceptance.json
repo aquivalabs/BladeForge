@@ -12,5 +12,6 @@
   "every finding is written in the session's governing language and register, inherited from the behavioural model above, not a tone the skill imposed",
   "each substantial (S1/S2) finding is unpacked in four parts — what is wrong, why it is a problem, a deliberately absurd example preserving the same cause-and-effect, and the corrected shape — with the example explaining the technical cause rather than decorating it",
   "each finding is valid JSON carrying location, severity, what, why, rationale, evidence, fix and fix_rationale (plus an example for S1/S2), and the synthesizer output adds convergence per finding and names lenses, rounds and stopped_because",
-  "every field is one short plain sentence a developer reads in one pass; evidence states the rule it rests on and names a law/pattern/case in parentheses when one backs it, never a fabricated source"
+  "every field is one short plain sentence a developer reads in one pass; evidence states the rule it rests on and names a law/pattern/case in parentheses when one backs it, never a fabricated source",
+  "every critic's output was validated against references/finding.schema.json and the synthesized run against references/critique-run.schema.json with a real validator; a failing object was rejected and re-asked, never patched or trusted on the LLM's word"
 ]

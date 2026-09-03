@@ -226,6 +226,19 @@ developer reading hundreds of these grasps each in a single pass. No stacked cla
 - `self_preference_caveat` is a string when every critic shares the artifact's model family, else
   `null`.
 
+**The shape is enforced, not requested.** The two schemas in `references/` are the authority —
+`finding.schema.json` for one critic's finding, `critique-run.schema.json` for the synthesizer's whole
+output. Both are strict: `additionalProperties: false` (no stray fields), `enum` on `severity` and
+`confidence`, `example` required for S1/S2, `lenses` at least 3, `rounds` at most 3, `stopped_because`
+one of the three allowed reasons. Enforce them in two places, because an LLM's "it matched" is not
+trusted:
+
+- **Constrain the decode.** Pass `finding.schema.json` to the critic as its response format (structured
+  output / `response_format` json_schema) so malformed JSON cannot be produced in the first place.
+- **Validate after.** The orchestrator runs a real validator (ajv, python `jsonschema`) over every
+  returned object against the schema. A finding that fails is REJECTED and re-asked — never patched by
+  hand, never waved through. The synthesized run is validated against `critique-run.schema.json`.
+
 **How a developer reads it — one line per finding, worst-first.** The default view is a flat list,
 sorted by `severity` then `convergence`; each finding is ONE line — `severity · location · what → fix ·
 ×convergence`. The full card (why, rationale, evidence, example, fix_rationale) opens on demand or for
@@ -255,5 +268,8 @@ instead of enumerating every one.
 9. Every field is one short sentence in plain words — a developer grasps the finding in one pass.
    `evidence` names its law/pattern/case in parentheses when one backs it, and states plain reasoning
    when none does — never a fabricated source.
-10. The output ends at findings for a human to dispose; nothing was auto-fixed.
-11. Any line failing? Fix it and start again from 1.
+10. Every critic's output validated against `references/finding.schema.json`, and the synthesized run
+    against `references/critique-run.schema.json`, with a real validator — a failing object was
+    rejected and re-asked, not patched. The LLM's own "it matched" was never trusted.
+11. The output ends at findings for a human to dispose; nothing was auto-fixed.
+12. Any line failing? Fix it and start again from 1.
