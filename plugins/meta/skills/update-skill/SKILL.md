@@ -224,6 +224,13 @@ python3 plugins/meta/skills/skill-eval/scripts/score-description.py \
 enabled, and stop. Do not measure with skill-creator instead — a wrong harness produces the false
 zeros the skill exists to prevent, and a false zero is worse than no number.
 
+**If there is no live clone to run the script from** (updating in a sandbox or detached worktree, no
+`scripts/` reachable), use the documented escape hatch — push with `SKILL_EVAL_SKIP=1`, which downgrades
+the gate's block to a warning — and say in the handoff that the measurement is owed, so it is visibly
+deferred rather than quietly skipped. Do NOT invent a "pending" `result.json`: the gate reads
+`queryset_hash` from that file and a hand-written placeholder reports a false "stale" every push.
+See `docs/mechanisms/skill-eval.md` for the flag and the file's real shape.
+
 ---
 
 ## Before you finish
@@ -237,6 +244,7 @@ zeros the skill exists to prevent, and a false zero is worse than no number.
 4. `python3 scripts/gen_catalog.py` → exits clean. Marketplace skills only.
 5. The owning `plugin.json` version is bumped, and the `README.md` line still describes the skill.
 6. `meta:skill-eval` was invoked and its script run from the repo → `evals/result.json` exists and is
-   current, no should-NOT-trigger query fired. Changing a `description` without re-measuring leaves a
-   result that describes text nobody ships any more.
+   current, no should-NOT-trigger query fired (or, if no clone was reachable, the push used
+   `SKILL_EVAL_SKIP=1` per the Measuring fallback and the handoff says the measurement is owed).
+   Changing a `description` without re-measuring leaves a result that describes text nobody ships any more.
 7. Any line failing? Fix it and start again from 1.
