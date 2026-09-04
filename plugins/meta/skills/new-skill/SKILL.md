@@ -10,8 +10,8 @@ description: "Use this skill to author a brand-new skill FROM SCRATCH \u2014 dec
 authoring questions · a domain, existing or about to be created.
 
 **Out:** `plugins/<domain>/skills/<name>/` holding `SKILL.md`, `metadata.yaml`,
-`evals/trigger-eval.json` and `evals/acceptance.json` · a one-line entry in `README.md` ·
-for a new domain, its `plugin.json` · the owning plugin's version bumped.
+`evals/trigger-eval.json` and `evals/acceptance.json` (plus `evals/result.json` once measured) ·
+a one-line entry in `README.md` · for a new domain, its `plugin.json` · the owning plugin's version bumped.
 
 ---
 
@@ -170,6 +170,11 @@ expectations is not repeated there; it lives once, in `evals/acceptance.json`.
    | `money` | moves money — payments, billing, real financial operations |
    | `other` | none of the above — MUST be described in `changes.notes` |
 
+   **Tag by what the skill CAN do when fully used, not just its default path.** A skill that only reads
+   by default but conditionally shells out to git / `gh` / an API when the user asks still carries that
+   tag — say the default is read-only in `changes.notes`. Under-tagging a latent mutation is the failure
+   here, not over-tagging.
+
    Do NOT ask about `activates-when` or `schema-version` — both are derivable, not authored:
    `activates-when` is copied verbatim from the `description:` frontmatter by the catalog compiler
    at build time, and `schema-version` is the constant `1`. Write the sidecar in one atomic step
@@ -186,7 +191,19 @@ expectations is not repeated there; it lives once, in `evals/acceptance.json`.
      notes: Free text.
    ```
 
-8. **Write `evals/acceptance.json`** — the list of expectations about the RESULT, straight from
+8. **Write `evals/trigger-eval.json`** — the queries that test *whether the skill fires*. An array of
+   `{query, should_trigger}`: the positives come from answer 1b/1c, the negatives from 3c (the work that
+   looks like yours but isn't). A handful each — enough to pin both edges of the boundary.
+
+   ```json
+   [
+     { "query": "convert the px in this stylesheet to rem", "should_trigger": true },
+     { "query": "make these sizes scale with the base font", "should_trigger": true },
+     { "query": "fix the border-width on this chart svg", "should_trigger": false }
+   ]
+   ```
+
+9. **Write `evals/acceptance.json`** — the list of expectations about the RESULT, straight from
    answer 2c. Its own file, not a field in the trigger eval: that one answers *did the skill fire*,
    this one answers *did the result come out right*, and merging them lets a skill that fires
    reliably while changing nothing read as green.
@@ -205,13 +222,13 @@ expectations is not repeated there; it lives once, in `evals/acceptance.json`.
    { "not-applicable": "explains the data-router; produces nothing to check" }
    ```
 
-9. **Bundling a script the skill will call (`scripts/*.py`, `scripts/*.sh`)?** If a line in that
+10. **Bundling a script the skill will call (`scripts/*.py`, `scripts/*.sh`)?** If a line in that
    script performs a mutation the scout gate would otherwise flag as suspicious (e.g. a stray
    `git push` in a helper that never actually runs it), you may suppress that one false-positive by
    adding a trailing `# scout-ignore` comment on that exact line — it is an authored escape hatch,
    not a way to hide real behavior. Full guidance on when this is appropriate lives in the `scout`
    skill; this is just the naming convention.
-10. **Editing an EXISTING skill or plugin? Bump its `plugin.json` `version` (semver).** The installed
+11. **Editing an EXISTING skill or plugin? Bump its `plugin.json` `version` (semver).** The installed
    plugin cache is keyed by version — `/plugin update` only reinstalls a plugin when its version
    changed. Edit a skill's body or description without bumping the owning plugin's `version` and the
    change lives in git + the marketplace but **never loads in a session**: the stale cache keeps
@@ -256,6 +273,18 @@ before authoring anything non-trivial. Do not duplicate it here. The house-enfor
   across skills. NEVER paste a real name from a work codebase: a real identifier is a leak, not a better example.
 - **Match the form to the failure.** If agents cut a corner under pressure, add a prohibition + a
   rationalization table ("thought → reality"); otherwise give a positive recipe.
+- **The scaffold enforces shape, not completeness — check the content too, by name.** Contract /
+  Instructions / Before-you-finish guarantee the page is well-formed, not that it says everything it
+  should. A vague "add what a practitioner would" gets read narrowly and changes nothing — so name the
+  categories to check for explicitly: (a) a secrets/PII guard if the skill ever handles a diff, log, or
+  user data; (b) an anti-fabrication line if it produces prose from evidence ("every claim maps to a
+  real change, nothing invented"); (c) a scope/edge-case judgment call the happy path hides. A
+  guide-compliant skill can still be thinner than one written freehand — this is where that gap closes.
+- **Shortening is not licence to drop correctness.** When you trim a body to satisfy "keep it short",
+  the first things to go are usually the ones that matter most — a boundary clause naming a competitor
+  skill, a correctness check, a second worked example. Length may fall; the boundary sentence, the
+  correctness checks, and at least one example must survive. If a cut removes one of those, it is the
+  wrong cut.
 
 Full house checklist (naming, plugin.json, sync, before-you-finalize) → `references/authoring-best-practices.md`.
 The nine questions with worked examples, and the evidence behind every rule above →
@@ -284,12 +313,19 @@ python3 plugins/meta/skills/skill-eval/scripts/score-description.py \
 enabled, and stop. Do not measure with skill-creator instead — a wrong harness produces the false
 zeros the skill exists to prevent, and a false zero is worse than no number.
 
+**If there is no live clone to run the script from** (drafting in a sandbox or detached worktree, no
+`scripts/` reachable), do not silently drop the file: say so in the handoff and leave
+`evals/result.json` marked pending, so the measurement is visibly owed rather than quietly skipped.
+Silently omitting it is the failure this section exists to prevent.
+
 ---
 
 ## Before you finish
 
 1. `ls plugins/<domain>/skills/<name>/` → `SKILL.md`, `metadata.yaml`, `evals/trigger-eval.json`,
-   `evals/acceptance.json`. All four, or you are not done.
+   `evals/acceptance.json`, and `evals/result.json` once measurement has run (or a pending note per the
+   Measuring section if no clone was reachable). The four authored files must all be present;
+   `result.json` is produced by the measurement step, not authored. Missing an authored file means you are not done.
 2. The body has exactly one `## Contract` heading and no `## When to Activate` heading. A plain
    `grep` over-counts on any skill that quotes markdown in an example — read the hits rather than
    trusting the number.
