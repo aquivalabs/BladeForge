@@ -1,7 +1,7 @@
 {
   "name": "skillcraft",
-  "description": "Skill quality & improvement — measuring whether a guide skill actually helps, diagnosing where it falls short, and improving it without regressions. Home for skill-improvement methods and metrics.",
-  "version": "0.1.0",
+  "description": "Skill quality & improvement \u2014 measuring whether a guide skill actually helps, diagnosing where it falls short, and improving it without regressions. Home for skill-improvement methods and metrics.",
+  "version": "0.1.1",
   "keywords": [
     "skill-quality",
     "skill-improvement",
