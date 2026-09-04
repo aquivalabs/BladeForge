@@ -1,0 +1,159 @@
+{
+  "skill": "rem",
+  "measured_at": "2026-09-04T18:07:17",
+  "model": "sonnet",
+  "runs_per_query": 3,
+  "best_score": "18/18",
+  "accuracy": 1.0,
+  "baseline_accuracy": null,
+  "description_hash": "380363b26431012631bee21868374e7ca15839d8b27d5390da64b5bf9649b966",
+  "queryset_hash": "7836773f5e47ab24624e2bc59e37d93d7c68939d3980a066f096a37d248822d1",
+  "eval_type": "description-triggering",
+  "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+  "results": [
+    {
+      "query": "the SidebarNav.tsx padding is 14px hardcoded, make it consistent with our spacing scale",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "add margin-top: 24px to the card header in card-header.scss",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "I see font-size: 16px in DashboardPanel.scss, should that be in rem?",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "convert all the px values in modal.scss to the right units for accessibility",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "the gap between widget cards is gap: 12px \u2014 change it to scale with browser zoom",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "tailwind class p-[10px] on Button.tsx \u2014 is that correct or should it be something else?",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "our h2 font-size is hardcoded to 20px in typography.scss, fix that",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "review the spacing in data-table.scss for any absolute pixel values that break zoom accessibility",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "width: 320px on the sidebar feels wrong \u2014 what unit should we use so it respects the root font size?",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "add a 1px border-bottom to the table header row in DataTable.scss",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "set box-shadow: 0 2px 8px rgba(0,0,0,0.1) on the dropdown card",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "the svg icon in NavIcon.tsx has width='24' height='24' \u2014 fix the svg attributes",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "switch the component stylesheet from .css to .scss and add the variables import",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "add $color-primary to the variables file and use it in the button styles",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "create a new SCSS module for the EntryForm component following BEM",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "the button label says 'Submit' in JSX, route it through useTranslation",
+      "should_trigger": false,
+      "triggers": 1,
+      "runs": 3,
+      "trigger_rate": 0.3333333333333333,
+      "pass": true
+    },
+    {
+      "query": "set letter-spacing: 0.5px on the badge text \u2014 is that acceptable?",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "stroke-width on the chart SVG paths should stay in px, right?",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    }
+  ]
+}

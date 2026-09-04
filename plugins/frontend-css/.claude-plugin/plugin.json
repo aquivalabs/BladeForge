@@ -1,7 +1,7 @@
 {
   "name": "frontend-css",
-  "description": "Personal frontend CSS skills \u2014 rem units, SCSS modules.",
-  "version": "2.0.0",
+  "description": "Frontend CSS/SCSS skills — rem units and SCSS-module structure, scoping & naming.",
+  "version": "2.1.0",
   "keywords": [
     "css",
     "scss",

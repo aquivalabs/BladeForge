@@ -1,0 +1,6 @@
+[
+  "no bare px remains in a size, spacing, or typography value in the changed styles",
+  "every such dimensional value is expressed in rem against a 16px base",
+  "px survives only for genuinely pixel-bound cases: border-width, border-radius that must be pixel-precise, box-shadow offsets and blur, SVG width/height/stroke-width, and fine letter-spacing",
+  "a Tailwind arbitrary value uses rem (p-[0.625rem]), never px (p-[10px]); a utility class is preferred when one exists"
+]
