@@ -1,0 +1,12 @@
+[
+  { "query": "does this authoring guide skill actually help the agent, or is it decorative?", "should_trigger": true },
+  { "query": "diagnose where meta:new-skill falls short and propose fixes", "should_trigger": true },
+  { "query": "audit this review-lens skill — measure its real effect on the output", "should_trigger": true },
+  { "query": "the guide skill doesn't seem to change what the agent produces, prove it either way", "should_trigger": true },
+  { "query": "improve this guide skill without dropping what already worked", "should_trigger": true },
+  { "query": "run a with-and-without comparison on this house-convention skill", "should_trigger": true },
+  { "query": "scaffold a brand-new skill for writing changelogs", "should_trigger": false },
+  { "query": "refresh the metadata.yaml for this skill after I edited its body", "should_trigger": false },
+  { "query": "does this skill's description trigger on the right queries?", "should_trigger": false },
+  { "query": "write me a react component for a date picker", "should_trigger": false }
+]

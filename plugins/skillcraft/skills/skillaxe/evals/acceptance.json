@@ -1,0 +1,6 @@
+[
+  "every dispatched axis returns a number (Quality Impact d*m, Instruction Compliance SkillScore, and — when embeddings are available — Trigger Precision and Solution-Path Coverage), or an explicit not-run reason, never a silent skip",
+  "findings are split into guide-fault (skill-fault f>0, fixable in the guide) and agent-fault (not a guide defect)",
+  "the baseline agent was isolated from the repo — no reading of sibling skills",
+  "if a fix was applied, a before/after judge ran and confirmed every must-survive item (boundary clauses, correctness checks, at least one example) is still present"
+]

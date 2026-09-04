@@ -1,0 +1,7 @@
+schema-version: 1
+purpose: Measure whether a guide skill helps (with/without run), attribute shortfalls to the guide vs the agent, and improve it without regressions.
+best-for: Auditing a high-traffic guide skill, or one that seems not to help, before trusting or rewriting it.
+needs: [meta:model-routing]
+changes:
+  tags: [files]
+  notes: During diagnosis it spawns subagents and writes generated skills + judgments to a scratch directory; its fix step edits the LIVE SKILL.md of the guide skill under test, behind the anti-regression anchor. Reads no secrets; touches no git/network/org/money on its own.
