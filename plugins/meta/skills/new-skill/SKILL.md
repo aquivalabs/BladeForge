@@ -1,8 +1,19 @@
 ---
-description: "Use this skill to author a brand-new skill FROM SCRATCH \u2014 deciding its plugin/domain, folder name, file placement, and writing its SKILL.md, frontmatter, and initial metadata.yaml sidecar. Triggers for \"create/add/write a new skill for X\", \"where does the SKILL.md go\", \"what's the naming convention or folder structure for a new skill\", or \"what goes in the description frontmatter\". This is about scaffolding a NOT-YET-EXISTING skill's structure and location, NOT about tuning, evaluating, or fixing an EXISTING skill's trigger behavior (skill-creator), and NOT about refreshing an EXISTING skill's metadata.yaml after its body/tools/scripts/hooks changed \u2014 that is the separate `meta:update-skill` skill. Also NOT for ordinary code, components, or config in a project. If the skill already exists, use `meta:update-skill` or `skill-creator` instead."
+description: "Use this skill to author a brand-new skill FROM SCRATCH \u2014 deciding its plugin/domain, folder name, file placement, and writing its SKILL.md, frontmatter, and initial metadata.yaml sidecar. Triggers for \"create/add/write a new skill for X\", \"where does the SKILL.md go\", \"what's the naming convention or folder structure for a new skill\", or \"what goes in the description frontmatter\" \u2014 including standing up a NEW domain plugin with its plugin.json, and choosing between a marketplace skill and one local to a single repo. This is about scaffolding a NOT-YET-EXISTING skill's structure and location, NOT about tuning, evaluating, or fixing an EXISTING skill's trigger behavior (skill-creator), and NOT about refreshing an EXISTING skill's metadata.yaml after its body/tools/scripts/hooks changed \u2014 that is the separate `meta:update-skill` skill. Also NOT for ordinary code, components, or config in a project. If the skill already exists, use `meta:update-skill` or `skill-creator` instead."
 ---
 
 # Create a New Skill
+
+## Contract
+
+**In:** a skill that does not exist yet · the marketplace repo · a person to answer the
+authoring questions · a domain, existing or about to be created.
+
+**Out:** `plugins/<domain>/skills/<name>/` holding `SKILL.md`, `metadata.yaml`,
+`evals/trigger-eval.json` and `evals/acceptance.json` · a one-line entry in `README.md` ·
+for a new domain, its `plugin.json` · the owning plugin's version bumped.
+
+---
 
 Skills live in a **marketplace plugin**, never as loose flat folders. A skill belongs to a domain
 (the plugin); the domain is the folder, not a prefix on the skill name.
@@ -16,7 +27,7 @@ plugins/<domain>/.claude-plugin/plugin.json      # one per domain
 
 | Scope | Location |
 |---|---|
-| Shared across the org | this repo — `plugins/<domain>/skills/<name>/` (the `bladeforge` marketplace) |
+| Shared across the org | this repo — `plugins/<domain>/skills/<name>/` (the `accountingseed` marketplace) |
 | One specific repo only | that repo's `.claude/skills/<name>/` for a quick repo-local skill |
 
 There are **no** flat `skills/<name>/` skills anymore, and nothing is "copied to a global location" —
@@ -54,14 +65,16 @@ allows only `[a-z0-9-]`). Frontmatter is just `description:`.
 
 ```markdown
 ---
-description: One sentence — used to decide when to activate this skill.
+description: Use when <triggering conditions>. <One phrase of purpose.>
+             <Do NOT use for Y (use Z instead) — only if a competing skill exists.>
 ---
 
 # Skill Title
 
-## When to Activate
+## Contract
 
-Describe the exact triggers: user phrases, file types, situations.
+**In:** what must be in place before this can be used.
+**Out:** what exists afterwards — a printed line, a file, a property of the code.
 
 ---
 
@@ -72,29 +85,70 @@ Use ## sections, code blocks, tables as needed.
 
 ---
 
-## Checklist (optional)
+## Before you finish
 
-- [ ] Item one
-- [ ] Item two
+1. Run <the check> → expect <result>.
+2. Not clean? Fix it and repeat from 1.
+3. You are done only when every line holds.
 ```
+
+**There is no `## When to Activate` section.** It duplicates the `description`, and the body is read
+only AFTER the skill has been chosen — by which point activation already happened. Anything genuinely
+about triggering belongs in the `description`; anything else is ordinary body prose.
+
+`## Before you finish` is a PROCEDURE — take this, run that, what counts as clean. The list of
+expectations is not repeated there; it lives once, in `evals/acceptance.json`.
 
 ---
 
 ## Steps
 
-1. Pick the **domain** (existing plugin) the skill belongs to, and a `<name>` per the convention above.
-2. Create `plugins/<domain>/skills/<name>/SKILL.md` using the structure above.
-3. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant.
-4. **New domain only:** also create `plugins/<domain>/.claude-plugin/plugin.json`
-   (`{name, description, version, keywords, author:{name:"Roman Maslennikov"}}` — `version` is semver,
-   `keywords` an array for marketplace discovery), then enable `<domain>@bladeforge` in the
+1. **Answer the nine questions first, with the human — before writing any body.** The answers ARE the
+   contract, the boundary and the acceptance criteria; written afterwards they get invented to fit
+   whatever was already typed. Full worked examples → `references/authoring-method.md`.
+
+   ```text
+   WHY IT EXISTS
+     1a  Name ONE live occasion where it should fire. Not a category — what are you
+         actually doing at that moment.
+     1b  What comes out in that case WITHOUT it? Show it, don't describe it.
+     1c  And WITH it? Show that too.
+
+   HOW IT IS USED
+     2a  What has to be in place for it to work at all?
+     2b  What exists at the end? Show it literally.
+     2c  What checks that? Name a command — or, if there is none, say where to look.
+
+   THIS ONE, OR THE NEIGHBOUR
+     3a  Take one query it must fire on. Who else answers it? Name them.
+     3b  If someone did — which of you wins, and under what condition?
+     3c  What work looks like yours but isn't? Name it, and whose it is.
+   ```
+
+   If 1b shows no problem, **the skill should not exist** — say so and stop. That is the whole point
+   of asking 1b first, and it is what both Anthropic's guidance and `superpowers:writing-skills`
+   demand before a line is written.
+
+   Where the answers land: 1b/1c → the eval queries · 2a/2b → `## Contract` · 2c →
+   `## Before you finish` and `evals/acceptance.json` · 3b → the boundary sentence in the
+   `description` · 3c → the negative eval cases.
+
+2. Pick the **domain** (existing plugin) the skill belongs to, and a `<name>` per the convention above.
+3. Create `plugins/<domain>/skills/<name>/SKILL.md` using the structure above.
+4. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant.
+5. **New domain only:** also create `plugins/<domain>/.claude-plugin/plugin.json`
+   (`{name, description, version, keywords, author:{name:"AccountingSeed"}}` — `version` is semver,
+   `keywords` an array for marketplace discovery), then enable `<domain>@accountingseed` in the
    consuming repo's `.claude/settings.json → enabledPlugins`. `.claude-plugin/marketplace.json` is
-   **generated** from each `plugin.json` by `sync.sh` — do not hand-edit it. Adding a skill to an
-   existing domain needs no manifest change.
-5. Add the skill's one-line entry to `README.md` by hand — the README is hand-maintained (`sync.sh`
-   does not touch it). `sync.sh` runs on the PostToolUse hook whenever a `SKILL.md` or `plugin.json`
-   changes: it regenerates `marketplace.json`, then commits + pushes.
-6. **Run the metadata interview and write `plugins/<domain>/skills/<name>/metadata.yaml`.** Every
+   **hand-maintained** — add the entry yourself. There is no generator: `sync.sh` was deleted in
+   `c4f210e` and nothing replaced it. The `marketplace-sync` CI check only verifies that every
+   `plugins/<name>/` has an entry and vice versa; it never compares the description text, so drift
+   there is silent. Adding a skill to an existing domain needs no manifest change.
+6. Add the skill's one-line entry to `README.md` by hand. Nothing generates it, and nothing
+   generates `marketplace.json` either. What IS generated is `catalog.json`, rebuilt by
+   `scripts/gen_catalog.py` and pushed by the `scout-publish` workflow after a merge — run it
+   locally to check your `metadata.yaml` compiles.
+7. **Run the metadata interview and write `plugins/<domain>/skills/<name>/metadata.yaml`.** Every
    skill ships this sidecar. Ask the human ONE field at a time, in this order:
 
    | field | rule |
@@ -132,13 +186,32 @@ Use ## sections, code blocks, tables as needed.
      notes: Free text.
    ```
 
-7. **Bundling a script the skill will call (`scripts/*.py`, `scripts/*.sh`)?** If a line in that
+8. **Write `evals/acceptance.json`** — the list of expectations about the RESULT, straight from
+   answer 2c. Its own file, not a field in the trigger eval: that one answers *did the skill fire*,
+   this one answers *did the result come out right*, and merging them lets a skill that fires
+   reliably while changing nothing read as green.
+
+   ```json
+   [
+     "no px remains in sizes or spacing in the changed styles",
+     "every size is expressed in rem against a 16px base"
+   ]
+   ```
+
+   A skill that produces nothing to check — one that only explains how a system is built — writes the
+   reason instead, and the gate lets it through:
+
+   ```json
+   { "not-applicable": "explains the data-router; produces nothing to check" }
+   ```
+
+9. **Bundling a script the skill will call (`scripts/*.py`, `scripts/*.sh`)?** If a line in that
    script performs a mutation the scout gate would otherwise flag as suspicious (e.g. a stray
    `git push` in a helper that never actually runs it), you may suppress that one false-positive by
    adding a trailing `# scout-ignore` comment on that exact line — it is an authored escape hatch,
    not a way to hide real behavior. Full guidance on when this is appropriate lives in the `scout`
    skill; this is just the naming convention.
-8. **Editing an EXISTING skill or plugin? Bump its `plugin.json` `version` (semver).** The installed
+10. **Editing an EXISTING skill or plugin? Bump its `plugin.json` `version` (semver).** The installed
    plugin cache is keyed by version — `/plugin update` only reinstalls a plugin when its version
    changed. Edit a skill's body or description without bumping the owning plugin's `version` and the
    change lives in git + the marketplace but **never loads in a session**: the stale cache keeps
@@ -153,16 +226,30 @@ Use ## sections, code blocks, tables as needed.
 The deep, tested methodology for writing a good skill lives in **`superpowers:writing-skills`** — read it
 before authoring anything non-trivial. Do not duplicate it here. The house-enforced essentials:
 
-- **`description` = when, not what.** Triggering conditions only (ideally "Use when…"). Never summarize the
-  workflow in the description — an agent that reads it will skip the body (tested anti-pattern).
+- **`description`: purpose is allowed, procedure is not.** Triggering conditions plus ONE phrase of
+  what the thing is. Never the steps — a description reading *"dispatches subagent per task with code
+  review between tasks"* made an agent run ONE review and never open the body, where the flowchart
+  showed two. Rewritten without the workflow, the same agent read the body and did both. A procedure
+  in the description is a shortcut agents take.
+- **The boundary goes in the `description` too, if a competitor exists.** `Use when X. Do NOT use for
+  Y (use Z instead).` It belongs there because the description is the only text read BEFORE the skill
+  is chosen — a boundary in the body arrives after the decision it was meant to inform. State a
+  CONDITION, not territory: where two skills share ground, "I own X" settles nothing, but "anonymous
+  Apex is mine, the MCP has no tool for it" does.
 - **Keep the body short; use `references/`.** Push deep tables/examples into `plugins/<domain>/skills/<name>/references/`
   and link one level deep — the SKILL.md stays an overview + quick-reference.
 - **One excellent example beats five mediocre ones.** Show the canonical case fully; don't enumerate.
-- **A result-producing skill MUST define acceptance criteria.** If the skill's point is to produce or
-  shape an output — a generated artifact, a transformed file, a compliance/adherence outcome — it ships an
-  explicit **Acceptance criteria** section: the checkable conditions that confirm the output is correct, so
-  an author or reviewer verifies adherence instead of guessing at it. A purely advisory/convention skill
-  that performs no measurable output may omit it (say so in its `changes` notes).
+- **Three places, no duplication between them.** `## Contract` says WHAT is promised.
+  `## Before you finish` says HOW to check it — steps, not claims. `evals/acceptance.json` holds the
+  LIST of expectations, once. Every skill carries all three; one that produces nothing to check writes
+  `not-applicable` with a reason in the acceptance file rather than skipping it.
+- **500 lines is not a limit, it is a question.** Both Anthropic and Cursor name the number, neither
+  measured it. Ask instead: is there anything here that is NOT needed on every firing? If yes, move it
+  to `references/`. If no, the length is earned — record in one line why. Extract one level deep only,
+  and each extracted file must stand alone: an agent may read only its first hundred lines.
+- **A skill replacing another states the old id in its first lines**, so a search for the old name
+  lands on the new page. No metadata field for this — one occurrence in this repo's history, and prose
+  did the job.
 - **Examples must be fictional & generic.** This is a PUBLIC marketplace. Every example identifier — in the
   body, `references/`, and the eval fixtures (class/object/field/org/ticket/repo/component/route names) —
   must be invented for a neutral demo product (`Order__c`, `WidgetConfig`, `myOrg`, `/api/items`), reused
@@ -171,19 +258,45 @@ before authoring anything non-trivial. Do not duplicate it here. The house-enfor
   rationalization table ("thought → reality"); otherwise give a positive recipe.
 
 Full house checklist (naming, plugin.json, sync, before-you-finalize) → `references/authoring-best-practices.md`.
+The nine questions with worked examples, and the evidence behind every rule above →
+`references/authoring-method.md`.
 
 ---
 
-## Evaluating / improving an existing skill
+## Measuring — a step, not a suggestion
 
-**Measure with `meta:skill-eval` — its bundled `score-description.py`. Do NOT use skill-creator's
-`run_eval`/`run_loop`.** That harness registers the skill as a transient slash-command and counts a
-trigger only if `Skill`/`Read` is the model's FIRST tool call, so real tasks (which open with
-`Bash`/`Write`) and advisory/chained skills score a false ~0. `meta:skill-eval` installs the skill as
-a REAL `.claude/skills/<name>/` and scores it honestly (0–10, current-vs-baseline, no-regression, with
-a plain-language verdict).
+**Invoke `meta:skill-eval` and follow it.** Do not just run a command you remember: that skill
+decides `--type` (a context-dependent skill is judged by no-regression, not by its absolute score),
+forbids skill-creator's `run_eval`/`run_loop` (it counts a trigger only when `Skill`/`Read` is the
+first tool call, so real tasks score a false ~0), and states what counts as a failure — a
+should-NOT-trigger query that fires is a real defect, not a rounding error.
 
-**If `meta:skill-eval` is not installed**, do not fall back to skill-creator: emit a warning that
-`meta:skill-eval` is required and ask the user to install it (enable the `meta` plugin from this
-marketplace), then stop. See `meta:skill-eval` for how to read the score (context-dependent skills are
-judged by no-regression, not the absolute number).
+**Run its script from the repository, not from the installed plugin cache.** The cache is keyed by
+version and lags behind: a cached copy predating the `result.json` repair prints a score and saves
+nothing, which is the exact regression this marketplace already suffered once.
+
+```bash
+python3 plugins/meta/skills/skill-eval/scripts/score-description.py \
+  --skill-path <skill-dir> --type self-contained
+```
+
+**If `meta:skill-eval` is not installed at all**, say it is required, ask for the `meta` plugin to be
+enabled, and stop. Do not measure with skill-creator instead — a wrong harness produces the false
+zeros the skill exists to prevent, and a false zero is worse than no number.
+
+---
+
+## Before you finish
+
+1. `ls plugins/<domain>/skills/<name>/` → `SKILL.md`, `metadata.yaml`, `evals/trigger-eval.json`,
+   `evals/acceptance.json`. All four, or you are not done.
+2. The body has exactly one `## Contract` heading and no `## When to Activate` heading. A plain
+   `grep` over-counts on any skill that quotes markdown in an example — read the hits rather than
+   trusting the number.
+3. `python3 scripts/gen_catalog.py` → exits clean.
+4. `python3 scripts/validate_eval.py plugins/<domain>/skills/<name>/evals/trigger-eval.json` → prints
+   a hash rather than an error.
+5. The owning `plugin.json` version is bumped — without it the skill never loads in a session.
+6. `meta:skill-eval` was invoked and its script run from the repo → `evals/result.json` exists, no
+   should-NOT-trigger query fired, and the verdict was read rather than glanced at.
+7. Any line failing? Fix it and start again from 1.

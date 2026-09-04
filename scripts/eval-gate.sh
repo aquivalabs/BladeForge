@@ -1,12 +1,22 @@
 #!/usr/bin/env bash
 # Pre-push eval-gate. Blocks pushing a touched/new skill whose trigger eval is
-# missing/invalid; warns (non-blocking) when the eval exists but its measured
-# result.json is absent or stale. Reads pre-push stdin; falls back to
-# origin/main..HEAD when run by hand with no stdin. Bash 3.2 compatible.
+# missing/invalid, OR whose measurement is missing or stale — stale meaning either
+# the queryset or the DESCRIPTION changed since result.json was written. A skill
+# nobody touched in this push is never inspected, so the 41 not-yet-measured skills
+# stay out of the way while anything you edited must be measured. The measurement
+# block applies only when the diff contains the skill's own SKILL.md: the eval scores
+# the DESCRIPTION, so editing a bundled script or a generated catalog beside a skill
+# leaves an existing measurement perfectly valid, and demanding a re-run there would
+# just teach people to set SKILL_EVAL_SKIP permanently.
+# Escape hatch: SKILL_EVAL_SKIP=1 downgrades the measurement block to a loud warning
+# (no `claude` available, offline). It prints what it let through.
+# Reads pre-push stdin; falls back to origin/main..HEAD when run by hand with no
+# stdin. Bash 3.2 compatible.
 set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 VALIDATE="$ROOT/scripts/validate_eval.py"
+SCORER="$ROOT/plugins/meta/skills/skill-eval/scripts/score-description.py"
 ZERO="0000000000000000000000000000000000000000"
 EMPTY_TREE="$(git hash-object -t tree /dev/null)"
 
@@ -53,6 +63,12 @@ $changed
 EOF
 skills="$(printf '%s\n' "$skills" | sed '/^$/d' | sort -u)"
 
+# Skills whose own SKILL.md is in the diff — only these owe a fresh measurement.
+descskills="$(printf '%s\n' "$changed" | sed -n 's#/SKILL\.md$##p' | sed '/^$/d' | sort -u)"
+owes_measurement() {
+  printf '%s\n' "$descskills" | grep -qx "$1"
+}
+
 if [ -z "$skills" ]; then
   echo "eval-gate: no skills touched — nothing to check."
   exit 0
@@ -75,19 +91,38 @@ while IFS= read -r sd; do
     continue
   fi
   resfile="$sd/evals/result.json"
+  problem=""
   if [ ! -f "$resfile" ]; then
-    warns="$warns
-     • $sd :: eval present but never measured"
+    problem="never measured — no evals/result.json"
+  elif [ "$(json_field "$resfile" queryset_hash)" != "$qhash" ]; then
+    problem="stale: the queryset changed since it was measured"
+  else
+    # The description is the thing the eval actually scores, so a rewritten one
+    # invalidates the result even when every query stayed put. The hash comes from
+    # the scorer itself — one frontmatter parser, not two that can disagree.
+    dnow="$(python3 "$SCORER" --skill-path "$sd" --print-description-hash 2>/dev/null)"
+    dwas="$(json_field "$resfile" description_hash)"
+    if [ -n "$dnow" ] && [ -n "$dwas" ] && [ "$dnow" != "$dwas" ]; then
+      problem="stale: the description was rewritten since it was measured"
+    fi
+  fi
+  if [ -n "$problem" ]; then
+    if ! owes_measurement "$sd"; then
+      warns="$warns
+     • $sd :: $problem  (SKILL.md unchanged in this push — not blocking)"
+      continue
+    fi
+    if [ "${SKILL_EVAL_SKIP:-0}" = "1" ]; then
+      warns="$warns
+     • $sd :: $problem  (allowed through by SKILL_EVAL_SKIP=1)"
+    else
+      blocks="$blocks
+     • $sd :: $problem"
+    fi
     continue
   fi
-  rhash="$(json_field "$resfile" queryset_hash)"
-  if [ "$rhash" != "$qhash" ]; then
-    warns="$warns
-     • $sd :: result.json is stale (queryset changed since last measure)"
-  else
-    passes="$passes
+  passes="$passes
   ✓ $sd :: best_score=$(json_field "$resfile" best_score)"
-  fi
 done <<EOF
 $skills
 EOF
@@ -105,13 +140,22 @@ if [ -n "$blocks" ]; then
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo "  ✖  eval-gate FAILED"
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "  These skills have no valid trigger eval:"
+  echo "  These touched skills are not shippable:"
   printf '%s\n' "$blocks"
   echo ""
-  echo "  HOW TO FIX: add a trigger eval next to the skill, then commit + push again:"
+  echo "  HOW TO FIX — no valid trigger eval: add one next to the skill,"
   echo "    <skill-dir>/evals/trigger-eval.json"
   echo "    — a JSON array of >= 6 cases: {\"query\": \"...\", \"should_trigger\": true|false}"
   echo "    — at least 1 positive (true) and 1 negative (false)."
+  echo ""
+  echo "  HOW TO FIX — never measured / stale: invoke the meta:skill-eval SKILL and follow it,"
+  echo "    then run its script FROM THIS REPO (the installed plugin cache lags and a stale"
+  echo "    copy saves no result at all):"
+  echo "      python3 plugins/meta/skills/skill-eval/scripts/score-description.py \\"
+  echo "        --skill-path <skill-dir> --type self-contained"
+  echo ""
+  echo "  No agent available (offline, no claude binary)? SKILL_EVAL_SKIP=1 git push"
+  echo "    — it downgrades this to a warning and prints what it let through."
   echo ""
   exit 1
 fi

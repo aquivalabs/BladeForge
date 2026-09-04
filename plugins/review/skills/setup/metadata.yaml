@@ -1,6 +1,6 @@
 schema-version: 1
-purpose: Install and tailor the pre-push review framework (5 reviewer agents, /review, secret-scan + attestation gate) into a target repo.
-best-for: A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the 5-agent pre-push review gate adopted and tuned to its stack.
+purpose: Install and tailor the pre-push review framework (seven reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.
+best-for: A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the pre-push review gate adopted and tuned to its stack — including deciding which of the seven bundled lenses it has a subject for.
 needs: []
 changes:
   tags: [files, network]

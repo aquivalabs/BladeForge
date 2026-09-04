@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Pre-push gate. core.hooksPath points here, so this file IS the repo's pre-push
+# hook — there is no .husky/ and no package.json in this repository.
+#
+# Two gates, in cost order. The deterministic one runs first so a missing eval
+# never costs an agent run.
+set -e
+ROOT="$(git rev-parse --show-toplevel)"
+
+# 1. Deterministic: blocks a touched skill with no valid trigger eval, warns on a
+#    result.json that is absent or stale. stdin (the pushed refs) flows through
+#    untouched — the gate reads it to find what is actually being pushed.
+bash "$ROOT/scripts/eval-gate.sh"
+
+# 2. The review gate: requires a passing /review attestation for the diff being
+#    pushed, and runs the secret scan. Published harness, fetched by npx.
+npx -y -p bladeforge-review-harness@latest review-gate
