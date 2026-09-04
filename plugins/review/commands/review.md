@@ -26,7 +26,7 @@ repeating every round.
 
 **A carried verdict can never be attested.** The script refuses on its own — `attest` is false while
 any entry is `carried`, however green the table looks — and the report names which lenses were carried.
-So the cheap rounds cannot leak into the record: an attestation always rests on five lenses judging one
+So the cheap rounds cannot leak into the record: an attestation always rests on every enabled lens judging one
 diff.
 
 **Two things make a round full**, and both are about not trusting a stale verdict: omitting
@@ -153,7 +153,7 @@ already does, so it accumulates on the branch without its own commit.
 
 **The round rule.** Rounds 1 and 2 score normally and open on any Blocker, Major, or Minor. From round 3, a Minor is still reported, still recorded in `report`, and still filed, but it deducts nothing and re-opens nothing — only a Blocker or a Major still moves a score or forces another round, and at most three Majors carry into the fix round (the rest are listed as deferred-this-round, never dropped). The scoring formula, applied once per lens inside the script: `10 − 20×blocker − 3×major − 1×countedMinor`, where `countedMinor` is every Minor in rounds 1 and 2 and zero from round 3 onward.
 
-**The full-run rule.** A full run of all five lenses precedes every attestation, and it is that run — never a mix of runs against different diffs — that gets attested. A delta round may carry a prior PASS forward to save re-judging it, but the script marks it `carried` and refuses to attest while any entry is; the final round, run with `priorPerAgent` omitted, is the attestable one.
+**The full-run rule.** A full run of every enabled lens precedes every attestation, and it is that run — never a mix of runs against different diffs — that gets attested. A delta round may carry a prior PASS forward to save re-judging it, but the script marks it `carried` and refuses to attest while any entry is; the final round, run with `priorPerAgent` omitted, is the attestable one.
 
 **The delta rule.** After a FAIL, the next invocation passes `priorPerAgent` and re-runs ONLY the failed lens(es). Repeat until a delta round comes back clean, then run once with `priorPerAgent` omitted — that full round attests. Never attest a round whose `perAgent` holds a `carried` entry; the script already refuses, and this states the same rule where a reader looks for it.
 
@@ -174,7 +174,7 @@ Print this FIRST, whatever the outcome — one row per lens in the `perAgent` ar
 | - | secret-scan | - | - | CLEAN / N found |
 | - | **OVERALL** | - | - | **PASS / FAIL** |
 
-On a migrated config that is the five built-ins and nothing else, dispatched as `review:review-<name>` — `review:review-craft` for the merged lens. A config naming a further agent gets a further row scored the same way as the rest; if no `plugins/review/agents/review-<name>.md` file backs that name, the dispatch itself fails and the row reads FAIL, never PASS.
+On a migrated config that names only the five default built-ins, dispatched as `review:review-<name>` — `review:review-craft` for the merged lens. A config naming a further agent gets a further row scored the same way as the rest; if no `plugins/review/agents/review-<name>.md` file backs that name, the dispatch itself fails and the row reads FAIL, never PASS.
 
 Then a **Recommendations** section: for each lens with any findings, list each as `severity  where - problem` with its `scenario`, grouped by lens. Then **Disputed**, **Deferred Majors**, **Deferred Minors**, and **Advisories** sections — all pulled straight out of `report`, never re-derived, since the script's own gate criterion 8 already checked `report` for completeness.
 

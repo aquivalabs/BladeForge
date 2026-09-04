@@ -1,7 +1,7 @@
 schema-version: 1
-purpose: Refresh an existing skill's metadata.yaml after its body, tools, scripts, or hooks changed, by re-interviewing the non-derivable fields.
-best-for: Any marketplace using metadata.yaml sidecars, to keep a skill's changes/purpose accurate after it is edited.
-needs: []
+purpose: Bring an existing skill up to the house standard — contract, boundary, checking loop, acceptance criteria — and refresh its metadata.yaml when only the wiring changed.
+best-for: Any marketplace with skills written before a standard existed, where each one must be reworked without re-scaffolding it from scratch.
+needs: [meta:new-skill, meta:skill-eval]
 changes:
   tags: [files]
-  notes: Rewrites the edited skill's metadata.yaml sidecar on disk.
+  notes: Rewrites the edited skill's SKILL.md, metadata.yaml and evals/ on disk, and edits README.md and the owning plugin.json version.

@@ -1,0 +1,10 @@
+[
+  "the new skill's directory holds all four files: SKILL.md, metadata.yaml, evals/trigger-eval.json, evals/acceptance.json",
+  "the body carries a ## Contract section stating In and Out",
+  "the body carries no ## When to Activate section",
+  "the description states triggering conditions and one phrase of purpose, and never the skill's steps",
+  "the nine questions were answered with the human before the body was written",
+  "the owning plugin.json version was bumped",
+  "README.md gained a one-line entry for the skill",
+  "meta:skill-eval was invoked and its script run from the repository, not the plugin cache, leaving evals/result.json beside the skill with no should-NOT-trigger query firing"
+]
