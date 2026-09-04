@@ -114,7 +114,7 @@ against, and no evidence a skill was ever measured at all.
 |---|---|---|
 | `hooks/pre-push` (every local push) | — | runs `eval-gate.sh`, then the review gate; `core.hooksPath` points at `hooks/`, so this file IS the pre-push hook — there is no `.husky/` here |
 | `scripts/eval-gate.sh` (that hook, and every PR) | `trigger-eval.json` | **blocks** a touched skill whose eval is missing or invalid |
-| | `result.json` | **blocks** a skill whose own `SKILL.md` is in the diff when the file is absent or stale — stale meaning either its `queryset_hash` or its `description_hash` no longer matches; **warns** (does not block) when only a bundled script or generated file beside the skill changed. `SKILL_EVAL_SKIP=1` downgrades the block to a warning offline |
+| | `result.json` | **blocks** a skill whose own `SKILL.md` is in the diff when the file is absent or stale — stale meaning either its `queryset_hash` or its `description_hash` no longer matches; **warns** (does not block) when only a bundled script or generated file beside the skill changed. There is no skip flag: a missing or stale measurement on a touched skill always blocks — no live clone to measure from means the skill is not shippable yet |
 | `scripts/scout_validate.py` (every PR) | `metadata.yaml` | blocks on an invalid sidecar or a tool/tag contradiction |
 | `score-description.py` (local only) | `trigger-eval.json` | runs each query as a nested `claude -p`, scores triggering, writes `result.json` |
 

@@ -7,9 +7,9 @@
 # block applies only when the diff contains the skill's own SKILL.md: the eval scores
 # the DESCRIPTION, so editing a bundled script or a generated catalog beside a skill
 # leaves an existing measurement perfectly valid, and demanding a re-run there would
-# just teach people to set SKILL_EVAL_SKIP permanently.
-# Escape hatch: SKILL_EVAL_SKIP=1 downgrades the measurement block to a loud warning
-# (no `claude` available, offline). It prints what it let through.
+# be pointless churn.
+# There is NO skip flag: a touched skill whose measurement is missing or stale always
+# blocks. No live clone to measure from means the skill is not shippable yet — get one.
 # Reads pre-push stdin; falls back to origin/main..HEAD when run by hand with no
 # stdin. Bash 3.2 compatible.
 set -uo pipefail
@@ -112,13 +112,8 @@ while IFS= read -r sd; do
      • $sd :: $problem  (SKILL.md unchanged in this push — not blocking)"
       continue
     fi
-    if [ "${SKILL_EVAL_SKIP:-0}" = "1" ]; then
-      warns="$warns
-     • $sd :: $problem  (allowed through by SKILL_EVAL_SKIP=1)"
-    else
-      blocks="$blocks
+    blocks="$blocks
      • $sd :: $problem"
-    fi
     continue
   fi
   passes="$passes
@@ -154,8 +149,8 @@ if [ -n "$blocks" ]; then
   echo "      python3 plugins/meta/skills/skill-eval/scripts/score-description.py \\"
   echo "        --skill-path <skill-dir> --type self-contained"
   echo ""
-  echo "  No agent available (offline, no claude binary)? SKILL_EVAL_SKIP=1 git push"
-  echo "    — it downgrades this to a warning and prints what it let through."
+  echo "  No live clone to measure from? The skill is not shippable yet — measurement"
+  echo "    is mandatory and has no skip flag. Get a working clone and measure."
   echo ""
   exit 1
 fi
