@@ -320,18 +320,19 @@ python3 plugins/meta/skills/skill-eval/scripts/score-description.py \
 enabled, and stop. Do not measure with skill-creator instead — a wrong harness produces the false
 zeros the skill exists to prevent, and a false zero is worse than no number.
 
-**If there is no live clone to run the script from** (drafting in a sandbox or detached worktree, no
-`scripts/` reachable), do not silently drop the file: say so in the handoff and leave
-`evals/result.json` marked pending, so the measurement is visibly owed rather than quietly skipped.
-Silently omitting it is the failure this section exists to prevent.
+**The measurement is not optional and has no escape hatch.** If there is no live clone to run the
+script from (a sandbox or detached worktree with no `scripts/` reachable), the skill is **not
+finished** — get a working clone and run the measurement before you call it done. Do not skip it, do
+not defer it, do not write a placeholder `result.json`. A skill that ships unmeasured is the failure
+this section exists to prevent.
 
 ---
 
 ## Before you finish
 
 1. `ls plugins/<domain>/skills/<name>/` → `SKILL.md`, `metadata.yaml`, `evals/trigger-eval.json`,
-   `evals/acceptance.json`, and `evals/result.json` once measurement has run (or a pending note per the
-   Measuring section if no clone was reachable). The four authored files must all be present;
+   `evals/acceptance.json`, and `evals/result.json` once measurement has run (measurement is mandatory —
+   no clone reachable means not done, not skipped). The four authored files must all be present;
    `result.json` is produced by the measurement step, not authored. Missing an authored file means you are not done.
 2. The body has exactly one `## Contract` heading and no `## When to Activate` heading. A plain
    `grep` over-counts on any skill that quotes markdown in an example — read the hits rather than

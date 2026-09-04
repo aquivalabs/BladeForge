@@ -6,5 +6,5 @@
   "conversation 1 was read out of the existing body and stated back, not re-asked; conversation 2 was re-asked with the human",
   "for a marketplace skill, metadata.yaml matches what the skill now does and was written atomically",
   "the owning plugin.json version was bumped, and the README.md line still describes the skill",
-  "meta:skill-eval was invoked and its script run from the repository, leaving a current evals/result.json (or, if no clone was reachable, the push used SKILL_EVAL_SKIP=1 per the Measuring fallback and the measurement was declared owed) — a rewritten description was re-measured rather than inheriting the old result"
+  "meta:skill-eval was invoked and its script run from the repository, leaving a current evals/result.json — a rewritten description was re-measured rather than inheriting the old result (measurement is mandatory; no clone reachable means not done, never skipped)"
 ]
