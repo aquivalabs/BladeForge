@@ -71,8 +71,10 @@ deterministic `scripts/eval-gate.sh`, which needs no agent.
   absolute bar (`>= 7/10`) AND no-regression.
 - **`--type context-dependent`** (only fires with the real repo / a file it reads / routing in a
   project's own instructions): the absolute score is **informational, NOT a fail** — judge by
-  no-regression only. A ~0 here is expected; confirm by reading one real transcript to see whether
-  the skill shaped the output.
+  no-regression only. A ~0 here is expected.
+  - **Confirm a low context-dependent score before trusting it** — a separate step, not an aside: open
+    one real transcript of a should-fire case and check whether the skill actually shaped the output.
+    A low number here often means the harness could not observe the firing, not that the skill failed.
 
 A should-NOT-trigger query that fires **is** a real failure: the description is too broad, narrow it.
 
