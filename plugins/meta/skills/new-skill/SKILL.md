@@ -300,6 +300,13 @@ forbids skill-creator's `run_eval`/`run_loop` (it counts a trigger only when `Sk
 first tool call, so real tasks score a false ~0), and states what counts as a failure — a
 should-NOT-trigger query that fires is a real defect, not a rounding error.
 
+**A guide skill also needs its EFFECT measured, not just its trigger.** `meta:skill-eval` scores
+whether the description fires; it says nothing about whether the guidance improves the output once it
+does. If this skill's job is to shape what an agent produces — an authoring guide, a review lens, a
+house-convention skill — also invoke **`skillcraft:skillaxe`**: a with/without run that scores the
+guide's real effect and attributes each shortfall to the guide or the agent. Skip it only for a skill
+that produces nothing to shape.
+
 **Run its script from the repository, not from the installed plugin cache.** The cache is keyed by
 version and lags behind: a cached copy predating the `result.json` repair prints a score and saves
 nothing, which is the exact regression this marketplace already suffered once.

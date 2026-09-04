@@ -187,6 +187,16 @@
       "category": "engineering"
     },
     {
+      "name": "skillcraft",
+      "description": "Skill quality & improvement — measuring whether a guide skill actually helps, diagnosing where it falls short, and improving it without regressions.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/skillcraft",
+      "category": "engineering"
+    },
+    {
       "name": "tests",
       "description": "Test standard as an installable plugin — the execution-tier split, the test contract, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent and the config a repository states its own numbers in.",
       "author": {

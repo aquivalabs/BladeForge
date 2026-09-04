@@ -1,0 +1,20 @@
+{
+  "diffHash": "cbb89a97a559bfe880b608177d5b7f72ffdcd7e224f99a4dc50edad27e0c5074",
+  "commitSha": "e4ab13a88495bbee135ce818f7001c6a67b1e0f5",
+  "perAgent": {
+    "docs": {
+      "score": 9,
+      "verdict": "PASS"
+    },
+    "skill": {
+      "score": 9,
+      "verdict": "PASS"
+    },
+    "leak": {
+      "score": 10,
+      "verdict": "PASS"
+    }
+  },
+  "overall": "PASS",
+  "timestamp": "2026-09-04T13:27:05.804Z"
+}
