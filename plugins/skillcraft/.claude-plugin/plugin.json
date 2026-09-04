@@ -1,0 +1,16 @@
+{
+  "name": "skillcraft",
+  "description": "Skill quality & improvement — measuring whether a guide skill actually helps, diagnosing where it falls short, and improving it without regressions. Home for skill-improvement methods and metrics.",
+  "version": "0.1.0",
+  "keywords": [
+    "skill-quality",
+    "skill-improvement",
+    "skillaxe",
+    "metrics",
+    "evaluation"
+  ],
+  "author": {
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
+  }
+}

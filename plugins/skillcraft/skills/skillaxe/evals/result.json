@@ -1,0 +1,95 @@
+{
+  "skill": "skillaxe",
+  "measured_at": "2026-09-04T15:15:09",
+  "model": "opus",
+  "runs_per_query": 5,
+  "best_score": "9/10",
+  "accuracy": 0.9,
+  "baseline_accuracy": 0.5,
+  "description_hash": "89a4f79565b213ef716d0b48c3e2ab1bcd91cf0203a1e021f542cd639b95d77c",
+  "queryset_hash": "53b1b8d4f5e4617ffcfddc5e8497c9a96197f092b08bf30e6b72d461abc98852",
+  "eval_type": "description-triggering",
+  "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+  "results": [
+    {
+      "query": "does this authoring guide skill actually help the agent, or is it decorative?",
+      "should_trigger": true,
+      "triggers": 4,
+      "runs": 5,
+      "trigger_rate": 0.8,
+      "pass": true
+    },
+    {
+      "query": "diagnose where meta:new-skill falls short and propose fixes",
+      "should_trigger": true,
+      "triggers": 5,
+      "runs": 5,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "audit this review-lens skill \u2014 measure its real effect on the output",
+      "should_trigger": true,
+      "triggers": 4,
+      "runs": 5,
+      "trigger_rate": 0.8,
+      "pass": true
+    },
+    {
+      "query": "the guide skill doesn't seem to change what the agent produces, prove it either way",
+      "should_trigger": true,
+      "triggers": 5,
+      "runs": 5,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "improve this guide skill without dropping what already worked",
+      "should_trigger": true,
+      "triggers": 4,
+      "runs": 5,
+      "trigger_rate": 0.8,
+      "pass": true
+    },
+    {
+      "query": "run a with-and-without comparison on this house-convention skill",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 5,
+      "trigger_rate": 0.4,
+      "pass": false
+    },
+    {
+      "query": "scaffold a brand-new skill for writing changelogs",
+      "should_trigger": false,
+      "triggers": 1,
+      "runs": 5,
+      "trigger_rate": 0.2,
+      "pass": true
+    },
+    {
+      "query": "refresh the metadata.yaml for this skill after I edited its body",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 5,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "does this skill's description trigger on the right queries?",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 5,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "write me a react component for a date picker",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 5,
+      "trigger_rate": 0.0,
+      "pass": true
+    }
+  ]
+}
