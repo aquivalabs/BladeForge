@@ -3,5 +3,5 @@ purpose: Measure whether a guide skill helps (with/without run), attribute short
 best-for: Auditing a high-traffic guide skill, or one that seems not to help, before trusting or rewriting it.
 needs: [meta:model-routing]
 changes:
-  tags: [files]
-  notes: During diagnosis it spawns subagents and writes generated skills + judgments to a scratch directory; its fix step edits the LIVE SKILL.md of the guide skill under test, behind the anti-regression anchor. Reads no secrets; touches no git/network/org/money on its own.
+  tags: [files, network]
+  notes: During diagnosis it spawns subagents and writes generated skills + judgments to a scratch directory; its fix step edits the LIVE SKILL.md of the guide skill under test, behind the anti-regression anchor. The optional embedding axis fetches a sentence-transformers model from HuggingFace on first use (network), then runs locally — hence the network tag; the two LLM axes need no embedding model. Reads no secrets; touches no git/org/money.
