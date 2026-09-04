@@ -1,0 +1,159 @@
+{
+  "skill": "new-skill",
+  "measured_at": "2026-09-01T18:29:14",
+  "model": "sonnet",
+  "runs_per_query": 2,
+  "best_score": "18/18",
+  "accuracy": 1.0,
+  "baseline_accuracy": null,
+  "description_hash": "d13d788be453cff44fa109603a58c12d87050f2c7c75abaacf1d9c71c89ce9a9",
+  "queryset_hash": "19502b1d44233e4799b075637172363817663c173636283bf74cf3e19923ef5e",
+  "eval_type": "description-triggering",
+  "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+  "results": [
+    {
+      "query": "i want to create a skill for how we handle i18n strings in this project",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 2,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "adding a new skill to the meta plugin \u2014 where does the SKILL.md go and what should be in it?",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 2,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "what's the right folder name and structure for a new salesforce skill about apex batches?",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 2,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "creating a new domain plugin for database stuff \u2014 do i need a plugin.json?",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 2,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "write a skill that teaches claude to always use the bff proxy for sf calls",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 2,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "the new frontend-css:rem skill needs a SKILL.md \u2014 show me what it should look like",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 2,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "adding embed-test as a project-local skill \u2014 how is that different from a marketplace skill?",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 2,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "i need a skill that fires before any apex test is authored \u2014 help me scaffold it",
+      "should_trigger": true,
+      "triggers": 1,
+      "runs": 2,
+      "trigger_rate": 0.5,
+      "pass": true
+    },
+    {
+      "query": "what goes in the description: frontmatter for a new skill?",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 2,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "improve this skill's description so it triggers more reliably \u2014 run evals on it",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 2,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "the ockham skill is triggering on the wrong things \u2014 optimize it",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 2,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "the lean-writing skill needs better examples in references/ \u2014 add some",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 2,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "how do i structure a new React component in this project?",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 2,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "set up the review gate in <ui-repo>",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 2,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "should the WidgetCard use SRP \u2014 it's doing fetch and render",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 2,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "audit docs/superpowers/specs/widget-engine.md for clarity",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 2,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "run the pre-push review before i merge this branch",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 2,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "what's the naming convention for scss module files in this repo?",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 2,
+      "trigger_rate": 0.0,
+      "pass": true
+    }
+  ]
+}

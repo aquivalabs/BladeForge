@@ -42,7 +42,7 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "Reviewer id. The 5 built-ins are craft, architecture, tests, docs, security; others are appended."
+          "description": "Reviewer id. Seven ship built in: craft, architecture, tests, docs, security are enabled by default; skill and leak are for repositories that publish skills and must be enabled deliberately; others are appended."
         },
         "enabled": {
           "type": "boolean"

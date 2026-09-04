@@ -1,0 +1,9 @@
+[
+  "the score was produced by score-description.py run from the repository, never by skill-creator's run_eval or run_loop",
+  "evals/result.json exists beside the skill and its description_hash matches the description being shipped",
+  "no should-NOT-trigger query fired; one that did was treated as a real defect and the description narrowed",
+  "every positive case was read individually rather than only the headline score, so cases passing on half their runs were noticed",
+  "each miss was diagnosed against the three questions — keyword list, boundary overreach, implausible query — and the fix addresses the cause rather than the wording of the failed query",
+  "a case firing on half its runs was re-measured with more runs before being diagnosed or fixed",
+  "the verdict was read against the skill's type: an absolute bar for self-contained, no-regression only for context-dependent"
+]

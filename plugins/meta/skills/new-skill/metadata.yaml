@@ -1,7 +1,7 @@
 schema-version: 1
-purpose: Scaffold a brand-new skill in the plugin model and author its metadata.yaml via a field-by-field interview.
-best-for: Any marketplace where a new skill must ship a metadata.yaml sidecar and follow the house folder/naming structure.
-needs: []
+purpose: Author a brand-new skill from the nine questions — its contract, boundary and acceptance criteria — then scaffold the folder, the metadata interview and both eval files.
+best-for: Any marketplace where a skill must declare what it needs and produces, ship checkable acceptance criteria, and follow one house structure.
+needs: [meta:skill-eval]
 changes:
   tags: [files]
-  notes: Creates the skill's SKILL.md and writes its metadata.yaml sidecar on disk.
+  notes: Writes the skill's SKILL.md, metadata.yaml, evals/trigger-eval.json and evals/acceptance.json on disk, and edits README.md and the owning plugin.json version.

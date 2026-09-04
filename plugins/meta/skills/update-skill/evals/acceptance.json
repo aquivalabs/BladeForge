@@ -1,0 +1,10 @@
+[
+  "the probe was run before any edit, and the path it selected was stated — a failing probe forces path A whatever the request asked for",
+  "the updated skill's body carries exactly one ## Contract section and no ## When to Activate section",
+  "the body ends in a ## Before you finish procedure that loops until clean, and repeats no expectation from evals/acceptance.json",
+  "evals/acceptance.json exists beside the skill, holding either an array of expectations or a not-applicable reason",
+  "conversation 1 was read out of the existing body and stated back, not re-asked; conversation 2 was re-asked with the human",
+  "for a marketplace skill, metadata.yaml matches what the skill now does and was written atomically",
+  "the owning plugin.json version was bumped, and the README.md line still describes the skill",
+  "meta:skill-eval was invoked and its script run from the repository, leaving a current evals/result.json — a rewritten description was re-measured rather than inheriting the old result"
+]

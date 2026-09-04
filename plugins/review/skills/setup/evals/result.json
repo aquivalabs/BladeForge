@@ -1,0 +1,111 @@
+{
+  "skill": "setup",
+  "measured_at": "2026-09-04T09:38:47",
+  "model": "sonnet",
+  "runs_per_query": 3,
+  "best_score": "12/12",
+  "accuracy": 1.0,
+  "baseline_accuracy": null,
+  "description_hash": "b12e962bb7c198abfaed79ccfc68c60007bb42643d07b0f7957663926e10350d",
+  "queryset_hash": "ec52e20c1f11e72fb80ed0f5c68e2ace87d2d81d61bfcc5efdd9bb6da9ace581",
+  "eval_type": "description-triggering",
+  "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+  "results": [
+    {
+      "query": "this repo has no .claude/review.config.json yet \u2014 can you install the pre-push review gate?",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "we want to adopt the 5-agent review system in this new project, set it up for us",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "set up the secret-scan CI and husky pre-push hook for this repo",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "how do I target the review framework to this codebase and pick which skills each reviewer agent loads?",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "onboard this repo onto the org's pre-push review gate \u2014 it's greenfield, nothing configured yet",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "tailor review.config.json for a React + Node repo, wiring in the right conventions and security skills",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "run the pre-push review on my current branch before I merge",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "the review gate flagged issues in my diff \u2014 walk me through fixing them",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "write a brand-new skill for parsing widget import errors, where should the SKILL.md live?",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "sweep the app for dead code and unused exports",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "add a loading skeleton to the DataTable component",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "fix the failing unit test in the checkout service",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    }
+  ]
+}

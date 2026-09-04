@@ -1,0 +1,135 @@
+{
+  "skill": "update-skill",
+  "measured_at": "2026-09-01T19:25:56",
+  "model": "sonnet",
+  "runs_per_query": 3,
+  "best_score": "14/15",
+  "accuracy": 0.933,
+  "baseline_accuracy": 0.733,
+  "description_hash": "f571854485829ff4a5a5f2af4693b3c34e1c2cc69d94f188d74775bbc260b787",
+  "queryset_hash": "6ea35ee7fbea747bac4b9676dc9545ac061ec8da4d798be8cae6583c518ef92a",
+  "eval_type": "description-triggering",
+  "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+  "results": [
+    {
+      "query": "i just changed the body of the widget-catalog skill \u2014 can you refresh its metadata.yaml?",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "i added a new bundled script to this skill and swapped its allowed-tools \u2014 update the metadata sidecar",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "the scout hook nudged me after editing this SKILL.md, walk me through updating metadata.yaml before i commit",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "i rewrote the hooks.json for this skill \u2014 does its changes.tags still match reality?",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "this skill's purpose and needs fields are stale after my edits, re-run the metadata interview",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 3,
+      "trigger_rate": 0.6666666666666666,
+      "pass": true
+    },
+    {
+      "query": "i changed what the order-sync skill actually does \u2014 its metadata.yaml purpose no longer matches, fix it",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "this skill has no Contract section and still carries a When to Activate \u2014 bring it up to the standard",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 3,
+      "trigger_rate": 0.6666666666666666,
+      "pass": true
+    },
+    {
+      "query": "audit the order-sync skill against the house standard and rework whatever fails",
+      "should_trigger": true,
+      "triggers": 2,
+      "runs": 3,
+      "trigger_rate": 0.6666666666666666,
+      "pass": true
+    },
+    {
+      "query": "add acceptance criteria to this existing skill \u2014 it has no evals/acceptance.json",
+      "should_trigger": true,
+      "triggers": 3,
+      "runs": 3,
+      "trigger_rate": 1.0,
+      "pass": true
+    },
+    {
+      "query": "its description summarises the workflow instead of saying when to use it \u2014 rewrite the frontmatter and fix the boundary",
+      "should_trigger": true,
+      "triggers": 1,
+      "runs": 3,
+      "trigger_rate": 0.3333333333333333,
+      "pass": false
+    },
+    {
+      "query": "i want to create a brand-new skill for handling widget import errors \u2014 where does the SKILL.md go?",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "improve this skill's description so it triggers more reliably \u2014 run evals and score it",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "how do i structure a new React component in this project?",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "what's the naming convention for scss module files in this repo?",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    },
+    {
+      "query": "run the pre-push review before i merge this branch",
+      "should_trigger": false,
+      "triggers": 0,
+      "runs": 3,
+      "trigger_rate": 0.0,
+      "pass": true
+    }
+  ]
+}

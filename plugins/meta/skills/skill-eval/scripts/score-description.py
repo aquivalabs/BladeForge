@@ -24,6 +24,8 @@ Usage:
 """
 import argparse
 import glob
+import datetime
+import hashlib
 import json
 import os
 import re
@@ -236,18 +238,17 @@ def recommendations(rows, skill_type, bar, score10):
             "Make sure the consuming repo's CLAUDE.md lists this skill so Claude gets routed to it.",
             "After future edits, only re-check no-regression (this isolated score can't climb).",
         ]
-    if fired_ok == 0 and pos:
-        return [
-            f"Name the exact user phrasings it missed, e.g. {ex(misses)}.",
-            "Be pushier about WHEN: open with \"Use whenever the user …\" and add "
-            "\"even if they don't explicitly say <keyword>\".",
-            "Keep it about WHEN to use it, not what it does.",
-            "Re-run with --suggest to get a concrete rewritten description, then re-score.",
-        ]
     if misses:
         return [
-            f"Extend the description to cover the missed phrasings: {ex(misses)}.",
-            f"Re-run with --suggest for a proposed rewrite; aim for no-regression AND >= {bar}/10.",
+            "Read WHY IT MISSED below before touching anything. Do NOT paste a failed query's "
+            "wording into the description — that patches the test set, not the skill.",
+            "Ask which of three causes it is: the description reads as a keyword list rather "
+            "than a condition; the boundary handed a neighbour a whole register instead of one "
+            "action; or the case fires only sometimes, in which case re-measure with more runs "
+            "before diagnosing anything.",
+            "Fix the missing CONDITION, then re-score; aim for no-regression AND "
+            f">= {bar}/10.",
+            "The queryset is frozen once measured — edit it only when what the skill DOES changed.",
         ]
     if ffires:
         return [
@@ -257,6 +258,33 @@ def recommendations(rows, skill_type, bar, score10):
     if score10 >= bar:
         return ["No change needed — the description triggers cleanly."]
     return [f"Solid but under {bar}/10 — optional: tighten wording to catch the borderline cases."]
+
+
+def diagnose_misses(claude_bin, name, description, misses, model):
+    """Ask the model WHY it did not reach for the skill.
+
+    A miss list on its own invites the one fix that must not be made — copying the failed
+    query's wording into the description. The answer to "why" names a missing CONDITION
+    instead, which is a fix that generalises. Anthropic's own guidance: address underlying
+    issues broadly rather than adding narrow patches.
+    """
+    queries = [r["query"] for r in misses]
+    prompt = (
+        f"Here is the `description` field of a Claude Code skill named '{name}':\n\n{description}\n\n"
+        "A trigger evaluation ran the requests below. On each, the model did NOT reliably reach "
+        f"for this skill:\n\n" + "\n".join(f"{i}. {q}" for i, q in enumerate(queries, 1)) + "\n\n"
+        "For EACH request answer three things, quoting the description's own wording:\n"
+        "(a) what in this description makes the match uncertain rather than obvious;\n"
+        "(b) which other skill or agent you would consider instead, and which phrase pulls you there;\n"
+        "(c) what CONDITION is missing from the description — describe the missing condition itself. "
+        "Do NOT write replacement text and do NOT repeat the request's own words back.")
+    try:
+        out = subprocess.run([claude_bin, "-p", prompt, "--model", model],
+                             capture_output=True, text=True, timeout=420,
+                             env={k: v for k, v in os.environ.items() if k != "CLAUDECODE"})
+        return out.stdout.strip() or "(diagnosis empty)"
+    except Exception as e:
+        return f"(diagnosis skipped: {e})"
 
 
 def suggest_description(claude_bin, name, description, misses, ffires, model):
@@ -278,7 +306,7 @@ def suggest_description(claude_bin, name, description, misses, ffires, model):
 
 
 def render(name, description, result, bar, base_acc=None, skill_type="self-contained",
-           suggest=False):
+           suggest=False, why=True, model="sonnet"):
     rows = rows_of(result)
     acc = accuracy(rows)
     s10 = round(acc * 10, 1)
@@ -311,6 +339,11 @@ def render(name, description, result, bar, base_acc=None, skill_type="self-conta
     misses = [r for r in pos if not r["passed"]]
     ffires = [r for r in neg if not r["passed"]]
 
+    if misses and why:
+        claude_bin = shutil.which("claude") or "/opt/homebrew/bin/claude"
+        print("\n  WHY IT MISSED (one nested call; --no-why to skip):")
+        for line in diagnose_misses(claude_bin, name, description, misses, model).splitlines():
+            print(f"    {line}" if line.strip() else "")
     if suggest and (misses or ffires):
         claude_bin = shutil.which("claude") or "/opt/homebrew/bin/claude"
         proposed = suggest_description(claude_bin, name, description, misses, ffires, "opus")
@@ -324,6 +357,44 @@ def render(name, description, result, bar, base_acc=None, skill_type="self-conta
         for r in ffires:
             print(f"    · \"{r['query']}\"   (fired {r['triggers']}/{r['runs']})")
     print()
+
+
+def save_result(skill_path, queryset, current, cur_result, base_acc, args):
+    """Write evals/result.json so a measurement survives the session that took it.
+
+    The shape follows the record `optimize_description.py` established before it was
+    deleted (commit 4c183a9), keeping its load-bearing idea: TWO hashes key the record
+    to the exact queryset AND description that were measured, so editing either one
+    marks this record stale for the gate. Dropping description_hash would let a rewritten
+    description keep an old score — the description is what this eval actually measures.
+
+    Fields belonging to the optimisation loop that script ran — holdout, best_train_score,
+    exit_reason, applied — are not carried: this scorer measures one description, it does
+    not search for a better one.
+    """
+    rows = rows_of(cur_result)
+    passed = sum(1 for r in rows if r["passed"])
+    out = {
+        "skill": os.path.basename(skill_path),
+        "measured_at": datetime.datetime.now().isoformat(timespec="seconds"),
+        "model": args.model,
+        "runs_per_query": args.runs,
+        "best_score": f"{passed}/{len(rows)}",
+        "accuracy": round(accuracy(rows), 3),
+        "baseline_accuracy": round(base_acc, 3) if base_acc is not None else None,
+        "description_hash": hashlib.sha256(current.encode()).hexdigest(),
+        "queryset_hash": hashlib.sha256(Path(queryset).read_bytes()).hexdigest(),
+        "eval_type": "description-triggering",
+        "method": ("score-description.py: the skill is installed as a real .claude/skills/<name>/ "
+                   "and each query runs as a nested `claude -p`; a query counts as TRIGGERED when "
+                   "the Skill tool fires for it anywhere in the turn."),
+        "results": cur_result.get("results", []),
+    }
+    dest = Path(skill_path, "evals", "result.json")
+    tmp = dest.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(out, indent=2) + "\n")
+    tmp.replace(dest)
+    print(f"\n  saved {dest}")
 
 
 def main():
@@ -340,15 +411,36 @@ def main():
                     default="self-contained",
                     help="context-dependent = only fires with the real repo/routing; "
                          "then absolute score is informational, judge by no-regression")
+    ap.add_argument("--no-save", action="store_true",
+                    help="do not write evals/result.json")
     ap.add_argument("--suggest", action="store_true",
                     help="also propose a rewritten description via one LLM call")
+    ap.add_argument("--no-why", action="store_true",
+                    help="skip the WHY IT MISSED diagnosis (one nested call, on by default "
+                         "whenever a positive case missed — the answer names the missing "
+                         "condition, which is what stops a miss being patched with the "
+                         "failed query's own wording)")
+    ap.add_argument("--print-description-hash", action="store_true",
+                    help="print sha256 of the skill's current description and exit; "
+                         "no LLM call. The gate uses this to tell a measured description "
+                         "from a rewritten one, so the extraction lives in ONE place.")
     args = ap.parse_args()
+
+    if args.print_description_hash:
+        if not args.skill_path:
+            sys.exit("--skill-path is required with --print-description-hash")
+        desc = description_from_text(Path(args.skill_path, "SKILL.md").read_text())
+        if not desc:
+            sys.exit(f"no description: frontmatter in {args.skill_path}/SKILL.md")
+        print(hashlib.sha256(desc.encode()).hexdigest())
+        return
 
     if args.from_result:
         result = json.load(open(args.from_result))
         name = result.get("skill_name", "") or os.path.basename(os.path.dirname(os.path.dirname(args.from_result)))
         render(name, result.get("description", "(from saved result)"), result, args.bar,
-               skill_type=args.type, suggest=args.suggest)
+               skill_type=args.type, suggest=args.suggest, why=not args.no_why,
+               model=args.model)
         return
 
     if not args.skill_path:
@@ -370,7 +462,10 @@ def main():
             base_acc = accuracy(rows_of(eval_description(ws, clean, baseline, queries, args.model, runs=args.runs)))
 
     render(os.path.basename(skill_path), current, cur_result, args.bar, base_acc,
-           skill_type=args.type, suggest=args.suggest)
+           skill_type=args.type, suggest=args.suggest, why=not args.no_why, model=args.model)
+
+    if not args.no_save:
+        save_result(skill_path, queryset, current, cur_result, base_acc, args)
 
 
 if __name__ == "__main__":

@@ -5,10 +5,13 @@
   {"query": "i rewrote the hooks.json for this skill — does its changes.tags still match reality?", "should_trigger": true},
   {"query": "this skill's purpose and needs fields are stale after my edits, re-run the metadata interview", "should_trigger": true},
   {"query": "i changed what the order-sync skill actually does — its metadata.yaml purpose no longer matches, fix it", "should_trigger": true},
+  {"query": "this skill has no Contract section and still carries a When to Activate — bring it up to the standard", "should_trigger": true},
+  {"query": "audit the order-sync skill against the house standard and rework whatever fails", "should_trigger": true},
+  {"query": "add acceptance criteria to this existing skill — it has no evals/acceptance.json", "should_trigger": true},
+  {"query": "its description summarises the workflow instead of saying when to use it — rewrite the frontmatter and fix the boundary", "should_trigger": true},
   {"query": "i want to create a brand-new skill for handling widget import errors — where does the SKILL.md go?", "should_trigger": false},
-  {"query": "improve this skill's description so it triggers more reliably — run evals on it", "should_trigger": false},
+  {"query": "improve this skill's description so it triggers more reliably — run evals and score it", "should_trigger": false},
   {"query": "how do i structure a new React component in this project?", "should_trigger": false},
-  {"query": "set up the review gate in <ui-repo>", "should_trigger": false},
   {"query": "what's the naming convention for scss module files in this repo?", "should_trigger": false},
   {"query": "run the pre-push review before i merge this branch", "should_trigger": false}
 ]

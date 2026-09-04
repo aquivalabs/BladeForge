@@ -1,10 +1,10 @@
 ---
-description: Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the 5-agent /review system in a new project.
+description: Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the /review system in a new project.
 ---
 
 # Review framework setup
 
-Installs the stack-agnostic review gate (5 reviewer agents + `/review` + secret-scan + attestation)
+Installs the stack-agnostic review gate (seven reviewer agents + `/review` + secret-scan + attestation)
 into the current repo and tailors it to the project.
 
 ## When to offer
@@ -61,9 +61,18 @@ After wiring from the answers, REMIND the adopter to add their PROJECT-LOCAL ski
 `.claude/skills/`, hyphen ids) on top — those encode repo-specific rules a generic map can't know.
 
 For anything the questionnaire doesn't cover, hand-edit `.claude/review.config.json`
-(schema: `./review.config.schema.json`). For each of the 5 agents (`craft`, `architecture`,
-`tests`, `docs`, `security`), fill in what is project-specific — anything omitted falls back to sane
-defaults:
+(schema: `./review.config.schema.json`). **Seven agents ship built in.** Five are general and the
+harness enables them by default — `craft`, `architecture`, `tests`, `docs`, `security`. Two are for
+repositories that publish skills and must be enabled deliberately:
+
+| lens | judges | enable when |
+|---|---|---|
+| `skill` | what a `SKILL.md` declares — contract, acceptance file, a description that routes rather than narrates | the repo contains skills |
+| `leak` | a real class, org, person or path from a work codebase reaching a published repository | the repo is published, or may be |
+
+A repo may still add its own by dropping a `plugins/review/agents/review-<name>.md` contract beside
+them and naming it in `agents`. For each agent, fill in what is project-specific; anything omitted
+falls back to sane defaults:
 
 - **checks** — deterministic commands `/review` runs once per round and hands to the lens as
   machine-verified facts, e.g. `{"name": "docs-check", "command": "python3 scripts/docs-check.py"}`
@@ -79,7 +88,15 @@ defaults:
   spells it out (the escape hatch).
 
 Keep thresholds at defaults (craft 7, architecture 8, tests 7, docs 8, security 9) unless the
-project wants a different bar. After editing, run `/review` to confirm the gate runs end-to-end.
+project wants a different bar; an agent a repo adds itself picks its own.
+
+**A built-in you do not want must be switched off explicitly.** The harness merges all five into
+every config, and a missing `enabled` field counts as ON — so naming three agents yields eight, and
+the extra runs cost an agent each with nothing in their subject to judge. Write
+`{"name": "tests", "enabled": false, "threshold": 7, "skills": []}` for each one the repo has no
+subject for.
+
+After editing, run `/review` to confirm the gate runs end-to-end.
 
 ## Compatibility with older installs
 
