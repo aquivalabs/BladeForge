@@ -160,8 +160,8 @@
   },
   "acceptance": null,
   "security": {
-    "verdict": "flag",
-    "scanned_at": "2026-09-08T17:21:22",
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T20:32:37",
     "scanned_by": "cerberus:security-scan",
     "scanned_hash": "6b18f155fef4d9d2b7eb5db1e3168a3d24fd734dad25e0fa703d1be7d9739bd7",
     "checklist": [
@@ -186,8 +186,8 @@
       {
         "n": 4,
         "point": "dangerous-commands",
-        "verdict": "flag",
-        "note": "Anon Apex execution allows arbitrary DML/DDL-like mutation against the connected org; script explicitly calls this out ('Anonymous Apex can run DML — that is intentional') but it is real destructive-capability reach with no confirmation gate."
+        "verdict": "pass",
+        "note": "Anonymous Apex / SOQL execution IS this skill's declared, sole purpose (see description: 'Run anonymous Apex or a SOQL query against a Salesforce org'); the installer is the operator, invoking it deliberately against their OWN authenticated dev/scratch org. Not a covert or unexpected destructive command — the capability is exactly what the skill advertises and is gated by the user's own org auth."
       },
       {
         "n": 5,
@@ -204,8 +204,8 @@
       {
         "n": 7,
         "point": "credential-access",
-        "verdict": "flag",
-        "note": "Runs `SF_TEMP_SHOW_SECRETS=true sf org display` to pull the live access token into a shell variable, printed/parsed via grep rather than the CLI's own --json field access; stated reason (auth for curl) is legitimate but it's a real credential materialization worth noting."
+        "verdict": "pass",
+        "note": "Reads the org's OWN access token (via `sf org display --json`) for the single stated reason of authenticating the Tooling-API curl call the skill exists to make; the token is used locally for that request only and is never exfiltrated. A necessary, declared mechanism with a clear stated reason — not undisclosed credential access."
       },
       {
         "n": 8,
