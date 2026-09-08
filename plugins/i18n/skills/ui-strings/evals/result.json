@@ -1,0 +1,227 @@
+{
+  "trigger": {
+    "skill": "ui-strings",
+    "measured_at": "2026-09-04T18:27:52",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "15/18",
+    "accuracy": 0.833,
+    "baseline_accuracy": 0.722,
+    "description_hash": "12a8e8df6f931c8fe94075905e6f51a522205425d220232bb926758f3ae69f08",
+    "queryset_hash": "dc6753adb51663180c5eeb24f4b55007325911b704c04c803bb4befde7b18f4f",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "add a 'Save changes' button label to the widget config panel in React",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "the empty state on the dashboard says 'No data found' — that string is hardcoded, need to move it to i18n",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add a toast that says 'Record saved successfully' after the user submits the form",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "placeholder text for the account search input is hardcoded in english, fix it",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "TICK-000 — the widget card settings modal needs a heading 'Configure Widget Card' wired through react-i18next",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "write the validation message for a required field in the record entry form",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "need a tooltip label on the usage metric card that says 'Rolling 30-day active users'",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "add error message copy for when the BFF returns a 403 on the dashboard load",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the sidebar nav item for 'Entries' needs a localization key, add it to the translation catalog",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "log an error to the console when the Salesforce token refresh fails",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add an error code for the missing Pkg__Config_Item__c field and register it in ERROR_CODES.md",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "set the enum key for the metric type to ACTIVE in the TypeScript union",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a test fixture with a hardcoded account name 'Acme Corp' for the records unit test",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the backend route logs 'request received' on every BFF call, is that fine?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a config key 'widget.refreshIntervalMs' to the app settings object",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "how should i handle the google.rpc.Status error envelope when the Apex service throws?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "rename the internal enum value OLD_ENTRY to NEW_ENTRY across the codebase",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a server-side log line that prints the Salesforce org id on startup",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.4,
+    "skillscore": 0.95,
+    "guide_faults": [],
+    "verdict": "Guide-following output hits all 5 rubric points explicitly (mechanism detection, key-reuse/no-duplication, identifiers-vs-prose split, namespace registration+build verification); the isolated baseline — though competent thanks to repo context already in CLAUDE.md — never mentions checking for an existing key to reuse or excluding identifiers/enums from translation, and spends effort on speculative multi-locale mirroring not evidenced in this repo."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "ad868c94007ed163eab0daceae4c8c7d772f24dcf17f5575e4b6ab772ce3fb4b",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "instructions are conventional agent guidance, no directives aimed at overriding the reading model's prior instructions"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "no network calls or data transmission of any kind in this markdown-only skill"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "no keys/tokens/credentials present"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "only command is a benign grep for hardcoded literals; no destructive shell"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain readable prose and markdown, no encoded payloads"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "no fetch/download/curl of any kind"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "no reference to ~/.ssh, ~/.aws, .env, keychain, or cookies"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "no sudo, setuid, cron, or profile edits"
+      }
+    ]
+  }
+}

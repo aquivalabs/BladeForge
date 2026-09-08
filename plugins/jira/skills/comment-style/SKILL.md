@@ -4,11 +4,13 @@ description: Use whenever writing or posting a comment on a Jira issue/ticket �
 
 # Jira Comment Style
 
-## When to Activate
+## Contract
 
-- About to post or draft a comment on any Jira ticket (any project key).
-- Writing a status update, decision, handoff, or "what's done / what's wrong / what's next" note.
-- Using the Atlassian MCP `addCommentToJiraIssue` tool.
+**In:** a Jira comment about to be written or posted — a status update, decision, handoff, or
+what's-done/left note, by any means including the Atlassian MCP `addCommentToJiraIssue` tool.
+
+**Out:** the comment is short, bottom-line-first, essence-only, precise, filler-free, and in English —
+understood on the first read. This IS the acceptance criteria for the comment.
 
 ---
 
@@ -42,3 +44,15 @@ A few points → short list, one line each:
 ## Anti-pattern
 
 A wall of text narrating the journey. The reader wants the result, not the process.
+
+
+---
+
+## Before you finish
+
+1. Re-read the drafted comment as the reader will: the FIRST sentence is the conclusion
+   (done / blocked / one deviation / needs a decision), not background.
+2. It is a few lines at most, each bullet is a single line, and it names the exact thing (AC #, field,
+   screen, file) — not "some stuff".
+3. No filler, hedging, "just wanted to update", or decorative emoji; it is in English.
+4. Any line fails? Trim and re-read from step 1.

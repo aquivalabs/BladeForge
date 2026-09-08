@@ -13,12 +13,15 @@ LWC/Aura, Web Components, or plain HTML/CSS. Wherever the examples say "SCSS", r
 stack's styling mechanism" (SCSS, CSS Modules, CSS custom properties, Tailwind, CSS-in-JS, a
 framework theme). The acceptance bar below does not depend on the framework.
 
-## When to Activate
+## Contract
 
-- Creating a new component, page, view, or template.
-- Editing an existing component's markup or styles in a way that affects layout, size, or wrapping.
-- Writing any styles with widths, columns, flex/grid, or media/container queries.
-- A project has no defined breakpoint scale / grid system (see step 0).
+**In:** creating or editing any UI component, page, or layout style — or a project with no breakpoint
+system yet.
+
+**Out:** it renders validly at every defined breakpoint and the awkward widths between — no overflow,
+readable text, discernible images, reflow rather than shrink, restrained chrome, usable targets, full-
+area states, and breakpoints via the token system. The checkable expectations are in
+`evals/rubric.json`.
 
 ---
 
@@ -51,36 +54,17 @@ magic-number widths.
 
 ---
 
-## Acceptance criteria
+## Before you finish
 
-A component or page is **responsive-valid** only when, at **every defined breakpoint** — and the
-awkward widths *between* them — all of the following hold. Check the smallest width (≈320px) and a
-wide one explicitly; most breakage hides at the extremes.
-
-1. **Fits its container.** No element clips or overflows its box; no element-level horizontal scrollbar.
-2. **No horizontal page scroll.** Wide content (tables, code blocks, diagrams, wide media) scrolls
-   inside its own `overflow-x: auto` container — the page body never scrolls sideways.
-3. **Text stays readable.** Not truncated to nonsense, never below a legible size, no overlap or
-   collision between text runs.
-4. **Images/illustrations stay discernible.** Scaled so the user can still make out what they show —
-   not shrunk to an unreadable thumbnail. Use `max-width: 100%` + intrinsic sizing, not fixed tiny
-   dimensions.
-5. **Reflow, don't just shrink.** Multi-column layouts collapse to stacked rows rather than scaling
-   type or media below legibility to keep columns side-by-side.
-6. **Borders/frames don't dominate.** Chrome — borders, padding, decorative frame — is never the
-   majority of a block's visual mass, especially at the narrowest widths.
-7. **Nothing hidden or covered.** No content pushed off-edge or trapped behind sticky/fixed/overlay
-   elements at any width.
-8. **Interactive targets stay usable.** Adequate hit area (≈44px) at touch widths; controls don't
-   overlap, stack into each other, or become unclickable.
-9. **Density/spacing scales sanely.** Spacing comes from the scale/tokens; no cavernous dead space
-   when wide, no cramped collisions when narrow.
-10. **Full-area states pass too.** Empty / loading / error / placeholder states fill their area
-    without overflow at every breakpoint (they are easy to forget — they render full-width).
-11. **Media queries via the system.** Every breakpoint rule uses the project's breakpoint tokens /
-    mixin — never a hardcoded magic-number width.
-
----
+1. Resize through EACH defined breakpoint boundary and the in-between widths — not just one — and
+   always spot-check the two extremes (smallest phone ~320px and a wide monitor); most breakage hides
+   there.
+2. At each width the eleven properties hold: fits its container, no page-level horizontal scroll,
+   readable text, discernible images, reflow-not-shrink, restrained chrome, nothing hidden (no content
+   trapped behind a sticky/fixed/overlay element at any width — check it or mark it N/A, never skip it
+   silently), usable targets, sane density, full-area states pass, breakpoints via the token system.
+   Walk EVERY axis explicitly; an axis that does not apply is declared N/A, not omitted.
+3. A width fails? Fix it and re-resize. Full expectations → `evals/rubric.json`.
 
 ## How to verify
 

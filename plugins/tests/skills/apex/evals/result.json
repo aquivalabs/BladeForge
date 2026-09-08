@@ -1,0 +1,259 @@
+{
+  "trigger": {
+    "skill": "apex",
+    "measured_at": "2026-09-07T09:19:18",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "16/22",
+    "accuracy": 0.727,
+    "baseline_accuracy": null,
+    "description_hash": "37d5c290f7dcb96e2bef9197e20dac5e50a1d83139a31bb094d22a9c99f53ed9",
+    "queryset_hash": "f10c2c9deef6e107043f1bdc1c38880788ed973ae3fa2f659dacc0cd938e8079",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "write a test class for MetricBuilder",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "I just created WidgetConfigResource.cls — add the matching test file",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "our apex tests for Pkg__Widget_Config__c are still using System.assertEquals, fix them to use Assert.*",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add @TestSetup data factory for Pkg__Order__c in OrderHandlerTest",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "cover the negative path in RangeHandlerTest — what happens when the range is null",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "MetricBuilderTest only has 40% coverage, write adversarial tests for the bad-input paths",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "i need a test for the REST resource WidgetCardConfigResource — mock the RestRequest",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "update RecordHandlerTest after I added the new validateItems method",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "our test inserts a hardcoded id '001000000000001AAA', fix that",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "deploy WidgetConfigResource.cls to the myOrg org",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "run the apex tests for MetricBuilderTest on the org",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "how does Pkg__RangeHandler work under the hood",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a new LWC component that calls the WidgetConfigResource apex class",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "run a SOQL query to check which Pkg__Widget_Config__c records exist for this user",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "add a BFF route for /api/widget-config",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "check the security of the WidgetConfigResource REST endpoint for SOQL injection",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "retrieve the ApexClass metadata for MetricBuilder from the org",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "document the data model for Widget_Config__c and Widget_Card__c",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "review this Apex test class somebody else wrote and tell me what it is missing",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "cover the WITH USER_MODE path in WidgetConfigResourceTest with a runAs case",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "write a vitest test for the WidgetCard React component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "what coverage threshold does our test standard set, and where is the ratchet configured",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.7,
+    "skillscore": 0.95,
+    "guide_faults": [],
+    "verdict": "Guided output hits all 11 rubric acceptance items (Assert.* messages, no hardcoded Ids, runAs positive+negative pair, the managed-package namespace namespace, three-terminal factories, re-SELECT-not-static-Id discipline); the isolated baseline fails message-bearing asserts, omits the negative-permission runAs case, under-specifies factory terminals, and drops the the managed-package namespace namespace entirely."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "6a8b75732b9d7f0f1dfabb8eddbefc115c7596753a620e036aa6fb9253d434f1",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "No model-directed steering text found in SKILL.md or references/; content is Apex testing guidance addressed to the developer."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No code paths or instructions send repo/user/context data anywhere; skill is documentation only."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "grep for key/token/secret/password patterns returned no matches."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts/ directory exists in this skill; nothing executable to run."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "No base64/hex/eval patterns found; all content is plain markdown prose."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No http(s):// URLs, curl, or wget found in any material file."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No references to ~/.ssh, ~/.aws, .env, keychain, or token stores."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, cron/launch-agent, or shell-profile edits present."
+      }
+    ]
+  }
+}

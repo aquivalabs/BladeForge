@@ -11,44 +11,58 @@ the mistake the design exists to prevent.
 | metric | question | status |
 |---|---|---|
 | triggering | is the skill reached for when it should be? | **built** — `score-description.py` |
-| acceptance | does the result come out as promised? | **designed, not built** — see below |
+| acceptance | does the result come out as promised? | the structural requirement (file + Contract) is on the gate; the LLM grader is `skillcraft:skillaxe` — see below |
 
 The parts:
 
 ```text
 plugins/meta/skills/skill-eval/       the skill: how to run it, how to read a score
   scripts/score-description.py        the triggering measurer, self-contained
-scripts/validate_eval.py              queryset shape + its sha256
+scripts/validate_eval.py              rubric.json trigger shape + its canonical hash
+scripts/validate_acceptance.py        rubric.json acceptance shape (array or {not-applicable})
+scripts/validate_security.py          result.json security-section shape + a skill's material hash
 scripts/eval-gate.sh                  what blocks, what only warns
 hooks/pre-push                        runs it locally before a push, then the review gate
 .github/workflows/eval-gate.yml       runs it again on a PR, deterministic, no LLM
-<skill>/evals/                        the three files below
+<skill>/evals/                        the two files below
 ```
 
-Every skill ships an `evals/` directory. Three files, three different questions, and confusing them
-is what lets a skill look healthy while doing nothing.
+Every skill ships an `evals/` directory. Two files — but still the three different questions, because
+confusing them is what lets a skill look healthy while doing nothing. `rubric.json` holds what the
+skill is measured AGAINST, in two halves; `result.json` holds what the last run MEASURED, in the same
+two halves. One file, two metrics — the halves are never merged, only stored together.
 
 ```text
 evals/
-  trigger-eval.json    did it FIRE?       labelled queries, positive and negative
-  acceptance.json      did it WORK?       expectations about the result
-  result.json          what was MEASURED? the recorded run
+  rubric.json    { "trigger": [ did it FIRE?  labelled queries ],
+                   "acceptance": [ did it WORK?  expectations about the result ] }
+  result.json    { "trigger": { the recorded trigger run },
+                   "acceptance": { the recorded skillaxe run, or null },
+                   "security": { the recorded eight-point safety walk } }
 ```
 
-## trigger-eval.json — did it fire
+`result.json` grew a third key, `security` — the consumer-safety confirmation written by
+`cerberus:security-scan`, not by `meta:skill-eval`. It is a different mechanism (does this skill harm
+whoever installs it?) that the SAME gate enforces, so it is stored in the same per-skill file rather
+than a fourth one. See "result.json `security`" below.
+
+## rubric.json `trigger` — did it fire
 
 A JSON array of `{"query": str, "should_trigger": bool}`. At least 6 cases, at least one of each
 polarity. Written by the author from questions 1b/1c (the positive cases) and 3c (the negatives) of
 the authoring method.
 
-`scripts/validate_eval.py` enforces the shape and prints the queryset's sha256. That hash is how
-`result.json` knows whether it still describes the current queries.
+`scripts/validate_eval.py` enforces the `trigger` shape and prints its CANONICAL hash — over the
+trigger array alone, so editing the acceptance half never marks a trigger measurement stale. That
+hash is how `result.json`'s `trigger.queryset_hash` knows whether it still describes the current queries.
 
-## acceptance.json — did it work
+## rubric.json `acceptance` — did it work
 
 A JSON array of short claims about the RESULT, straight from the author's answer to "what checks
-that". Not a field inside the trigger eval, and deliberately so: firing and working are two different
-metrics, and a skill that fires reliably while changing nothing reads as green when they are merged.
+that". A sibling key of `trigger` in the same file, never folded INTO the trigger cases: firing and
+working are two different metrics, measured by two different runs, and a skill that fires reliably
+while changing nothing must not be able to borrow the trigger score. Sharing a file is not merging
+the metrics — the gate reads and scores the two halves separately.
 
 ```json
 [
@@ -66,25 +80,29 @@ A skill with nothing to check — one that only explains how a system is built �
 ## result.json — what was measured
 
 Written by `plugins/meta/skills/skill-eval/scripts/score-description.py` at the end of a run, unless
-`--no-save` is passed. It carries the queryset hash, the score, the model and runs used, the date,
-a description of the method, and the per-query rows.
+`--no-save` is passed. Its two keys mirror `rubric.json`: `trigger` carries the queryset hash, the
+score, the model and runs used, the date, the method, and the per-query rows; `acceptance` carries
+the skillaxe run, or `null` until one has been taken.
 
 The record's shape, and the reason for it:
 
 ```json
 {
-  "skill": "new-skill",
-  "measured_at": "2026-08-31T18:40:12",
-  "model": "sonnet",
-  "runs_per_query": 2,
-  "best_score": "16/18",
-  "accuracy": 0.889,
-  "baseline_accuracy": null,
-  "description_hash": "…",
-  "queryset_hash": "…",
-  "eval_type": "description-triggering",
-  "method": "…how the measurement was taken…",
-  "results": [ … per-query rows … ]
+  "trigger": {
+    "skill": "new-skill",
+    "measured_at": "2026-08-31T18:40:12",
+    "model": "sonnet",
+    "runs_per_query": 2,
+    "best_score": "16/18",
+    "accuracy": 0.889,
+    "baseline_accuracy": null,
+    "description_hash": "…",
+    "queryset_hash": "…",
+    "eval_type": "description-triggering",
+    "method": "…how the measurement was taken…",
+    "results": [ … per-query rows … ]
+  },
+  "acceptance": null
 }
 ```
 
@@ -92,6 +110,22 @@ The record's shape, and the reason for it:
 measured, so editing either marks the record stale. Dropping `description_hash` would let a rewritten
 description keep an old score — and the description is precisely what this eval measures. That
 docstring rationale comes from the original implementation and is the reason the field exists.
+
+The `acceptance` half stays `null` until `skillcraft:skillaxe` runs; a run fills it with the
+diagnostic score:
+
+```json
+{
+  "runner": "skillcraft:skillaxe",
+  "measured_at": "2026-09-07",
+  "model": "sonnet",
+  "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+  "quality_impact": 0.75,
+  "skillscore": 0.92,
+  "guide_faults": ["a fixable weak spot the guide itself owns, or none"],
+  "verdict": "one-line summary of whether the guide earned its keep"
+}
+```
 
 Fields belonging to the optimisation loop the old script ran — `holdout`, `best_train_score`,
 `exit_reason`, `applied` — are not carried. This scorer measures one description; it does not search
@@ -108,24 +142,54 @@ The measurement matters because runs otherwise land in `*-workspace/` directorie
 excludes as scratch, and evaporate. Without a saved result there is nothing to compare a later run
 against, and no evidence a skill was ever measured at all.
 
+## result.json `security` — is it safe to install
+
+Written by `cerberus:security-scan` when it walks a skill, not by the trigger scorer. It is the
+eight-point consumer-safety confirmation — one row per point, each with a `verdict` of `pass`, `flag`,
+or `n/a` — plus `scanned_hash`, the skill's MATERIAL hash. The top `verdict` is `pass` only when no
+point is `flag`.
+
+```json
+"security": {
+  "verdict": "pass",
+  "scanned_at": "2026-09-08T00:00:00",
+  "scanned_by": "cerberus:security-scan",
+  "scanned_hash": "<sha256 of SKILL.md + references/ + scripts/>",
+  "checklist": [ { "n": 1, "point": "prompt-injection", "verdict": "pass", "note": "…" }, … 8 points … ]
+}
+```
+
+`scanned_hash` is the freshness key, and it is deliberately BROADER than the trigger hashes: it covers
+the skill's installer-facing material — `SKILL.md`, `references/`, and `scripts/` — because a script
+or reference edit changes what reaches a consumer even when the description is untouched. It excludes
+sidecars and eval files, which a consumer never runs. `scripts/validate_security.py` both checks the
+section's shape and, with `--print-material-hash <skill-dir>`, computes the hash — one implementation,
+shared by the head that writes and the gate that checks, so the two can never disagree.
+
 ## Who reads what
 
 | reader | reads | does |
 |---|---|---|
 | `hooks/pre-push` (every local push) | — | runs `eval-gate.sh`, then the review gate; `core.hooksPath` points at `hooks/`, so this file IS the pre-push hook — there is no `.husky/` here |
-| `scripts/eval-gate.sh` (that hook, and every PR) | `trigger-eval.json` | **blocks** a touched skill whose eval is missing or invalid |
+| `scripts/eval-gate.sh` (that hook, and every PR) | `rubric.json` (trigger) | **blocks** a touched skill whose eval is missing or invalid |
 | | `result.json` | **blocks** a skill whose own `SKILL.md` is in the diff when the file is absent or stale — stale meaning either its `queryset_hash` or its `description_hash` no longer matches; **warns** (does not block) when only a bundled script or generated file beside the skill changed. There is no skip flag: a missing or stale measurement on a touched skill always blocks — no live clone to measure from means the skill is not shippable yet |
+| | `rubric.json` (acceptance) + `## Contract` | **blocks** a skill whose own `SKILL.md` is in the diff when the `acceptance` half of `evals/rubric.json` is missing or invalid (`scripts/validate_acceptance.py`) or the body has no `## Contract` heading — the step-5 structural requirement, switched on once ten skills carried the file. A map declares `{"not-applicable": "<reason>"}` and passes. `SKILL_EVAL_SKIP=1` downgrades it to a warning offline. An untouched skill is not checked |
+| | `result.json` (security) | **blocks** a skill whose installer-facing MATERIAL is in the diff (`SKILL.md`, `references/`, or `scripts/`) when the `security` section is absent, invalid (`scripts/validate_security.py`), stale (its `scanned_hash` no longer matches the skill's material hash), **or its top `verdict` is not `pass`** — a recorded `flag` blocks the push, so an honestly-recorded but unresolved hit cannot ship. Broader trigger than the trigger measurement (any material edit, not only the description) and stronger: consumer safety has **no** skip flag. An untouched skill, or a sidecar/eval-only edit, is not checked |
 | `scripts/scout_validate.py` (every PR) | `metadata.yaml` | blocks on an invalid sidecar or a tool/tag contradiction |
-| `score-description.py` (local only) | `trigger-eval.json` | runs each query as a nested `claude -p`, scores triggering, writes `result.json` |
+| `score-description.py` (local only) | `rubric.json` (trigger) | runs each query as a nested `claude -p`, scores triggering, writes `result.json` |
 
 **No LLM runs in CI.** The gate is deterministic and agent-free; anything that spawns `claude -p` is
-run locally by the author, on demand. This is why acceptance criteria are not checked on a PR — that
+run locally by the author, on demand. The gate checks that the `acceptance` half of `rubric.json` and a `## Contract` heading are PRESENT on a touched skill (deterministic, step 5); it does not GRADE the result against them on a PR — that
 needs an agent to perform the task and a grader to judge the output.
 
-## The acceptance metric — designed, not yet built
+## The acceptance metric — built as `skillcraft:skillaxe`
 
-Nothing reads `acceptance.json` today. That is the second half of this mechanism, and it is specified
-here so the file is not written blind.
+The LLM grader that reads the `acceptance` half of `rubric.json` and judges whether the guidance actually improved the
+result is `skillcraft:skillaxe` — an embedding-optional adaptation of SkillAxe (arXiv 2606.10546). It
+generates with and without the guide (isolated baseline), scores Quality Impact and Instruction
+Compliance against the skill's `rubric.json` acceptance, and attributes each weak spot to the guide or the
+agent. It is run locally and selectively (a high-traffic guide, a large rewrite), never on a PR — the
+design below records why the trigger scorer could not be extended to cover it.
 
 **Why the existing runner cannot be extended to cover it.** `score-description.py` sends a query and
 watches whether the Skill tool fires. It never performs the task, so there is no result for it to
@@ -136,7 +200,7 @@ judge. Triggering and acceptance need different runs, not different flags.
 ```text
 1  give an agent a real task, of the kind the skill exists for
 2  it works, with the skill available
-3  a grader checks the result against each line of acceptance.json — one yes/no per line
+3  a grader checks the result against each acceptance line of rubric.json — one yes/no per line
 4  the SAME task runs again with the skill disabled
 5  the grader compares the two outputs BLIND, not told which had the skill
 ```
@@ -159,8 +223,9 @@ changed something".
   hundreds of runs is a difference not worth the document.
 - **Never in CI.** It spawns agents; the gate stays deterministic.
 
-**When it gets built:** after the first ten skills carry an `acceptance.json`, so the criteria have
-settled into a shape worth writing a runner against. Building it earlier means rewriting it.
+**When to reach for it:** now that the skills carry a `rubric.json`, the criteria have settled
+into a shape worth grading against. Run it locally and selectively — a high-traffic guide, a large
+rewrite — never on a PR.
 
 ## Running one
 

@@ -34,6 +34,9 @@ a path-only **PostToolUse hook** fires on any edit under `skills/`, `references/
 nothing — and the **[`leak-check`](#leak-check) skill** reads the change in context and rewrites anything
 client-specific onto one neutral fictional demo before it ships.
 
+The same hook runs a second head inward: **[`security-scan`](#security-scan)** walks an eight-point
+consumer-safety checklist so a skill you publish can never do something unsafe to whoever installs it.
+
 It ships in this marketplace and is enabled by default (`cerberus@bladeforge` in `.claude/settings.json`).
 
 ## Plugins
@@ -43,11 +46,12 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | Plugin | What it does | Skills |
 |---|---|---|
 | scout | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data; never runs code itself. | [scout](#scout) |
-| cerberus | Leak guard at the gate — a PostToolUse hook reminds on any skill/eval edit; the agent skill reviews the change for work-codebase fingerprints (real class/object/namespace names, secrets, employer/client brand, domain flavor) and rewrites them to a fictional demo before they ship. No denylist by design. | [leak-check](#leak-check) |
+| cerberus | Two-headed guard at the gate — a PostToolUse hook reminds on any skill/eval edit to run both agent passes: `leak-check` (outward — rewrites work/client fingerprints to a fictional demo before they ship) and `security-scan` (inward — an eight-point consumer-safety checklist so nothing unsafe reaches whoever installs the skill). No denylist by design. | [leak-check](#leak-check), [security-scan](#security-scan) |
 | cicero | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | critique | Adversarial critique — the house method for red-teaming a design, spec, or plan: diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize. Consumed by pipelines (speccy, a critic role) rather than reinvented. | [critique](#critique) |
-| diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable D2→ELK page (classes+methods, objects, permission sets, relations); contents from an Atlas hardened by Sextant reviewers. | [diagram](#diagram) |
+| diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable React Flow + ELK page (classes+methods, objects, permission sets, relations); a diagram-model JSON hardened by parallel Sextant reviewers. | [diagram](#diagram) |
 | docs | Documentation standard — four layers with one duty each, a per-section README that states that section's own rules, and one deterministic check that blocks a push when a declared mechanism changes without its doc. | [standard](#standard) |
+| error | Error handling — a framework-agnostic client-side architecture (one code→UX policy table, a state dispatcher, a shared error-tile renderer) plus the uniform `google.rpc.Status` envelope across every layer. | [architecture](#architecture), [format](#format) |
 | plan-gate | *(project)* PreToolUse hook — blocks Edit/Write to code unless you are off `main` and a plan matching the branch task-id exists. | — (hook only) |
 | frontend-css | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
 | frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
@@ -56,10 +60,11 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | git | Git workflow — atomic commit splitting. | [commit](#commit) |
 | i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | jira | Jira — comment style. | [comment-style](#comment-style) |
-| meta | Meta — design law, error handling, doc writing, skill authoring. | [error-handling](#error-handling), [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| meta | Meta — design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [setup](#setup) |
-| review-workflow | Workflow script that dispatches the review plugin's five lenses in parallel, reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
+| review-workflow | Workflow script that dispatches the review plugin's lenses in parallel (five on by default, plus skill, leak and security-scan where enabled), reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | salesforce | Salesforce — LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
+| skillcraft | Skill quality & improvement — measure whether a guide skill helps, diagnose where it falls short, improve it without regressions. | [skillaxe](#skillaxe) |
 | tests | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories, matchers and fakes, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
 
 ## Skills
@@ -80,6 +85,11 @@ Grouped by plugin. Each group links back to [Plugins](#plugins).
   real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an
   employer/client brand, or the aggregate domain flavor) and rewrite it to a neutral fictional demo. A
   **PostToolUse** hook nudges it on every skill/eval edit; there is no denylist by design.
+- <a id="security-scan"></a>**security-scan** — the guard's inward-facing head. Before a skill ships to
+  whoever installs it, run the eight-point consumer-safety checklist — prompt injection, exfiltration,
+  secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation —
+  plus an adversarial "make this skill do something its author did not intend" pass. An agent judgment
+  pass, not a denylist; the counterpart to [`leak-check`](#leak-check), which guards what leaks *out*.
 
 ### cicero &nbsp;·&nbsp; [↑ Plugins](#plugins)
 Not a skill — the house communication style. The **numbered rules** under one governing readability rule
@@ -97,7 +107,7 @@ cuts the fluff. **See the difference:**
 - <a id="critique"></a>**critique** — Run an adversarial critique of a design, spec, or plan: 3–4 diverse independent lenses, each scoped to one layer with its own rubric, findings grounded in a location and merged parallel-then-synthesize, handed to a human to dispose.
 
 ### diagram &nbsp;·&nbsp; [↑ Plugins](#plugins)
-- <a id="diagram"></a>**diagram** — Turn a spec or raw code into a readable, clickable architecture/flow diagram: a D2 graph laid out by ELK, each class showing its real methods, objects with fields, and permission sets, rendered as a browsable HTML page under `docs/diagrams/<name>/`. Node contents come from an **Atlas** entity list that parallel **Sextant** reviewer agents harden to zero edits; bidirectional click-to-jump between diagram and its notes, pan/zoom via svg-pan-zoom.
+- <a id="diagram"></a>**diagram** — Turn a spec or raw code into a readable, clickable architecture/flow diagram: a `<name>.diagram.json` model laid out by React Flow + ELK (elkjs), each class showing its real methods, objects with fields, and permission sets, rendered as one browsable HTML page under `docs/diagrams/<name>/`. Node contents are hardened by parallel **Sextant** reviewer agents over a capped review loop; bidirectional click-to-jump between diagram and its notes.
 ### docs &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="standard"></a>**standard** — Where a document belongs and whether anything keeps it honest: four layers separated by update discipline (decision, mechanism, rule, frozen record), a `README.md` in every layer root answering five fixed questions about that section's own rules, and a vendored `docs-check.py` that fails a push when a declared mechanism changes and its doc does not. Installs into a target repo with its own hook and CI workflow.
 
@@ -163,6 +173,13 @@ Plus the `/review` orchestrator, the reviewer agents, and the secret-scan + atte
 
 See [CLAUDE.example.md](CLAUDE.example.md) for a reference `CLAUDE.md` — how to
 wire these plugins into a repo and keep the config thin (rules live in skills).
+
+### skillcraft &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="skillaxe"></a>**skillaxe** — Measure whether a guide skill actually improves the output it is
+  meant to help with, and improve it without regressions. Generates the same task with and without the
+  guide, judges the quality delta and per-rule instruction compliance, attributes each weak spot to the
+  guide or the agent, and — behind a mandatory anti-regression anchor — re-judges any fix. An
+  embedding-optional adaptation of SkillAxe (arXiv 2606.10546).
 
 ### tests &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="architecture"></a>**architecture** — The standard itself: which execution tier a test file belongs to and how its filename declares it, the numbered rules a test must satisfy, the fixed axis list a case space is derived from, one factory per entity, assertions that state the rule rather than its encoding, a JSON failure envelope every custom matcher fills in, and the coverage ratchet plus the mutation bar that keeps a coverage floor from being decoration. Carries a transition section, so a repository adopting it knows what is in force before every mechanism exists.

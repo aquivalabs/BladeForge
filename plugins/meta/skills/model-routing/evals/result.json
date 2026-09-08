@@ -1,0 +1,218 @@
+{
+  "trigger": {
+    "skill": "model-routing",
+    "measured_at": "2026-09-04T20:02:51",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "14/18",
+    "accuracy": 0.778,
+    "baseline_accuracy": null,
+    "description_hash": "0e6bcbf07bb9763c4dd9329a06c1b0ff7ecc11a653519b81a44d1c66cd845416",
+    "queryset_hash": "7fc40d4adafc2b23d6281e18452055bf405d377ec1b176d47906cbb07be2af3b",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "write a workflow that fans out 10 reviewer agents over the cumulative diff and adversarially verifies each finding",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "kick off a couple of subagents to comb the repo for duplicated code in parallel",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "spawn a bunch of agents to audit every route file under src/config in parallel and report violations",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "can you parallelize this alias migration with subagents? there are like 40 files to touch",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "add a verify stage to my workflow script where 3 skeptics try to refute each bug before it lands in the report",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "create a hunt-tests agent in .claude/agents that digs through CI logs for flaky tests",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "use a workflow to sweep src and server for dead code and unused exports",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "dispatch an Explore agent to find where getApiClient is initialized",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "write a workflow script: loop until we collect 10 confirmed bugs, two verifiers per bug",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "which claude model is cheapest for my API integration right now, haiku or sonnet?",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "switch my default session model to sonnet, tired of burning tokens on chat",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a route guard to src/config/guards so the admin pages need the permission check",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write the data model for the widget card config object, fields and types",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "my elevenlabs voice agent sounds off, tweak its prompt for me",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "explain how the agent toolset works in the managed agents API, do I need a beta header?",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "fix the workflow yaml for the github actions deploy, it fails on the cache step",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "how do I register a new MCP server in settings.json for this project?",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "refactor the routeRequest function in RequestRouter, it has grown to 80 lines",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "8e35fe90ba21e1a895aead2654609bc0945c80917ef772e236fb2f3f05a3e22a",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Prose is all reader-facing methodology (tier table, rules); no directives aimed at overriding the reading agent's instructions."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network sends of repo/user data; only local progress-beacon file writes described."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials present anywhere in the file."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "Skill contains no scripts/ directory and runs no shell commands."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain markdown tables and prose; no encoded blobs or eval-of-decoded-data."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No URLs or download/fetch instructions anywhere in the skill."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, keychain, or any credential store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo/setuid/cron/profile persistence; only a benign ~/.claude/progress/current.json status file mentioned."
+      }
+    ]
+  }
+}

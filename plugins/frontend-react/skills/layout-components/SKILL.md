@@ -11,13 +11,25 @@ domain.
 > **Scope.** React, framework-agnostic — no assumption about your router, styling,
 > or i18n library. Take those bindings from the project's *local* skills.
 
-## When to Activate
+## Contract
 
-Editing or adding app chrome (shell, top bar, sidebar, command palette, global
-overlays). If the component renders/edits domain data, it's a feature, not layout
+**In:** editing or adding app chrome — the shell, top bar, sidebar, command palette, or global
+overlays that frame every page. A component that renders/edits domain data is a feature instead
 (`frontend-react:feature-components`).
 
+**Out:** the component is placed in the layout area (app-wide chrome only), holds no domain logic or
+data fetching beyond navigation, is composed from primitives, routes route/nav/guard changes through
+the routing config, and follows `component-structure` + i18n. The checkable expectations are in
+`evals/rubric.json`.
+
+---
+
 ## Rules
+
+Produce an integrated design — real layout mechanics (grid/flex, spacing, a11y, responsive
+behaviour), not a rule-by-rule "Rule 1… Rule 2…" audit narration that satisfies the checklist while
+delivering less than a plain competent design would.
+
 
 1. **Placement.** The project's layout area — app-wide chrome only.
 2. **No domain/business logic.** Layout arranges space and routes the user; it
@@ -31,11 +43,12 @@ overlays). If the component renders/edits domain data, it's a feature, not layou
 5. **Structure + i18n.** Follow `frontend-react:component-structure`; route strings
    through the project's i18n setup.
 
-## Checklist
-- [ ] Confirmed it's app chrome, not a domain feature
-- [ ] Placed in the layout area
-- [ ] No domain logic or direct data fetching
-- [ ] Chrome composed from existing primitives
-- [ ] Route/nav/guard changes went through the routing config
-- [ ] Structure + i18n per project conventions
-- [ ] Added a story if the project has a catalog
+## Before you finish
+
+1. It is confirmed app chrome, not a domain feature, and placed in the project's layout area (app-wide
+   chrome only), with no domain/business logic and no data fetching beyond what navigation itself needs.
+2. Chrome is composed from existing primitives, and any route/nav item/section/guard change went through
+   the project's routing configuration — not ad hoc inside a layout component.
+3. Structure follows `component-structure`, strings route through i18n, and a story was added if the
+   repo has a catalog.
+4. A line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

@@ -4,15 +4,14 @@ description: Use when about to add, hand-roll, rename, move, or remove a custom 
 
 # React Hooks Registry & Reuse
 
-## When to Activate
+## Contract
 
-- About to create, scaffold, or hand-roll any custom hook (a `use*` function).
-- Renaming, moving, or deleting an existing hook.
-- Reviewing a diff that adds/changes hooks (reviewer agents read the registry to
-  catch duplicates and mis-placed hooks).
+**In:** about to add, hand-roll, rename, move, or remove a custom React `use*` hook. The registry is
+`docs/mechanisms/hooks-registry.md` — the authoritative list of every custom hook in the app.
 
-The registry is `docs/hooks-registry.md` — the authoritative list of every custom
-hook in the app.
+**Out:** the registry was read and an existing hook reused/extended where one fit; a genuinely-new hook
+placed by scope; a local hook that gained a second consumer promoted and generalized; and the registry
+updated in the SAME change. The checkable expectations are in `evals/rubric.json`.
 
 ---
 
@@ -20,7 +19,7 @@ hook in the app.
 
 ### Before creating a hook — reuse first
 
-1. **Read `docs/hooks-registry.md`.** If a hook already does this (or nearly does),
+1. **Read `docs/mechanisms/hooks-registry.md`.** If a hook already does this (or nearly does),
    reuse it or extend it (one more param / option) instead of writing a new one.
    Duplicate/overlapping hooks are the thing this registry exists to prevent.
 2. Only create a new hook when reuse and extension both genuinely fail.
@@ -38,7 +37,7 @@ hook in the app.
 
 ### After adding / renaming / moving / removing a hook — update the registry
 
-In the **same change**, edit `docs/hooks-registry.md`:
+In the **same change**, edit `docs/mechanisms/hooks-registry.md`:
 
 - **Added** → add a row (Hook · File · one-line Purpose) in the right section.
 - **Renamed / moved** → update the name/file in its row.
@@ -49,10 +48,13 @@ A new `use*` file in a diff with no matching registry update is a review finding
 
 ---
 
-## Checklist
+## Before you finish
 
-- [ ] Read `docs/hooks-registry.md` before writing a new hook
-- [ ] Reused/extended an existing hook if one fit
-- [ ] Placed the hook by scope (global / capability / library / local)
-- [ ] Promoted + generalized any local hook that gained a second consumer
-- [ ] Updated `docs/hooks-registry.md` in the same change
+1. `docs/mechanisms/hooks-registry.md` was read before writing a new hook, and an existing hook was reused or
+   extended where one fit — no duplicate or overlapping hook was created.
+2. The hook is placed by scope: global `src/hooks/`, capability `src/hooks/capabilities/`, library
+   `src/lib/<area>/`, or local next to the feature — and a local hook that gained a second consumer was
+   promoted to `src/hooks/` and generalized.
+3. `docs/mechanisms/hooks-registry.md` was updated in the SAME change — a row added / renamed / moved / removed to
+   match.
+4. A line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

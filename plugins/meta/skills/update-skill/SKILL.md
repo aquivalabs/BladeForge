@@ -12,7 +12,7 @@ questions the change reopens.
 
 **Out:** the skill conforms to the standard — `## Contract` at the top of the body, the boundary in
 the `description`, `## Before you finish` at the bottom, no `## When to Activate` anywhere ·
-`evals/acceptance.json` present · for a marketplace skill, a `metadata.yaml` that matches what the
+`evals/rubric.json` present · for a marketplace skill, a `metadata.yaml` that matches what the
 skill now does, and the owning `plugin.json` version bumped.
 
 ---
@@ -26,7 +26,7 @@ D=plugins/<domain>/skills/<name>          # or .claude/skills/<name>
 grep -c '^## Contract' $D/SKILL.md
 grep -c '^## Before you finish' $D/SKILL.md
 grep -c '^## When to Activate' $D/SKILL.md
-ls $D/evals/acceptance.json
+ls $D/evals/rubric.json
 ```
 
 | what the probe found | path |
@@ -62,7 +62,7 @@ Three places, and nothing appears in two of them:
 ```text
 ## Contract, top of the body        WHAT is promised — In and Out, from 2a and 2b
 ## Before you finish, bottom        HOW to check — steps: run this, look at that, from 2c
-evals/acceptance.json               the LIST of expectations about the result, also from 2c
+evals/rubric.json  (acceptance half) the LIST of expectations about the result, from 2c
 ```
 
 `## Before you finish` is a procedure that loops, never a list of claims:
@@ -75,7 +75,7 @@ evals/acceptance.json               the LIST of expectations about the result, a
 3. You are done only when every line holds.
 ```
 
-`evals/acceptance.json` is an array of expectations about the RESULT — not about the skill firing.
+The `acceptance` half of `evals/rubric.json` is an array of expectations about the RESULT — not about the skill firing.
 A skill that produces nothing to check declares that, and the gate lets it through:
 
 ```json
@@ -101,12 +101,12 @@ ordinary body prose or goes.
   share ground, "I own X" settles nothing, but "anonymous Apex is mine, the MCP has no tool for it"
   does.
 - Changing the description changes what the trigger eval measures. Add or fix cases in
-  `evals/trigger-eval.json` in the same edit, including a negative case for whatever 3c named.
+  `evals/rubric.json` in the same edit, including a negative case for whatever 3c named.
 
 ### A repo-local skill has no sidecar
 
 `.claude/skills/<name>/` skills live outside the marketplace: no `metadata.yaml`, no catalog, no
-`plugin.json` to bump. They still get the body work and `evals/acceptance.json` — the file is where
+`plugin.json` to bump. They still get the body work and `evals/rubric.json` — the file is where
 the skill's "done" is written down, and it costs nothing to keep it beside a local skill. Skip path B
 entirely for them.
 
@@ -236,9 +236,9 @@ the failure this section exists to prevent.
 
 1. `grep -c '^## Contract' <skill>/SKILL.md` → `1`. `grep -c '^## When to Activate'` → `0`.
    A skill that quotes markdown in an example over-counts — read the hits, do not trust the number.
-2. `ls <skill>/evals/acceptance.json` → present. A marketplace skill also has `metadata.yaml` and
-   `evals/trigger-eval.json`.
-3. `python3 scripts/validate_eval.py <skill>/evals/trigger-eval.json` → prints a hash, not an error.
+2. `ls <skill>/evals/rubric.json` → present. A marketplace skill also has `metadata.yaml` and,
+   once measured, `evals/result.json`.
+3. `python3 scripts/validate_eval.py <skill>/evals/rubric.json` → prints a hash, not an error.
    Marketplace skills only.
 4. `python3 scripts/gen_catalog.py` → exits clean. Marketplace skills only.
 5. The owning `plugin.json` version is bumped, and the `README.md` line still describes the skill.
@@ -246,4 +246,9 @@ the failure this section exists to prevent.
    current, no should-NOT-trigger query fired. Measurement is mandatory — no clone reachable means not
    done, not skipped. Changing a `description` without re-measuring leaves a result that describes text
    nobody ships any more.
-7. Any line failing? Fix it and start again from 1.
+7. Did this change touch the skill's MATERIAL — `SKILL.md`, `references/`, or `scripts/`? Then
+   `cerberus:security-scan` was re-walked and `evals/result.json`'s `security` section rewritten, with
+   `scanned_hash` = `python3 scripts/validate_security.py --print-material-hash <skill-dir>`. A
+   material edit restales the old scan; the pre-push eval-gate blocks it, and consumer safety has no
+   skip flag. A sidecar-only or eval-only change does not touch material and skips this.
+8. Any line failing? Fix it and start again from 1.

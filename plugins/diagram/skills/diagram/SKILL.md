@@ -1,268 +1,192 @@
 ---
-description: Use when creating or refining an architecture / flow diagram (a feature "schema", data flow, or how-it-works picture) that should end up readable and user-friendly — renders a D2 source with the ELK layout engine and inlines it into a self-contained, committable HTML page. Also use when iterating on an existing diagram to improve readability.
+description: Use when asked to draw, sketch, map, diagram, visualize, or make a picture/schema/architecture of how software works — the architecture or how-it-works view of a feature, the relationships between classes or interfaces (with their methods and fields), data or record flow, an object model with its fields and permission sets, or a dependency graph — for a package, a feature, a handful of files, or a whole undocumented source directory, built from a spec, a plan or ticket, or read straight from the code, and output as one shareable HTML page you can commit. Also use to clean up an existing generated diagram that is hard to read (overlapping nodes, tiny text). Do NOT use to plot a data or metrics chart from a dataset, to paste a mermaid or ascii snippet into a PR or README, to draw in an external editor like Lucidchart or Excalidraw, to convert a whiteboard photo, to re-render an existing page for a screenshot, or to explain how something works in words with no picture.
 ---
 
-# Diagram (D2 → ELK → HTML artifact)
+# Diagram (model JSON → React Flow + ELK → one HTML file)
 
-Iterative, user-refined skill. Seed comes from a sample feature diagram. The
-owner adds refinements on top over time — treat the conventions below as the current house style,
-not frozen.
+Iterative, user-refined skill. A diagram is **DATA** — a plain JSON model — rendered by a reusable
+engine. You author the model; you never hand-write the HTML/CSS/JS. Treat the conventions as the
+current house style, not frozen.
 
-## When to Activate
+## Contract
 
-- The user asks to draw / diagram a feature, object model, data flow, or architecture — especially
-  when they want it **readable and user-friendly**, viewable as an HTML page in a separate window.
-- Refining or fixing an existing diagram's layout/readability.
+**In:** a request to draw or diagram a feature, object model, data flow, or architecture as a readable
+page — or to refine an existing diagram — with a scope (a spec/plan, named files/classes/folder, or a
+description).
+
+**Out:** a `<name>.diagram.json` model, hardened by the Sextants until clean, rendered into ONE
+`docs/diagrams/<name>/<name>.html` — self-contained in the sense of **no sibling files** (model baked
+in), but the three libraries load from a CDN (esm.sh), so the first open needs network. VISUALLY
+inspected in a browser, not trusted from source. Acceptance: `evals/rubric.json`.
 
 ## The non-negotiable: LOOK at the render, don't trust the source
 
-A diagram is only done when it *looks* right. After every change: render → rasterize → **Read the
-PNG** → judge (empty nodes? label overlaps? long crossing wires? invisible text? crowding?) →
-edit the `.d2` → repeat. Never publish a diagram you have not visually inspected.
+A diagram is only done when it *looks* right. After every change: build → **capture the pixels** with
+`node references/shot.mjs <name>.html <name>.png` (headless Chrome; it also reports node/zone counts
+and any page error, and exits non-zero on a blank/errored render) → **Read the PNG and judge it**
+(empty/blended nodes, label overlaps, crossing wires, unreadable text, crowding, a garish palette) →
+fix the MODEL → rebuild. Never publish a diagram you have not visually inspected.
 
-## Step 1 — the Atlas (the SINGLE source of truth; build it FIRST, before any `.d2`)
+**Failure modes to handle, not ignore.** Malformed model JSON fails the build with a JSON parse error
+(a position, not an id); a dangling edge, a duplicate id, a `parent` that isn't a node id, or a
+`parent` cycle → `build-spec-diagram.mjs` rejects the build LOUD naming the offending id; fix the model
+and rebuild (it will not emit a broken file). A `shot.mjs` non-zero exit / zero nodes / page error →
+the render is broken, not a picture to trust — read the error, fix, rebuild. A huge/slow graph (ELK
+degrades past ~100 nodes) → narrow scope per Step 1's roster rule, or split into per-domain diagrams.
 
-The **Atlas** is the canonical list of every entity the diagram covers. It is authored once, hardened
-by review until it stops changing, saved as `docs/diagrams/<name>/atlas.md`, and is the ONLY thing
-the `.d2` nodes and the Reference notes are generated from — never from memory, never straight from a
-fresh read of the code. The most important step in this skill; it replaces the old "content from
-source" + "visual verify" rules.
+## Step 1 — build the diagram MODEL (the single source of truth)
 
-### Acceptance criterion — every Atlas entry answers four questions
+The **model** is one JSON file, `docs/diagrams/<name>/<name>.diagram.json`, and it is the ONLY thing
+the render is generated from — never from memory, never straight from a fresh code read. Format:
 
-Any entity, code or not (class, interface, object, permission set, CMDT, config, flow, …), is
-"accepted" into the Atlas only when it answers all four. Keep every answer **declarative — the shape
-and the facts, NOT the algorithm / control-flow** (what it *is*, not step-by-step what it *does*):
+```
+{ "diagram": { "title", "subtitle" },
+  "domains": [ { "id", "name", "sub" } ],                 // optional — subsystems, drawn as background zones
+  "nodes":   [ { "id", "parent"?, "domain"?, "name", "kind", "summary", "role"?,
+                 "description"?, "rows"?:[{group,text,means}], "refs"?:[{kind,label,url}] } ],
+  "edges":   [ { "from", "to", "kind"?, "label"? } ] }
+```
 
-1. **What** — its kind (class / interface / object / permset / …) and name.
-2. **Why** — one line of purpose.
-3. **Made of** — its members, and WHAT you enumerate depends on the entity's KIND (from Q1): an
-   **executable** class/interface/factory/trigger → its methods with FULL signatures (visibility,
-   typed params, return type, `static`/`abstract`/`virtual`/`override`); a **descriptive** object →
-   its fields (name + type + key attributes); a **permission set** → the object grant **and every
-   field with its right** (Read/Edit), per field — never a count like "×7"; a CMDT → fields/values.
-   **Hybrid — a DTO / facade** (an Apex class whose purpose is a data shape, e.g. a `fromRecord` mapper)
-   enumerates BOTH its method(s) AND the shape it emits (every output key). The Sextants own this
-   classification (`references/sextant.md`); the tell is "does the reader care what it DOES or what it
-   HOLDS/EMITS?" — for a DTO, both.
-4. **Relations** — the edges to other entities: `implements …`, `extends …`, `creates …`, `calls …`,
-   `reads …`. This is what makes the Atlas produce the diagram's wiring, not just its boxes.
+- **`parent` and `domain` are two axes** — `parent` (another node id) = nesting/ownership, shown by a
+  box inside a box; `domain` (a domain id) = subsystem membership, shown as a translucent background
+  zone. A node may have both (nested inside an owner AND tagged to a domain). Ownership is nesting,
+  **never an edge**.
+- `kind` = an OPEN vocabulary label (`react-component`, `apex-class`, `sobject`, `lambda`…) → a stable
+  hash of the NAME drives its colour + a letter badge; past ~8 kinds a shape channel is added. **How to
+  break a subject into nodes, and how to choose `kind` words → the default decomposition in Owner
+  refinements below** (one node for the whole subject → a few containers → the parts + shared nodes wired
+  by edges).
+- `edge.kind` (optional, open) = the relation type (`calls`, `reads`, `extends`…) → its line style.
+- `role` (optional) = a node's STRUCTURAL layer, ORTHOGONAL to `kind` — `shared` / `external` /
+  `entrypoint`… → a bright coloured LEFT STRIPE (reads on any fill) + a legend row. Type stays on the
+  fill, role on the stripe, so a node reads as BOTH — a `shared` `cache` vs a `shared` `database`. Leave
+  it off for ordinary nodes (nesting already shows owner-vs-leaf); use it to mark the non-obvious layer.
+- **Scope boundary:** this format is for architecture / dependency / containment diagrams. It has no
+  cardinality (ER) and no time/order axis (sequence) — for those, say so and don't force them into
+  this JSON.
+- Full field reference: the header of `references/build-spec-diagram.mjs`; the encoding + the research
+  behind it: `references/readability-rules.md` and `references/color-encoding-research.md`.
 
-A blank on any of the four = a gap to resolve, not a thing to guess.
+### Acceptance criterion — a node's DETAIL PANEL must be worth opening, not a one-liner
+Every node carries: `name`+`kind` (what it is); a declarative one-line `summary` (shape/fact, never the
+algorithm); a fuller `description` (2-4 sentences — how it fits, what it holds/returns); `rows`
+enumerating its members per its kind (methods for an executable, fields for an object, props for a
+component — a DTO gets both, each with a plain-language `means`); a `refs` link to its real source; and
+an `edge` for every real dependency/relation. A node with ONLY a `summary` (no `description`, no `rows`)
+is **THIN** — its panel opens near-empty, which is a defect, not a terse choice. `build-spec-diagram.mjs`
+reports thin nodes on every build and `--strict` fails on them; a blank is a gap to fill, not a guess.
 
 ### Roles — the Shaper writes, the Sextants hunt
+- **The Shaper** — YOU, this skill's main loop — is the SOLE writer of the model: drafts nodes/edges,
+  applies what the Sextants return, resolves conflicts, saves the JSON.
+- **The Sextants** — 3 read-only hunter subagents (`references/sextant.md`) — gather facts from code +
+  spec and RETURN **findings as JSON** (`{lens, findings:[{op,target,current,proposed,evidence,severity,why}]}`).
+  They never touch a file. One writer applying many read-only reports = no write conflicts.
 
-- **The Shaper** — YOU, this skill's main loop — is the SOLE writer and owner of the Atlas: it drafts
-  entries, applies what the Sextants return, resolves conflicts, and commits `atlas.md`. It
-  shapes the Atlas; nothing else writes it. (Named for the maker of the Atlas of Worlds.)
-  **The Shaper's generation rule (duplicated from rule 10 so it can't be forgotten here):** when the
-  Shaper turns the Atlas into the page, it emits a `<dt>` for EVERY member the node draws — every
-  method (incl. private helpers) and every object field, one `<dt>` each, full typed signature, never
-  combined or curated. Count the node's rows, count the note's `<dt>`s — they MUST be equal, or that
-  member renders unclickable and unexplained.
-- **The Sextants** — 3 read-only hunter subagents (`references/sextant.md`) — gather facts from
-  code + spec and RETURN proposed entries / corrections. They never touch a file. One writer (the
-  Shaper) applying many read-only reports = no parallel-write conflicts, cheap heavy reading on the
-  Work tier.
+### How it's built
+1. **Roster from the given scope.** From a spec/plan (richest), the code directly, or a description.
+   Vague scope ("diagram the codebase") → **ASK to narrow** it; never auto-scope a whole repo.
+2. **Resolve each entity into a node** (name · kind · summary · rows · edges). Code is the authority
+   for facts (signatures, fields); a spec adds design intent and not-yet-built pieces.
+3. **Recurse over STRUCTURE, not types — until 0 new nodes.** Expanding a node's rows/edges may
+   surface another in-scope entity (a factory a dispatcher routes through, an extends target). Add it.
+   A row's parameter/return type is a leaf — never a new node. An EXTERNAL relation is a named leaf.
+4. **Harden with the Sextants — loop, at most 3 rounds.** Spawn **3 in parallel** (Agent tool), each
+   with `references/sextant.md` as its prompt and a DIFFERENT lens (A roster&scope · B wiring&detail ·
+   C clarity&standard), read-only, explicit **`model: sonnet`** (per `meta:model-routing` — measure
+   one, show the cost table before launching). Each returns a `{lens, findings:[…]}` object. Then, each
+   round, apply them:
+   - **Merge** the three `findings` arrays into one list (keep each item's source lens).
+   - **Dedup** by `(target.nodeKey, target.field)`. On a CONFLICT (two lenses propose different values
+     for the same key): keep the **higher-severity** finding; if tied, re-read the cited `evidence`
+     `file:line` and keep the one the source actually supports.
+   - **Verify then apply.** For every S1/S2 finding, spot-check its `evidence` at the cited line before
+     writing the change in; drop any whose evidence doesn't hold. Apply node-`add`s by their proposed
+     full node object (dedup new nodes by source-derived id), field-`fix`es by their stable path. A
+     `gap` (an unanswered required field) is applied like a `fix` when the field exists-but-empty, or
+     like an `add` when it's a missing member — same stable path either way; a `remove` deletes at its
+     path. Re-validate against the JSON shape (`build-spec-diagram.mjs` re-validates references at build).
+   - **Stop condition — ONE rule:** a round that surfaces **no new S1** is done; leftover S2/S3 do not
+     block stopping (park them). Node-`add`s (still discovering structure) get PRIORITY inside a round —
+     apply them first, before fixes — so the roster keeps growing while rounds remain; they do not earn
+     extra rounds.
+   - **Hard cap: 3 rounds, for everything.** The cap binds node-`add`s too. If S1 or new nodes still
+     appear at round 3, that says PROTOTYPE — ship it flagged, LOG what was left unadded/unfixed, and
+     surface it to the user; don't loop a 4th time.
+5. **Save** the model as `docs/diagrams/<name>/<name>.diagram.json`. On every regenerate, reconcile the
+   MODEL first (diff vs current code + spec, edit the JSON), THEN rebuild.
 
-### How it's built — recursive, until the Atlas stops growing
+## Step 2 — render (ONE self-contained file, never hand-built)
 
-1. **Roster from the given scope — a spec/plan is ONE source, not a requirement.** Build the seed
-   roster from whatever the user gave as scope:
-   - **a spec/plan** — the richest source (scope + design intent + not-yet-built pieces); the common
-     case, but not mandatory;
-   - **code directly** — "diagram these classes / this folder / this module": take the roster from the
-     code itself (no spec needed);
-   - **a description in the conversation** — the user named what to draw in words.
-   If the scope is vague ("diagram the codebase"), **ASK the user to narrow it** — never auto-scope a
-   whole repo (the recursion/boundary would explode). List every entity in the agreed scope; miss nothing.
-2. **Resolve each entity into a full Atlas entry** (the four questions). Code is the authority for the
-   facts (signatures, fields, grants); a spec/plan/description adds design intent and any not-yet-built
-   pieces. With no spec, code alone is enough.
-3. **Recurse over STRUCTURE, not types — until 0 new entities.** Expanding an entity's "made of" /
-   "relations" may surface another entity (e.g. a dispatcher method routes through a factory the roster
-   missed). Add any genuinely-needed, in-scope entity so discovered. Termination is structural and
-   shallow, so it converges fast:
-   - Class/interface/object → expand into members.
-   - A method/field is a **leaf** — do NOT descend into its parameter/return *types* as new entities;
-     just record them. The one exception: a dispatcher (e.g. `call`) that enumerates sibling methods —
-     record that method list (already members) and stop; don't go inside them.
-   - A relation to an **external** entity (platform, `Pkg` core, third-party, anything out of
-     scope) is recorded by name as a leaf — named, never expanded.
-   - Stop when a full pass adds no new entity.
-4. **Harden with the Sextants — loop until zero edits.** The **Sextant** is the entity hunter; its
-   full subagent prompt lives INSIDE this skill at `references/sextant.md` (not a project-level agent —
-   it travels with the skill). Spawn **3 in parallel** via the Agent tool, each with that file as its
-   prompt (fill in the Atlas + spec paths), read-only tools, explicit **`model: sonnet`** (Work tier,
-   per `meta:model-routing`; measure one and show the cost table before launching). Each independently
-   re-checks the Atlas — missing entities, missing/extra/mis-signed members, wrong types, wrong
-   relations, unanswered questions — and returns a correction list (or `0 edits`). Apply every
-   correction; run **2 rounds**; repeat the whole review until a round returns **0 edits** across all
-   three. Only a clean round ends it. Cap total agents/rounds and log anything cut — no unbounded loop.
-5. **Commit the Atlas** as `docs/diagrams/<name>/atlas.md`. One block per entity: what · why ·
-   made-of · relations · source path · scope flag (in-scope / boundary-leaf). THIS FILE is what the
-   `.d2` and the Reference notes are generated from.
-6. **On every regenerate, reconcile the Atlas FIRST.** Before touching the diagram, re-read the Atlas,
-   diff it against current code + spec, edit the ATLAS first (add / remove / amend), THEN regenerate the
-   `.d2` + Reference notes from it. The Atlas leads; the diagram follows. After rendering, diff the
-   visible page against the Atlas (per the LOOK-at-the-render rule) — every entity/member present,
-   nothing clipped.
-
-## Tooling pipeline
-
-- **D2** (`brew install d2`) — diagram-as-code; source lives in git, AI-friendly.
-- **ELK layout** (`d2 --layout elk`) — free engine, best auto-layout for architecture (beats
-  Mermaid's dagre; TALA is nicer but paid). Layout is engine-computed → geometry is never crooked.
-- **rsvg-convert** (`brew install librsvg`) — rasterize SVG → PNG so you can Read/inspect it.
-  (d2's own PNG export needs Playwright, which may fail to install — use rsvg-convert instead.)
-- **Plain HTML page (committed)** — inline the SVG into a self-contained styled `.html` file saved
-  in the repo (next to the spec/plan, or under docs/). **Prefer this over a claude.ai Artifact:** a
-  committed page is cheaper (no publish round-trip / hosting), versioned, diffable, and offline; an
-  Artifact can't be committed to git. Use an Artifact ONLY for a throwaway hosted preview the user
-  explicitly asks to share via a claude.ai link. Either way the SVG is inlined — no external CDN.
-
-## Commands
-
-One folder per diagram, `docs/diagrams/<name>/`, with generic file names (the FOLDER names the
-diagram). Open the folder and it's obvious what's what: `atlas.md` + `diagram.html` at the top,
-everything else tucked into `assets/`. `build.sh` copies the shared assets (css/js/svg-pan-zoom) into
-`assets/` deterministically and points `diagram.html` at them (the SVG is inlined — the JS drives it).
-
+The renderer is a finished, reusable asset — do NOT write HTML per diagram:
 ```bash
-mkdir -p docs/diagrams/flow/assets && cd docs/diagrams/flow
-cp <skill>/references/page-template.html assets/page.html   # fill {{placeholders}} + Reference notes,
-                                                            # keep the <!--SVG--> + <link>/<script> markers
-# author assets/graph.d2 (the D2 graph) and atlas.md (the entity list); then build FROM the skill:
-bash <skill>/references/build.sh .              # -> assets/{css,js,lib,svg,png} + diagram.html
-# iterate assets/graph.d2 / assets/page.html and re-run until assets/diagram.png is genuinely readable.
+node <skill>/references/build-spec-diagram.mjs <name>.diagram.json <name>.html \
+     <skill>/references/diagram-viewer.template.html
+```
+It inlines the model into a copy of the engine and strips the fetch loader → **one HTML file, no
+sibling files** (model baked in; the three libraries load from a CDN, so opening it needs network).
+Then **open it and LOOK** (browser or headless). Iterate the MODEL, never the HTML.
+
+- Engine: `references/diagram-viewer.template.html` (React Flow + elkjs). It stays put; the model is
+  the only thing that changes.
+- Encoding (all automatic from the model): **kind → colour** (OKLCH, stable per-name, capped, CVD-safe,
+  comfortable band) **+ a letter badge** (header for a container, corner chip for a leaf); **domain →
+  translucent zone**; **edges** coloured by source; select-to-highlight+dim; a detail panel
+  (description · references+lightbox · rows with `means` tooltips · depends-on/used-by); a legend
+  generated from the kinds+domains present. The rules + the research behind them:
+  `references/readability-rules.md`, `references/color-encoding-research.md`.
+
+### Placement
+`docs/diagrams/<name>/` by default (the `<name>.diagram.json` + the built `<name>.html`), unless the
+repo dictates otherwise.
+
+```
+docs/diagrams/<name>/
+├── <name>.diagram.json   the model — the Sextant-hardened source of truth
+└── <name>.html           THE diagram — one self-contained file; open / share / commit this
 ```
 
-Resulting folder — top level is just the two things you care about:
-```
-docs/diagrams/flow/
-├── atlas.md            the entity list (Sextant-hardened source of truth)
-├── diagram.html        THE diagram — open / share / commit this (links ./assets, inlined SVG)
-└── assets/
-    ├── graph.d2        the D2 graph source
-    ├── page.html       page skeleton + Reference notes (prose/notes source)
-    ├── diagram.css · diagram.js · svg-pan-zoom.min.js   (copied from the skill each build)
-    ├── diagram.svg     render          (artifact)
-    └── diagram.png     rasterized render — the LOOK-at-it check   (artifact)
-```
-
-## Conventions
-
-Two kinds of rule below: **authoring** (how you write the `.d2` and the page content — this is your
-job each time) and **reusable assets** (styling + interaction + scaffold, already built — you copy
-them, never re-derive). Everything that used to describe deriving colours/fonts/pan-zoom/clickability
-now lives in the assets (rules 13–14); it was deleted here so a fresh read is fast and can't mislead.
-
-### Authoring — the `.d2` source
-
-1. **Plain-text labels, never D2 markdown (`|md ... |`).** Markdown labels render via SVG
-   `<foreignObject>`, which rsvg-convert can't rasterize (nodes come out empty) and which blurs/clips
-   under the pan-zoom CSS transform. Use quoted plain text; method rows come from `shape: class`
-   (rule 6), not markdown.
-2. **Flat graph — no container frames.** ELK routes edges *through* a container's border and collides
-   the frame title with passing wires. Encode grouping by node role/fill, not by boxes.
-3. **No back-edges.** An arrow that points "backwards" (e.g. `store -> handler` labelled *return*)
-   makes ELK draw a long ugly loop across the whole diagram. Keep the flow one-directional —
-   attribute an output straight to its destination node instead of looping an arrow back to the source.
-4. **Short labels; choose the layout direction by the graph's shape.** `direction: right` for a wide
-   left-to-right pipeline (nodes spread across the page width, the page scrolls vertically);
-   `direction: down` for a tall tree. Big empty side gutters mean the direction is wrong for the shape.
-5. **Scope to the agreed scope (Step 1) — no more.** Draw only the entities and real connections in
-   the roster the user gave (a spec's deliverables, or the named files/classes/folder, or the described
-   feature) — drop the full runtime path (clients, third-party internals, audit objects) unless the
-   user asks for them.
-6. **Every code node is `shape: class` and lists its REAL methods as native rows**, one per line:
-   `+load(criteria): Object` / `-hash(criteria): String` / `#getCriteria(input): Map` — visibility
-   `+` public `−` private `#` protected, then the return type, with `· abstract|virtual|override`
-   appended where it applies. `shape: class` is the confirmed choice: crisp native text at any zoom,
-   correctly sized (no clip/overlap/blur), and rsvg-renderable so the rule-10 visual check works.
-   Interface/factory → list the FULL method surface (it *is* the contract); a large class → the
-   load-bearing methods that carry the story (say which you dropped and why).
-7. **Annotate only the genuinely non-obvious** — a short note node or a `key: value` edge label so the
-   reader doesn't have to infer. Over-annotating is its own noise.
-8. **Render at native size — automated by `build.sh`.** d2's outer `<svg>` tag has only a `viewBox`
-   (no width/height), so CSS would collapse it small; `build.sh` reads the native W/H from the viewBox
-   and injects them onto the tag. You don't do this by hand — just run the build.
-9. **When it's built, open the `.html` in the browser** for the user (`open <file>.html` on macOS).
-
-Content accuracy is NOT a rule here any more — it is Step 1 (the Atlas, above). Both the `.d2` nodes
-and the Reference notes are generated FROM the hardened Atlas; after rendering, diff the visible page
-against the Atlas (per the LOOK-at-the-render rule) so nothing is missing or clipped.
-
-### Authoring — the page content
-
-10. **One Reference note per entity, grouped by class — with a `<dt>` for EVERY drawn member (no
-   curation).** Every class / interface / factory / object drawn gets its own note (no bare box the
-   reader can't explain): a one-line *what + why*, then a SEPARATE `<dt>`+`<dd>` for **every single
-   method and every single field the node shows** — each `<dt>` the full typed signature, each `<dd>`
-   a one-line what — all taken verbatim from the Atlas (Step 1). Do NOT combine members into one
-   `<dt>` and do NOT drop the "minor" ones (private helpers, every object field): the click-wiring
-   matches a diagram row to a `<dt>` by identifier, so a member with no `<dt>` of its own is
-   unclickable AND unexplained (the exact defect to avoid). The rule of thumb: **count the node's rows,
-   count the note's `<dt>`s — they must be equal.** Group the notes by the same blocks the diagram uses
-   (one heading per class), never a flat undivided list. Give each note `id="c-<d2-node-key>"` so the
-   shared JS auto-wires its clickable links (rule 12).
-
-### Reusable assets — copy and fill, NEVER regenerate
-
-11. **ALL styling is in `references/diagram-theme.css`.** The complete look — dark-ocean page, grey
-   diagram backing, per-type dark body tints, uniform dark block headers, white entity titles, amber
-   italic method/field names, muted return types, bigger+lighter edge labels, single-column borderless
-   Reference notes, the two `.ov` overlays, clickable-link cues + landing highlights — is defined once
-   there. `build.sh` copies it to `assets/diagram.css` each build and the page `<link>`s it — never
-   hand-write a `<style>` block. To restyle, edit the one file in `references/`. Its header comments document the palette + the SVG selectors + the
-   class-presence gotcha (`.text-mono[…]`, never exact `[class="text-mono"]`). The ONLY visual thing
-   set outside the CSS is in the `.d2`: per-type body fill (`class: <role>` + a `classes:{...}` block)
-   and the render flag `d2 --layout elk --dark-theme 200`.
-12. **ALL interaction is in `references/diagram.js` + the shared scaffold.** Pan/zoom is delegated to
-   the **vendored `svg-pan-zoom.min.js`** (local file, no CDN — CSP/offline safe), NOT a hand-rolled
-   CSS transform. This matters: svg-pan-zoom is SVG-native (it transforms an internal viewport `<g>`),
-   so a large diagram stays cheap — no giant CSS layer, no blank/disappearing tiles, no lag (the trap
-   the hand-rolled version kept hitting). `diagram.js` inits it (`minZoom:1` = can't zoom out past
-   fit; `controlIconsEnabled:false` — the page's own `#zin`/`#zout`/`#zfit` buttons drive it) and
-   layers BIDIRECTIONAL click-to-jump on top: diagram title/method → scrolls to the Reference
-   heading/`<dt>` (amber flash); Reference heading/`<dt>` → zooms+pans to that node (~45% of the
-   viewport, amber glow) via the svg-pan-zoom API + flashes the row. The only per-diagram wiring is the
-   `id="c-<node-key>"` convention (rule 10) — D2 emits the node's group as `class=btoa(<key>)`.
-   A new diagram reuses FIVE assets that STAY in `references/` (never copied beside the diagram):
-   `diagram-theme.css`, `diagram.js`, `svg-pan-zoom.min.js`, `page-template.html` (skeleton with the
-   `<link>`/`<script src>` markers `build.sh` swaps for inline blocks + the `<!--SVG-->` marker), and
-   `build.sh` (renders `assets/graph.d2`, copies css/js/lib into `assets/`, and writes the top-level
-   `diagram.html` that `<link>`s/`<script src>`s them + inlines the SVG). Run it from the skill:
-   `bash <skill>/references/build.sh <dir>`. You author ONLY the graph, the page prose, and the
-   Reference notes — never the CSS, JS, or assembly.
-
-## Reusable prompt (paste-and-fill for a new feature diagram)
-
-> Produce a D2 diagram of <FEATURE> limited to what <SPEC> delivers/changes. Flat graph (no
-> container frames), every code node `shape: class` listing its real methods (read from committed
-> source — verify, don't guess), role encoded by a per-type body fill via `class: <role>` +
-> `classes:{ <role>.style.fill }`, linear flow with no back-edges. Render with
-> `d2 --layout elk --dark-theme 200`, iterate against the rendered PNG until genuinely readable. Give
-> every code entity a borderless Reference note with `id="c-<d2-node-key>"` so the shared script
-> auto-wires clickable title/method jumps. Keep the whole diagram in `docs/diagrams/<name>/` (`atlas.md`
-> + `diagram.html` at top, `graph.d2`/`page.html`/render in `assets/`). Run
-> `bash <skill>/references/build.sh docs/diagrams/<name>` — it copies the shared CSS/JS/svg-pan-zoom
-> into `assets/`, inlines the SVG, and writes `diagram.html` linking them. Commit `atlas.md` +
-> `diagram.html` + the `assets/` folder.
-
-## Checklist
-
-- [ ] D2 source uses plain labels, flat graph, `shape: class` nodes with per-type fills, direction chosen by shape
-- [ ] Rendered with ELK and rasterized; PNG **visually inspected** (Read)
-- [ ] No empty nodes, no label/title overlaps, minimal edge crossings, all text legible
-- [ ] Scoped to the intended content (no stray full-runtime-path nodes)
-- [ ] Built with `build.sh` into `docs/diagrams/<name>/` — `diagram.html` + `atlas.md` at top, and
-      `assets/` holding the copied css/js/svg-pan-zoom + sources (`graph.d2`, `page.html`) + render
-      (`diagram.svg/.png`); `diagram.html` links `./assets` and inlines the SVG; committed (not an Artifact)
-- [ ] Every code entity has a Reference note `id="c-<d2-node-key>"`; clickable title/method jumps
-      verified working in the browser (not just present in source)
+## Before you finish
+1. The MODEL was hardened by 3 diverse-lens Sextants returning JSON findings, applied deterministically,
+   until a round found no new S1 — not trusted from a single pass.
+2. Built into ONE self-contained `docs/diagrams/<name>/<name>.html` via `build-spec-diagram.mjs`; opened
+   in a browser and the actual pixels judged — legible nodes, distinct non-garish colours, no overlaps,
+   minimal crossings, a generated legend, working select/panel.
+3. **The build reported ZERO thin nodes** (or `--strict` passed) — a node with only a one-line summary
+   is a defect. And you OPENED at least one detail panel and confirmed it is worth opening: a fuller
+   `description`, real `rows` with `means`, and a source `ref` — not a one-liner. Enrich every thin node
+   the build lists before shipping.
+4. Scoped to the agreed scope (no stray nodes); every node answers name·kind·summary·rows; ownership is
+   nesting, not edges.
+5. A line fails? Fix the MODEL and rebuild. Full expectations → `evals/rubric.json`.
 
 ## Owner refinements
 
 <!-- The owner appends house refinements here as we perfect the process. Keep them above the
      conventions if they override a default. -->
+
+- **Default decomposition — how a subject becomes nodes (do this unless the subject fights it).** The
+  shape that reads best, whatever the subject is:
+  1. ONE node for the WHOLE subject (the feature / page / module) — everything nests under it, so the
+     render packs into one box instead of scattering across the canvas.
+  2. Group the parts into a few CONTAINER nodes (a box that owns related sub-parts) — not a flat list of
+     every part at the top level, and not far-apart `domain` zones with nothing tying them together.
+  3. The individual parts are the nodes INSIDE those containers.
+  4. Pull anything cross-cutting — shared state, data, a result set, a shared service — into its OWN node
+     and point every consumer at it with a dependency **edge**, instead of copying the shared concern into
+     each user. These shared nodes are the graph's spine and are what make it read as *wired*, not sparse.
+  Ownership is nesting; shared use is an edge. A flat graph, or one split into far-apart zones with no
+  shared spine, is the exact anti-pattern this replaces.
+- **`kind` words follow the subject — pick a handful, not one per part.** `kind` is OPEN and differs per
+  diagram; name each node for WHAT IT IS. A UI page reads well as `page` / `region` / `component` / `data`;
+  a backend feature as `service` / `module` / `queue` / `store`; an object model as `sobject` /
+  `field-set` / `permission-set`; mix concrete kinds freely (`react-component`, `apex-class`, `lambda`).
+  Keep it to a FEW meaningful kinds — one colour per type that matters — rather than a distinct kind for
+  every single part, which makes a garish, singleton-heavy legend.
+- **Readability + encoding standard** → `references/readability-rules.md` (the evidence-backed rules:
+  crossing-minimization, ownership-as-nesting, kind→colour + domain→zone two-axis encoding, stable
+  OKLCH palette, badges, select-to-highlight, the numeric thresholds). The full literature behind the
+  colour/encoding half → `references/color-encoding-research.md`. Rules are defaults to bend
+  deliberately, not laws.
+- **The engine is reusable — never regenerate it.** A diagram is DATA (`<name>.diagram.json`); the
+  engine (`diagram-viewer.template.html`) is the tool. Author the model, run the bundler, get one file.

@@ -6,7 +6,7 @@ description: "Use when you need to know whether a skill's `description` actually
 
 ## Contract
 
-**In:** an existing skill directory holding `SKILL.md` and `evals/trigger-eval.json` (≥6 cases, at
+**In:** an existing skill directory holding `SKILL.md` and `evals/rubric.json` (≥6 cases, at
 least one of each polarity) · a working `claude` binary — this spends tokens, it is not a static
 check.
 
@@ -14,9 +14,9 @@ check.
 the exact queries that missed or wrongly fired · `evals/result.json` written beside the skill,
 carrying both hashes so the gate can tell a fresh measurement from a stale one.
 
-**Not in scope:** whether the skill does its job WELL once it fires. That is the second metric, it
-needs `evals/acceptance.json` and a runner that does not exist yet. A trigger score of 10 says the
-model reached for the skill, nothing more.
+**Not in scope:** whether the skill does its job WELL once it fires. That is the second metric — it
+reads `evals/rubric.json` and is run by `skillcraft:skillaxe`, not by this skill. A trigger score
+of 10 says the model reached for the skill, nothing more.
 
 ---
 
@@ -51,7 +51,7 @@ python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path
   [--runs 5] [--model sonnet] [--bar 7] [--type self-contained|context-dependent] [--suggest]
 ```
 
-- Reads `<skill-path>/evals/trigger-eval.json` (≥6 cases `{"query","should_trigger"}`, ≥1 positive +
+- Reads `<skill-path>/evals/rubric.json` (≥6 cases `{"query","should_trigger"}`, ≥1 positive +
   ≥1 negative; realistic queries, genuine near-miss negatives).
 - Prints the score, a one-glance verdict, current-vs-baseline (git HEAD) with a **no-regression
   gate**, plain-language WHY, and the exact MISSED / wrongly-fired queries.
@@ -117,7 +117,7 @@ and a real weakness look identical until then.
 
 ## Before you finish
 
-1. `evals/trigger-eval.json` exists: ≥6 cases, ≥1 positive, ≥1 negative, realistic queries and
+1. `evals/rubric.json` exists: ≥6 cases, ≥1 positive, ≥1 negative, realistic queries and
    genuine near-miss negatives.
 2. The script was run from the repository → `evals/result.json` exists and its `description_hash`
    matches the description you are shipping.
@@ -126,7 +126,8 @@ and a real weakness look identical until then.
 4. Every positive case was read individually, not just the headline score. For each miss, the WHY was
    answered from the three questions above and the fix addresses that cause — not the wording of the
    failed query.
-5. `git diff` touches no `trigger-eval.json` unless what the skill DOES changed in the same change.
-   A queryset edited alongside a score is an instrument bent to its reading.
+5. `git diff` touches no `trigger` half of `rubric.json` unless what the skill DOES changed in the
+   same change. A queryset edited alongside a score is an instrument bent to its reading. (Editing the
+   `acceptance` half is fine — it does not move the trigger hash.)
 6. `bash scripts/eval-gate.sh` → green for this skill.
 7. Any line failing? Fix it and start again from 1.

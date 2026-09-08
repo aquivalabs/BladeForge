@@ -11,11 +11,18 @@ primitives, never instead of them.
 > **Scope.** React, framework-agnostic — no assumption about your data layer,
 > styling, or i18n library. Take those bindings from the project's *local* skills.
 
-## When to Activate
+## Contract
 
-Building or editing a domain-coupled block, or adding a new domain area. If the
-thing is generic and domain-agnostic, stop — it's a primitive
+**In:** building or editing a domain-coupled feature block — a panel/table/editor tied to real business
+data — or adding a new domain area. A generic domain-agnostic thing is a primitive instead
 (`frontend-react:ui-primitive-reuse`).
+
+**Out:** the feature is placed under the features area by domain, composed from existing primitives,
+fetches through the project's data layer, holds the business logic (primitives stay dumb), follows
+`component-structure` + i18n, and has a story if the repo has a catalog. The checkable expectations are
+in `evals/rubric.json`.
+
+---
 
 ## Rules
 
@@ -32,11 +39,13 @@ thing is generic and domain-agnostic, stop — it's a primitive
 5. **Structure + i18n.** Follow `frontend-react:component-structure`; route
    user-visible strings through the project's i18n setup.
 
-## Checklist
-- [ ] Confirmed it's domain-coupled (not a generic primitive)
-- [ ] Placed under the features area (reused an existing domain if it fit)
-- [ ] UI composed from existing primitives — no re-implemented controls
-- [ ] Data access via the project's data layer
-- [ ] Logic in the feature, not pushed into primitives
-- [ ] Structure + i18n per project conventions
-- [ ] Added a story if the project has a catalog
+## Before you finish
+
+1. It is confirmed domain-coupled (a generic control is a primitive first), placed under the features
+   area by domain — an existing domain reused where it fit, a new top-level domain only when none fits.
+2. The UI is composed from existing primitives (no control re-implemented inside the feature), data
+   access goes through the project's data layer, and business logic/state/domain rules live in the
+   feature, not pushed into primitives.
+3. Structure follows `component-structure`, user-visible strings route through i18n, and a story was
+   added if the repo has a catalog.
+4. A line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

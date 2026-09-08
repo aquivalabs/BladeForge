@@ -8,7 +8,7 @@
 // Enforcement is OPT-IN per repo: a repo participates only if it has a
 // `.claude/plan-gate.config.json`. Any repo without that file is never gated.
 //
-// Bypass: set AS_SKIP_PLAN_GATE=1 for a single conscious hotfix.
+// Bypass: set SKIP_PLAN_GATE=1 for a single conscious hotfix.
 // Fail-open: any unexpected error allows the edit — a workflow gate must never brick
 // the ability to work.
 //
@@ -124,7 +124,7 @@ function planAddedOnBranch(repoRoot, plansDir, baseBranch) {
 }
 
 function main() {
-  if (process.env.AS_SKIP_PLAN_GATE === '1') {
+  if (process.env.SKIP_PLAN_GATE === '1') {
     allow();
   }
 
@@ -174,7 +174,7 @@ function main() {
     deny(
       `[plan-gate] \`${relPath}\` — no code on \`${config.baseBranch}\` ` +
       `(the deploy branch). Create a feature branch first, then edit.\n` +
-      `Bypass a genuine hotfix with AS_SKIP_PLAN_GATE=1.`,
+      `Bypass a genuine hotfix with SKIP_PLAN_GATE=1.`,
     );
   }
 
@@ -188,7 +188,7 @@ function main() {
         `[plan-gate] \`${relPath}\` — branch \`${branch}\` carries task ` +
         `\`${taskId}\` but no plan \`${plansDir}/*${taskId}*.md\` exists. ` +
         `Write the plan first (brainstorming -> writing-plans).\n` +
-        `Bypass with AS_SKIP_PLAN_GATE=1.`,
+        `Bypass with SKIP_PLAN_GATE=1.`,
       );
     }
   } else if (!planAddedOnBranch(repoRoot, plansDir, config.baseBranch)) {
@@ -196,7 +196,7 @@ function main() {
       `[plan-gate] \`${relPath}\` — branch \`${branch}\` has no plan in ` +
       `\`${plansDir}\` (nothing new vs \`${config.baseBranch}\`, nothing ` +
       `in the working tree). Write the plan first ` +
-      `(brainstorming -> writing-plans).\nBypass with AS_SKIP_PLAN_GATE=1.`,
+      `(brainstorming -> writing-plans).\nBypass with SKIP_PLAN_GATE=1.`,
     );
   }
 

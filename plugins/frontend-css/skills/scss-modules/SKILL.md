@@ -4,10 +4,13 @@ description: House rules for authoring component SCSS — the .scss-over-.css co
 
 # CSS / SCSS — Modules, Colors, and Structure
 
-## When to Activate
+## Contract
 
-Any time styles are written or modified: creating a new component, writing CSS/SCSS,
-refactoring existing styles.
+**In:** a component's SCSS being written or refactored, or setting up the SCSS token/variable system.
+
+**Out:** styles live in `.scss` with colours from `$color-*`, spacing/radius from the scale, sizes in
+`rem`, BEM structure, and any absolute positioning justified — new tokens added to the variables file
+first. The checkable expectations are in `evals/rubric.json`.
 
 ---
 
@@ -173,14 +176,12 @@ An `absolute`/`fixed` with **no** such justification comment is a review finding
 
 ---
 
-## Checklist when creating component styles
+## Before you finish
 
-- [ ] Project uses SCSS (if not — propose it first)
-- [ ] Global variables file exists before writing any values
-- [ ] File extension is `.scss`, not `.css`
-- [ ] No hardcoded hex colors — all from `$color-*`
-- [ ] No magic numbers — spacing from `$space-*`, radius from `$radius-*`
-- [ ] New tokens added to the correct `variables/_*.scss` file first
-- [ ] All sizes in `rem` (except border-width, box-shadow offsets, SVG attributes)
-- [ ] BEM structure: block → `&__element` → `&--modifier`
-- [ ] No `position: absolute`/`fixed` without a one-line justification comment (prefer flow / flex / grid)
+1. The file is `.scss` (SCSS proposed first if the project had none), a global variables file exists,
+   and no hardcoded hex or magic number remains — colours from `$color-*`, spacing from `$space-*`,
+   radius from `$radius-*`, new tokens added to `variables/_*.scss` first.
+2. All sizes are `rem` (except border-width, box-shadow offsets, SVG attributes), the structure is BEM
+   (block -> `&__element` -> `&--modifier`), and no `position: absolute`/`fixed` stands without a
+   one-line justification comment.
+3. A rule broken? Fix it and re-check. Full expectations → `evals/rubric.json`.

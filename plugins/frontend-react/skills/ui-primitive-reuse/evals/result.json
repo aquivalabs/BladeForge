@@ -1,0 +1,179 @@
+{
+  "trigger": {
+    "skill": "ui-primitive-reuse",
+    "measured_at": "2026-09-07T09:37:52",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "12/12",
+    "accuracy": 1.0,
+    "baseline_accuracy": null,
+    "description_hash": "00bf8a7964b13f85bc5aecfea1222b3edb2296d953dbf4af3d7b286ff3f3c993",
+    "queryset_hash": "7f251580d8756881706a881a321b625adec4c39d323095d10cbc1e5c8d9e5cf0",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "I need a checkbox component for this settings form — should I just write a new one?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "there's no dropdown/select in this project yet, I'm about to hand-roll one from scratch",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "before I build a shared tooltip component, is there already one in the primitives folder?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "I want to add a reusable badge control other screens can use — where do I start?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "we need a modal/dialog primitive for confirmations across the app, should I create a new one?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "about to hand-roll a raw <input> with custom styling for a form that other pages will reuse",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "how should I structure the folder and files for this new OrderSummary feature component?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "should this new component get a loading skeleton, and where should it live?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a Storybook story for the Button component covering default, disabled, and loading states",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "convert the hardcoded 16px padding in this card's SCSS to rem units",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "this error message is hardcoded English text — route it through the i18n system",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a new custom useDebouncedValue hook and figure out where it should be registered",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.85,
+    "skillscore": 0.95,
+    "guide_faults": [],
+    "verdict": "Guide-driven agent grepped the actual primitives folder and named the exact reuse target (a project artifact) with props and story-check; the isolated baseline only reasoned abstractly about headless-UI best practice and would have proposed building a wrapper that already exists."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "ebabb7c5b58a7cc5235001d9255578a3b1a16b77792fde6750f0546da4b0b5fa",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "instructional guidance only, no directives aimed at overriding the reading agent's instructions"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "n/a",
+        "note": "no scripts or network-capable code present; SKILL.md contains no data-sending logic"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "no keys/tokens/credentials found in SKILL.md"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "skill has no scripts/ directory; only a grep-based search is described in prose, nothing destructive"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain markdown prose, fully readable, no encoded blobs"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "n/a",
+        "note": "no scripts or fetch calls; only references/ mention is a project-local docs-retrieval step, not executed by this skill"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "n/a",
+        "note": "no file/credential access code exists in this skill's material"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "n/a",
+        "note": "no shell execution capability in this skill at all"
+      }
+    ]
+  }
+}

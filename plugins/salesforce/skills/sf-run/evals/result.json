@@ -1,0 +1,218 @@
+{
+  "trigger": {
+    "skill": "sf-run",
+    "measured_at": "2026-09-07T10:04:49",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "15/18",
+    "accuracy": 0.833,
+    "baseline_accuracy": 0.833,
+    "description_hash": "a4eaf0cb32a3f21ac472e718b5af9ff4ed14a90f64c4c578e50cda173d7bfccb",
+    "queryset_hash": "62268219f85571d32b41736bfbf74add32278d051140a110f72173dc804f6b23",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "run anonymous apex: System.debug(UserInfo.getOrganizationId());",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "quick soql check — how many Pkg__Widget_Config__c records exist for the current user",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "execute anon apex on myOrg to reset the widget config for my test user",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "I want to reproduce the org-side null pointer in MetricBuilder — run it anon",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "soql: SELECT Id, Pkg__Config_Kind__c FROM Pkg__Widget_Config__c LIMIT 5",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "run this apex snippet on the org without deploying a class",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "check if Pkg__Widget_Card__c has any rows where Item_Key__c is null — quick soql",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "execute apex on the scratch org to see the debug output from RangeResolver",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "run a soql query against myOrg tooling API to check code coverage",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "deploy WidgetConfigResource.cls and run WidgetConfigResourceTest",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "push the widgetSettings metadata package to myOrg",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "run the full apex test suite for the widgetSettings package",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a test class for MetricBuilder",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "what fields does Pkg__Data_View__c have",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "build an lwc that displays widget cards",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "retrieve ApexClass:MetricBuilder from the org",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "check this apex REST endpoint for SOQL injection vulnerabilities",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "update the per-user dashboard config in SharedPkg and deploy",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T20:32:37",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "6b18f155fef4d9d2b7eb5db1e3168a3d24fd734dad25e0fa703d1be7d9739bd7",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "No text steering the reading model; docs are plain usage instructions."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "Token/URL only used to call the same org's own Tooling API endpoint, nothing sent elsewhere."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No embedded key/token; token is resolved at runtime via `sf org display`."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Anonymous Apex / SOQL execution IS this skill's declared, sole purpose (see description: 'Run anonymous Apex or a SOQL query against a Salesforce org'); the installer is the operator, invoking it deliberately against their OWN authenticated dev/scratch org. Not a covert or unexpected destructive command — the capability is exactly what the skill advertises and is gated by the user's own org auth."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain bash + python3, fully readable, no encoded blobs."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "curl only targets the org's own instanceUrl resolved from `sf org display`, not a third-party host."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "Reads the org's OWN access token (via `sf org display --json`) for the single stated reason of authenticating the Tooling-API curl call the skill exists to make; the token is used locally for that request only and is never exfiltrated. A necessary, declared mechanism with a clear stated reason — not undisclosed credential access."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, no persistence, no profile/cron edits."
+      }
+    ]
+  }
+}

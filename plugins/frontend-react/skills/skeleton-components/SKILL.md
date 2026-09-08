@@ -9,12 +9,15 @@ loading window. This skill gates that decision and, when a skeleton is warranted
 fixes how it is built: a **separate component next to the real one**, composed from
 the shared `Skeleton` primitive — never a library, never hand-rolled pulse markup.
 
-## When to Activate
+## Contract
 
-- Creating or editing a React component that fetches its own data (TanStack Query,
-  `await`, `isLoading`/`isPending`/`isFetching`).
-- A component shows a blank area or a bare "Loading…" string before content paints.
-- Reviewing async-data UI, or someone asks to "add a skeleton / loading state".
+**In:** building or editing a React component that renders asynchronously-loaded data, reviewing
+async-data UI, or asked to add a loading state.
+
+**Out:** the skeleton decision made (one only when a real loading window exists), and where warranted a
+SEPARATE `<Component>Skeleton` colocated beside the real one, composed from the shared `Skeleton`
+primitive, mirroring the layout, exported from the barrel and wired at the consumer. The checkable
+expectations are in `evals/rubric.json`.
 
 ---
 
@@ -88,11 +91,15 @@ Stack them — don't lay them out left/right.
 
 ---
 
-## Checklist
+## Before you finish
 
-- [ ] Confirmed a real async loading window exists — otherwise NO skeleton
-- [ ] Reused the shared `Skeleton` primitive (no library, no hand-rolled pulse)
-- [ ] Skeleton is a separate `<Component>Skeleton.tsx` in the same folder
-- [ ] Mirrors the real component's shape/size so there's no layout jump
-- [ ] Exported from the barrel and rendered in the consumer's loading branch
-- [ ] In Storybook, skeleton shown stacked under the real component per state (no separate skeleton story file)
+1. A real async loading window was confirmed — the component owns an async query with a visible
+   pre-data gap; otherwise NO skeleton was built (purely-presentational, synchronous, cached, or
+   already covered by the parent).
+2. Where warranted, the skeleton uses the shared `Skeleton` primitive (no library, no hand-rolled
+   pulse), is a separate `<Component>Skeleton.tsx` in the same folder, mirrors the real shape/size so
+   there is no layout jump, and is exported from the barrel and rendered in the consumer's loading
+   branch.
+3. In Storybook, the skeleton is shown stacked under the real component per state — no separate
+   skeleton story file.
+4. A line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

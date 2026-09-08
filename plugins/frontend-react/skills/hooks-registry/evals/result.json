@@ -1,0 +1,229 @@
+{
+  "trigger": {
+    "skill": "hooks-registry",
+    "measured_at": "2026-09-07T09:35:32",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "15/18",
+    "accuracy": 0.833,
+    "baseline_accuracy": null,
+    "description_hash": "b1870446e00358929a05c724e22f15e13061daefb0a431f3694a4c7305b5e987",
+    "queryset_hash": "d48e3f1e138f52949d49da2c2e34966c25833df7a2aebd2dc647902e131af0be",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "I need to add a useDebounce hook under src/hooks for the search input",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "can you create a custom hook to fetch and cache the current Period across components?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "lets extract this polling logic into a reusable useInterval hook",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "rename useFetchUser to useCurrentUser everywhere",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "i need some reusable logic to fetch and cache the current user across components",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "move useLocalStorage from src/components/utils into src/hooks",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "delete the old useLegacyGrid hook, nothing uses it anymore",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "write a useRange hook that wraps the range query",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add a hook for tracking window resize so multiple charts can subscribe",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "explain how useEffect dependency arrays work",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "why does my useState update trigger two re-renders in strict mode?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "convert this class component to use hooks",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a git pre-commit hook to run eslint",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a webhook handler in the server for Stripe events",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "useMemo vs useCallback for this expensive calc, which is faster?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "my useEffect keeps firing in an infinite loop, help me debug it",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "set up a husky pre-push hook that runs the tests",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "should I call useContext here or pass the value down as props?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.85,
+    "skillscore": 0.95,
+    "guide_faults": [
+      "The skill's generic text points at a stale sibling the hooks-registry doc while the project's real SSOT is the mechanism doc; the with-guide agent had to catch and route around this itself via CLAUDE.md rather than the guide naming the right path."
+    ],
+    "verdict": "Guide turned a would-be duplicate-hook essay into a grounded reuse verdict: read the real registry, confirmed the hook and its two consumers already exist and are correctly placed/registered, and closed the task with zero new code — exactly the rubric's reuse-first, scope-by-consumer-count, registry-in-sync bar; baseline, lacking repo access, could only gesture at the same rules generically and explicitly flagged its own unverified assumptions."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "63cd2a655c5e1ba12dd012215d98598f0492057041f6208e1834363b1b465443",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "plain instructional guidance to the agent; no directives aimed at overriding the model's instructions"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "no network calls or data transmission of any kind in this doc-only skill"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "no keys, tokens, or credentials present"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "no scripts/ directory exists; SKILL.md contains no shell commands at all"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain markdown, fully readable, no encoded blobs"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "no URLs or fetch/download instructions anywhere in the file"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "no reference to ~/.ssh, ~/.aws, .env, or any credential store"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "no sudo, cron, profile edits, or persistence mechanisms"
+      }
+    ]
+  }
+}

@@ -1,0 +1,797 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Diagram</title>
+<link rel="stylesheet" href="https://esm.sh/reactflow@11.11.4/dist/style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap">
+<style>
+  /* surfaces: Atom One Dark greys (canvas / elevated panel / hairline / fg / dim / link-blue) */
+  :root{--bg:#16191e;--panel:#2b3038;--hair:#3e4451;--txt:#c8ccd4;--dim:#949cab;--key:#61afef}
+  html,body{margin:0;height:100%;color:var(--txt);
+    font:13px/1.5 "Roboto",ui-sans-serif,system-ui,sans-serif}
+  /* depth: a faint top glow + a vignette darkening outward — the CENTRE stays exactly --bg (#16191e) so
+     card contrast is untouched, only the edges recede. The dot grid rides on top for a 3D-field feel. */
+  body{background:
+    radial-gradient(1100px 640px at 50% -8%, rgba(97,175,239,.11), transparent 64%),
+    radial-gradient(145% 140% at 50% 38%, var(--bg) 0%, #121419 40%, #090a0d 100%) fixed}
+  #root{width:100vw;height:100vh}
+  /* fallback shown until React mounts (createRoot replaces #root's content); stays if the CDN imports fail */
+  .boot{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:10px;text-align:center;padding:0 12%;color:var(--dim);font:600 15px/1.5 "Roboto",system-ui,sans-serif}
+  .boot span{font-weight:400;font-size:12.5px;max-width:560px;color:#7f8896}
+  .hdr{position:fixed;z-index:10;top:0;left:0;right:0;padding:9px 14px;background:rgba(22,25,30,.85);
+    border-bottom:1px solid var(--hair);backdrop-filter:blur(4px)}
+  .hdr b{color:#fff} .hdr .sub{color:var(--dim)}
+  /* domain = translucent low-chroma ZONE (Gestalt common-region; ground, never competes with kind colour) */
+  .zone{box-sizing:border-box;border-radius:16px;border:1.5px dashed;width:100%;height:100%}
+  .zone .zlabel{padding:9px 14px;font-weight:600;font-size:13px;pointer-events:none}
+  .zone .zsub{font-weight:400;font-size:11px;color:var(--dim);margin-top:1px}
+  /* owner container = a node that owns children: kind-coloured border, header carries name + badge + summary */
+  .cont{position:relative;box-sizing:border-box;border-radius:13px;border:1.5px solid;width:100%;height:100%;
+    background:rgba(40,44,52,.55)}
+  .cont .chdr{padding:9px 13px 0;pointer-events:none}
+  .cont .crow{display:flex;align-items:center;gap:8px}
+  .cont .nm{font-weight:700;font-size:14px;color:#fff}
+  .cont .sum{color:var(--dim);font-size:12px;margin-top:3px;max-width:520px;
+    display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+  /* leaf card = compact; kind-coloured dark fill + bright border, badge as a small CORNER chip */
+  .node{position:relative;box-sizing:border-box;width:210px;min-height:60px;max-height:74px;overflow:hidden;
+    border-radius:10px;border:1.5px solid;
+    padding:8px 11px;box-shadow:0 2px 10px rgba(0,0,0,.4);cursor:pointer;transition:box-shadow .12s,opacity .2s}
+  .node:hover{box-shadow:0 0 0 2px rgba(255,255,255,.16),0 4px 14px rgba(0,0,0,.5)}
+  .badge{height:15px;padding:0 5px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;
+    font:700 9.5px/1 "Roboto Mono",ui-monospace,Menlo,monospace;color:#10131a}
+  .node .badge{position:absolute;top:7px;right:8px}
+  .node .nm{font-weight:700;font-size:13.5px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:36px}
+  .node .kind{font:10.5px/1 "Roboto Mono",ui-monospace,Menlo,monospace;color:#ffffff;margin-top:2px}
+  .node .sum{color:#d3dbeb;font-size:11.5px;line-height:1.35;margin-top:5px;
+    display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+  /* detail panel */
+  .detail{position:fixed;z-index:20;top:0;right:0;width:360px;height:100vh;overflow:auto;background:#21252b;
+    border-left:1px solid var(--hair);padding:16px 18px;box-shadow:-6px 0 20px rgba(0,0,0,.45)}
+  .detail h2{margin:0 0 3px;font-size:17px;color:#fff}
+  .detail .kd{font:11px "Roboto Mono",ui-monospace,Menlo,monospace;color:var(--dim);margin-bottom:2px}
+  .detail .id{font:11px "Roboto Mono",ui-monospace,Menlo,monospace;color:#6a7690;word-break:break-all;margin-bottom:12px}
+  .detail .desc{color:#e2e8f4;font-size:13.5px;line-height:1.62;margin:4px 0 14px}
+  .detail .tagline{color:var(--dim);font-size:12px;font-style:italic;margin:-4px 0 14px}
+  .detail .sec{margin:16px 0 6px;padding-top:11px;border-top:1px solid #1c2740;font-size:10.5px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.07em;color:#c678dd}
+  .detail .it{font:12px/1.55 "Roboto Mono",ui-monospace,Menlo,monospace;color:var(--txt);margin:4px 0}
+  /* clickable depends-on / used-by entries — jump to that node */
+  .detail .rel{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;
+    color:#8fb6ff;border:1px solid transparent;border-radius:6px;padding:4px 8px;margin:3px 0 3px -8px;
+    transition:background .12s,color .12s,border-color .12s}
+  .detail .rel::after{content:'›';opacity:.5;font-size:15px}
+  .detail .rel:hover{background:rgba(97,175,239,.14);border-color:rgba(97,175,239,.35);color:#cfe2ff}
+  .detail .rel:hover::after{opacity:1}
+  .detail .it .means{font-family:ui-sans-serif,system-ui,sans-serif;color:#aeb8cc;font-size:12px;margin:1px 0 0 12px}
+  .detail .tip{border-bottom:1px dotted #7d8aa5;cursor:help}
+  .detail .close{position:absolute;top:12px;right:14px;cursor:pointer;color:var(--dim);font-size:18px}
+  .detail .close:hover{color:#fff}
+  .detail .refs{display:flex;flex-wrap:wrap;gap:6px;margin:3px 0}
+  .detail .ref{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border:1px solid #3e4451;border-radius:6px;
+    color:#61afef;text-decoration:none;font-size:12px;background:#2b3038}
+  .detail .ref:hover{border-color:#61afef;color:#c4d8ff}
+  .detail .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+  .detail .thumb{border:1px solid var(--hair);border-radius:7px;overflow:hidden;line-height:0;cursor:zoom-in}
+  .detail .thumb img{display:block;max-height:104px;max-width:160px}
+  .lightbox{position:fixed;inset:0;z-index:50;background:rgba(4,8,16,.86);display:flex;align-items:center;
+    justify-content:center;cursor:zoom-out}
+  .lightbox img{max-width:90vw;max-height:90vh;border:1px solid var(--hair);border-radius:8px}
+  .tooltip{position:fixed;z-index:60;max-width:280px;background:#21252b;border:1px solid var(--key);border-radius:7px;
+    padding:7px 10px;font:12px/1.45 ui-sans-serif,system-ui,sans-serif;color:var(--txt);box-shadow:0 8px 24px rgba(0,0,0,.55);pointer-events:none}
+  /* legend */
+  .legend{position:fixed;z-index:10;bottom:12px;left:12px;background:rgba(40,44,52,.96);border:1px solid var(--hair);
+    border-radius:10px;padding:10px 12px;font-size:12px;color:var(--dim);max-width:340px;max-height:66vh;overflow:auto}
+  .legend .grp{color:#9fb0cc;font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 4px}
+  .legend .grp:first-child{margin-top:0}
+  .legend .row{display:flex;align-items:center;gap:8px;margin:3px 0}
+  .legend .sw{flex:none;width:16px;height:16px;border-radius:4px;border:1.5px solid}
+  .legend .bd{flex:none}
+  .legend .zs{flex:none;width:16px;height:16px;border-radius:4px;border:1.5px dashed}
+  .legend .es{flex:none;width:22px;height:8px}
+  .legend .rs{flex:none;width:16px;height:16px;border-radius:4px;border:1.5px solid var(--hair);border-left-width:6px}
+  .legend .nm{color:#cdd6e6}
+  .react-flow__attribution{display:none}
+</style>
+</head>
+<body>
+<div class="hdr"><b id="title">diagram</b> — <span class="sub" id="sub"></span></div>
+<div id="root"><div class="boot">Loading the diagram… <span>this page loads React Flow + ELK from a CDN (esm.sh) and fonts from Google — if it stays on this message you are offline, or a firewall/CSP is blocking those hosts.</span></div></div>
+<div class="legend" id="legend"></div>
+
+<script type="module">
+import React from 'https://esm.sh/react@18.2.0';
+import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client';
+import ReactFlow, { Background, Controls, MiniMap, Handle, Position, useNodesState }
+  from 'https://esm.sh/reactflow@11.11.4?deps=react@18.2.0,react-dom@18.2.0';
+import ELK from 'https://esm.sh/elkjs@0.9.3/lib/elk.bundled.js';
+// `h` is the hyperscript alias for React.createElement — a universal JSX-less idiom, kept short on
+// purpose so an element tree reads as a tree rather than as a wall of `React.createElement(` calls.
+const h = React.createElement;
+
+/*BUILD:REPLACE-START*/
+// ---- inlined default (a heterogeneous example) — the bundler replaces this whole marked block with
+// `const DATA=…`. The markers below, NOT this prose, are what the bundler matches. ----
+const INLINED_DEFAULT = {
+  diagram: { title:'checkout', subtitle:'React storefront → Apex backend → Lambda' },
+  domains: [
+    { id:'web',  name:'Web frontend', sub:'React SPA' },
+    { id:'sf',   name:'Salesforce',   sub:'Apex backend' },
+    { id:'edge', name:'Serverless',   sub:'AWS Lambda' }
+  ],
+  nodes: [
+    { id:'grid',  domain:'web',  name:'ProductGrid',   kind:'react-component', summary:'renders the catalogue grid',
+      description:'The catalogue grid. Reads products from the API client and cart quantities from the store; each cell is an add-to-cart tile.',
+      rows:[{group:'props', text:'products: Product[]', means:'the current page of products'},
+            {group:'props', text:'onAdd: (id)=>void', means:'add-to-cart callback'}],
+      refs:[{kind:'doc', label:'React docs', url:'https://react.dev/'}] },
+    { id:'form',  domain:'web',  name:'CheckoutForm',  kind:'react-component', summary:'address + payment form' },
+    { id:'cart',  domain:'web',  name:'CartStore',     kind:'zustand-store',   summary:'client cart state',
+      description:'The single client-side cart store. Holds line items and derived totals; every cart view subscribes here.' },
+    { id:'usecart',domain:'web', name:'useCart',       kind:'react-hook',      summary:'cart selector hook' },
+    { id:'api',   domain:'web',  name:'apiClient',     kind:'module',          summary:'typed REST client' },
+    { id:'ctrl',  domain:'sf',   name:'OrderController',kind:'apex-class',     summary:'REST endpoint for orders' },
+    { id:'svc',   domain:'sf',   name:'OrderService',  kind:'apex-class',      summary:'order business logic' },
+    { id:'price', domain:'sf',   name:'PricingEngine', kind:'apex-class',      summary:'totals, discounts, tax call-out' },
+    { id:'order', domain:'sf',   name:'Order__c',      kind:'sobject',         summary:'the order record' },
+    { id:'trig',  domain:'sf',   name:'OrderTrigger',  kind:'apex-trigger',    summary:'after-insert recompute' },
+    { id:'tax',   domain:'edge', name:'taxCalc',       kind:'lambda',          summary:'per-jurisdiction tax' },
+    { id:'fx',    domain:'edge', name:'fxRates',       kind:'lambda',          summary:'currency conversion' },
+    { id:'queue', domain:'edge', name:'orderQueue',    kind:'queue',           summary:'async order events' }
+  ],
+  edges: [
+    {from:'grid',to:'cart'},{from:'grid',to:'api'},{from:'form',to:'cart'},{from:'form',to:'api'},
+    {from:'usecart',to:'cart'},{from:'api',to:'ctrl'},{from:'ctrl',to:'svc'},{from:'svc',to:'order'},
+    {from:'svc',to:'price'},{from:'trig',to:'svc'},{from:'price',to:'tax'},{from:'price',to:'fx'},{from:'tax',to:'queue'}
+  ]
+};
+
+// A fundamental rule: the diagram is DATA — the engine reads a plain JSON natively. ?data=<file>.json,
+// else the inlined default (the bundler bakes one in for a single-file build).
+const urlParams = new URLSearchParams(location.search);
+const dataUrl = urlParams.get('data');
+let DATA;
+try {
+  DATA = dataUrl ? await (await fetch(dataUrl)).json() : INLINED_DEFAULT;
+} catch (fetchError) {
+  console.warn('data fetch failed, using inlined', fetchError);
+  DATA = INLINED_DEFAULT;
+}
+/*BUILD:REPLACE-END*/
+
+// ---- normalize the model so a terse or hand-edited node never crashes the panel or blanks the render ----
+// Each guard is its own named helper (one responsibility each) rather than one god-block, so a future
+// guard is a new function call in normalizeModel, not another clause wedged into a growing IIFE.
+const applyModelDefaults = (model) => {
+  model.diagram = model.diagram || {};
+  model.domains = model.domains || [];
+  model.edges = model.edges || [];
+  model.nodes = model.nodes || [];
+};
+// drop duplicate domain ids (keep first, warn) — a dup would double-render zones + legend rows
+const dropDuplicateDomainIds = (model) => {
+  const seenDomainIds = new Set();
+  model.domains = model.domains.filter((domain) => {
+    if (seenDomainIds.has(domain.id)) {
+      console.warn('dropping duplicate domain id:', domain.id);
+      return false;
+    }
+    seenDomainIds.add(domain.id);
+    return true;
+  });
+};
+// drop duplicate node ids (keep the first, warn) — a dup id corrupts ELK's global id space + RF keys
+const dropDuplicateNodeIds = (model) => {
+  const seenNodeIds = new Set();
+  model.nodes = model.nodes.filter((node) => {
+    if (seenNodeIds.has(node.id)) {
+      console.warn('dropping duplicate node id:', node.id);
+      return false;
+    }
+    seenNodeIds.add(node.id);
+    return true;
+  });
+};
+// a node id that ALSO names a domain shares one id-space with ELK's 'dom:'-groups → drop the node (the
+// build validator rejects this; the ?data= path can't, so degrade instead of letting ELK blank the page)
+const dropNodesCollidingWithDomainIds = (model) => {
+  const domainIds = new Set(model.domains.map((domain) => domain.id));
+  model.nodes = model.nodes.filter((node) => {
+    if (domainIds.has(node.id)) {
+      console.warn('dropping node whose id collides with a domain id:', node.id);
+      return false;
+    }
+    return true;
+  });
+};
+const fillNodeDefaults = (model) => {
+  model.nodes.forEach((node) => {
+    node.rows = node.rows || [];
+    node.refs = node.refs || [];
+    node.kind = node.kind || 'unknown';
+  });
+};
+const normalizeModel = (model) => {
+  applyModelDefaults(model);
+  dropDuplicateDomainIds(model);
+  dropDuplicateNodeIds(model);
+  dropNodesCollidingWithDomainIds(model);
+  fillNodeDefaults(model);
+};
+normalizeModel(DATA);
+
+const nodeById = Object.fromEntries(DATA.nodes.map((node) => [node.id, node]));
+const domainById = Object.fromEntries(DATA.domains.map((domain) => [domain.id, domain]));
+const isDomain = (id) => !!domainById[id];
+// TWO CLEAN AXES: `parent` (another NODE id) = nesting/ownership; `domain` (a domain id) = zone
+// membership. A node's ELK container is its parent-node if set, else its domain zone. A `parent` that
+// isn't a real OTHER node (missing, or pointing at itself) is ignored — placement falls back to domain.
+const containerOf = (node) => {
+  if (node && node.parent && node.parent !== node.id && nodeById[node.parent]) {
+    return node.parent;
+  }
+  return (node && node.domain) || null;
+};
+const childrenOf = {};
+DATA.nodes.forEach((node) => {
+  const container = containerOf(node);
+  if (container) {
+    (childrenOf[container] ||= []).push(node.id);
+  }
+});
+DATA.domains.forEach((domain) => {   // ensure domains iterate even if empty
+  childrenOf[domain.id] = childrenOf[domain.id] || [];
+});
+const isContainer = (id) => !isDomain(id) && (childrenOf[id] || []).length > 0;
+
+// nodes actually PLACED in the tree = those reachable from a top-level entry through childrenOf. A pair
+// stranded by a mutual `parent` cycle (A.parent=B, B.parent=A) resolves to a container yet is reachable
+// from no root, so it never enters ELK; an edge to it would point ELK at an un-placed id and blank the
+// whole render. Compute the set so the edge filter can drop those edges (the validator rejects the cycle
+// at build time; this guards the unvalidated ?data= path).
+const explainUnreachable = (node) => {
+  if (node.domain && !domainById[node.domain]) {
+    return `its domain '${node.domain}' is not declared`;
+  }
+  if (node.parent && node.parent !== node.id && !nodeById[node.parent]) {
+    return `its parent '${node.parent}' is not a node id`;
+  }
+  return 'a parent cycle, or an ANCESTOR is itself unreachable (undeclared domain / non-node parent)';
+};
+const computeReachableIds = () => {
+  const reached = new Set();
+  const roots = [
+    ...DATA.domains.map((domain) => domain.id),
+    ...DATA.nodes.filter((node) => !containerOf(node)).map((node) => node.id)
+  ];
+  const stack = [...roots];
+  while (stack.length) {
+    const id = stack.pop();
+    if (reached.has(id)) {
+      continue;
+    }
+    reached.add(id);
+    (childrenOf[id] || []).forEach((childId) => stack.push(childId));
+  }
+  DATA.nodes.forEach((node) => {
+    if (!reached.has(node.id)) {
+      console.warn(`node not rendered (${explainUnreachable(node)}):`, node.id);
+    }
+  });
+  return reached;
+};
+const reachableIds = computeReachableIds();
+
+// climb the CONTAINER chain (parent-node, then its domain) reusing containerOf's validity guard — so a
+// dangling/self/domain `parent` is handled the same everywhere — with a visited-set against cycles
+const ancestorsOf = (id) => {
+  const ancestors = [];
+  const seen = new Set([id]);
+  let container = nodeById[id] && containerOf(nodeById[id]);
+  while (container && !seen.has(container)) {
+    seen.add(container);
+    ancestors.push(container);
+    container = nodeById[container] ? containerOf(nodeById[container]) : null;
+  }
+  return ancestors;
+};
+// nearest domain for a node: its own container if that's a domain, else climb until one is found
+const domainOf = (id) => {
+  let container = containerOf(nodeById[id]);
+  const seen = new Set();
+  while (container && !seen.has(container)) {
+    seen.add(container);
+    if (domainById[container]) {
+      return container;
+    }
+    container = nodeById[container] ? containerOf(nodeById[container]) : null;
+  }
+  return null;
+};
+
+// ---- ENCODING (research: color-encoding-research.md). kind → colour + badge. Colour comes from a
+// STABLE hash of the kind NAME (never its position in the current set) so a kind keeps its colour when
+// the set changes (Qu & Hullman). Hues are capped at a comfortable, dark-theme-legible set; once
+// distinct kinds exceed the cap a second SHAPE channel kicks in so they stay distinguishable — colour
+// picks the group, shape splits within it. Fill L is high enough to clear ≥3:1 against the canvas. ----
+const hashString = (value) => {
+  let hash = 5381;
+  const text = value || '';
+  for (let index = 0; index < text.length; index++) {
+    hash = ((hash << 5) + hash + text.charCodeAt(index)) >>> 0;
+  }
+  return hash >>> 0;
+};
+const KINDS = [...new Set(DATA.nodes.map((node) => node.kind).filter(Boolean))];
+// 12 evenly-spread hues — a Material-style categorical wheel (red→orange→amber→lime→green→teal→cyan→
+// blue→indigo→violet→magenta→pink). More colour variety, but only ~8 hues are reliably CVD-safe, so the
+// redundant SHAPE channel kicks in past CVD_SAFE_HUES (not past the full 12) — colour still varies, shape
+// adds the CVD-safe backup, and the badge letter is the final tie-break.
+const HUES = [20,50,78,105,140,168,195,225,255,285,315,345];
+const CVD_SAFE_HUES = 8;
+const SHAPES = ['round','sharp','cut'];                    // 2nd channel, ONLY past the hue cap
+const useShapeChannel = KINDS.length > CVD_SAFE_HUES;
+// Common kinds get a CURATED, well-separated, conventional hue (like the BADGE map) so a stack of
+// service/data/cache/database/component never collapses into one band; anything not listed still hashes
+// stably. Values are hue angles spread around the wheel (red→…→magenta).
+const KIND_HUE = {
+  cache:20, lambda:50, queue:78, function:78, module:105, service:140, api:140, worker:140,
+  controller:168, component:195, 'react-component':195, 'react-hook':170, hook:170, adapter:78, dto:300,
+  'transport-op':105, cmdt:240, database:225, db:225,
+  sobject:225, object:225, data:255, store:255, state:255, 'zustand-store':255,
+  'apex-class':285, class:285, interface:285, selector:285, region:315, layout:315, page:345, root:345 };
+const kindHueById = {};
+KINDS.forEach((kind) => { kindHueById[kind] = KIND_HUE[kind] ?? HUES[hashString(kind) % HUES.length]; });
+const hueOfKind = (kind) => kindHueById[kind] ?? 0;
+// shape is keyed off an INDEPENDENT hash (reversed name) so it doesn't correlate with the hue channel —
+// two kinds sharing a hue are then likely to differ in shape; the unique badge letter is the final tie-break.
+const reverseHash = (value) => hashString([...(value || '')].reverse().join('') + '#s');
+const shapeOfKind = (kind) => useShapeChannel ? SHAPES[reverseHash(kind) % SHAPES.length] : 'round';
+const shapeStyleOfKind = (kind) => {
+  const shape = shapeOfKind(kind);
+  if (shape === 'sharp') {
+    return { borderRadius:'3px' };
+  }
+  if (shape === 'cut') {
+    return { borderRadius:'10px', clipPath:'polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% 100%, 0 100%)' };
+  }
+  return { borderRadius:'10px' };
+};
+// Material feel = bolder chroma on a dark card; L held at the hardened values so fill/canvas stays ≥3:1
+// and the kind label stays ≥4.5:1 on the fill (canvas is the deep Atom One Dark charcoal #16191e).
+const kindFill = (kind) => `oklch(0.53 0.11 ${hueOfKind(kind)})`;
+const kindBorder = (kind) => `oklch(0.76 0.16 ${hueOfKind(kind)})`;
+const kindAccent = (kind) => `oklch(0.78 0.17 ${hueOfKind(kind)})`;
+const BADGE = { 'react-component':'cmp','react-hook':'hk','zustand-store':'sto','module':'mod','apex-class':'cls',
+  'apex-trigger':'trg','sobject':'obj','lambda':'λ','queue':'Q','service':'svc','function':'fn','database':'DB','component':'cmp' };
+const badgeOf = (kind) => BADGE[kind] || (kind || '?').replace(/[^a-z0-9]/gi, '').slice(0, 3).toLowerCase();
+// an optional structural ROLE (shared / external / entrypoint …) → a coloured EDGE STRIPE down the left
+// of the card. Same role = same stripe colour, so a role reads as one group; the fill keeps the TYPE
+// colour (the two axes stay on two channels). Roles are few, so a small curated hue map + a legend row.
+const ROLE_HUE = { shared:250, external:40, entrypoint:145, deprecated:20, owner:300, api:210, sink:180 };
+// bright (L 0.82) so the stripe reads by LIGHTNESS against the mid-L fill even when its hue is near the
+// fill's — e.g. a "shared" stripe on a blue "data" card still pops. Hue still separates roles from roles.
+const roleColorOf = (role) => role ? `oklch(0.82 0.15 ${ROLE_HUE[role] ?? (hashString(role + '#r') % 360)})` : null;
+const roleStripeStyle = (node) => (node && node.role)
+  ? { borderLeftColor: roleColorOf(node.role), borderLeftWidth:'7px' }
+  : {};
+const ROLES = [...new Set(DATA.nodes.map((node) => node.role).filter(Boolean))];
+// domain → a very low-chroma zone tint. The zones are near-achromatic (C≈0.02), so a domain hue that
+// happens to equal a kind hue is still perceptually a grey wash behind coloured cards — hue is not the
+// channel that separates zones from figures (lightness/chroma is), so no hue reservation is needed.
+const domainIds = DATA.domains.map((domain) => domain.id);
+const domainHueById = {};
+domainIds.forEach((id, index) => { domainHueById[id] = Math.round((index * 40 + 10) % 360); });
+const hueOfDomain = (id) => domainHueById[id] || 0;
+const zoneFill = (id) => `oklch(0.27 0.025 ${hueOfDomain(id)})`;   // a hair above the deep One-Dark canvas — a raised region
+const zoneBorder = (id) => `oklch(0.47 0.04 ${hueOfDomain(id)})`;
+
+document.getElementById('title').textContent = DATA.diagram.title || 'diagram';
+document.getElementById('sub').textContent = DATA.diagram.subtitle || '';
+
+// ---- node components ----
+const Zone = ({ data }) => {
+  const domain = data.domain;
+  return h('div', { className:'zone', style:{ background:zoneFill(domain.id), borderColor:zoneBorder(domain.id) } },
+    h('div', { className:'zlabel', style:{ color:`oklch(0.80 0.05 ${hueOfDomain(domain.id)})` } }, domain.name,
+      domain.sub ? h('div', { className:'zsub' }, domain.sub) : null));
+};
+
+// owner: badge in the HEADER (parent-header rule)
+const Container = ({ data }) => {
+  const node = data.node;
+  return h('div', { className:'cont', style:{ borderColor:kindBorder(node.kind), ...roleStripeStyle(node) } },
+    h(Handle, { type:'target', position:Position.Top, style:{ opacity:0 } }),
+    h('div', { className:'chdr' },
+      h('div', { className:'crow' }, h('span', { className:'nm' }, node.name),
+        h('span', { className:'badge', style:{ background:kindAccent(node.kind) } }, badgeOf(node.kind))),
+      node.summary ? h('div', { className:'sum' }, node.summary) : null),
+    h(Handle, { type:'source', position:Position.Bottom, style:{ opacity:0 } }));
+};
+
+// leaf: badge as a CORNER chip; shape = 2nd channel
+const Leaf = ({ data }) => {
+  const node = data.node;
+  return h('div', { className:'node', style:{ ...shapeStyleOfKind(node.kind), background:kindFill(node.kind), borderColor:kindBorder(node.kind), ...roleStripeStyle(node) } },
+    h(Handle, { type:'target', position:Position.Top, style:{ opacity:0 } }),
+    h('span', { className:'badge', style:{ background:kindAccent(node.kind) } }, badgeOf(node.kind)),
+    h('div', { className:'nm' }, node.name),
+    h('div', { className:'kind' }, node.kind),
+    node.summary ? h('div', { className:'sum' }, node.summary) : null,
+    h(Handle, { type:'source', position:Position.Bottom, style:{ opacity:0 } }));
+};
+
+// ---- edges (dependencies/relations), coloured by source kind; optional edge.kind → line style ----
+// endpoints that don't resolve are DROPPED (with a warning) so one bad id can't blank the whole render.
+const EDGE_DASH = { calls:'6 4', reads:'2 3', writes:'8 3', publishes:'1 5', extends:'0', implements:'3 3' };
+const FALLBACK_DASHES = ['5 5','2 4','10 6','1 6','8 4 2 4','3 3 8 3','12 4','4 4 1 4','7 3','2 2 6 2'];   // fallbacks for kinds outside EDGE_DASH — each unknown kind is stable + distinct up to this many; past ~10 unknown kinds a dash can repeat
+// one dash per edge kind — a named kind keeps its dash, an unknown kind gets a STABLE distinct dash (never
+// the '6 4' default), so the legend never promises a distinction the canvas doesn't draw. No kind → default.
+const dashOf = (kind) => kind ? (EDGE_DASH[kind] ?? FALLBACK_DASHES[hashString(kind) % FALLBACK_DASHES.length]) : '4 4';   // no-kind default — distinct from every named kind's dash (incl. calls '6 4')
+const edgeIsRenderable = (edge) => {
+  if (!(nodeById[edge.from] && nodeById[edge.to])) {
+    console.warn('dropping edge with unresolved endpoint:', edge.from, '→', edge.to);
+    return false;
+  }
+  if (!(reachableIds.has(edge.from) && reachableIds.has(edge.to))) {
+    console.warn('dropping edge to a node ELK never placed (parent cycle):', edge.from, '→', edge.to);
+    return false;
+  }
+  if (edge.from === edge.to) {
+    console.warn('dropping self-loop edge (from === to):', edge.from);   // draws hidden under its own node
+    return false;
+  }
+  return true;
+};
+const resolvedEdges = DATA.edges.filter(edgeIsRenderable).map((edge, index) => {
+  const strokeColor = `oklch(0.72 0.13 ${hueOfKind(nodeById[edge.from].kind)})`;
+  return {
+    id:'e' + index, source:edge.from, target:edge.to, kind:edge.kind, type:'smoothstep', animated:true, zIndex:2000,
+    slotLabel: (edge.kind ? edge.kind + (edge.label ? ' · ' + edge.label : '') : edge.label) || null,
+    style:{ stroke:strokeColor, strokeWidth:1.6, strokeDasharray: dashOf(edge.kind) },
+    markerEnd:{ type:'arrowclosed', color:strokeColor, width:12, height:12 }
+  };
+});
+
+// ---- detail panel ----
+let openLightboxImage = () => {};
+const REF_ICONS = { doc:'📄', code:'⟨⟩', design:'🎨', ticket:'🎫', link:'🔗', image:'🖼' };
+// ref urls come from the model (incl. the untrusted ?data= path) and React does NOT sanitize href/src —
+// so a `javascript:`/`vbscript:` url would be clickable script. Allow only http(s)/mailto/relative for
+// links, and http(s)/data:image for images; anything else is dropped to a non-navigating '#'.
+// Deliberately simple + safe (no bare-domain guessing — that mis-fired on relative filenames like
+// `architecture.md`): block dangerous schemes, pass http(s)/mailto and inline image data, and treat
+// everything scheme-less as a same-origin relative path. For an OFF-SITE ref, the author writes a full
+// https:// url — the engine never rewrites a scheme onto an ambiguous string.
+const safeUrl = (rawUrl, isImage) => {
+  const url = String(rawUrl || '').trim();
+  if (/^[\\/][\\/]/.test(url) || /^\\/.test(url)) {
+    return '#';                       // //host \/host /\host \\host \x → off-site, block (browsers normalize \ to /)
+  }
+  if (/^(https?:|mailto:)/i.test(url)) {
+    return url;                       // explicit safe scheme
+  }
+  if (isImage && /^data:image\//i.test(url)) {
+    return url;                       // inline image data only
+  }
+  if (/:/.test(url)) {
+    return '#';                       // any OTHER scheme (javascript:, data:text, vbscript:…) → block
+  }
+  return url;                         // scheme-less → same-origin relative path
+};
+const buildRefBlocks = (refs) => {
+  const refList = refs || [];
+  if (!refList.length) {
+    return [];
+  }
+  const imageRefs = refList.filter((ref) => ref.kind === 'image' && safeUrl(ref.url, true) !== '#');
+  const linkRefs = refList.filter((ref) => ref.kind !== 'image');
+  const blocks = [];
+  if (imageRefs.length) {
+    blocks.push(h('div', { key:'t', className:'thumbs' }, imageRefs.map((ref, index) => {
+      const url = safeUrl(ref.url, true);
+      return h('div', { key:index, className:'thumb', title:ref.label, onClick:() => openLightboxImage(url) },
+        h('img', { src:url, alt:ref.label || '' }));
+    })));
+  }
+  if (linkRefs.length) {
+    blocks.push(h('div', { key:'l', className:'refs' }, linkRefs.map((ref, index) =>
+      h('a', { key:index, className:'ref', href:safeUrl(ref.url, false), target:'_blank', rel:'noopener' },
+        (REF_ICONS[ref.kind] || '🔗') + ' ' + (ref.label || ref.url)))));
+  }
+  return blocks;
+};
+const DetailPanel = ({ node, onClose, onNav }) => {
+  const section = (title, children) => (children && children.length)
+    ? [h('div', { key:'s' + title, className:'sec' }, title), ...children]
+    : [];
+  const rowsByGroup = {};
+  (node.rows || []).forEach((row) => { (rowsByGroup[row.group || 'detail'] ||= []).push(row); });
+  const rowElements = Object.entries(rowsByGroup).flatMap(([group, rows]) => section(group, rows.map((row, index) =>
+    h('div', { key:group + index, className:'it' + (row.means ? ' tip' : ''), 'data-means':row.means || undefined }, row.text,
+      row.means ? h('div', { className:'means' }, '↳ ' + row.means) : null))));
+  const outgoingEdges = resolvedEdges.filter((edge) => edge.source === node.id);
+  const incomingEdges = resolvedEdges.filter((edge) => edge.target === node.id);
+  // each depends-on / used-by entry jumps to that node (select + centre it) on click
+  const relationRow = (edge, direction) => {
+    const otherId = direction === 'out' ? edge.target : edge.source;
+    const otherName = nodeById[otherId] ? nodeById[otherId].name : otherId;
+    return h('div', { key:edge.id + direction, className:'it rel', title:'jump to ' + otherName,
+      onClick:() => onNav && onNav(otherId) }, (direction === 'out' ? '→ ' : '← ') + otherName);
+  };
+  const kindLine = () => {
+    const domainId = domainOf(node.id);
+    const domainLabel = domainId ? (' · ' + domainById[domainId].name) : '';
+    return h('div', { className:'kd', style:{ color:kindAccent(node.kind) } }, node.kind + domainLabel);
+  };
+  const taglineOrSummary = () => {
+    if (node.description && node.summary) {
+      return h('div', { className:'tagline' }, '“' + node.summary + '”');
+    }
+    if (!node.description && node.summary) {
+      return h('div', { className:'desc' }, node.summary);
+    }
+    return null;
+  };
+  return h('div', { className:'detail' },
+    h('div', { className:'close', onClick:onClose }, '×'),
+    h('h2', null, node.name),
+    kindLine(),
+    h('div', { className:'id' }, node.id),
+    node.description ? h('div', { className:'desc' }, node.description) : null,
+    taglineOrSummary(),
+    ...section('references', buildRefBlocks(node.refs)),
+    ...rowElements,
+    ...section('depends on', outgoingEdges.map((edge) => relationRow(edge, 'out'))),
+    ...section('used by', incomingEdges.map((edge) => relationRow(edge, 'in')))
+  );
+};
+
+// ---- generated legend ----
+// escape every interpolated user string — the legend is the one spot built via innerHTML (React
+// escapes everything else), so an unescaped kind/domain/role would corrupt markup or, via ?data=, be XSS.
+const escapeHtml = (value) => String(value == null ? '' : value)
+  .replace(/[&<>"]/g, (character) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[character]));
+const renderLegend = () => {
+  const legendElement = document.getElementById('legend');
+  const kindRows = KINDS.map((kind) =>
+    `<div class="row"><span class="sw" style="background:${kindFill(kind)};border-color:${kindBorder(kind)}"></span><span class="bd badge" style="background:${kindAccent(kind)}">${escapeHtml(badgeOf(kind))}</span><span class="nm">${escapeHtml(kind)}</span></div>`).join('');
+  const domainRows = DATA.domains.map((domain) =>
+    `<div class="row"><span class="zs" style="background:${zoneFill(domain.id)};border-color:${zoneBorder(domain.id)}"></span><span class="nm">${escapeHtml(domain.name)}${domain.sub ? ' · <span style="color:#8a97b3">' + escapeHtml(domain.sub) + '</span>' : ''}</span></div>`).join('');
+  const edgeKinds = [...new Set(resolvedEdges.map((edge) => edge.kind).filter(Boolean))];   // surviving edges only — a dropped edge's kind must not linger in the legend
+  const edgeRows = edgeKinds.map((kind) =>
+    `<div class="row"><svg class="es" viewBox="0 0 22 8"><line x1="0" y1="4" x2="22" y2="4" stroke="#9fb0cc" stroke-width="1.6" stroke-dasharray="${dashOf(kind)}"/></svg><span class="nm">${escapeHtml(kind)}</span></div>`).join('');
+  const roleRows = ROLES.map((role) =>
+    `<div class="row"><span class="rs" style="border-left-color:${roleColorOf(role)}"></span><span class="nm">${escapeHtml(role)}</span></div>`).join('');
+  legendElement.innerHTML = `<div class="grp">node kind — colour + badge</div>${kindRows}`
+    + (roleRows ? `<div class="grp">role — edge stripe</div>${roleRows}` : '')
+    + (domainRows ? `<div class="grp">domain — background zone</div>${domainRows}` : '')
+    + (edgeRows ? `<div class="grp">relation — line style</div>${edgeRows}` : '');
+};
+renderLegend();
+
+// ---- App ----
+// dim non-focus (selected + edge-neighbours + ancestors stay lit); the SELECTED node itself gets a
+// reserved luminance ring — a channel dedicated to "what I clicked", distinct from "merely adjacent".
+const computeFocusSet = (selectedId) => {
+  if (!selectedId) {
+    return null;
+  }
+  const focus = new Set([selectedId]);
+  resolvedEdges.forEach((edge) => {
+    if (edge.source === selectedId) { focus.add(edge.target); }
+    if (edge.target === selectedId) { focus.add(edge.source); }
+  });
+  [...focus].forEach((id) => {
+    ancestorsOf(id).forEach((ancestorId) => focus.add(ancestorId));
+    const domainId = domainOf(id);
+    if (domainId) { focus.add(domainId); }
+  });
+  // domain zones render with a 'dom:'-prefixed RF id — translate any domain id in the set so the
+  // node's own zone stays LIT on selection instead of being dimmed with the rest.
+  [...focus].forEach((id) => {
+    if (isDomain(id)) {
+      focus.delete(id);
+      focus.add('dom:' + id);
+    }
+  });
+  return focus;
+};
+// ring radius follows cont 13 / sharp 3 / rounded 10; a 'cut' card's clipped corner is approximated by
+// the rounded ring (cosmetic).
+const selectionRingRadius = (id) => {
+  if (isContainer(id)) {
+    return 13;
+  }
+  if (nodeById[id]) {
+    return parseFloat(shapeStyleOfKind(nodeById[id].kind).borderRadius) || 10;
+  }
+  return 10;
+};
+const App = () => {
+  const [selectedId, setSelectedId] = React.useState(null);
+  const [lightboxImage, setLightboxImage] = React.useState(null);
+  openLightboxImage = (url) => setLightboxImage(url);
+  const [tooltip, setTooltip] = React.useState(null);
+  const reactFlowInstance = React.useRef(null);   // React Flow instance, for centring on a node when you jump to it
+  const [flowNodes, setFlowNodes, onNodesChange] = useNodesState(window.__rf);
+
+  React.useEffect(() => {
+    const focus = computeFocusSet(selectedId);
+    setFlowNodes((nodes) => nodes.map((node) => ({ ...node, style:{ ...(node.style || {}),
+      opacity: focus && !focus.has(node.id) ? .3 : 1,
+      borderRadius: node.id === selectedId ? selectionRingRadius(node.id) : undefined,
+      boxShadow: node.id === selectedId ? '0 0 0 2.5px #fff, 0 4px 16px rgba(0,0,0,.5)' : undefined } })));
+  }, [selectedId, setFlowNodes]);
+
+  // tooltip: one document mousemove reads data-means (per-element handlers get swallowed by React Flow)
+  React.useEffect(() => {
+    let lastMeans;
+    const handleMouseMove = (event) => {
+      const element = event.target && event.target.closest ? event.target.closest('.tip[data-means]') : null;
+      const means = element ? element.getAttribute('data-means') : null;
+      if (means === lastMeans) {
+        return;
+      }
+      lastMeans = means;
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        setTooltip({ text:means, x:rect.left, y:rect.bottom + 6 });
+      } else {
+        setTooltip(null);
+      }
+    };
+    document.addEventListener('mousemove', handleMouseMove, true);
+    return () => document.removeEventListener('mousemove', handleMouseMove, true);
+  }, []);
+
+  // select on pointerup (trackpad tap fires no click); tiny travel = tap
+  React.useEffect(() => {
+    let pointerDownAt = null;
+    const handlePointerDown = (event) => {
+      pointerDownAt = { x:event.clientX, y:event.clientY };
+      setTooltip(null);
+    };
+    const handlePointerUp = (event) => {
+      if (!pointerDownAt) {
+        return;
+      }
+      const travel = Math.hypot(event.clientX - pointerDownAt.x, event.clientY - pointerDownAt.y);
+      pointerDownAt = null;
+      if (travel > 6) {
+        return;
+      }
+      const element = event.target;
+      if (!(element && element.closest)) {
+        return;
+      }
+      const nodeElement = element.closest('.react-flow__node');
+      if (nodeElement) {
+        const id = nodeElement.getAttribute('data-id');
+        if (id && nodeById[id] && !isDomain(id)) {
+          setSelectedId(id);
+          return;
+        }
+      }
+      if (!element.closest('.detail')) {
+        setSelectedId(null);   // zone background / empty canvas → deselect
+      }
+    };
+    document.addEventListener('pointerdown', handlePointerDown, true);
+    document.addEventListener('pointerup', handlePointerUp, true);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown, true);
+      document.removeEventListener('pointerup', handlePointerUp, true);
+    };
+  }, []);
+
+  // recompute the edge styling only when the SELECTION changes, not on every tooltip/lightbox re-render.
+  const styledEdges = React.useMemo(() => resolvedEdges.map((edge) => {
+    const touchesSelection = selectedId && (edge.source === selectedId || edge.target === selectedId);
+    // animate ONLY the selected node's edges; idle (nothing selected) is static so a big graph doesn't
+    // burn CPU running every edge's dash animation forever.
+    return { ...edge, label:touchesSelection ? edge.slotLabel : undefined,
+      style:{ ...edge.style, opacity:(selectedId && !touchesSelection) ? .12 : 1, strokeWidth:touchesSelection ? 2.6 : 1.6 },
+      animated:edge.animated && !!selectedId && touchesSelection };
+  }), [selectedId]);
+  const selectedNode = selectedId ? nodeById[selectedId] : null;
+
+  // jump from a panel relation to its target node: select it AND centre the viewport on it
+  const jumpToNode = (id) => {
+    if (!nodeById[id] || isDomain(id)) {
+      return;
+    }
+    setSelectedId(id);
+    if (reactFlowInstance.current) {
+      reactFlowInstance.current.fitView({ nodes:[{ id }], duration:450, maxZoom:1.5, padding:0.4 });
+    }
+  };
+
+  const clampedTooltipStyle = tooltip ? {
+    left: Math.max(8, Math.min(tooltip.x, window.innerWidth - 292)),
+    top: Math.max(8, Math.min(tooltip.y, window.innerHeight - 72))
+  } : null;
+
+  return h(React.Fragment, null,
+    h(ReactFlow, { nodes:flowNodes, edges:styledEdges, onNodesChange, nodeTypes:{ zone:Zone, cont:Container, leaf:Leaf },
+      onInit:(instance) => { reactFlowInstance.current = instance; }, fitView:true, minZoom:0.2, maxZoom:1.6, nodesConnectable:false, proOptions:{ hideAttribution:true } },
+      h(Background, { id:'bg-fine', variant:'dots', gap:20, size:1.4, color:'#3a4450' }),
+      h(Background, { id:'bg-coarse', variant:'dots', gap:80, size:3.2, color:'#566275' }),
+      h(MiniMap, { position:'bottom-right', pannable:true, zoomable:true, style:{ background:'#21252b' },
+        nodeColor:(flowNode) => flowNode.type === 'zone' ? '#3a404b' : kindAccent(nodeById[flowNode.id] && nodeById[flowNode.id].kind) }),
+      h(Controls, { position:'top-right' })),
+    selectedNode ? h(DetailPanel, { node:selectedNode, onClose:() => setSelectedId(null), onNav:jumpToNode }) : null,
+    lightboxImage ? h('div', { className:'lightbox', onClick:() => setLightboxImage(null) }, h('img', { src:lightboxImage })) : null,
+    tooltip ? h('div', { className:'tooltip', style:clampedTooltipStyle }, tooltip.text) : null
+  );
+};
+
+// ---- ELK layout: domains + owner-containers nest; leaves inside. INCLUDE_CHILDREN routes cross edges ----
+const NODE_WIDTH = 210, LEAF_HEIGHT = 74, CONTAINER_HEADER = 52, ZONE_HEADER = 46;   // LEAF_HEIGHT matches the leaf card's max-height so ELK reserves exactly what a full card can be
+const elk = new ELK();
+const COMMON_LAYOUT = { 'elk.algorithm':'layered','elk.direction':'DOWN','elk.edgeRouting':'ORTHOGONAL',
+  'elk.layered.nodePlacement.strategy':'NETWORK_SIMPLEX','elk.layered.considerModelOrder.strategy':'NODES_AND_EDGES',
+  'elk.layered.thoroughness':'10','elk.layered.spacing.nodeNodeBetweenLayers':'60','elk.spacing.nodeNode':'34' };
+const elkGroup = (id, headerPadding) => ({ id, layoutOptions:{ 'elk.padding':`[top=${headerPadding},left=16,bottom=16,right=16]` }, children:[] });
+// build the ELK tree; `seen` guards against a cyclic parent/domain graph (never recurse a node twice)
+const toElkNode = (id, seen) => {
+  const visited = seen || new Set();
+  if (visited.has(id)) {
+    return { id, width:NODE_WIDTH, height:LEAF_HEIGHT };   // cycle — draw it once as a leaf, don't recurse
+  }
+  const nextVisited = new Set(visited);
+  nextVisited.add(id);
+  if (isDomain(id)) {
+    const group = elkGroup('dom:' + id, ZONE_HEADER);
+    group.children = (childrenOf[id] || []).map((childId) => toElkNode(childId, nextVisited));
+    return group;
+  }
+  if (isContainer(id)) {
+    const group = elkGroup(id, CONTAINER_HEADER);
+    group.children = (childrenOf[id] || []).map((childId) => toElkNode(childId, nextVisited));
+    return group;
+  }
+  return { id, width:NODE_WIDTH, height:LEAF_HEIGHT };
+};
+// top level = domains + any node with no container (no parent-node and no domain)
+const topLevelIds = [...DATA.domains.map((domain) => domain.id), ...DATA.nodes.filter((node) => !containerOf(node)).map((node) => node.id)];
+const elkGraph = { id:'root', layoutOptions:{ ...COMMON_LAYOUT, 'elk.hierarchyHandling':'INCLUDE_CHILDREN',
+    'elk.layered.spacing.nodeNodeBetweenLayers':'90','elk.spacing.nodeNode':'64' },
+  children: topLevelIds.map((id) => toElkNode(id)),
+  edges: resolvedEdges.map((edge) => ({ id:edge.id, sources:[edge.source], targets:[edge.target] })) };   // use the FILTERED edges
+
+const collectFlowNodes = (elkNode, parentId, out) => {
+  const isRoot = elkNode.id === 'root';
+  if (!isRoot) {
+    const domainId = elkNode.id.startsWith('dom:') ? elkNode.id.slice(4) : null;
+    const type = domainId ? 'zone' : (isContainer(elkNode.id) ? 'cont' : 'leaf');
+    out.push({ id: elkNode.id, type,                                 // RF id == ELK id (keeps parentId consistent)
+      position:{ x:elkNode.x || 0, y:elkNode.y || 0 },
+      ...(parentId ? { parentId, extent:'parent' } : {}),
+      ...((type === 'zone' || type === 'cont') ? { style:{ width:elkNode.width, height:elkNode.height } } : {}),
+      zIndex: type === 'leaf' ? 2500 : 0, width:elkNode.width, height:elkNode.height,
+      data: domainId ? { domain:domainById[domainId] } : { node: nodeById[elkNode.id] },
+      ...(type === 'zone' ? { selectable:false } : {}) });
+  }
+  (elkNode.children || []).forEach((child) => collectFlowNodes(child, isRoot ? null : elkNode.id, out));
+};
+
+const root = createRoot(document.getElementById('root'));
+elk.layout(elkGraph).then((laidOutGraph) => {
+  const out = [];
+  collectFlowNodes(laidOutGraph, null, out);
+  // React Flow needs parent before child — sort so containers/zones precede their children
+  const typeOrder = { zone:0, cont:1, leaf:2 };
+  out.sort((a, b) => typeOrder[a.type] - typeOrder[b.type]);
+  window.__rf = out;
+  root.render(h(App));
+}).catch((elkError) => {
+  console.error('elk failed', elkError);
+  document.getElementById('sub').textContent = 'ELK error: ' + elkError.message;
+});
+</script>
+</body>
+</html>

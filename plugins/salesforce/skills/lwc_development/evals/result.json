@@ -1,0 +1,229 @@
+{
+  "trigger": {
+    "skill": "lwc_development",
+    "measured_at": "2026-09-06T21:28:06",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "13/18",
+    "accuracy": 0.722,
+    "baseline_accuracy": null,
+    "description_hash": "a598d6149ee89c4f11931348b3344ce61eb7e491a99c9ae33e1e2a36fca9df85",
+    "queryset_hash": "00f779eaf4c8d367b1badeeb878dcfc21a1f010eef8c7c31af4d24e887e052d7",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "create an lwc component that displays Pkg__Widget_Card__c data",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "my lwc is querying document.querySelectorAll('.card') — is that ok",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add a CSS custom property for the card background color in the widget-card lwc",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "wire up a new @wire call to the WidgetConfigResource apex class in the dashboard lwc",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "I'm editing the .html template for the itemList component — add a conditional render",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "write the js-meta.xml for a new widgetDashboard lwc with isExposed true",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "the metricBanner component uses scss — should I convert it to plain css",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "update the RangePicker lwc to emit a custom event when the range changes",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add a public @api property to the itemCard component for the record id",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "write apex tests for WidgetConfigResource.cls",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "deploy the widgetDashboard lwc to myOrg org",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "run SOQL to find all active Pkg__Widget_Config__c records",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a new React component for the widget card in <ui-repo>",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "check this apex REST endpoint for SOQL injection",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "how does Pkg manage the order sync flow at the apex level",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a new BFF route for /api/lwc-config",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "what fields does Pkg__Order__c have",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "update the ui config per-user dashboard settings in SharedPkg",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.4,
+    "skillscore": 0.93,
+    "guide_faults": [
+      "The skill inherits the generic frontend-js:conventions rule verbatim, including \"arrow functions,\" without carving out the well-known LWC exception that controller/handler/lifecycle methods are standard ES class methods, not arrow-bound class fields. The with-guide agent had to invent its own rationalization (\"arrow-free class methods... the idiomatic exception this style already carves out\") to reconcile this — a literal reading of the guide's own checklist item 3 could otherwise push an author toward non-idiomatic arrow-function class properties in a bundle."
+    ],
+    "verdict": "Guide's checklist drove concrete, verifiable wins on its own rubric — real CSS-custom-property styling plus an explicit self-check the isolated agent never performed — while isolated skipped the CSS file and left two competing unfinished implementations instead of one coherent bundle."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "9b4d9288dfd9a5ac0559dac78f14d86e6a03b28e007a489dce12016e98420677",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Plain house-style doc with no instructions aimed at overriding model behavior."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network calls or data transmission of any kind; only local grep guidance."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No embedded keys/tokens/credentials found."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Only command is a read-only grep check for global DOM access, nothing destructive."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "No encoded blobs or unreadable logic; plain markdown prose."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No URLs, downloads, or external host references present."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, keychain, or token stores."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, or persistence-mechanism edits anywhere in the file."
+      }
+    ]
+  }
+}

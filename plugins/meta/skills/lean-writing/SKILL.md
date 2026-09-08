@@ -4,12 +4,16 @@ description: Use this skill to WRITE terse technical documents. Trigger when ask
 
 # Lean Writing — specs & brainstorming results
 
-## When to Activate
+## Contract
 
-- Writing or updating a design spec / design doc.
-- Presenting the result of a brainstorming or exploration (the decision, the options, the summary).
+**In:** a terse technical document to write or update — a spec, design doc, RFC, brainstorming or
+exploration summary, or a decision log of options considered.
 
-NOT for normal chat — answer those naturally.
+**Out:** the document leads with the answer, prefers bullets and tables to prose, uses plain words,
+one idea per line, exact names and numbers, and no filler — caveman-simple but technically precise.
+The checkable expectations are in `evals/rubric.json`.
+
+---
 
 ## Rules
 
@@ -21,6 +25,11 @@ NOT for normal chat — answer those naturally.
 - Cut: intros that clear the throat, hedging, recaps of what the user just said, victory laps.
 - Caveman but smarter: short. direct. correct.
 
-## Smell test
+## Before you finish
 
-If a sentence can be deleted without losing a fact or a decision — delete it.
+1. The smell test, sentence by sentence: can this line be deleted without losing a fact or a decision?
+   If yes, delete it.
+2. The first line is the answer/decision; bullets beat paragraphs; no throat-clearing intro, hedging,
+   recap of what the user just said, or victory lap.
+3. Names, numbers, and field names are exact — terse never slid into vague.
+4. Anything fails? Cut or fix and re-read from 1. Full expectations → `evals/rubric.json`.

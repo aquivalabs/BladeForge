@@ -1,0 +1,227 @@
+{
+  "trigger": {
+    "skill": "lean-writing",
+    "measured_at": "2026-09-04T19:57:01",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "13/18",
+    "accuracy": 0.722,
+    "baseline_accuracy": null,
+    "description_hash": "5a178d602b757ebae9b786371c32f3aafe90a8a3dc0cc034b9ca5a4517047bbf",
+    "queryset_hash": "ea0a04bb2d72e2b0614c3796644a1a56a564a50dfbbbe5c15b9763423e8bdcf5",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "write up the design spec for the new metric engine",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "i need to present the brainstorming results for the list/grid layout feature",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "write a design doc for how we'll store per-user UI config in Widget_Config__c",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "summarize the exploration we did on the error-handling approach — put it in docs/superpowers/specs/",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "draft the spec for TICK-000 daily report batch — should go under docs/superpowers/plans/",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "write the brainstorm summary for the transport-layer refactor, keep it concise",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "update the design doc for the widget card config — it's gotten too wordy",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "putting together the spec for the new apex-test factory pattern, needs to be tight and skimmable",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "write up the options we considered for model routing before we decided — going into the decision log",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "hey what does the Pkg__Widget_Config__c object look like",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "review this spec under docs/superpowers/specs/widget-engine.md for clarity and bloat — cut what's not earning its place",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "this design doc is a wall of text, audit it and fix it",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "check my commit message, is it clear enough",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "I'm about to add a new helper util for date formatting — should I create a new file?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "what's the SOLID principle for this service class that does both fetching and parsing?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a jira comment summarizing the deploy status",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a ui-strings entry for the new toast message",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "explain how the data-sync message flow works",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.55,
+    "skillscore": 0.93,
+    "guide_faults": [],
+    "verdict": "Guide output nails all five lean-writing criteria (leads with the verdict, table/bullet-only, zero filler, exact field names, nothing cuttable); baseline is a solid, more exhaustive spec but opens with problem-statement prose, argues its choices in paragraph form, and carries justificatory/hedging phrasing the rubric explicitly penalizes."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "3dc7065cd1553e89638c76c0f73a4a2c602c1361bf2c5344760dda7ce577daff",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "instructional writing-style guidance only, no model-directed override language"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "no network/data-send behavior; SKILL.md only contains writing rules"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "no keys/tokens/credentials present"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "no scripts or shell commands present at all"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain readable markdown, no encoded blobs"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "no fetch/download logic; skill has no scripts/ or references/"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "no file/credential reads referenced"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "no sudo/cron/profile edits; skill is text-only guidance"
+      }
+    ]
+  }
+}

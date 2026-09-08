@@ -6,6 +6,17 @@ description: House JavaScript/TypeScript coding style — arrow functions, singl
 
 House style for all JavaScript and TypeScript. Apply on every JS/TS edit.
 
+## Contract
+
+**In:** a JavaScript or TypeScript file being written, edited, or reviewed — React, Node, any JS/TS.
+
+**Out:** the code holds the house style — arrow functions, single quotes, full descriptive names,
+braces on every control structure, small single-responsibility functions, and every import that a
+registered alias covers goes through the alias, never `../../../`. This IS the acceptance criteria:
+the property the changed code must hold.
+
+---
+
 - Prefer **arrow functions** wherever possible.
 - Use **single quotes** for strings.
 - Use **full, descriptive variable names** — no abbreviations
@@ -14,7 +25,9 @@ House style for all JavaScript and TypeScript. Apply on every JS/TS edit.
   `while`, ...), even for a single-line body.
 - Write functions a stranger to the code can understand:
   - one function = one clear responsibility;
-  - extract helper functions with descriptive names instead of long inline logic;
+  - extract helper functions with descriptive names instead of long inline logic — but NOT a
+    trivial one-liner (a single regex/match/format): extraction is for genuine reuse or a named
+    concept, not for its own sake, and a near-duplicate helper name is a smell, not a win;
   - avoid clever one-liners when a readable multi-line form is clearer.
 
 ## Imports — prefer aliases over relative paths
@@ -32,3 +45,17 @@ House style for all JavaScript and TypeScript. Apply on every JS/TS edit.
 
 For Salesforce LWC / Aura-specific rules (DOM access, styling) see
 `salesforce-lwc_development`.
+
+
+---
+
+## Before you finish
+
+1. In the files you changed, check the mechanical rules by eye or grep:
+   - `grep -nE "\"[^\"]*\"" <files>` → strings are single-quoted (allow a double quote only to
+     avoid escaping an inner `'`).
+   - `grep -nE "\.\./\.\./" <files>` → no `../../` climb where a registered alias covers the path.
+   - every `if`/`else`/`for`/`while` has braces, even a one-line body.
+2. Read the changed functions: names are full words (`errorMessage`, not `errMsg`); each function is
+   one responsibility; long inline logic is pulled into a named helper.
+3. A rule broken? Fix it and return to step 1. You are done only when every line holds.

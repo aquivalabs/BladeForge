@@ -1,0 +1,154 @@
+{
+  "trigger": {
+    "skill": "security-scan",
+    "measured_at": "2026-09-08T15:10:26",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "7/10",
+    "accuracy": 0.7,
+    "baseline_accuracy": null,
+    "description_hash": "a2732d77d4610f5531db1f2008f9d28ba7e463c493ede83c3a5964782cc3e055",
+    "queryset_hash": "3d86b583ea3bc71c4203b74377302d70fe2fb37c887ca0fd484cc6dd56d13756",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "before i commit this skill, scan its bundled script for anything unsafe to whoever installs it",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "does this skill's reference doc contain prompt-injection text aimed at the reading agent?",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "check this new skill for dangerous commands, external fetches, or credential access before it ships",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "the cerberus hook flagged my skill edit — run the security scan for exfiltration and privilege escalation",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "is there any base64/obfuscated payload or download-and-run in this skill's scripts?",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "review this skill's change for the eight-point security checklist before i publish it",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "does this eval fixture leak a real class or object name from our codebase?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "fix the failing unit test in the checkout service",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a conventional-commit message for these staged changes",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a loading skeleton to the DataTable component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T16:50:42",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "e6f0bf62bf4de57679e15c999cf4e57da0a880f9215df58788330c624c4edc8c",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "body addresses the human author; no directive aimed at a reading agent"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "no code that sends repo/user/context data anywhere"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "no key, token, or credential embedded"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "destructive strings appear only as prose examples of what to look for; none executed"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain markdown throughout; nothing encoded or unreadable-on-purpose"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "no download-and-run or reach to an external host"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "no read of ~/.ssh, ~/.aws, .env, keychain, cookies, or a token store"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "no sudo/setuid/persistence; no write outside the working tree"
+      }
+    ]
+  }
+}
