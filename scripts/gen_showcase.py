@@ -8,8 +8,8 @@ list, no server. Deployed to GitHub Pages.
 Deliberately shows only REAL, curated data — purpose, when-it-fires, side effects, deps,
 the file bundle (names only), and the measured trigger score from evals/result.json.
 The SKILL.md BODY is NOT embedded: bodies can carry real identifiers, and this page is
-public, so the site links to the body on GitHub instead of copying it. Effect and
-the security-scan checklist and (where measured) the skillaxe effect score.
+public, so the site links to the body on GitHub instead of copying it. The security-scan
+checklist and, where measured, the skillaxe effect score are shown alongside the trigger score.
 """
 import json, os, math, html as _html
 
