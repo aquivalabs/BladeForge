@@ -1,7 +1,7 @@
 {
   "name": "cerberus",
-  "description": "CERBERUS — the two-headed guard at the gate for a PUBLIC skills marketplace. A PostToolUse hook fires on every skill / reference / script / eval / manifest edit and reminds you to run BOTH heads before committing: cerberus:leak-check (outward — no real work identifier or secret escapes into the public marketplace) and cerberus:security-scan (inward — the eight-point consumer-safety checklist: prompt injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation, so nothing unsafe reaches whoever installs the skill). Both are agent judgment passes, no denylist by design — a list of the real names to catch would itself be the leak; the intelligence lives in the agent, not a regex.",
-  "version": "2.1.1",
+  "description": "CERBERUS \u2014 the two-headed guard at the gate for a PUBLIC skills marketplace. A PostToolUse hook fires on every skill / reference / script / eval / manifest edit and reminds you to run BOTH heads before committing: cerberus:leak-check (outward \u2014 no real work identifier or secret escapes into the public marketplace) and cerberus:security-scan (inward \u2014 the eight-point consumer-safety checklist: prompt injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation, so nothing unsafe reaches whoever installs the skill). Both are agent judgment passes, no denylist by design \u2014 a list of the real names to catch would itself be the leak; the intelligence lives in the agent, not a regex.",
+  "version": "2.1.2",
   "keywords": [
     "security",
     "leak-guard",

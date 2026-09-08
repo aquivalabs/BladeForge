@@ -1,7 +1,7 @@
 {
   "name": "review",
   "description": "Stack-agnostic pre-push review framework \u2014 eight reviewer agents (five on by default, plus skill, leak and security-scan for repos that publish skills), the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "keywords": [
     "review",
     "pre-push",
