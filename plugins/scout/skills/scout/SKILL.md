@@ -118,7 +118,7 @@ render its full record as a heading + a blockquote `purpose` + a two-column FIEL
     | Side effects | per Safety below: ✎ + `changes.tags` and a plain reading of `changes.notes`, or "— read-only (declared + gate-checked)" |
     | Hook | each `hooks` event, glossed as "runs code on install at {Event}", or "— none" |
     | Bundles | the OTHER skills under this `plugin` (installing for one adds them all); omit if it is the only skill |
-    | Install | `/plugin install {plugin}@aquivalabs` |
+    | Install | `/plugin install {plugin}@bladeforge` |
 
 Rules:
 
@@ -164,10 +164,10 @@ Before asking for confirmation, state ALL THREE:
 Only after the user gives explicit OK, run in-session:
 
 ```
-/plugin install <plugin>@aquivalabs
+/plugin install <plugin>@bladeforge
 ```
 
-Use `@aquivalabs` — that is this marketplace's `name` from its `marketplace.json`, not the GitHub
+Use `@bladeforge` — that is this marketplace's `name` from its `marketplace.json`, not the GitHub
 repo slug. Never hardcode a repo slug in place of the marketplace name.
 
 Do not shell out to install anything and do not promise the new skill is available in the current

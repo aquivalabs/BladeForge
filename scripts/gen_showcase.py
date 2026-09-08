@@ -299,7 +299,7 @@ function open(s){const[ns,nm]=s.id.split(':');modal.style.setProperty('--dc',PAL
  modal.innerHTML=`<div class="m-head"><span class="id"><span class="ns">${ns}:</span>${nm}</span><button class="m-close" aria-label="close">✕</button></div>
   <div class="m-body">
     <div class="m-purpose">${esc(s.purpose)}</div>
-    <div class="m-install"><b>install</b> /plugin install ${ns}@aquivalabs</div>
+    <div class="m-install"><b>install</b> /plugin install ${ns}@bladeforge</div>
     <div class="srcrow"><a class="srclink" href="${REPO}/tree/main/plugins/${ns}/skills/${nm}" target="_blank" rel="noopener">↗ source on GitHub</a>
       <a class="srclink ghost" href="${REPO}/blob/main/plugins/${ns}/skills/${nm}/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
     ${measureBlock(s)}

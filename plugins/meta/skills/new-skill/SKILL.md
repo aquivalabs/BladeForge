@@ -138,7 +138,7 @@ expectations is not repeated there; it lives once, in `evals/rubric.json`.
 4. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant.
 5. **New domain only:** also create `plugins/<domain>/.claude-plugin/plugin.json`
    (`{name, description, version, keywords, author:{name:"aquivalabs"}}` — `version` is semver,
-   `keywords` an array for marketplace discovery), then enable `<domain>@aquivalabs` in the
+   `keywords` an array for marketplace discovery), then enable `<domain>@bladeforge` in the
    consuming repo's `.claude/settings.json → enabledPlugins`. `.claude-plugin/marketplace.json` is
    **hand-maintained** — add the entry yourself. There is no generator: `sync.sh` was deleted in
    `c4f210e` and nothing replaced it. The `marketplace-sync` CI check only verifies that every
