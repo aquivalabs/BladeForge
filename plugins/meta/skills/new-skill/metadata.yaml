@@ -1,5 +1,5 @@
 schema-version: 1
-purpose: Author a brand-new skill from the nine questions — its contract, boundary and acceptance criteria — then scaffold the folder, the metadata interview and both eval files.
+purpose: Author a brand-new skill from the nine questions — its contract, boundary and acceptance criteria — then scaffold the folder, the metadata interview and its evals/rubric.json (trigger + acceptance halves).
 best-for: Any marketplace where a skill must declare what it needs and produces, ship checkable acceptance criteria, and follow one house structure.
 needs: [meta:skill-eval]
 changes:

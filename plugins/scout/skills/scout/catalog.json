@@ -394,7 +394,7 @@
       "plugin": "meta",
       "plugin-version": "2.6.2",
       "activates-when": "Use this skill to author a brand-new skill FROM SCRATCH \\u2014 deciding its plugin/domain, folder name, file placement, and writing its SKILL.md, frontmatter, and initial metadata.yaml sidecar. Triggers for \\\"create/add/write a new skill for X\\\", \\\"where does the SKILL.md go\\\", \\\"what's the naming convention or folder structure for a new skill\\\", or \\\"what goes in the description frontmatter\\\" \\u2014 including standing up a NEW domain plugin with its plugin.json, and choosing between a marketplace skill and one local to a single repo. This is about scaffolding a NOT-YET-EXISTING skill's structure and location, NOT about tuning, evaluating, or fixing an EXISTING skill's trigger behavior (skill-creator), and NOT about refreshing an EXISTING skill's metadata.yaml after its body/tools/scripts/hooks changed \\u2014 that is the separate `meta:update-skill` skill. Also NOT for ordinary code, components, or config in a project. If the skill already exists, use `meta:update-skill` or `skill-creator` instead.",
-      "purpose": "Author a brand-new skill from the nine questions \u2014 its contract, boundary and acceptance criteria \u2014 then scaffold the folder, the metadata interview and both eval files.",
+      "purpose": "Author a brand-new skill from the nine questions \u2014 its contract, boundary and acceptance criteria \u2014 then scaffold the folder, the metadata interview and its evals/rubric.json (trigger + acceptance halves).",
       "best-for": "Any marketplace where a skill must declare what it needs and produces, ship checkable acceptance criteria, and follow one house structure.",
       "needs": [
         "meta:skill-eval"

@@ -168,6 +168,11 @@ while IFS= read -r sd; do
       mwas="$(json_field "$resfile" security.scanned_hash)"
       if [ -n "$mnow" ] && [ "$mnow" != "$mwas" ]; then
         secproblem="stale: the skill's material changed since it was security-scanned"
+      else
+        sverdict="$(json_field "$resfile" security.verdict)"
+        if [ "$sverdict" != "pass" ]; then
+          secproblem="security scan verdict is '$sverdict', not 'pass' — resolve the flagged point before shipping"
+        fi
       fi
     fi
     if [ -n "$secproblem" ]; then
