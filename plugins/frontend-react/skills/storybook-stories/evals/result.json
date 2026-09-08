@@ -1,0 +1,227 @@
+{
+  "trigger": {
+    "skill": "storybook-stories",
+    "measured_at": "2026-09-07T09:47:38",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "18/18",
+    "accuracy": 1.0,
+    "baseline_accuracy": null,
+    "description_hash": "4212cc4dea03c12fa9eb5557b835f9809c8d20249386b700a090ca448ee3b470",
+    "queryset_hash": "94aac74b99040605d2fe40c353c17184dc63406446d7d722c962120010f270ca",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "I just finished building the WidgetCard component — do I need to write a story for it?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add a storybook story for the new DataSummary component",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "what states should the ItemList story cover — default, empty, error?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "created FilterPanel.tsx — should a stories/ folder go inside the component folder?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "how do I show the WidgetCardSkeleton alongside the real WidgetCard in the story?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the AccountBadge story is using live domain mock data from our test factories — is that ok?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "where do I put mock data for a storybook story — inline in the file or separate?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "does this project want me to write stories for every component, or just some?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "write a story for the DateRangePicker covering its default, open, and disabled states",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "create a WidgetCardSkeleton.tsx next to WidgetCard.tsx using the Skeleton primitive",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the component folder for DataRow is a bare .tsx file, move it into its own subfolder",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add rem-based spacing to the story container div",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the 'No orders' empty state is hardcoded — route through useTranslation",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "check hooks-registry.md before writing a useItemFilters hook",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add SCSS variables for the card's shadow and border-radius tokens",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "review the DataTable component for code style — arrow functions, braces, naming",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a loading skeleton to the RecordList since it fetches its own data",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "set up the review gate in this repo using the bootstrap script",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.8,
+    "skillscore": 0.9,
+    "guide_faults": [],
+    "verdict": "Guide-following output hits every mechanical acceptance item (colocated stories/ folder, separate *.a file with neutral fixtures, one controls-driven Playground story instead of per-state exports, explicit ErrorBoundary reasoning, preview URL surfaced) while the isolated baseline places a flat .a file with no mock-file separation and sprawls into a dozen per-variant named exports — exactly the anti-pattern the guide exists to prevent."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "b1232eae2855e48a12703c499384ac437d1b855a1256b39f4392e4c3e67e5f4f",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "No model-directed steering text; plain instructional skill content only"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network calls or data-sending behavior; only reads local CLAUDE.md and writes a preference line"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No embedded keys/tokens/credentials found"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "No shell commands at all in SKILL.md; only prose (e.g. suggests running npx storybook@latest init, user-initiated, non-destructive)"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "No encoded blobs or eval of decoded content; plain readable markdown"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No external host references; mentions an optional Storybook MCP by name only, no fetch/download-and-run"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reads of ~/.ssh, ~/.aws, .env, keychain, or cookie stores"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, cron/profile edits, or persistence mechanisms"
+      }
+    ]
+  }
+}

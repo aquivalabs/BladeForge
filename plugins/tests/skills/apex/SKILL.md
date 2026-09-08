@@ -206,28 +206,15 @@ Only the ones the platform produces. The shared standard's own list covers the r
 
 ---
 
-## Acceptance criteria
+---
 
-Apex-only, and each one is checkable. Shared rules are checked by §5's table, not here. A path
-placeholder `<apex-root>` is the repository's Apex source root.
+## Before you finish
 
-1. Every `.cls` added or changed in the diff has a `{ClassName}Test` in the same change.
-2. No `System.assert*` in a changed file — `grep -rn 'System\.assert' <apex-root>`.
-3. No `SeeAllData=true` anywhere — `grep -rnE 'SeeAllData\s*=\s*true' <apex-root>`.
-4. Every `Assert.*` call passes a message. `grep -rnE 'Assert\.(isTrue|isFalse|isNull|isNotNull)\([^,)]*\)' <apex-root>`
-   finds the single-argument forms; `Assert.areEqual` with two arguments has no reliable grep
-   because a nested comma defeats it, so that half is reviewed.
-5. No record-Id literal — `grep -rnE "'[a-zA-Z0-9]{15}([a-zA-Z0-9]{3})?'" <apex-root>`. It reports
-   any 15- or 18-character quoted token, so read the hits; it can raise a false alarm and cannot
-   give a false clear.
-6. Every exercise sits between `Test.startTest()` and `Test.stopTest()` — reviewed.
-7. A class whose SOQL or DML runs in user mode has both a `System.runAs` case with the shipped
-   permission set and a case without it that asserts the failure — reviewed.
-8. A `@RestResource` class's test sets `RestContext.request` and covers each URI-parsing branch —
-   reviewed.
-9. Every factory in the change is one `@IsTest` class per SObject, in the factory folder, with the
-   terminals this page's `references/factories.md` gives — reviewed.
-10. Every `User` a test creates has a derived username, never a literal —
-    `grep -rn 'Username =' <apex-root>` and read each one.
-11. Baseline data shared by more than one method is built in `@TestSetup`, and no Id crosses the
-    rollback boundary — no record Id held in a static, and a re-SELECT inside each method. Reviewed.
+1. Run the greps this page names over the Apex root: `System.assert` → none, `SeeAllData\s*=\s*true`
+   → none, a 15/18-char quoted record-Id literal → read the hits, `Username =` → each derived not
+   literal.
+2. By eye: every changed `.cls` has a paired `{ClassName}Test`; user-mode classes carry a `System.runAs`
+   case with the permission set AND one without that asserts the failure; a `@RestResource` test sets
+   `RestContext.request` and covers each URI branch; factories are one `@IsTest` class per SObject;
+   baseline data lives in `@TestSetup` with no Id crossing the rollback.
+3. A check fails? Fix it and re-run. Full expectations → `evals/rubric.json`.

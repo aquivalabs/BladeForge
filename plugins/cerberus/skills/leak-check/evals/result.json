@@ -1,13 +1,154 @@
 {
-  "skill": "cerberus:leak-check",
-  "measured_at": "2026-07-12T15:58:13",
-  "model": "sonnet",
-  "runs_per_query": 1,
-  "holdout": 0,
-  "best_score": 10.0,
-  "best_train_score": 10.0,
-  "exit_reason": "measured (score-description, runs=1)",
-  "description_hash": "f6b2c5e27f571825a8400dc7dcf3a24273b7fabfe100290f13ec3111ad354fce",
-  "queryset_hash": "c51e37d7a028ff42fb794cc56e3d94b7249e5f10cd8d3b968a6c154ca99c5de8",
-  "applied": false
+  "trigger": {
+    "skill": "leak-check",
+    "measured_at": "2026-09-08T15:33:19",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "9/10",
+    "accuracy": 0.9,
+    "baseline_accuracy": 0.8,
+    "description_hash": "d261df5d2f2e741c6b000a57a06349ee3a5a46b7eae90a2d0f0712003713412e",
+    "queryset_hash": "9920588d945b6f9ad6435c63b5db64fa3f169a5129c399c3cd22610b52bd7bbf",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "i just wrote a new skill's SKILL.md — check it for leaks before i commit it to the public marketplace",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "review this eval fixture, does it leak any real class or object names from our codebase before i push?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "i renamed some example objects in the salesforce skill references — make sure nothing points to a real work project",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "about to publish this skill — does any example look copied from real work instead of a fictional demo?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the cerberus hook flagged my skill edit — run the leak check on it",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "scrub this plugin's examples down to a neutral demo product before it ships publicly",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "fix the failing unit test in the checkout service",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "rename this local variable across the current file",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a conventional-commit message for these staged changes",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a loading skeleton to the DataTable component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "62928e66fcee6de530fb1c64552e0451e2246832ec1a71d71bd7f0f99e55557a",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "instructional prose only, no directives steering the reading model beyond normal skill guidance"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "no network calls or data transmission anywhere in the file"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "only placeholder examples like /Users/<name>/... and ABC-1234, no real embedded credentials"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "mentions git filter-repo and force-push only as prose advice for escalation scenarios, not executed by any script"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain readable markdown, no encoded payloads"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "no fetch/download logic present; skill has no scripts/ directory at all"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "no reading of ~/.ssh, .env, keychain, etc."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "no sudo/setuid/persistence mechanisms; skill is documentation-only with no scripts"
+      }
+    ]
+  }
 }

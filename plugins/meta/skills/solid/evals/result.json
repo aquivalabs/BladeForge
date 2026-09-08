@@ -1,0 +1,227 @@
+{
+  "trigger": {
+    "skill": "solid",
+    "measured_at": "2026-09-04T19:54:07",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "13/18",
+    "accuracy": 0.722,
+    "baseline_accuracy": null,
+    "description_hash": "d2ac7dbb345977ef2671550b5e8cc41fa7190431d0ae647671082e8520bd580b",
+    "queryset_hash": "1e29d957f3861f61f114d370813646dc502438b504457109baf11df8c3684dde",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "designing the MetricBuilder class — should it handle both fetching and computing the metric values?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "this BFF route handler fetches data, formats it, and sends the email — is that a problem?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "i keep adding cases to the switch in ApiClient.dispatch — how should i structure new transport methods?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the PlatformClient hook does 6 things, reviewing it before i add more",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "structuring the error envelope layer — should the BFF import the Apex error codes directly?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "about to write the RangeResolver — thinking through how it should depend on RangeHandler",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "reviewing this apex class before committing — it handles auth, validation, and db writes in one method",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the useWidgetConfig hook is doing fetching, caching, and transform — should i split it up?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "designing a plugin interface for custom metric providers so we can add more without changing the compiler",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "i'm about to add a new apexErrorCodes.ts file — do we need it?",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "this spec for the metric engine is too long, tighten it up",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "how do i add a new skill to the meta plugin?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "this plan doc is unclear — a manager wouldn't follow section 3",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "what model tier should i use for a mechanical search subagent?",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "adding a new scss module for the dashboard card — what are the naming conventions?",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "should i create a new DateUtils module or just inline the logic?",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "write a jira comment about the deploy blocker",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "run the apex tests for MetricBuilderTest",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.3,
+    "skillscore": 0.93,
+    "guide_faults": [],
+    "verdict": "Guide output maps every design choice explicitly onto SRP/OCP/LSP/ISP/DIP and adds a disciplined YAGNI \"what we didn't build\" section matching the rubric almost line-for-line; baseline is competent but sprawls to 16 types with some speculative additions (event publisher, multi-channel delivery) yet also catches a real idempotency/double-charge concern the guided design omits — so the win is real but modest."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "c369860b19b5a5304e63700168dd1dd5455511f71b3bd3741bb6150c92803297",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "No directives aimed at the reading model; pure design-principle prose."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "n/a",
+        "note": "No network or send behavior; skill has no scripts."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No embedded keys/tokens/credentials found."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts/ directory exists; nothing executes shell commands."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain readable markdown, no encoded blobs or eval."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "n/a",
+        "note": "No fetch/download logic present."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "n/a",
+        "note": "No file access of any kind in this static doc."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "n/a",
+        "note": "No sudo/cron/profile edits; skill is documentation only."
+      }
+    ]
+  }
+}

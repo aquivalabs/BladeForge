@@ -1,95 +1,154 @@
 {
-  "skill": "skillaxe",
-  "measured_at": "2026-09-04T15:15:09",
-  "model": "opus",
-  "runs_per_query": 5,
-  "best_score": "9/10",
-  "accuracy": 0.9,
-  "baseline_accuracy": 0.5,
-  "description_hash": "89a4f79565b213ef716d0b48c3e2ab1bcd91cf0203a1e021f542cd639b95d77c",
-  "queryset_hash": "53b1b8d4f5e4617ffcfddc5e8497c9a96197f092b08bf30e6b72d461abc98852",
-  "eval_type": "description-triggering",
-  "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
-  "results": [
-    {
-      "query": "does this authoring guide skill actually help the agent, or is it decorative?",
-      "should_trigger": true,
-      "triggers": 4,
-      "runs": 5,
-      "trigger_rate": 0.8,
-      "pass": true
-    },
-    {
-      "query": "diagnose where meta:new-skill falls short and propose fixes",
-      "should_trigger": true,
-      "triggers": 5,
-      "runs": 5,
-      "trigger_rate": 1.0,
-      "pass": true
-    },
-    {
-      "query": "audit this review-lens skill \u2014 measure its real effect on the output",
-      "should_trigger": true,
-      "triggers": 4,
-      "runs": 5,
-      "trigger_rate": 0.8,
-      "pass": true
-    },
-    {
-      "query": "the guide skill doesn't seem to change what the agent produces, prove it either way",
-      "should_trigger": true,
-      "triggers": 5,
-      "runs": 5,
-      "trigger_rate": 1.0,
-      "pass": true
-    },
-    {
-      "query": "improve this guide skill without dropping what already worked",
-      "should_trigger": true,
-      "triggers": 4,
-      "runs": 5,
-      "trigger_rate": 0.8,
-      "pass": true
-    },
-    {
-      "query": "run a with-and-without comparison on this house-convention skill",
-      "should_trigger": true,
-      "triggers": 2,
-      "runs": 5,
-      "trigger_rate": 0.4,
-      "pass": false
-    },
-    {
-      "query": "scaffold a brand-new skill for writing changelogs",
-      "should_trigger": false,
-      "triggers": 1,
-      "runs": 5,
-      "trigger_rate": 0.2,
-      "pass": true
-    },
-    {
-      "query": "refresh the metadata.yaml for this skill after I edited its body",
-      "should_trigger": false,
-      "triggers": 0,
-      "runs": 5,
-      "trigger_rate": 0.0,
-      "pass": true
-    },
-    {
-      "query": "does this skill's description trigger on the right queries?",
-      "should_trigger": false,
-      "triggers": 0,
-      "runs": 5,
-      "trigger_rate": 0.0,
-      "pass": true
-    },
-    {
-      "query": "write me a react component for a date picker",
-      "should_trigger": false,
-      "triggers": 0,
-      "runs": 5,
-      "trigger_rate": 0.0,
-      "pass": true
-    }
-  ]
+  "trigger": {
+    "skill": "skillaxe",
+    "measured_at": "2026-09-04T15:15:09",
+    "model": "opus",
+    "runs_per_query": 5,
+    "best_score": "9/10",
+    "accuracy": 0.9,
+    "baseline_accuracy": 0.5,
+    "description_hash": "89a4f79565b213ef716d0b48c3e2ab1bcd91cf0203a1e021f542cd639b95d77c",
+    "queryset_hash": "8fc3b6faa28b0d0d5d266bd696fa2c49c8d703347d7981659c98b4bfa4d179dc",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "does this authoring guide skill actually help the agent, or is it decorative?",
+        "should_trigger": true,
+        "triggers": 4,
+        "runs": 5,
+        "trigger_rate": 0.8,
+        "pass": true
+      },
+      {
+        "query": "diagnose where meta:new-skill falls short and propose fixes",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "audit this review-lens skill — measure its real effect on the output",
+        "should_trigger": true,
+        "triggers": 4,
+        "runs": 5,
+        "trigger_rate": 0.8,
+        "pass": true
+      },
+      {
+        "query": "the guide skill doesn't seem to change what the agent produces, prove it either way",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "improve this guide skill without dropping what already worked",
+        "should_trigger": true,
+        "triggers": 4,
+        "runs": 5,
+        "trigger_rate": 0.8,
+        "pass": true
+      },
+      {
+        "query": "run a with-and-without comparison on this house-convention skill",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 5,
+        "trigger_rate": 0.4,
+        "pass": false
+      },
+      {
+        "query": "scaffold a brand-new skill for writing changelogs",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 5,
+        "trigger_rate": 0.2,
+        "pass": true
+      },
+      {
+        "query": "refresh the metadata.yaml for this skill after I edited its body",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "does this skill's description trigger on the right queries?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write me a react component for a date picker",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "1172e4cdf10ee29cb561b98799f1621fb916b476ef4cc320397728e934d7f7a7",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Pure prose instructions to the operating agent about running a measurement pipeline; no embedded directive attempts to override the reading agent's own instructions."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network calls or send-data-elsewhere logic; only local scratch-dir file writes described."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials present in SKILL.md or method.md."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts/ directory and no shell commands anywhere in the material; nothing executes."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "All content is readable Markdown prose; no base64/hex blobs or eval-of-decoded logic."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "References an arXiv paper by id (2606.10546) only as citation text; no fetch/download-and-run behavior."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "n/a",
+        "note": "No file/credential-store reads described; skill only reads its own evals/rubric.json within the target skill under test."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "n/a",
+        "note": "No sudo/cron/profile-editing content; nothing executes at all."
+      }
+    ]
+  }
 }

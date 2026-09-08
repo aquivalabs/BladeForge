@@ -4,20 +4,20 @@ description: "Interact with a Salesforce org through the salesforce-dx MCP tools
 
 # Salesforce DX MCP — Use It For Org Interactions
 
-## When to Activate
+## Contract
 
-Activate before ANY action that touches a Salesforce org, in any project:
+**In:** an org-touching task in any project — a SOQL/Tooling query, an Apex-test run or resume, a
+metadata deploy/retrieve, a long-running job to resume, or an org/alias to resolve · the
+salesforce-dx MCP available in the session.
 
-- Running a SOQL or Tooling API query (objects, fields, `ApexClass`, `*__mdt`, etc.)
-- Running Apex tests (a `classes/*.cls` test, a single method, a suite, or org-wide)
-- Deploying metadata to an org / retrieving metadata from an org
-- Resolving which org/username to use, or listing orgs
-- Resuming a long-running deploy/test/scratch-org job
+**Out:** the action runs through the `mcp__salesforce-dx__*` tools (never the `sf` CLI), with the
+org resolved via `get_username`, an absolute `directory` on every call, and `useToolingApi: true`
+on metadata/Apex/`*__mdt` queries — structured, resumable results instead of parsed shell text.
 
-This OVERRIDES any `sf` CLI examples in project docs/CLAUDE.md (`sf data query`,
-`sf apex run test`, `sf project retrieve start`, etc.). Reach for the MCP first;
-fall back to `sf` via Bash only when an MCP tool genuinely can't do the job
-(e.g. `sf org login`, scratch-org creation, an interactive flag).
+**This overrides any `sf` CLI example in a project's docs or CLAUDE.md** (`sf data query`,
+`sf apex run test`, `sf project retrieve start`, …). Reach for the MCP first; fall back to `sf` via
+Bash only when an MCP tool genuinely cannot do the job — `sf org login`, scratch-org creation, an
+interactive flag.
 
 ---
 
@@ -87,10 +87,11 @@ For discovery (existing test patterns, custom metadata rows), use
 
 ---
 
-## Checklist
+## Before you finish
 
-- [ ] Loaded the needed `mcp__salesforce-dx__*` schemas via ToolSearch
-- [ ] Resolved the org with `get_username`; passed its value as `usernameOrAlias`
-- [ ] Passed an absolute `directory`
-- [ ] Used `useToolingApi: true` for metadata/Apex/`*__mdt` queries
-- [ ] Reached for MCP, not `sf` Bash, unless the MCP can't do it
+1. The org action ran through `mcp__salesforce-dx__*`, not `sf` via Bash. If you shelled out, an MCP
+   tool genuinely could not do it (login, scratch-org create, an interactive flag).
+2. The needed schemas were loaded via ToolSearch first; `get_username` resolved the target and its
+   value rode on every call as `usernameOrAlias`; `directory` was absolute; metadata/Apex/`*__mdt`
+   queries set `useToolingApi: true`.
+3. Any line failing? Correct the call and repeat from 1.

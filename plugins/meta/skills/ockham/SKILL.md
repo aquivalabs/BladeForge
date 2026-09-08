@@ -22,6 +22,19 @@ The 30-second theory (why the razor exists — the entity-as-debt metaphor) → 
 
 ---
 
+## Contract
+
+**In:** you are about to bring a NEW entity into existence — a file, folder, module, class, function,
+component, hook, util, type, prop, variant, config key, abstraction layer, doc, or top-level category,
+in any language or stack.
+
+**Out:** the entity exists only when all three gates passed in order and a concrete trigger was named;
+otherwise it was hosted inside an existing entity, and any dead or duplicate one nearby died in the
+same change — the net entity count is flat or falling. The checkable expectations are in
+`evals/rubric.json`.
+
+---
+
 ## When OCKHAM appears
 
 The instant you are about to **bring a new thing into existence**:
@@ -141,14 +154,18 @@ still standing behind you, tapping the razor.
 
 ---
 
-## Checklist — before any `New File`
+## Before you finish
 
-- [ ] Announced the blade to the user (`⚔️ OCKHAM: do we need this?`)
-- [ ] Gate I — no existing entity can reasonably host it
-- [ ] Gate II — reuse and extension both genuinely failed
-- [ ] Gate III — no speculative props/layers/wrappers for hypothetical futures
-- [ ] Direct/native chosen over indirection that adds no value
-- [ ] Nested under an existing theme, not a shiny new top-level category
-- [ ] Any dead / duplicate / empty entity nearby killed in the same change
-- [ ] Named the concrete trigger if creating (duplication / divergence / size / hard rule)
-- [ ] Net entity count is flat or falling — not quietly climbing
+Before any `New File`, walk the blade:
+
+1. Announced the blade (`⚔️ OCKHAM: do we need this?`).
+2. Gate I — no existing entity can reasonably host it. Gate II — reuse AND extension both genuinely
+   failed. Gate III — no speculative props/layers/wrappers for a hypothetical future.
+3. Direct/native chosen over value-free indirection; nested under an existing theme, not a shiny new
+   top-level category.
+4. A concrete trigger named for creating (duplication / divergence / size / a hard rule) — never "for
+   the future".
+5. Any dead, duplicate, or empty entity nearby killed in the SAME change; net entity count flat or
+   falling, not quietly climbing.
+6. A gate unpassed? Do not create — host it in what exists, or delete instead, and re-walk from 1.
+   Full expectations → `evals/rubric.json`.

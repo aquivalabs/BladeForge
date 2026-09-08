@@ -1,0 +1,25 @@
+{
+  "trigger": [
+    {"query": "before i commit this skill, scan its bundled script for anything unsafe to whoever installs it", "should_trigger": true},
+    {"query": "does this skill's reference doc contain prompt-injection text aimed at the reading agent?", "should_trigger": true},
+    {"query": "check this new skill for dangerous commands, external fetches, or credential access before it ships", "should_trigger": true},
+    {"query": "the cerberus hook flagged my skill edit — run the security scan for exfiltration and privilege escalation", "should_trigger": true},
+    {"query": "is there any base64/obfuscated payload or download-and-run in this skill's scripts?", "should_trigger": true},
+    {"query": "review this skill's change for the eight-point security checklist before i publish it", "should_trigger": true},
+    {"query": "does this eval fixture leak a real class or object name from our codebase?", "should_trigger": false},
+    {"query": "fix the failing unit test in the checkout service", "should_trigger": false},
+    {"query": "write a conventional-commit message for these staged changes", "should_trigger": false},
+    {"query": "add a loading skeleton to the DataTable component", "should_trigger": false}
+  ],
+  "acceptance": [
+    "no prompt-injection text (instructions aimed at the reading agent, hidden directives) remains in the skill body, references, or fixtures",
+    "no data-exfiltration path — repo/user/context data sent to a sink it needn't reach — survives the change",
+    "no real secret, key, token, or credential is embedded anywhere (shared seam with leak-check)",
+    "no dangerous/destructive command the skill actually RUNS remains (a string that never executes, or a quoted what-not-to-do example, is declared N/A rather than flagged)",
+    "no obfuscated payload — base64/hex blob, eval-of-decoded, deliberately unreadable logic — remains",
+    "no unexpected external fetch or download-and-run to an undocumented host remains",
+    "no credential-store access (~/.ssh, ~/.aws, .env, keychain, cookies, token store) without a stated reason remains",
+    "no privilege escalation (sudo, setuid, editing a shell profile/cron/launch agent for persistence) remains",
+    "each fix kept the skill's teaching value and did not hide the change behind obfuscation"
+  ]
+}

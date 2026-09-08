@@ -4,8 +4,19 @@ description: Install and target the pre-push review framework in a repo. Use whe
 
 # Review framework setup
 
-Installs the stack-agnostic review gate (seven reviewer agents + `/review` + secret-scan + attestation)
+Installs the stack-agnostic review gate (eight reviewer agents + `/review` + secret-scan + attestation)
 into the current repo and tailors it to the project.
+
+## Contract
+
+**In:** a repo that carries the review plugin but has no `.claude/review.config.json`, or a request to
+set up the review gate / pre-push review / secret-scan CI.
+
+**Out:** the review framework is installed and TARGETED at this repo — `review.config.json` seeded and
+tailored, only the lenses the repo has a subject for enabled, the pre-push hook wired and actually
+rejecting a push with no valid attestation. The checkable expectations are in `evals/rubric.json`.
+
+---
 
 ## When to offer
 
@@ -18,7 +29,7 @@ offer to set it up: *"This repo has no review config — want me to install the 
 From the root of the target repo, with no prior setup (needs the GitHub CLI, `gh auth login`):
 
 ```bash
-bash <(gh api repos/AccountingSeedDev/claude-skills/contents/plugins/review/bootstrap.sh -H "Accept: application/vnd.github.raw")
+bash <(gh api repos/aquivalabs/BladeForge/contents/plugins/review/bootstrap.sh -H "Accept: application/vnd.github.raw")
 ```
 
 `bootstrap.sh` shallow-clones this marketplace and runs `install.sh` against the repo. If the plugin is
@@ -61,14 +72,15 @@ After wiring from the answers, REMIND the adopter to add their PROJECT-LOCAL ski
 `.claude/skills/`, hyphen ids) on top — those encode repo-specific rules a generic map can't know.
 
 For anything the questionnaire doesn't cover, hand-edit `.claude/review.config.json`
-(schema: `./review.config.schema.json`). **Seven agents ship built in.** Five are general and the
-harness enables them by default — `craft`, `architecture`, `tests`, `docs`, `security`. Two are for
+(schema: `./review.config.schema.json`). **Eight agents ship built in.** Five are general and the
+harness enables them by default — `craft`, `architecture`, `tests`, `docs`, `security`. Three are for
 repositories that publish skills and must be enabled deliberately:
 
 | lens | judges | enable when |
 |---|---|---|
 | `skill` | what a `SKILL.md` declares — contract, acceptance file, a description that routes rather than narrates | the repo contains skills |
 | `leak` | a real class, org, person or path from a work codebase reaching a published repository | the repo is published, or may be |
+| `security-scan` | a skill unsafe to whoever installs it — the eight-point checklist (injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation) | the repo publishes skills that run on other machines |
 
 A repo may still add its own by dropping a `plugins/review/agents/review-<name>.md` contract beside
 them and naming it in `agents`. For each agent, fill in what is project-specific; anything omitted
@@ -125,3 +137,17 @@ The migration is four edits: rename `conventions` to `craft`; delete the `scaven
 every `zones` array; and — in a different file, `.claude/settings.json` — add
 `review-workflow@<marketplace>` to `enabledPlugins` beside `review`. Enabling does not fetch, so the
 plugin update is still a separate step and still comes first.
+
+
+---
+
+## Before you finish
+
+1. `.claude/review.config.json` exists and names only the lenses this repo has a subject for — a
+   built-in lens with no subject here is disabled explicitly, not left implicitly on.
+2. The config is TAILORED to the repo (thresholds, `pairedDocs`, skills), not the seeded template
+   verbatim.
+3. The pre-push hook is wired and a push with no valid attestation is actually rejected — installed is
+   not the same as working; prove it once.
+4. The secret-scan / CI gate is wired where the repo runs CI.
+5. Any line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

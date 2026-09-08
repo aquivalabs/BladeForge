@@ -4,15 +4,18 @@ description: SOLID is the design law for all code — SRP/OCP/LSP/ISP/DIP plus D
 
 # SOLID — the design law for all code
 
-## When to Activate
+## Contract
 
-The moment you write, edit, or review any code — **before** you commit to a structure, not after.
-This is a process skill: it sets the approach; style/implementation skills carry it out. If you are
-shaping functions, classes, modules, components, or their dependencies, SOLID speaks first.
+**In:** code being designed, written, edited, or reviewed — a class, function, hook, route, module, or
+the way one depends on another — in any language or stack.
 
-Pairs with `meta:ockham` (the Razor): **Ockham decides WHETHER an entity should exist** (don't
-multiply entities — YAGNI/KISS); **SOLID decides HOW the entities that do exist are structured.**
-Consult Ockham before creating; apply SOLID once it lives.
+**Out:** each unit holds one responsibility, a new case extends rather than grows a conditional,
+subtypes honour their base, interfaces stay small, dependencies point at abstractions, and there is no
+duplicated knowledge, no over-built form, no speculative entity. The checkable expectations are in
+`evals/rubric.json`.
+
+Pairs with `meta:ockham`: **Ockham decides WHETHER an entity should exist**; SOLID decides HOW the
+entities that do exist are structured. Consult Ockham before creating; apply SOLID once it lives.
 
 ---
 
@@ -62,11 +65,14 @@ The corner-cuts under deadline — both directions (skipping structure AND over-
 
 ---
 
-## Checklist
+## Before you finish
 
-- [ ] Each unit has ONE responsibility (SRP)
-- [ ] New cases extend (add an entry), not modify a growing conditional (OCP)
-- [ ] Subtypes honor their base contract (LSP)
-- [ ] Interfaces are small and consumer-focused (ISP)
-- [ ] Depend on abstractions; inject concretions (DIP)
-- [ ] No duplicated knowledge (DRY); simplest form (KISS); no speculative entities (YAGNI + `meta:ockham`)
+1. Each unit has ONE responsibility (SRP) — no method doing fetch + format + write, or auth +
+   validation + DB, at once.
+2. A new case EXTENDS (add an entry), it does not modify a growing conditional (OCP); subtypes honour
+   their base contract (LSP); interfaces are small and consumer-focused (ISP).
+3. Code depends on abstractions and injects concretions (DIP), not on a concrete implementation
+   directly.
+4. No duplicated knowledge (DRY), the simplest form that works (KISS), no speculative entities
+   (YAGNI + `meta:ockham`).
+5. A principle broken? Restructure and re-check from 1. Full expectations → `evals/rubric.json`.

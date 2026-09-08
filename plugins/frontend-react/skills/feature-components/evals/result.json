@@ -1,0 +1,179 @@
+{
+  "trigger": {
+    "skill": "feature-components",
+    "measured_at": "2026-09-07T09:39:24",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "10/12",
+    "accuracy": 0.833,
+    "baseline_accuracy": null,
+    "description_hash": "d281b1a0a200e0511978451ba3e3024421c6bec0ef87f712fb57a25286e870e4",
+    "queryset_hash": "e5957fcbbf9324b3f344154325ee27a4de4d79475fa5efb2d6562191c514ecfc",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "i need to build an OrderHistoryPanel that fetches a customer's past orders and lets support reps issue refunds — where does this go and how should it be structured?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "add a new InvoiceTable feature that joins line items with customer data and computes totals with our business rules",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "we're adding a whole new domain area for subscription management — plans, billing cycles, upgrade/downgrade logic — how should i lay out the feature components?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "editing the ShipmentTracker block: it needs to call the data layer for live status and hold the retry/escalation logic itself",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "this ProductCatalogEditor component mixes business rules for pricing tiers with UI — is that logic supposed to live here or somewhere else?",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "building a CustomerProfileCard that renders real account data and needs to compose existing buttons/inputs instead of hand-rolling new controls",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "i need a generic reusable Tooltip component for the whole app — nothing domain-specific, just a UI primitive",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "this component file is in the wrong folder — help me restructure it into its own directory with proper BEM class names",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a loading skeleton for the OrderHistoryPanel while its data fetches",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a Storybook story covering the default, empty, and error states of the InvoiceTable component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "set up the top navigation bar and sidebar shell for the app",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "convert this component's hardcoded pixel padding values to rem units",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.6,
+    "skillscore": 0.95,
+    "guide_faults": [],
+    "verdict": "Guide-following output nails all six acceptance points (explicit domain-gate confirmation, correct nesting under an existing domain, a reuse-primitives table with a fallback rule, layer-agnostic data/i18n phrasing) while the isolated baseline never addresses top-level placement and reinvents its own badge/toolbar/action-bar components instead of composing from existing primitives — a real, guide-attributable quality gain on a task where structure IS the deliverable."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "6a04a5a1d753e6a1a0be0e2271510d1f8e93e83e0ee4810581f1aeb597a17249",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "No text steering the reading model; content is standard rule-list guidance."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No data collection or transmission of any kind mentioned."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials present."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts/ directory at all — nothing executes."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Entire SKILL.md is plain readable markdown."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "n/a",
+        "note": "No scripts or code that could fetch anything; only references/ and scripts/ are absent."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "n/a",
+        "note": "No code path exists to read any credential store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "n/a",
+        "note": "No shell/persistence mechanism present in the skill."
+      }
+    ]
+  }
+}

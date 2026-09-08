@@ -1,0 +1,84 @@
+{
+  "trigger": [
+    {
+      "query": "review docs/superpowers/specs/widget-engine.md — is it clear enough for a non-technical manager?",
+      "should_trigger": true
+    },
+    {
+      "query": "audit this implementation plan under docs/superpowers/plans/layout-modes.md for bloat and clarity",
+      "should_trigger": true
+    },
+    {
+      "query": "the design doc for TICK-000 has gotten long — run the clarity check on it",
+      "should_trigger": true
+    },
+    {
+      "query": "just finished writing the RFC for the error envelope format, check if a manager could follow it",
+      "should_trigger": true
+    },
+    {
+      "query": "this spec has a 40-line wall of prose in section 3, fix it",
+      "should_trigger": true
+    },
+    {
+      "query": "the plan doc buries the decision at the end — flip it so the bottom line is first",
+      "should_trigger": true
+    },
+    {
+      "query": "review the metric engine spec for undefined jargon and unclear sections",
+      "should_trigger": true
+    },
+    {
+      "query": "docs/superpowers/plans/transport-refactor.md feels padded — audit it and trim",
+      "should_trigger": true
+    },
+    {
+      "query": "i wrote a design note explaining the data-sync layer — check if a non-technical reader could understand it",
+      "should_trigger": true
+    },
+    {
+      "query": "write the design spec for the custom metric feature",
+      "should_trigger": false
+    },
+    {
+      "query": "i'm about to create a new RangeResolverFactory — do we need it?",
+      "should_trigger": false
+    },
+    {
+      "query": "this apex class has too many responsibilities, refactor it",
+      "should_trigger": false
+    },
+    {
+      "query": "write the brainstorm summary for the transport layer options — keep it terse",
+      "should_trigger": false
+    },
+    {
+      "query": "check my commit message for clarity",
+      "should_trigger": false
+    },
+    {
+      "query": "is the jira comment i wrote clear and short?",
+      "should_trigger": false
+    },
+    {
+      "query": "this code comment in the BFF route is confusing — rewrite it",
+      "should_trigger": false
+    },
+    {
+      "query": "update the README for the docs repo",
+      "should_trigger": false
+    },
+    {
+      "query": "review this diff for security vulnerabilities",
+      "should_trigger": false
+    }
+  ],
+  "acceptance": [
+    "the doc opens with the bottom line — a plain first line saying what it achieves and why; nothing is buried at the end",
+    "every undefined jargon term or acronym is glossed or cut, and a non-technical manager grasps the point on the first read",
+    "filler, hedging, and repetition are gone; bullets are used over paragraphs at ~2 sentences each; no section is a wall of prose",
+    "brevity stripped no name, number, field, or decision — terse never became lossy",
+    "the verdict opens with a Strike never repeated, cites each fix by section, and the doc was fixed in place rather than only critiqued",
+    "the verdict's own text glosses any persona term (e.g. Unsinn = nonsense) on first use — the readability bar applies to WITTGENSTEIN's output, not only to the reviewed doc"
+  ]
+}

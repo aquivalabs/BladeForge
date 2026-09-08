@@ -10,7 +10,7 @@ description: "Use this skill to author a brand-new skill FROM SCRATCH \u2014 dec
 authoring questions · a domain, existing or about to be created.
 
 **Out:** `plugins/<domain>/skills/<name>/` holding `SKILL.md`, `metadata.yaml`,
-`evals/trigger-eval.json` and `evals/acceptance.json` (plus `evals/result.json` once measured) ·
+`evals/rubric.json` — its `trigger` and `acceptance` halves — plus `evals/result.json` once measured ·
 a one-line entry in `README.md` · for a new domain, its `plugin.json` · the owning plugin's version bumped.
 
 ---
@@ -27,7 +27,7 @@ plugins/<domain>/.claude-plugin/plugin.json      # one per domain
 
 | Scope | Location |
 |---|---|
-| Shared across the org | this repo — `plugins/<domain>/skills/<name>/` (the `accountingseed` marketplace) |
+| Shared across the org | this repo — `plugins/<domain>/skills/<name>/` (the `aquivalabs` marketplace) |
 | One specific repo only | that repo's `.claude/skills/<name>/` for a quick repo-local skill |
 
 There are **no** flat `skills/<name>/` skills anymore, and nothing is "copied to a global location" —
@@ -97,7 +97,7 @@ only AFTER the skill has been chosen — by which point activation already happe
 about triggering belongs in the `description`; anything else is ordinary body prose.
 
 `## Before you finish` is a PROCEDURE — take this, run that, what counts as clean. The list of
-expectations is not repeated there; it lives once, in `evals/acceptance.json`.
+expectations is not repeated there; it lives once, in `evals/rubric.json`.
 
 ---
 
@@ -130,15 +130,15 @@ expectations is not repeated there; it lives once, in `evals/acceptance.json`.
    demand before a line is written.
 
    Where the answers land: 1b/1c → the eval queries · 2a/2b → `## Contract` · 2c →
-   `## Before you finish` and `evals/acceptance.json` · 3b → the boundary sentence in the
+   `## Before you finish` and `evals/rubric.json` · 3b → the boundary sentence in the
    `description` · 3c → the negative eval cases.
 
 2. Pick the **domain** (existing plugin) the skill belongs to, and a `<name>` per the convention above.
 3. Create `plugins/<domain>/skills/<name>/SKILL.md` using the structure above.
 4. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant.
 5. **New domain only:** also create `plugins/<domain>/.claude-plugin/plugin.json`
-   (`{name, description, version, keywords, author:{name:"AccountingSeed"}}` — `version` is semver,
-   `keywords` an array for marketplace discovery), then enable `<domain>@accountingseed` in the
+   (`{name, description, version, keywords, author:{name:"aquivalabs"}}` — `version` is semver,
+   `keywords` an array for marketplace discovery), then enable `<domain>@aquivalabs` in the
    consuming repo's `.claude/settings.json → enabledPlugins`. `.claude-plugin/marketplace.json` is
    **hand-maintained** — add the entry yourself. There is no generator: `sync.sh` was deleted in
    `c4f210e` and nothing replaced it. The `marketplace-sync` CI check only verifies that every
@@ -191,7 +191,7 @@ expectations is not repeated there; it lives once, in `evals/acceptance.json`.
      notes: Free text.
    ```
 
-8. **Write `evals/trigger-eval.json`** — the queries that test *whether the skill fires*. An array of
+8. **Write the `trigger` half of `evals/rubric.json`** — the queries that test *whether the skill fires*. An array of
    `{query, should_trigger}`: the positives come from answer 1b/1c, the negatives from 3c (the work that
    looks like yours but isn't). A handful each — enough to pin both edges of the boundary.
 
@@ -203,8 +203,8 @@ expectations is not repeated there; it lives once, in `evals/acceptance.json`.
    ]
    ```
 
-9. **Write `evals/acceptance.json`** — the list of expectations about the RESULT, straight from
-   answer 2c. Its own file, not a field in the trigger eval: that one answers *did the skill fire*,
+9. **Write the `acceptance` half of `evals/rubric.json`** — the list of expectations about the RESULT, straight from
+   answer 2c. Its own half of `rubric.json`, never folded into the trigger cases: those answer *did the skill fire*,
    this one answers *did the result come out right*, and merging them lets a skill that fires
    reliably while changing nothing read as green.
 
@@ -257,7 +257,7 @@ before authoring anything non-trivial. Do not duplicate it here. The house-enfor
   and link one level deep — the SKILL.md stays an overview + quick-reference.
 - **One excellent example beats five mediocre ones.** Show the canonical case fully; don't enumerate.
 - **Three places, no duplication between them.** `## Contract` says WHAT is promised.
-  `## Before you finish` says HOW to check it — steps, not claims. `evals/acceptance.json` holds the
+  `## Before you finish` says HOW to check it — steps, not claims. `evals/rubric.json` holds the
   LIST of expectations, once. Every skill carries all three; one that produces nothing to check writes
   `not-applicable` with a reason in the acceptance file rather than skipping it.
 - **500 lines is not a limit, it is a question.** Both Anthropic and Cursor name the number, neither
@@ -330,17 +330,21 @@ this section exists to prevent.
 
 ## Before you finish
 
-1. `ls plugins/<domain>/skills/<name>/` → `SKILL.md`, `metadata.yaml`, `evals/trigger-eval.json`,
-   `evals/acceptance.json`, and `evals/result.json` once measurement has run (measurement is mandatory —
-   no clone reachable means not done, not skipped). The four authored files must all be present;
-   `result.json` is produced by the measurement step, not authored. Missing an authored file means you are not done.
+1. `ls plugins/<domain>/skills/<name>/` → `SKILL.md`, `metadata.yaml`, `evals/rubric.json`,
+   and `evals/result.json` once measurement has run (measurement is mandatory —
+   no clone reachable means not done, not skipped). The three authored files — `SKILL.md`, `metadata.yaml`,
+   `evals/rubric.json` — must all be present; `result.json` is produced by the measurement step, not authored.
 2. The body has exactly one `## Contract` heading and no `## When to Activate` heading. A plain
    `grep` over-counts on any skill that quotes markdown in an example — read the hits rather than
    trusting the number.
 3. `python3 scripts/gen_catalog.py` → exits clean.
-4. `python3 scripts/validate_eval.py plugins/<domain>/skills/<name>/evals/trigger-eval.json` → prints
+4. `python3 scripts/validate_eval.py plugins/<domain>/skills/<name>/evals/rubric.json` → prints
    a hash rather than an error.
 5. The owning `plugin.json` version is bumped — without it the skill never loads in a session.
 6. `meta:skill-eval` was invoked and its script run from the repo → `evals/result.json` exists, no
    should-NOT-trigger query fired, and the verdict was read rather than glanced at.
-7. Any line failing? Fix it and start again from 1.
+7. `cerberus:security-scan` was walked over the new skill's material and the eight-point confirmation
+   written to `evals/result.json` under `security` — all points with verdicts, and `scanned_hash`
+   from `python3 scripts/validate_security.py --print-material-hash <skill-dir>`. The pre-push
+   eval-gate blocks a skill that ships material without a fresh one; consumer safety has no skip flag.
+8. Any line failing? Fix it and start again from 1.

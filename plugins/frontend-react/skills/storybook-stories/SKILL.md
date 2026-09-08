@@ -8,11 +8,15 @@ A story is the cheapest way for a human to see a component in isolation, but not
 every project wants them. This skill makes that a deliberate, remembered, per-project
 decision instead of a guess made fresh every time.
 
-## When to Activate
+## Contract
 
-Right after creating (or finishing) ANY new React component, in ANY project —
-the moment you would otherwise just move on from a fresh `.tsx`. Pairs with
-`frontend-react_component-placement`: its "catalog it" step routes here.
+**In:** writing or adding a Storybook story for a React component, or deciding whether a just-finished
+component needs one.
+
+**Out:** the `CLAUDE.md` Storybook preference honoured (explained + asked + recorded on the first
+component), and where `yes` a colocated story covering the key states — including the error state —
+driven by controls, its mock a separate `*.mock.ts` under a `stories/` folder. The checkable
+expectations are in `evals/rubric.json`.
 
 ---
 
@@ -98,10 +102,13 @@ Then act on the answer (Step 3 if yes; otherwise stop).
 
 ---
 
-## Checklist
+## Before you finish
 
-- [ ] Read `CLAUDE.md` for the recorded `Storybook stories:` preference
-- [ ] If absent: explained Storybook, asked the user, recorded `yes`/`no` in `CLAUDE.md`
-- [ ] If `yes`: wrote a colocated story covering the key states — including the error/ErrorBoundary state — driven by `select`/`radio`/`boolean` controls (one controllable story, not per-state duplicates); surfaced the preview URL
-- [ ] Story + its mock live in a `stories/` folder; data is a separate `*.mock.ts` (never inline, no app/domain mock-data)
-- [ ] If `no`: skipped story creation silently
+1. `CLAUDE.md`'s recorded `Storybook stories:` preference was read; on the first component Storybook was
+   explained, the user asked, and `yes`/`no` recorded in `CLAUDE.md`.
+2. If `yes`: a colocated story covers the key states — including the error/ErrorBoundary state — driven
+   by `select`/`radio`/`boolean` controls (one controllable story, not per-state duplicates), the
+   preview URL was surfaced, and the story + its mock live in a `stories/` folder with data in a
+   separate `*.mock.ts` (never inline, no app/domain mock-data).
+3. If `no`: story creation was skipped silently.
+4. A line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

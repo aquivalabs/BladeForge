@@ -4,11 +4,16 @@ description: Security rules for reviewing changes or writing security-sensitive 
 
 # Security Review Rules
 
-## When to Activate
+## Contract
 
-- Reviewing a diff for security (e.g. a pre-push Security reviewer agent).
-- Writing/editing BFF routes, Apex REST, auth flows, SOQL/SOSL, or anything touching
-  tokens, secrets, or user-supplied input.
+**In:** a diff being reviewed for security, or security-sensitive code being written — a BFF route,
+Apex REST, an auth flow, SOQL/SOSL, or anything touching tokens, secrets, or user-supplied input.
+
+**Out:** no hardcoded secret, no raw Salesforce token reaching the client, server routes enforcing
+auth, no injection or unescaped output, and Apex enforcing CRUD/FLS with sharing — each change asked
+"how would an attacker abuse this?". The checkable expectations are in `evals/rubric.json`.
+
+---
 
 ## Mindset
 
@@ -72,11 +77,12 @@ package submission is on the line.
 
 ---
 
-## Checklist
+## Before you finish
 
-- [ ] No hardcoded secrets/tokens (triaged, real ones flagged)
-- [ ] Client never sees raw SF tokens; nothing secret logged
-- [ ] New server routes enforce auth/session
-- [ ] No SOQL/SOSL/shell/path injection from user input; output escaped
-- [ ] Apex enforces CRUD/FLS (`WITH USER_MODE` / `stripInaccessible`) and `with sharing`
-- [ ] Asked "how would an attacker abuse this?" for each change — twice
+1. No hardcoded secret or token remains — real ones flagged, false positives triaged; nothing secret
+   is logged and the client never sees a raw Salesforce token.
+2. New server routes enforce auth/session; no SOQL/SOSL/shell/path injection from user input, and
+   output is escaped.
+3. Apex enforces CRUD/FLS (`WITH USER_MODE` / `Security.stripInaccessible`) and runs `with sharing`.
+4. Each change was asked "how would an attacker abuse this?" — twice.
+5. A check fails? Fix it and re-review. Full expectations → `evals/rubric.json`.

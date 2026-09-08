@@ -1,0 +1,81 @@
+{
+  "trigger": [
+    {
+      "query": "we map error codes to messages in like a dozen components — how do i get one place that decides copy and retry?",
+      "should_trigger": true
+    },
+    {
+      "query": "design the app-wide error handling architecture for our Vue dashboard",
+      "should_trigger": true
+    },
+    {
+      "query": "review this diff for error-surfacing consistency — is every failure shown the same way?",
+      "should_trigger": true
+    },
+    {
+      "query": "does this codebase follow one error-handling pattern or does each view roll its own?",
+      "should_trigger": true
+    },
+    {
+      "query": "i want a single classifier table that decides toast vs block vs redirect per error code",
+      "should_trigger": true
+    },
+    {
+      "query": "audit how errors are displayed across the whole Angular app and tell me where it drifts",
+      "should_trigger": true
+    },
+    {
+      "query": "where should the session-expiry redirect fire — every catch site calls it right now and it feels wrong",
+      "should_trigger": true
+    },
+    {
+      "query": "adding a new error reason PAYMENT_REQUIRED — how much of the UI do i have to touch?",
+      "should_trigger": true
+    },
+    {
+      "query": "our Svelte app blanks the whole page when one widget throws — how do we tier boundaries so siblings survive?",
+      "should_trigger": true
+    },
+    {
+      "query": "just wrap this OrderTable component in an error boundary so it doesn't crash the parent",
+      "should_trigger": false
+    },
+    {
+      "query": "style the error tile — the retry button spacing is off and the icon is too big",
+      "should_trigger": false
+    },
+    {
+      "query": "what should the ErrorInfo.reason envelope look like on the wire and which status enum do i use?",
+      "should_trigger": false
+    },
+    {
+      "query": "add a new reason code to the backend registry and map it to an http status",
+      "should_trigger": false
+    },
+    {
+      "query": "translate these error strings into French",
+      "should_trigger": false
+    },
+    {
+      "query": "my useOrders hook is fetching twice on mount — debug the query",
+      "should_trigger": false
+    },
+    {
+      "query": "write a storybook story for the EmptyState component",
+      "should_trigger": false
+    }
+  ],
+  "acceptance": [
+    "exactly one code-to-UX policy table exists; no component maps a code to copy, retry-ness, or escalation on its own",
+    "no raw error text is rendered — every user-facing error string resolves from the table via an i18n key, never a raw error.message or status",
+    "every data view renders through the state-dispatcher (loading -> error -> empty -> data); a 200-with-no-rows renders the empty branch; no raw I/O in render",
+    "the classified error is drawn by the one shared error-tile renderer, which alone owns the session-end escalation (the escalation call appears only inside that renderer) — conditional on a session/auth concept",
+    "every render-throwing subtree sits inside a boundary at its tier; one failing block never blanks its siblings or the page",
+    "when boundaries nest, the nearest enclosing one handles the throw; the outer floor catches only escapes no inner boundary caught",
+    "a bounded subtree that threw exposes a retry/recover affordance where the code is retryable, without a full page reload",
+    "exactly one outermost floor catches what route-level boundaries cannot, including throws in the app shell (above the router if the app has one)",
+    "each channel the app actually uses routes its error to the prescribed placement (render-throw -> boundary tile, query-error -> dispatcher tile, mutation-error -> toast, loader/action -> route error element, uncaught async -> floor); unused channels are exempt",
+    "behaviour is policy-driven — retry is offered only for reasons the table marks retryable, redirect/sign-out only for auth/session reasons; no component hardcodes a retry button",
+    "the architecture test: adding a brand-new error code touches only the policy table and its i18n keys — zero component changes"
+  ]
+}

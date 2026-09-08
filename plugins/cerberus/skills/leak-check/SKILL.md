@@ -1,5 +1,5 @@
 ---
-description: Use before committing a NEW or EDITED skill, its references, or its eval fixtures to this PUBLIC marketplace — review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate "this is one specific company's product" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/eval edit.
+description: Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace — review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate "this is one specific company's product" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.
 ---
 
 # cerberus:leak-check — nothing that points to real work leaves the gate
@@ -10,6 +10,18 @@ here on purpose — a list of the real names to catch would itself be the leak. 
 an **agent judgment pass**: you (the model) already know what real, copied-from-work
 code looks like versus an invented demo. Read the change against the checklist and
 rewrite every hit.
+
+## Contract
+
+**In:** a new or edited skill, its `references/`, its bundled `scripts/`, or its eval fixtures — about to be committed to this
+PUBLIC marketplace.
+
+**Out:** nothing in the change points to a real work codebase — every real class/object/namespace/
+field/org/ticket name, secret, real person, email, absolute path, or employer/client brand is rewritten
+to a neutral fictional demo, and the aggregate "this is one company's product" flavour is gone, without
+breaking the example's teaching value. The checkable expectations are in `evals/rubric.json`.
+
+---
 
 ## What to hunt (ranked by how much it burns)
 
@@ -51,3 +63,16 @@ Unsure, or before a public release / the first push of a mirror repo → run a d
 architecture, domain, history + secrets) plus an adversarial "recognize your own code"
 pass — that catches the aggregate a single pass misses. Then scrub the working tree AND
 git history (`git filter-repo`) and force-push.
+
+
+---
+
+## Before you finish
+
+1. Scan the change for each hunted fingerprint: a real class/object/namespace/field/API name, a secret
+   or credential, a real person/email/absolute path, an employer or client brand.
+2. Each hit is rewritten to a neutral fictional demo (`Order__c`, `WidgetConfig`, `myOrg`,
+   `/api/items`) — reused across skills — not merely redacted.
+3. The aggregate flavour does not still read as one specific company's product, and the rewrite kept
+   the example's teaching value.
+4. A fingerprint survives? Rewrite it and re-scan. Full expectations → `evals/rubric.json`.

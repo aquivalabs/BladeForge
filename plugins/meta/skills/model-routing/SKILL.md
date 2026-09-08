@@ -9,6 +9,18 @@ the session model (usually the most expensive tier), and fan-out multiplies that
 agent count. This skill exists because a real workflow once spawned 240 verifier agents on the
 session's Opus — ~2.5× the cost of the same work on Sonnet — purely from omitted `model:` options.
 
+## Contract
+
+**In:** you are about to spawn, fan out, or parallelize agents — any multi-agent work: a Workflow
+script, an eval loop, a reviewer fan-out, or writing agent-definition frontmatter.
+
+**Out:** every spawned agent has an EXPLICIT model tier assigned before it launches — head reserved
+for a small bounded set of final judges/synthesizers, mid-tier for judgment, cheap for mechanical
+sweeps — and the fan-out's spend was priced before launch. The checkable expectations are in
+`evals/rubric.json`.
+
+---
+
 ## The tiers
 
 | Tier | Model | Who runs here | Why |
@@ -81,3 +93,17 @@ launch is cheap by construction. Only head-tier agents may omit it (inherit).
 | "Haiku everywhere, cheapest wins" | Judgment tasks on Sweep tier return confident garbage — you pay twice: once for the run, once for the rework. |
 | "The loop will stop when findings dry up" | It won't. Creative models never run dry. Cap rounds or budget. |
 | "I'll remember to set models next time" | Memory is advisory. The PreToolUse guard hook blocks what discipline forgets. |
+
+
+---
+
+## Before you finish
+
+1. Every `agent()` / spawn carries an explicit model tier — none silently inherits the session model.
+2. Head tier is a small bounded set (final judges/synthesizers only); judgment tasks (review, verify,
+   hunt) run mid-tier; mechanical sweeps (grep, list, count, rename) run cheap-tier.
+3. Before the fan-out or eval loop, one representative unit was measured and the total spend priced —
+   no unbounded loop without a round or budget cap.
+4. Persistent agent definitions pin their tier in frontmatter (`model: sonnet`/`haiku`); only head-tier
+   agents omit it.
+5. An agent on the inherited default? Assign a tier and re-check. Full expectations → `evals/rubric.json`.

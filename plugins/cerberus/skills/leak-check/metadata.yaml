@@ -1,7 +1,7 @@
 schema-version: 1
-purpose: Agent judgment pass that reviews a skill/reference/eval change for anything pointing to a real work codebase — secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate "one company's product" flavor — and rewrites it to a neutral fictional demo.
+purpose: Agent judgment pass that reviews a skill/reference/script/eval change for anything pointing to a real work codebase — secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate "one company's product" flavor — and rewrites it to a neutral fictional demo.
 best-for: Any contributor to this public skills marketplace, right before committing a new or edited skill, reference, or eval fixture — also triggered automatically by the cerberus PostToolUse hook on skill edits.
 needs: []
 changes:
-  tags: []
-  notes: ""
+  tags: [files]
+  notes: An agent judgment pass; rewrites the reviewed skill/reference/eval in place to replace a leaked real identifier with a neutral fictional demo. No network, no org, no money.

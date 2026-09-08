@@ -1,0 +1,227 @@
+{
+  "trigger": {
+    "skill": "security_review-rules",
+    "measured_at": "2026-09-06T20:58:35",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "11/18",
+    "accuracy": 0.611,
+    "baseline_accuracy": null,
+    "description_hash": "a64e4616ef5647ad48e97eeb85a12dd645e84b35dffe697cd20a87ff10badc57",
+    "queryset_hash": "0f89101ecf9200ffb60e2c22816390d1300af18ff4d9bade2d29a16c057a5670",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "review this diff for security issues before I push",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "my new BFF route /api/widget-config doesn't have auth middleware — is that a problem",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "check this apex class for SOQL injection — it builds a query with user input",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "I'm writing a REST resource that returns Pkg__Widget_Config__c — do I need stripInaccessible",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "does this server route leak the salesforce access token to the client",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "audit the pre-push diff for hardcoded secrets or api keys",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "we're logging the sf session token in the BFF error handler — is that safe",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "does the new order endpoint enforce WITH USER_MODE",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "check if this Aura controller is vulnerable to stored XSS via unescaped output",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "write apex tests for the WidgetConfigResource REST class",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "deploy WidgetConfigResource.cls to myOrg org",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "query Pkg__Widget_Config__c records for the current user",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "run the apex tests for MetricBuilderTest",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "build an lwc for displaying order records",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "how does Pkg__RangeHandler work",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a new React component for the metrics dashboard",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "update the per-user UI config save logic in SharedPkg",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "run anonymous apex to check the current user's permissions",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.3,
+    "skillscore": 0.92,
+    "guide_faults": [],
+    "verdict": "Guide-following output nails the rubric's specific asks (explicit twice-over abuse check, section-numbered N/A triage for secrets/token-boundary/injection) that the isolated baseline never performs explicitly, but both correctly caught the two load-bearing defects (missing WITH USER_MODE, missing with sharing) and the baseline was actually more exhaustive in raw finding count, so the net quality lift is real but modest."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "278086be8cc7c63a708aed90d5c7c70f53107683ea79100d3692cd000739ecf6",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "No directives aimed at the reading model; all imperative language is standard skill-authoring guidance to the agent about its task, not covert steering."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network calls or data transmission of any kind; SKILL.md is pure review-guidance prose."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "Token/secret patterns (00D...!..., AKIA..., Bearer <token>) appear only as example regex candidates for the reviewer to search for, not embedded real credentials."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts/ directory exists; no shell commands are run by this skill."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Entirely plain readable markdown, no encoded blobs or eval of decoded content."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "n/a",
+        "note": "No scripts or fetch instructions present; skill is guidance-only with no execution surface."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No instruction to read ~/.ssh, ~/.aws, .env, keychain, or cookie stores; discussion of tokens is about not leaking them, not accessing local credential files."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "n/a",
+        "note": "No sudo, cron, launch-agent, or shell-profile edits anywhere in the material — only Apex 'with sharing' and 'WITH USER_MODE' access-control guidance, unrelated to OS privilege escalation."
+      }
+    ]
+  }
+}

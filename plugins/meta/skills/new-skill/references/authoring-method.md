@@ -105,7 +105,7 @@ author reads the list rather than recalling it. (research 07)
 org — so "I own X" settles nothing there. What separates them is the condition: what the MCP cannot
 do, what shape of output is wanted.
 
-**3c writes the eval.** "Looks like mine, isn't" is exactly the negative case `trigger-eval.json`
+**3c writes the eval.** "Looks like mine, isn't" is exactly the negative case `rubric.json`
 requires. Answer the question, get the test.
 
 For most skills 3a is "nobody", and that is a correct answer, not a dodge — 979 pairs of 990 have no
@@ -216,7 +216,7 @@ This took several wrong turns before settling. The confusion was always the same
 |---|---|---|
 | `## Contract`, top of the body | WHAT is promised — In and Out | the agent, starting work |
 | `## Before you finish`, bottom of the body | HOW to check — steps: run this, look at that | the agent, finishing work |
-| `evals/acceptance.json` | the LIST of expectations about the result | the grader, and the gate |
+| `evals/rubric.json` | the LIST of expectations about the result | the grader, and the gate |
 
 The body is a procedure throughout, the closing section included. It says take this, run that, and
 what counts as clean:
@@ -228,7 +228,7 @@ what counts as clean:
 2. Empty? Done. Not empty — replace each hit with rem and return to step 1.
 ```
 
-The list of expectations is NOT repeated there. It lives once, in its own file:
+The list of expectations is NOT repeated there. It lives once, as its own half of `rubric.json`:
 
 ```json
 [
@@ -237,21 +237,23 @@ The list of expectations is NOT repeated there. It lives once, in its own file:
 ]
 ```
 
-**Why its own file rather than a field inside the trigger eval.** They answer different questions, and
-research 05 is explicit that the two must be measured apart: `trigger-eval.json` answers *did the skill
-fire*, acceptance answers *did the result come out right*. A skill can fire reliably and change
-nothing — and with one merged file, that looks green. A separate file also reads on its own: its name
-says what it is, and a person opening it needs no explanation.
+**Why its own half rather than folded into the trigger cases.** They answer different questions, and
+research 05 is explicit that the two must be measured apart: the `trigger` half answers *did the skill
+fire*, the `acceptance` half answers *did the result come out right*. A skill can fire reliably and
+change nothing — and folded into the trigger cases, that looks green. Keeping them as two named keys of
+one `rubric.json` keeps each readable on its own — a person opening the file sees which half is which
+without explanation — while a single measurement pass can still read both.
 
 ## The `evals/` directory
 
-Three files, three questions, one per file.
+Two files, but still the three questions — `rubric.json` says what to measure against in two
+halves, `result.json` records what was measured.
 
 ```text
 evals/
-  trigger-eval.json    did it fire?          queries, positive and negative
-  acceptance.json      did it work?          expectations about the result
-  result.json          what did we measure?  the recorded run
+  rubric.json   { "trigger": [ did it fire?  queries, positive and negative ],
+                  "acceptance": [ did it work?  expectations about the result ] }
+  result.json   { "trigger": { the recorded run }, "acceptance": { skillaxe, or null } }
 ```
 
 `result.json` is what keeps a measurement from evaporating. Runs used to go into `*-workspace/`

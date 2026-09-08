@@ -8,6 +8,18 @@ Napoleonic field surgeons invented it: sort the incoming by severity in minutes,
 surgeons' hours go only to those who need them. The engineering translation: **never run the
 expensive pass over items a cheap pass could have cleared.**
 
+## Contract
+
+**In:** a LARGE batch of items you are about to attack the same expensive way — a repo-wide sweep, a
+big multi-file review, dozens of call sites to migrate, a fleet of files/skills/docs to audit, at
+planning time before the first item.
+
+**Out:** a cheap shallow pass ran over ALL of them first, sorting skip vs worth-it, and the expensive
+deep pass touched only the shortlist — no item paid deep cost that a cheap pass could have cleared,
+and whatever was dropped was announced. The checkable expectations are in `evals/rubric.json`.
+
+---
+
 ## The pattern
 
 ```
@@ -51,3 +63,16 @@ Two invariants make it work:
 | "The shallow pass might miss something subtle" | The deep pass still runs — on the shortlist. Subtlety hides in items the cheap pass FLAGS, which is why unmeasurable ≠ healthy. |
 | "This item is obviously sick, skip its triage" | Fine — but say so out loud and count it into the shortlist. Skipping triage silently is how coverage claims rot. |
 | "The shallow results look uniform, ship it" | Too-even numbers are the signature of a broken instrument, not a healthy fleet. Hand-check one item before trusting the sort. |
+
+
+---
+
+## Before you finish
+
+1. The cheap pass covered ALL items — full coverage, not a sample — and sorted them into skip
+   vs worth-it.
+2. The expensive deep pass ran ONLY on the shortlist the cheap pass surfaced, never on every item.
+3. The two passes are calibrated apart: the cheap one's per-item cost is genuinely low against the
+   deep one.
+4. Whatever triage dropped or skipped was announced — a silent cap reads as full coverage.
+5. Any line fails? Re-run the cheap full-coverage pass first. Full expectations → `evals/rubric.json`.
