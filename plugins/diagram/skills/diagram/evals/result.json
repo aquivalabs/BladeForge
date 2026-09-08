@@ -1,13 +1,13 @@
 {
   "trigger": {
     "skill": "diagram",
-    "measured_at": "2026-09-08T10:39:32",
-    "model": "sonnet",
-    "runs_per_query": 3,
-    "best_score": "9/23",
-    "accuracy": 0.391,
-    "baseline_accuracy": null,
-    "description_hash": "c0057f2ebc9f7f29d3a13a7d8b2a32e633a5a0879107e976efd8d4dc39f14adb",
+    "measured_at": "2026-09-08T21:23:27",
+    "model": "opus",
+    "runs_per_query": 5,
+    "best_score": "17/23",
+    "accuracy": 0.739,
+    "baseline_accuracy": 0.435,
+    "description_hash": "26c15452e62150f7385ffa4a758f7d2ee72790aa89f55bad41e5de09139dd618",
     "queryset_hash": "52f3290d62d8a50eedc59f33fb107bb7c52e03e480245b9393cd248ccdee0d36",
     "eval_type": "description-triggering",
     "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
@@ -15,128 +15,128 @@
       {
         "query": "i've got a spec for a new handler layer in this apex package (interface, abstract base, factory, concrete impl) — sketch how the classes connect, with their methods, so i can open it in a browser and read it",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": false
+        "triggers": 4,
+        "runs": 5,
+        "trigger_rate": 0.8,
+        "pass": true
       },
       {
         "query": "draw the data flow for the widget-config feature — the queueable that writes, the selector that reads, the DTO facade — i want a readable page, not a wall of text",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": false
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1.0,
+        "pass": true
       },
       {
         "query": "can you make a diagram of how Widget_Config__c, the handlers and the two permission sets fit together? something i can actually click around and explore",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": false
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1.0,
+        "pass": true
       },
       {
         "query": "draw the architecture of feature TICK-000 from the plan — every class with its methods and relations, and make it clean and readable",
         "should_trigger": true,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": false
       },
       {
         "query": "the record-flow diagram we have is hard to read, nodes overlap and the text is tiny — fix the layout and make it nicer",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": false
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1.0,
+        "pass": true
       },
       {
         "query": "i want a picture of how the data-sync layer enters the controller and goes down to the store, with the methods on each block, as its own page",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": false
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1.0,
+        "pass": true
       },
       {
         "query": "sketch the relationships between these ~12 apex classes so a new dev can understand the whole feature at a glance",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
+        "triggers": 1,
+        "runs": 5,
+        "trigger_rate": 0.2,
         "pass": false
       },
       {
         "query": "make a how-it-works schematic of the data refresh pipeline that i can share as a standalone html file",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": false
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1.0,
+        "pass": true
       },
       {
         "query": "visualize the object model — the object, its fields, and which permset grants what — as its own readable page",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": false
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1.0,
+        "pass": true
       },
       {
         "query": "i need a flow diagram: where the brief is read from, where it's written, and what that DTO facade between them is",
         "should_trigger": true,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": false
       },
       {
         "query": "no spec for this, just the code — draw how these three files interact: RangeHandler.cls, RangeFieldHandler.cls, RangeHandlerFactory.cls",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
+        "triggers": 1,
+        "runs": 5,
+        "trigger_rate": 0.2,
         "pass": false
       },
       {
         "query": "i inherited this module and there's zero documentation — read the classes in force-app/main/default/classes and draw me a readable how-it-works picture so i can get oriented",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
+        "triggers": 1,
+        "runs": 5,
+        "trigger_rate": 0.2,
         "pass": false
       },
       {
         "query": "there's no design doc, just make a schema of everything in the brief flow by reading the source, as an html page i can browse",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": false
+        "triggers": 4,
+        "runs": 5,
+        "trigger_rate": 0.8,
+        "pass": true
       },
       {
         "query": "draw a diagram spanning our react app AND the apex backend AND a couple of lambdas — the node kinds are all different and i want them visually distinct",
         "should_trigger": true,
-        "triggers": 1,
-        "runs": 3,
-        "trigger_rate": 0.3333333333333333,
-        "pass": false
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1.0,
+        "pass": true
       },
       {
         "query": "plot quarterly sales from this csv in my downloads as a bar chart with axis labels",
         "should_trigger": false,
-        "triggers": 1,
-        "runs": 3,
-        "trigger_rate": 0.3333333333333333,
-        "pass": true
+        "triggers": 3,
+        "runs": 5,
+        "trigger_rate": 0.6,
+        "pass": false
       },
       {
         "query": "explain in words how the sealed-base pattern works in RangeHandler — no picture needed, just walk me through it",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": true
       },
@@ -144,7 +144,7 @@
         "query": "this svg icon broke, fix the path data so it renders properly again",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": true
       },
@@ -152,7 +152,7 @@
         "query": "create an ERD for our salesforce objects in Lucidchart and share the link with the team",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": true
       },
@@ -160,7 +160,7 @@
         "query": "show me a dashboard of the metrics for the last full week — signups / active / churn",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": true
       },
@@ -168,7 +168,7 @@
         "query": "add a mermaid sequence diagram to the PR description showing the login handshake between the SPA and the BFF",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": true
       },
@@ -176,7 +176,7 @@
         "query": "convert this hand-drawn architecture photo i took of the whiteboard into an editable excalidraw",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": true
       },
@@ -184,7 +184,7 @@
         "query": "just render the existing record-flow.html and take a screenshot, don't change anything",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": true
       },
@@ -192,7 +192,7 @@
         "query": "generate an ascii flowchart of the CI pipeline steps to paste into the README",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 5,
         "trigger_rate": 0.0,
         "pass": true
       }
@@ -201,9 +201,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_at": "2026-09-08T21:24:46",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "5dc8d30a617cf114447474369e40d4da8442f82f039775fa3a7e54ba9f5e83b6",
+    "scanned_hash": "3257a25b8615118edae165ffb8659621934b56d7eef451bb6f04eb54dcedb697",
     "checklist": [
       {
         "n": 1,

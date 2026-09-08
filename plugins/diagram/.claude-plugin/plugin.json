@@ -1,7 +1,7 @@
 {
   "name": "diagram",
   "description": "Architecture / flow diagram authoring — turn a spec or raw code into a readable, clickable D2→ELK diagram (classes with methods, objects, permission sets, relations) as a browsable HTML page under docs/diagrams/<name>/. Node contents come from an Atlas entity list that parallel Sextant reviewer agents harden to zero edits.",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "keywords": [
     "diagram",
     "architecture",

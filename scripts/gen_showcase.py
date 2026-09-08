@@ -80,7 +80,7 @@ def load():
                 if sec.get("checklist"):
                     cl=sec["checklist"]
                     security={"verdict":sec.get("verdict"),"at":sec.get("scanned_at"),
-                              "passed":sum(1 for c in cl if c.get("verdict")=="pass"),
+                              "passed":sum(1 for c in cl if c.get("verdict")!="flag"),
                               "total":len(cl),"checklist":cl}
                 else:
                     security=None
@@ -168,7 +168,7 @@ main{max-width:80rem;margin:1.4rem auto 4rem;padding:0 clamp(1rem,4vw,2.5rem)}
 .scan{display:grid;gap:.3rem}
 .scan .row{display:flex;align-items:center;gap:.5rem;font-size:.82rem;padding:.28rem .1rem;border-bottom:1px solid var(--line)}
 .scan .row:last-child{border-bottom:none}
-.scan .st{width:1.1rem;text-align:center;flex:none}.scan .pass{color:var(--good)}.scan .flag{color:var(--warn)}
+.scan .st{width:1.1rem;text-align:center;flex:none}.scan .pass{color:var(--good)}.scan .flag{color:var(--warn)}.scan .na{color:var(--none)}
 .scan .nm{color:var(--ink)}.scan .dt{color:var(--muted);font-size:.75rem;margin-left:auto;text-align:right;max-width:60%}
 .empty{text-align:center;color:var(--faint);padding:3rem;font-family:"JetBrains Mono",monospace}
 footer{max-width:80rem;margin:0 auto;padding:1.2rem clamp(1rem,4vw,2.5rem) 2.5rem;border-top:1px solid var(--line);color:var(--faint);font-size:.78rem}
@@ -248,8 +248,8 @@ function trigChip(s){const chips=[];
   return chips.length?`<div class="metrics">${chips.join('')}</div>`:'';}
 function scanBlock(s){if(!s.security)return'';const sec=s.security;
   return `<div class="m-sec"><h3>security scan · ${sec.passed}/${sec.total}</h3><div class="scan">${sec.checklist.map(c=>{
-    const flag=c.verdict!=='pass';
-    return `<div class="row"><span class="st ${flag?'flag':'pass'}">${flag?'▲':'✓'}</span><span class="nm">${esc(c.point)}</span><span class="dt">${esc(c.note||'')}</span></div>`;
+    const v=c.verdict, st=v==='flag'?'flag':(v==='n/a'?'na':'pass'), glyph=v==='flag'?'▲':(v==='n/a'?'–':'✓');
+    return `<div class="row"><span class="st ${st}">${glyph}</span><span class="nm">${esc(c.point)}</span><span class="dt">${esc(c.note||'')}</span></div>`;
   }).join('')}</div><div class="bmeta" style="margin-top:.5rem">scanned ${esc((sec.at||'').slice(0,10))} · cerberus:security-scan</div></div>`;}
 function measureBlock(s){if(!s.trig)return'';const t=s.trig;
   const pct=t.acc!=null?Math.round(t.acc*100)+'%':'—';const base=t.baseline!=null?Math.round(t.baseline*100)+'%':'—';
