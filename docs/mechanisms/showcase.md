@@ -24,17 +24,20 @@ trigger score.
 **The SKILL.md body is NOT embedded.** Bodies can carry real identifiers (namespaces,
 ticket refs) and the site is public; `cerberus:leak-check` only runs on skill *edits*,
 not on this export path, so a verbatim body dump would publish any pre-existing leak.
-The page links to the body on GitHub instead of copying it. Effect and security-scan
+The page links to the body on GitHub instead of copying it.
+
 The measured trigger score is shown, the security-scan checklist is shown per skill, and the skillaxe effect score is shown where it has been measured.
 
 ## The `[skip ci]` trap (why the trigger looks the way it does)
 
-`catalog.json`'s only writer is scout-publish-bot, which commits as
+`catalog.json`'s only writer is scout-publish, which commits as
 `chore(scout): regenerate catalog … [skip ci]`. GitHub Actions' `[skip ci]` suppresses
 **every** push-triggered workflow on that commit, repo-wide — so a push trigger on
-`catalog.json` can never fire. `pages.yml` therefore does not trigger on `catalog.json`;
-a **daily `schedule`** picks up version bumps, and the push trigger covers the generator,
-the workflow, and `SKILL.md` edits. `workflow_dispatch` forces a manual rebuild.
+`catalog.json` can never fire. `pages.yml` therefore triggers on **`workflow_run`** of the
+`scout-publish` workflow COMPLETING: that fires on the workflow finishing, not on its
+`[skip ci]` commit's push, so the showcase rebuilds immediately after every catalog
+regeneration. A **daily `schedule`** stays as a fallback, the push trigger covers the
+generator/workflow/`SKILL.md` edits, and `workflow_dispatch` forces a manual rebuild.
 
 ## Change trigger
 

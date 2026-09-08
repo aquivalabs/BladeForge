@@ -13,6 +13,10 @@ company-approved skills, synced from the shared source and reviewed before relea
 Install [`scout`](#scout) first — it is the one plugin that finds all the others, then recommends and
 installs the rest on demand.
 
+**Browse the catalogue → [aquivalabs.github.io/BladeForge](https://aquivalabs.github.io/BladeForge/)** — a
+generated showcase of every skill: what it does, when it fires, what it touches, its measured trigger
+and security-scan results.
+
 > **Adding or publishing a skill?** Read [`docs/`](docs/) first — [authoring.md](docs/authoring.md)
 > (create a skill, write its `metadata.yaml`, run the evals) and [publishing.md](docs/publishing.md)
 > (how a merge auto-regenerates the catalog and bumps the version — the scout bot).
