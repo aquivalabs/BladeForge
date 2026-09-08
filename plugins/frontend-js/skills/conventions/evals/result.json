@@ -1,0 +1,229 @@
+{
+  "trigger": {
+    "skill": "conventions",
+    "measured_at": "2026-09-04T18:22:11",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "16/18",
+    "accuracy": 0.889,
+    "baseline_accuracy": null,
+    "description_hash": "7363def7ec76bd9a316d27d83d4596c092413a6290e7f2bc3b1ebb178c4ff4ee",
+    "queryset_hash": "ea3ed197d15bbeecadab0f92459c3536ca8dc9d9cfb61055d847480463c6e73e",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "I have function getAcct(r) { return r.id } — should it be an arrow function?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the file uses double quotes everywhere, our house style is single quotes right?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "rename variable sel to selectedRecord throughout useAccountsFilter.ts",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "this if statement has no braces: if (isLoading) return null — is that ok?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the fetchItems function is 80 lines long, help me break it into smaller pieces",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "import from ../../../lib/salesforce/client — should I use an alias instead?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "review ItemList.tsx for code style issues before i push",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "add a @shared alias to vite config and tsconfig so I can import shared types cleanly",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the handler is named fn and the arg is e — is that naming acceptable in our codebase?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add margin-top: 1.5rem to the card header scss",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "create a new SCSS variables file for spacing tokens",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "should I use rem or px for the sidebar width in tailwind?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "scaffold a new React component folder for ItemFilters with BEM scss",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "add a Storybook story for the MetricCard component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add skeleton loading to the RecordList component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write an Apex test for AccountRangeResolver with @TestSetup",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "route the 'No results found' label in DataTable.tsx through useTranslation",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the BFF route /api/items is missing auth — fix the middleware",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": -0.1,
+    "skillscore": 0.8,
+    "guide_faults": [
+      "The guide's 'one function = one responsibility, extract helpers' rule carries no judgment caveat against extracting a trivial one-line regex match into a separate function — that literal-minded extraction is what produced the with-guide output's actual defect: a confusingly near-duplicate name (`withoutSeparators` local var vs `withoutSeparors` function) with a typo, self-flagged but left unfixed in the delivered file."
+    ],
+    "verdict": "Both outputs already hit single quotes/braces/full-names/small-functions on their own; the guide's only clear, demonstrable win was forcing the @shared alias import, while its literal 'extract everything' pressure produced a self-admitted typo'd helper (and a `function` keyword the guide itself bans) that the cleaner, more feature-complete isolated baseline never had — net effect roughly a wash, tilted slightly negative."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "693683abccd7667b6deb041ca446f211c81388553a581fcc4530b0046e78bf89",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Plain style-guide prose, no directives steering the reading agent's behavior beyond the stated coding rules."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No mention of sending any data anywhere; skill only edits/greps local files."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials present."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Only grep commands shown for self-check (grep -nE for quotes/relative imports); nothing destructive."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "No base64/hex/eval or unreadable logic anywhere."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "n/a",
+        "note": "No scripts/ or references/ exist; SKILL.md contains no network calls or download instructions."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, keychain, or cookies."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, or persistence mechanisms; skill directory contains only SKILL.md, no scripts/ or references/ subfolders."
+      }
+    ]
+  }
+}

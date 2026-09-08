@@ -1,0 +1,227 @@
+{
+  "trigger": {
+    "skill": "format",
+    "measured_at": "2026-09-04T19:45:25",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "17/18",
+    "accuracy": 0.944,
+    "baseline_accuracy": 1.0,
+    "description_hash": "9e083888fea244fa735fe1ae34fdb1ded94ba943628737536b75e901dd28fcca",
+    "queryset_hash": "9c4b6da6a999c66efed2c51d9c3864c48f145640b20c13bfbdae6be49f50aa54",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "In the /api/orders POST route, throw a proper typed error when the SF create call comes back rejected instead of just letting it 500",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "The Anthropic proxy sometimes returns a 502 and the UI just shows a blank screen — handle it properly so the user sees something",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "Add a NOT_FOUND error code for when a entity record id doesn't resolve, and use it in the controller",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "Map the CONSTRAINT_VIOLATION fault we get from the upstream API into whatever envelope our client expects",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "On the records page the fetch hook resolves with an error payload — how should the component read the code and message out of it?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "My REST controller catches a persistence exception but I'm not sure what shape to return to the client — walk me through throwing it the right way",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "When the metric endpoint rejects, we need a google.rpc.Status with a proper status field so the frontend can branch on it",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "Wrap the upstream a payment provider transport failures so a downstream 429 surfaces as a retryable error the client can recognize",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "Right now every layer invents its own error JSON shape — I want one envelope from the backend through to the frontend toast",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "Fix this TypeError: cannot read properties of undefined crashing the DataGrid on first render",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "Why is this try/catch swallowing the stack trace? I can't see where it actually failed",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "Add React error boundaries around the router so a crash in one route doesn't blank the whole app",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "Write a vitest test that asserts createOrder throws when the amount is negative",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "The linter flags an unused catch binding in this function — how do I silence it cleanly?",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "Explain the difference between throwing an Error and rejecting a promise in async JS",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "Our test coverage dropped — add negative-path assertions so the failing branch is covered",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "The retry logic in the fetch wrapper loops forever on a network drop; add a max-attempts cap",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "Rename the ApiException class to ServiceException across the codebase without changing behavior",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.85,
+    "skillscore": 0.95,
+    "guide_faults": [],
+    "verdict": "With-guide hits all 8 rubric criteria and even matches this repo's real conventions (code=HTTP int, ErrorInfo/DebugInfo split, registry+dictionary, reused the actual existing INSUFFICIENT_ACCESS reason); isolated baseline invents a generic google.rpc.Status pattern that gets the house convention backwards (code=rpc-numeric instead of HTTP int), skips the central registry, hardcodes messages at throw sites, and omits ErrorInfo.reason from 3 of 4 envelopes — a guide-driven, substantial quality win."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "9b367f08fd585b26a6bf45d5cb3de0d0859e8904a227f10b02273ca2d971c9dc",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Pure instructional prose about error envelopes; no directives aimed at overriding agent behavior."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network calls or data transmission of any kind; doc-only skill."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials present anywhere in SKILL.md."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts/ directory exists; nothing executable to run."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain readable markdown/JSON example, no encoded blobs."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No URLs or fetch/download instructions anywhere in the file."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, or any credential store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, cron, launch agent, or shell profile edits mentioned."
+      }
+    ]
+  }
+}

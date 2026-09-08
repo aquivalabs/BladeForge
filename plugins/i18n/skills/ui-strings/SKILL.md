@@ -1,18 +1,18 @@
 ---
-description: Route every user-facing UI string through the project's localization system instead of hardcoding it. Activate whenever writing or editing display text — labels, buttons, messages, errors, toasts, placeholders, empty states, flavor copy — in any project and any stack.
+description: "Route every user-facing UI string through the project's localization system instead of hardcoding it. Activate whenever writing or editing display text a user will see — labels, buttons, messages, errors, toasts, placeholders, empty states, flavor copy — in any project and any stack. Do NOT use for text a user never reads: log lines, internal error codes, test fixtures, code identifiers, enum keys, slugs, or proper-noun/canonical identifiers (those stay as plain data)."
 ---
 
 # i18n / UI-string localization
 
-## When to Activate
+## Contract
 
-Activate whenever you are about to introduce or edit a **human-readable string that a user will see**:
+**In:** a human-readable string a user will see, about to be introduced or edited in a component,
+page, or template.
 
-- labels, headings, button/CTA text, tooltips, placeholders
-- success/error/validation messages, toasts, banners, empty-state copy
-- any narrative/flavor text in a component, page, or template
-
-Do NOT activate for: log lines, internal error codes, test fixtures, code identifiers, enum keys, or proper-noun/canonical identifiers (see "Identifiers vs prose" below).
+**Out:** the string lives in the project's localization mechanism — an existing i18n catalog/namespace,
+a Salesforce Custom Label, or a proposed constants module — and is referenced through that API, never
+hardcoded; identifiers and proper nouns stay as plain data. This IS the acceptance criteria for the
+change.
 
 ---
 
@@ -53,11 +53,14 @@ Resolve prose by id from the catalog (e.g. `t('characters.' + id + '.role')`) wh
 
 ---
 
-## Checklist
+## Before you finish
 
-- [ ] Detected the project's localization mechanism (or confirmed none + chose a plan)
-- [ ] Salesforce → Custom Labels, not a JS i18n library
-- [ ] String added to the catalog/namespace, referenced via the i18n API — not hardcoded
-- [ ] Reused existing keys where possible; namespacing matches the project
-- [ ] Identifiers/proper nouns kept as data; only prose localized
-- [ ] New namespace registered; key resolves at build time
+1. Grep the files you changed for a hardcoded user-facing literal in markup —
+   `grep -nE ">[A-Z][a-z].*<|=\"[A-Z][a-z][^\"]+\"" <files>` — and read each hit: prose a user
+   reads must go through the i18n API, not sit as a literal.
+2. Confirm each new string: added to the catalog/namespace (or a Custom Label on Salesforce),
+   referenced through the API, an existing key reused where one covered it, and identifiers/proper
+   nouns left as data.
+3. The new namespace is registered and the key resolves at build/typecheck — a missing key renders
+   the raw key, a visible bug.
+4. Anything hardcoded or unresolved? Fix it and return to step 1.

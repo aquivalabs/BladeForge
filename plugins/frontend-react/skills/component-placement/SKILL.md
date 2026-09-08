@@ -16,10 +16,17 @@ sends you to the right per-type skill.
 > project's own *local* skills, which extend this one. Adapt the example paths to
 > the repo's actual structure.
 
-## When to Activate
+## Contract
 
-Before creating ANY React component — "add a button/card/panel/section", "build an
-X", or you're about to scaffold a `.tsx`/`.jsx` for a component.
+**In:** before creating ANY React component — about to add, scaffold, or hand-roll a component, panel,
+card, widget, or control.
+
+**Out:** Ockham invoked, the component tree and catalog searched (the tree-grep alone when no live catalog is reachable), an existing component reused/extended
+where it fit; otherwise the new one placed via the decision tree (primitive / feature / layout /
+page-local), routed to the matching per-type skill, structured per the project's conventions, and
+catalogued. The checkable expectations are in `evals/rubric.json`.
+
+---
 
 ## Step 0 — OCKHAM
 Invoke `meta:ockham`. The cheapest component is the one that already exists.
@@ -28,6 +35,8 @@ Invoke `meta:ockham`. The cheapest component is the one that already exists.
 1. Grep the component tree for something similar by role/name — the project's
    `components/` areas (primitives, features, layout) and page-local folders.
 2. If the project has a component catalog (Storybook or similar), search it — it's
+   (if no live catalog search is reachable in-session, the tree-grep in step 1 IS the search — do
+   not report the catalog leg as unmet)
    the live index of what's already built.
 3. **If something fits → reuse or extend it and STOP**, and say what you found.
    Only continue if nothing suitable exists — then say so explicitly.
@@ -51,11 +60,14 @@ the project's existing styling and i18n approach — don't introduce a new one.
 If the repo uses Storybook (or any component catalog), add the matching story so the
 next person finds it in Step 1 instead of rebuilding it.
 
-## Checklist
-- [ ] Invoked `meta:ockham`
-- [ ] Searched the component tree (+ catalog/Storybook if present) for an equivalent
-- [ ] Reused/extended if found; else stated "nothing reusable found"
-- [ ] Placed via the decision tree (primitive / feature / layout / page-local)
-- [ ] Routed to the matching per-type skill
-- [ ] Followed the project's structure + styling conventions
-- [ ] Added a story if the project has a catalog
+## Before you finish
+
+1. `meta:ockham` was invoked, and the component tree (primitives/features/layout/page-local) plus the
+   catalog (Storybook) were searched for an equivalent by role/name — or, if no live catalog
+   search is reachable in-session, the tree-grep alone satisfies the search (the catalog leg is not reported unmet).
+2. An existing component was reused or extended where one fit and the search STOPPED there; otherwise
+   "nothing reusable found" was stated, and the new one placed via the decision tree and routed to the
+   matching per-type skill.
+3. The project's structure + styling + i18n conventions were followed, and a story was added if the
+   repo has a catalog.
+4. A line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

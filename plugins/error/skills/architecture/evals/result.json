@@ -1,0 +1,211 @@
+{
+  "trigger": {
+    "skill": "architecture",
+    "measured_at": "2026-09-07T09:28:21",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "14/16",
+    "accuracy": 0.875,
+    "baseline_accuracy": null,
+    "description_hash": "7db836fcf9abfe5548d3be969c84e7bd8cf94df06337b1ee79cdd60e24de6d1e",
+    "queryset_hash": "334e373f509992a5b5009336e5d16bddf7affd65fe18915f538afed4c5988d98",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "we map error codes to messages in like a dozen components — how do i get one place that decides copy and retry?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "design the app-wide error handling architecture for our Vue dashboard",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "review this diff for error-surfacing consistency — is every failure shown the same way?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "does this codebase follow one error-handling pattern or does each view roll its own?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "i want a single classifier table that decides toast vs block vs redirect per error code",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "audit how errors are displayed across the whole Angular app and tell me where it drifts",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "where should the session-expiry redirect fire — every catch site calls it right now and it feels wrong",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "adding a new error reason PAYMENT_REQUIRED — how much of the UI do i have to touch?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "our Svelte app blanks the whole page when one widget throws — how do we tier boundaries so siblings survive?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "just wrap this OrderTable component in an error boundary so it doesn't crash the parent",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "style the error tile — the retry button spacing is off and the icon is too big",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "what should the ErrorInfo.reason envelope look like on the wire and which status enum do i use?",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "add a new reason code to the backend registry and map it to an http status",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "translate these error strings into French",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "my useOrders hook is fetching twice on mount — debug the query",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a storybook story for the EmptyState component",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.6,
+    "skillscore": 0.93,
+    "guide_faults": [],
+    "verdict": "Guide-following output hits nearly every rubric line verbatim (one policy table with placement/retryable/escalate columns, four consumer roles, tiered boundaries, single renderer owning session-escalation, explicit architecture-test diff touching only table+i18n) and correctly defers the wire envelope to error:format; isolated baseline is also strong (better on Apex bulk-failure/idempotency/correlation-id specifics) but never instantiates a concrete table, never names tiered boundaries or a single escalation owner, and offers no architecture-test proof."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "2565618bd2c0b58c1eceb53c1b9c2f97488bbb5c44d455cb870525b34c0cc0bc",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Plain documentation aimed at humans/architecture guidance, no model-directive language."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network calls or data transmission anywhere; skill has no scripts."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No credentials; only fictional/example reason codes like Pkg__RATE_LIMITED."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts or shell commands exist in this skill (only SKILL.md)."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "All content is readable prose and plain pseudocode, nothing encoded."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No fetch/download logic present; skill is documentation only."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reads of ~/.ssh, .env, or any credential store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, cron, or persistence mechanisms; no executable content at all."
+      }
+    ]
+  }
+}

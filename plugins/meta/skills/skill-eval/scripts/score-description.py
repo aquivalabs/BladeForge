@@ -359,6 +359,12 @@ def render(name, description, result, bar, base_acc=None, skill_type="self-conta
     print()
 
 
+def _canonical_trigger_hash(trigger):
+    return hashlib.sha256(
+        json.dumps(trigger, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+
+
 def save_result(skill_path, queryset, current, cur_result, base_acc, args):
     """Write evals/result.json so a measurement survives the session that took it.
 
@@ -383,7 +389,7 @@ def save_result(skill_path, queryset, current, cur_result, base_acc, args):
         "accuracy": round(accuracy(rows), 3),
         "baseline_accuracy": round(base_acc, 3) if base_acc is not None else None,
         "description_hash": hashlib.sha256(current.encode()).hexdigest(),
-        "queryset_hash": hashlib.sha256(Path(queryset).read_bytes()).hexdigest(),
+        "queryset_hash": _canonical_trigger_hash(json.load(open(queryset))["trigger"]),
         "eval_type": "description-triggering",
         "method": ("score-description.py: the skill is installed as a real .claude/skills/<name>/ "
                    "and each query runs as a nested `claude -p`; a query counts as TRIGGERED when "
@@ -391,8 +397,16 @@ def save_result(skill_path, queryset, current, cur_result, base_acc, args):
         "results": cur_result.get("results", []),
     }
     dest = Path(skill_path, "evals", "result.json")
+    prev_acc = None
+    if dest.exists():
+        try:
+            prev = json.loads(dest.read_text())
+            prev_acc = prev.get("acceptance") if "trigger" in prev else None
+        except Exception:
+            prev_acc = None
+    wrapped = {"trigger": out, "acceptance": prev_acc}
     tmp = dest.with_suffix(".json.tmp")
-    tmp.write_text(json.dumps(out, indent=2) + "\n")
+    tmp.write_text(json.dumps(wrapped, indent=2) + "\n")
     tmp.replace(dest)
     print(f"\n  saved {dest}")
 
@@ -401,7 +415,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--skill-path", help="skill dir (required unless --from-result)")
     ap.add_argument("--from-result", help="render a saved run_eval JSON, no new eval")
-    ap.add_argument("--queryset", help="default: <skill>/evals/trigger-eval.json")
+    ap.add_argument("--queryset", help="default: <skill>/evals/rubric.json (its trigger half)")
     ap.add_argument("--baseline-description", help="default: the git HEAD version")
     ap.add_argument("--model", default="opus")
     ap.add_argument("--runs", type=int, default=5,
@@ -437,6 +451,8 @@ def main():
 
     if args.from_result:
         result = json.load(open(args.from_result))
+        if isinstance(result, dict) and "trigger" in result:
+            result = result["trigger"]
         name = result.get("skill_name", "") or os.path.basename(os.path.dirname(os.path.dirname(args.from_result)))
         render(name, result.get("description", "(from saved result)"), result, args.bar,
                skill_type=args.type, suggest=args.suggest, why=not args.no_why,
@@ -446,13 +462,13 @@ def main():
     if not args.skill_path:
         sys.exit("--skill-path is required (or use --from-result)")
     skill_path = os.path.abspath(args.skill_path)
-    queryset = args.queryset or os.path.join(skill_path, "evals", "trigger-eval.json")
+    queryset = args.queryset or os.path.join(skill_path, "evals", "rubric.json")
     if not os.path.isfile(queryset):
         sys.exit(f"no queryset at {queryset} — create one first")
 
     current = description_from_text(Path(skill_path, "SKILL.md").read_text())
     baseline = args.baseline_description or git_head_description(skill_path)
-    queries = json.load(open(queryset))
+    queries = json.load(open(queryset))["trigger"]
     clean = re.sub(r"[^a-z0-9-]", "-", os.path.basename(skill_path).lower()) + "-probe"
 
     with tempfile.TemporaryDirectory() as ws:

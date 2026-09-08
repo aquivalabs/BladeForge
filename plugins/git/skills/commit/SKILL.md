@@ -2,6 +2,20 @@
 description: Use this skill whenever the user asks to commit, create a commit, or push changes — e.g. "commit this", "let's commit", "make a commit". First syncs docs/skills owned by the changed area, then splits into atomic logical commits.
 ---
 
+# Commit — atomic logical commits
+
+## Contract
+
+**In:** a working tree with uncommitted changes and a request to commit or push · the repo's
+`CLAUDE.md`, which names any doc or skill that owns a changed area.
+
+**Out:** the changes are committed as a sequence of ATOMIC logical commits — one concern each, each
+one building, conventionally prefixed, foundational changes before their consumers — with any doc or
+skill owned by a changed area updated in the same set. This IS the acceptance criteria for the run.
+
+---
+
+
 ## Current git state
 
 !`git status`
@@ -39,3 +53,16 @@ Analyze the changes above and split them into atomic logical commits. Rules:
 4. Show the final commit list to the user.
 
 Do not ask for confirmation — analyze and execute the split directly.
+
+
+---
+
+## Before you finish
+
+1. `git log --oneline` the commits you just made: each is ONE concern, carries a conventional prefix
+   (`feat`/`fix`/`refactor`/`chore`/`docs`/`test`), and its message names at most 2–3 actions.
+2. No unrelated concerns share a commit, and nothing that belonged was left unstaged.
+3. Foundational changes land before their consumers — no commit references something a later commit
+   introduces.
+4. Any doc or skill the `CLAUDE.md` mapping ties to a changed area was updated in this same set (Step 0).
+5. A line broken? Re-split and return to step 1.

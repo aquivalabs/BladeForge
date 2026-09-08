@@ -1,111 +1,170 @@
 {
-  "skill": "skill-eval",
-  "measured_at": "2026-09-01T18:44:11",
-  "model": "sonnet",
-  "runs_per_query": 3,
-  "best_score": "12/12",
-  "accuracy": 1.0,
-  "baseline_accuracy": 0.75,
-  "description_hash": "ebe558ddffa4a2679f3929f5df943cb6ae4d8739dd0bdbc880c22e7ca9a947aa",
-  "queryset_hash": "821efce9194d6ca9877dde8feb86e76daa25408d8f5131a9b66475a6680df244",
-  "eval_type": "description-triggering",
-  "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
-  "results": [
-    {
-      "query": "i just finished writing a new skill's description and i want to know if it actually triggers before i publish it \u2014 how do i measure that",
-      "should_trigger": true,
-      "triggers": 3,
-      "runs": 3,
-      "trigger_rate": 1.0,
-      "pass": true
-    },
-    {
-      "query": "my skill scores 0 recall in the eval, it never seems to fire even though the description looks right. what's going on and how do i get honest numbers",
-      "should_trigger": true,
-      "triggers": 3,
-      "runs": 3,
-      "trigger_rate": 1.0,
-      "pass": true
-    },
-    {
-      "query": "run the trigger eval on plugins/frontend-css/skills/responsive-layout and tell me the pass rate",
-      "should_trigger": true,
-      "triggers": 2,
-      "runs": 3,
-      "trigger_rate": 0.6666666666666666,
-      "pass": true
-    },
-    {
-      "query": "is this skill good enough to ship, or is its description too narrow to trigger on real queries",
-      "should_trigger": true,
-      "triggers": 2,
-      "runs": 3,
-      "trigger_rate": 0.6666666666666666,
-      "pass": true
-    },
-    {
-      "query": "i edited the description of an existing skill \u2014 measure whether it still triggers on the should-fire cases without firing on the near-misses",
-      "should_trigger": true,
-      "triggers": 3,
-      "runs": 3,
-      "trigger_rate": 1.0,
-      "pass": true
-    },
-    {
-      "query": "which eval harness should i use to test skill triggering \u2014 skill-creator's run_eval keeps giving me zeros",
-      "should_trigger": true,
-      "triggers": 3,
-      "runs": 3,
-      "trigger_rate": 1.0,
-      "pass": true
-    },
-    {
-      "query": "one of my eval cases fired on 1 of 2 runs \u2014 what does that mean and what do i do about it?",
-      "should_trigger": true,
-      "triggers": 3,
-      "runs": 3,
-      "trigger_rate": 1.0,
-      "pass": true
-    },
-    {
-      "query": "a should-not-trigger query fired in my results \u2014 is that a real problem or noise?",
-      "should_trigger": true,
-      "triggers": 3,
-      "runs": 3,
-      "trigger_rate": 1.0,
-      "pass": true
-    },
-    {
-      "query": "scaffold a brand new skill for parsing CSV files \u2014 where does the SKILL.md go and what's the folder naming",
-      "should_trigger": false,
-      "triggers": 0,
-      "runs": 3,
-      "trigger_rate": 0.0,
-      "pass": true
-    },
-    {
-      "query": "refresh the metadata.yaml sidecar for this skill, i changed its bundled script and hooks",
-      "should_trigger": false,
-      "triggers": 0,
-      "runs": 3,
-      "trigger_rate": 0.0,
-      "pass": true
-    },
-    {
-      "query": "the pre-push gate is blocking my push saying the trigger eval is missing \u2014 what file do i add",
-      "should_trigger": false,
-      "triggers": 0,
-      "runs": 3,
-      "trigger_rate": 0.0,
-      "pass": true
-    },
-    {
-      "query": "write me a python script that measures cyclomatic complexity of a codebase",
-      "should_trigger": false,
-      "triggers": 0,
-      "runs": 3,
-      "trigger_rate": 0.0,
-      "pass": true
-    }
-  ]
+  "trigger": {
+    "skill": "skill-eval",
+    "measured_at": "2026-09-01T18:44:11",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "12/12",
+    "accuracy": 1.0,
+    "baseline_accuracy": 0.75,
+    "description_hash": "ebe558ddffa4a2679f3929f5df943cb6ae4d8739dd0bdbc880c22e7ca9a947aa",
+    "queryset_hash": "6cbfba5649fc8b8c1837ed0185eeed160cca7c5a400c86861f92c688c51eba92",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "i just finished writing a new skill's description and i want to know if it actually triggers before i publish it — how do i measure that",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "my skill scores 0 recall in the eval, it never seems to fire even though the description looks right. what's going on and how do i get honest numbers",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "run the trigger eval on plugins/frontend-css/skills/responsive-layout and tell me the pass rate",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "is this skill good enough to ship, or is its description too narrow to trigger on real queries",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "i edited the description of an existing skill — measure whether it still triggers on the should-fire cases without firing on the near-misses",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "which eval harness should i use to test skill triggering — skill-creator's run_eval keeps giving me zeros",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "one of my eval cases fired on 1 of 2 runs — what does that mean and what do i do about it?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "a should-not-trigger query fired in my results — is that a real problem or noise?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "scaffold a brand new skill for parsing CSV files — where does the SKILL.md go and what's the folder naming",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "refresh the metadata.yaml sidecar for this skill, i changed its bundled script and hooks",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the pre-push gate is blocking my push saying the trigger eval is missing — what file do i add",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write me a python script that measures cyclomatic complexity of a codebase",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T18:43:40",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "56e5010ea1228fd2a24e6313039c211d7c06b203ed1b1d1e2f720eb52b4caf58",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "SKILL.md and script prompts are instructions to the tool author, no hidden directives aimed at overriding the reading agent"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "script only reads local skill files/git and invokes local claude binary; no data sent to any external endpoint"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "no embedded keys/tokens/credentials found in SKILL.md or script"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "only benign subprocess calls: git rev-parse/show, and claude -p invocations; no rm -rf, force-push, dd, or mass delete"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain readable Python, no base64/hex payloads or eval of decoded blobs"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "no urllib/requests/curl/http calls anywhere in the script"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "no reads of ~/.ssh, ~/.aws, .env, keychain, or cookie stores"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "no sudo, setuid, or persistence via cron/shell-profile/launch agents"
+      }
+    ]
+  }
 }

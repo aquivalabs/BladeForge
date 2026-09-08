@@ -4,9 +4,15 @@ description: "Use when creating, editing, restructuring, or reviewing a React fr
 
 # Component Structure — BEM + SCSS + rem + i18n
 
-## When to Activate
+## Contract
 
-Any time a new React component is created, or an existing component is edited or its structure is reviewed.
+**In:** creating, editing, restructuring, or reviewing a React component — its folder layout, files,
+BEM naming, SCSS, rem sizing, i18n, error boundary, and barrel exports.
+
+**Out:** a kebab-case folder with a PascalCase `.tsx`, a kebab-case `.scss`, and an `index.ts` barrel;
+BEM naming; colours/spacing from tokens and sizes in rem; hover states in SCSS not inline handlers;
+user-visible strings through i18n; fallible components wrapped in an ErrorBoundary; and a controllable
+Storybook story. The checkable expectations are in `evals/rubric.json`.
 
 ---
 
@@ -204,6 +210,29 @@ skill.
 
 ---
 
+## QueryState — the standard dispatcher for a TanStack Query result
+
+Any component that renders a `useQuery`/`useSoqlQuery` result MUST dispatch through `QueryState`
+(`src/components/feedback/query-state/`) instead of hand-rolling `isLoading` / `isError` / empty
+branch trees:
+
+```tsx
+import { QueryState } from '@/components/feedback/query-state';
+
+<QueryState query={someQuery}>
+  {(data) => <DataGrid rows={data} />}
+</QueryState>
+```
+
+`QueryState` dispatches loading → error → empty → data, rendering `ErrorTile` for the error branch.
+It replaces the boundary's re-throw pattern for data that loads via TanStack Query — use it instead
+of (not in addition to) a manual `if (error) throw error`. It replaces the re-throw IDIOM only — the
+component still stays wrapped in its `ErrorBoundary`; `QueryState` is not a substitute for the boundary. The full error classification model
+(reason/status → tile variant, retry, session-expiry escalation) is documented in
+the project's error-format and design-system docs — don't duplicate it here.
+
+---
+
 ## Barrel exports (index.ts)
 
 Always export:
@@ -218,30 +247,18 @@ export type { FeatureBlockItemData } from './FeatureBlockItem';
 
 ---
 
-## Checklist — creating a new component
+## Before you finish
 
-- [ ] Folder is kebab-case
-- [ ] Component file is PascalCase `.tsx`
-- [ ] Style file is kebab-case `.scss`
-- [ ] `index.ts` barrel exports the component and its public types
-- [ ] BEM: block matches folder name, elements use `&__`, modifiers use `&--`
-- [ ] No inline `onMouseEnter`/`onMouseLeave` — hover states are in SCSS
-- [ ] Colors from `$color-*` or `var(--color-*)` (see `frontend-css:scss-modules`)
-- [ ] Spacing from `$space-*` / `$radius-*` (see `frontend-css:scss-modules`)
-- [ ] All sizes in rem (see `frontend-css:rem`)
-- [ ] Renders validly at every breakpoint — no overflow, readable text, discernible images, reflow not shrink (see `frontend-css:responsive-layout`)
-- [ ] All user-visible strings use `useTranslation` — no hardcoded text in JSX
-- [ ] Translation keys added to the correct JSON file in `src/i18n/locales/en/`
-- [ ] New page namespace registered in `src/i18n/index.ts` (if applicable)
-- [ ] Data/fallible component isolated by `<ErrorBoundary>` (or `withErrorBoundary`)
-- [ ] Storybook exercises the error/fallback (and other) states via a `select`-control arg — one controllable story, not per-state exports
-
-## Checklist — editing an existing component
-
-- [ ] Any new user-visible strings added via `useTranslation`, not hardcoded
-- [ ] New translation keys added to the existing JSON namespace file
-- [ ] No existing hardcoded strings left as-is if they were missed — fix them too
-- [ ] BEM structure preserved: new elements follow `&__element` pattern
-- [ ] No new inline hover handlers introduced
-- [ ] No new hardcoded color or spacing values — use tokens
-- [ ] Any new fetch/throw path sits inside an `ErrorBoundary`
+1. The folder is kebab-case, the component file PascalCase `.tsx`, the style file kebab-case `.scss`,
+   and `index.ts` barrels the component and its public types; BEM holds (block = folder name, `&__`
+   elements, `&--` modifiers) with no inline `onMouseEnter`/`onMouseLeave` — hover lives in SCSS.
+2. Colours from `$color-*`/`var(--color-*)`, spacing from `$space-*`/`$radius-*`, all sizes in `rem`,
+   and it renders validly at every breakpoint (no overflow, readable text, reflow not shrink).
+3. Every user-visible string uses `useTranslation` with keys in the correct `src/i18n/locales/en/`
+   file (a new page namespace registered in `src/i18n/index.ts`); every data/fallible component is
+   isolated by an `ErrorBoundary`; and Storybook exercises the error/fallback and other states via a
+   `select`-control arg — one controllable story, not per-state exports.
+4. When EDITING: new strings go through `useTranslation` (and any missed hardcoded ones are fixed too),
+   BEM is preserved, no new inline hover or hardcoded colour/spacing is introduced, and any new
+   fetch/throw path sits inside an `ErrorBoundary`.
+5. A line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

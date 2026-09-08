@@ -18,9 +18,9 @@ argued.
 1. A `SKILL.md` is added or changed and carries no `## Contract` section — mine, because a
    skill that does not say what it needs and what it produces gives the agent nothing to work
    against and the loop at the bottom nothing to compare to.
-2. A skill directory has no `evals/acceptance.json`, or has one that is neither a non-empty
-   array of strings nor an object carrying `not-applicable` with a reason — mine, because that
-   file is the only place the expectations live and an absent one cannot be measured.
+2. A skill directory has no `evals/rubric.json`, or its `acceptance` half is neither a
+   non-empty array of strings nor an object carrying `not-applicable` with a reason — mine,
+   because that half is the only place the expectations live and an absent one cannot be measured.
 3. A skill body carries a `## When to Activate` heading — mine, because it duplicates the
    `description` and the body is read only after the skill has been chosen, so the section
    answers a question that was already settled.
@@ -47,7 +47,7 @@ argued.
    different lens's subject.
 3. A bundled `scripts/*.py` has an unhandled error path or a magic constant — not mine; that is
    ordinary code quality, judged as code.
-4. A `trigger-eval.json` has fewer than six cases or lacks a negative — not mine; the
+4. A `rubric.json` has fewer than six cases or lacks a negative — not mine; the
    deterministic gate blocks that before a reviewer ever sees the diff.
 5. The advice a skill gives about its own domain is wrong — a CSS rule that does not hold, a
    Salesforce claim that is false — not mine; I judge declarations, not domain correctness.

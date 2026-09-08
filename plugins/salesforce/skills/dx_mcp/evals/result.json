@@ -1,0 +1,218 @@
+{
+  "trigger": {
+    "skill": "dx_mcp",
+    "measured_at": "2026-09-07T10:14:24",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "13/18",
+    "accuracy": 0.722,
+    "baseline_accuracy": null,
+    "description_hash": "00d26e6e7d64a2f038966538c232fb585faca9b57e8eec76a7eee8377483320e",
+    "queryset_hash": "f8f476eb51877ec7e6907fe256f361a01e7e34794211bf2b9ca5cc0de724816c",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "run the apex tests for MetricBuilderTest on myOrg",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "deploy WidgetConfigResource.cls and WidgetConfigResourceTest.cls to the org",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "query the org: SELECT Id, Name FROM Pkg__Widget_Config__c LIMIT 20",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "retrieve the ApexClass:MetricBuilder metadata from myOrg",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "which org alias should I use for this project?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the deploy job is still running, resume it with the test run id",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "list all my connected orgs and their aliases",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "run a tooling API query to check code coverage for MetricBuilder",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "push the widgetSettings metadata to the myOrg scratch org",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "what fields does Pkg__Data_View__c have",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "how does Pkg__RangeHandler work under the hood",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "run anonymous apex: System.debug('hello');",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "run a quick soql check — how many order records are synced",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "write test class for WidgetConfigResource",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "build a new lwc that shows widget cards",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "check this diff for soql injection vulnerabilities",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "deploy these classes and run the tests — use sf-deploy-test",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "describe Pkg__Widget_Card__c object fields and relationships",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "477405f16dd46a0b4102e7ce8968c3058411dc560d8af2f640922042ca4f1df3",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Plain instructional guidance, no directives aimed at overriding the model's actual instructions beyond stated scope"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No data is sent anywhere except standard MCP tool calls to the org itself"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No credentials, keys, or tokens present in the file"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "No shell commands executed at all; only recommends MCP tool calls over sf CLI"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain readable markdown, no encoded payloads"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No external network fetches beyond the user's own configured Salesforce org via MCP"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reading of ~/.ssh, ~/.aws, .env, or keychains; org auth handled entirely by the MCP server itself"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, persistence mechanisms, or shell profile/cron edits"
+      }
+    ]
+  }
+}

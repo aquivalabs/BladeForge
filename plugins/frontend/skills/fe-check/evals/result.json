@@ -1,0 +1,170 @@
+{
+  "trigger": {
+    "skill": "fe-check",
+    "measured_at": "2026-09-07T09:57:18",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "9/12",
+    "accuracy": 0.75,
+    "baseline_accuracy": 0.833,
+    "description_hash": "987529515c0e5886ec069b0c836cb514119bfce5a655dfb01692af811a27c008",
+    "queryset_hash": "6007769825b030a5e9848869847fa576452fb6f2e64392296fcf47229955ef39",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "i just finished editing this React component, can you typecheck and run its tests?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "run tsc and vitest on src/lib/order-summary.ts and give me a quick pass/fail",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "check that my TypeScript changes didn't break the build before i open a PR",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "quickly confirm types are clean and the widget-catalog tests still pass after my edit",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "run the targeted unit tests for cart-utils.test.ts plus a typecheck, terse summary please",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "did i break anything? typecheck the frontend repo and run the relevant test file",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "deploy this Apex class and its test class to the sandbox and tell me if tests pass",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a unit test for this new formatCurrency helper function",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "review my diff for bugs and simplification opportunities before i push",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "run anonymous Apex against the dev org to check the trigger fired correctly",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "add a Storybook story covering the loading and error states of this card component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "should i convert this hardcoded 16px margin to a rem value?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "b4d7ed5e604484ff7f54d7fc35b62891c2c1787b296afb54a36755210e1e20ad",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "No directives aimed at the model; plain contract/usage prose."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "Output stays local stdout; nothing sent anywhere."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No embedded keys/tokens/credentials."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Only npx tsc --noEmit and npx vitest run; no rm/force-push/chmod."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain readable bash, no base64/eval of decoded blobs."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "npx may resolve local deps but no explicit curl/wget/download-and-run to an external host."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reads of ~/.ssh, ~/.aws, .env, or keychain."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, or persistence edits to profile/cron/launch agents."
+      }
+    ]
+  }
+}

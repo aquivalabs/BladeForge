@@ -9,6 +9,17 @@ counterpart to `error:format`: that skill says what an error *is* on the wire; t
 UI *shows* it. The whole pattern is framework-independent except one primitive (catching a render
 throw), which a binding table maps onto each framework.
 
+## Contract
+
+**In:** defining, adopting, or reviewing a client/UI app's WHOLE error-handling architecture — where
+every failure surfaces and how adherence is checked, across any framework.
+
+**Out:** exactly one code-to-UX classifier table, every error surfaced through the state-dispatcher and
+the one shared renderer, every fallible subtree bounded, and adding a new code touching only the table
+and its i18n keys. The checkable expectations are in `evals/rubric.json`.
+
+---
+
 ## Prerequisite (hard): `error:format`
 
 Apply `error:format` FIRST. It owns the `status` (canonical enum) + `reason` (app code) vocabulary
@@ -96,40 +107,17 @@ authority.
 - **Your framework's component/primitive skill** (e.g. `frontend-react:ui-primitive-reuse`) — the concrete
   visual tiles/presets the renderer draws. This skill owns only the code→preset MAPPING, not the components.
 
-## Acceptance criteria (adherence checks)
+## Before you finish
 
-Apply these to a codebase to decide "does it follow the pattern?". Router / query-lib / session clauses
-are **conditional** — they bind only if the app uses that capability.
-
-1. **One classifier.** Exactly one code→UX policy table exists; no component maps a code to copy,
-   retry-ness, or escalation on its own.
-2. **No raw error text.** Every user-facing error string resolves from the table via an i18n key; a raw
-   `error.message`/status string is never rendered to a user.
-3. **Dispatcher, empty ≠ error, no I/O in render.** Every data view renders through the state-dispatcher
-   (loading → error → empty → data), not bespoke `isLoading/isError` trees; a 200-with-no-rows renders
-   the empty branch. *(Query lib: reads via the query layer, writes via the mutation channel. Query-less:
-   reads/writes via the one designated data-access seam.)* Never raw I/O in render.
-4. **Single renderer owns escalation** *(if a session/auth concept)*. The classified error is drawn by
-   the one shared error-tile renderer, which owns the session-end action — **grep-checkable: the
-   escalation call appears ONLY inside that renderer**, at no call site. *(Auth-less: satisfied vacuously,
-   no escalation effect.)*
-5. **Every fallible subtree is bounded.** A render-throwing subtree sits inside a boundary at its tier;
-   one failing block never blanks its siblings or the page.
-6. **Nested-boundary precedence.** When boundaries nest, the nearest enclosing one handles the throw; the
-   floor catches only escapes no inner boundary caught.
-7. **Reset / recovery.** A bounded subtree that threw exposes a retry/recover affordance where the code is
-   retryable — recovery without a full page reload.
-8. **Exactly one outer floor** *(if a router: above the router)*. A single outermost floor catches what
-   route-level boundaries cannot, including throws in the app shell. *(Router-less: one top-level boundary
-   satisfies the floor intent.)*
-9. **Channel → placement is fixed.** For each channel the app actually uses, the error routes to its
-   prescribed placement (render-throw → boundary tile; *(query lib)* query-error → dispatcher tile,
-   mutation-error → toast; *(router)* loader/action error → route error element; uncaught async → floor).
-   Unused channels are exempt.
-10. **Behaviour is policy-driven.** Retry is offered only for reasons the table marks retryable;
-    redirect/sign-out only for auth/session reasons. A component never hardcodes "show a retry button."
-11. **The architecture test.** Adding a brand-new error code touches ONLY the policy table and its i18n
-    keys — zero component changes. If a new code forces a component edit, the pattern is violated.
+1. Exactly one code-to-UX policy table owns classification; no component maps a code to copy, retry, or
+   escalation itself, and no raw `error.message`/status is rendered — strings resolve from the table via
+   an i18n key.
+2. Every data view renders through the state-dispatcher (loading -> error -> empty -> data), the shared
+   renderer alone owns escalation, every fallible subtree is bounded with correct nesting/floor, and
+   channel -> placement is fixed for the channels the app uses.
+3. The architecture test passes: adding a new error code touches ONLY the policy table and its i18n
+   keys — zero component changes.
+4. A criterion fails? Fix it and re-check. Full expectations → `evals/rubric.json`.
 
 ## Worked example (framework-neutral pseudocode; render-throw bound to Vue)
 

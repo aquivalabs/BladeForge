@@ -6,6 +6,17 @@ description: Use when deciding where a piece of documentation belongs — a deci
 
 Documentation decays for two reasons. Nothing says which kind of text a given document is, so every text drifts into every role — a system description ends up living inside a skill file. And nothing ties a document to the change that invalidates it. This skill names four kinds of document, says where each belongs, and states the one rule that keeps a mechanism doc attached to its code.
 
+## Contract
+
+**In:** a piece of documentation whose home is being decided (a decision, a mechanism, a rule, or a
+frozen record), a project adopting or auditing this standard, or a mechanism doc drifting from its code.
+
+**Out:** each document lives in the layer that matches its kind — ADR, live doc, skill, or frozen —
+or the ungoverned bucket; a change to a declared mechanism moves its doc in the same PR; the
+deterministic check passes. The full checkable expectations are in `evals/rubric.json`.
+
+---
+
 ## The four layers
 
 Each layer has one duty and one update discipline. Merging any two forces one of them to lie.
@@ -41,7 +52,7 @@ Pick a few mechanisms; do not try to cover all of them. The mechanism list is a 
 
 ## The update rule
 
-A change touching a declared mechanism updates that mechanism's doc in the same pull request. An exemption is declared in config where a reviewer sees it, never granted silently. The structure rules — index agreement, required fields, internal links — have no such exemption: an exemption from being correct would not be an exemption, it would be a hole.
+A change touching a declared mechanism updates that mechanism's doc in the same pull request. **Verify every technical claim against the shipped code before writing it** — a live doc's whole premise is that it tracks real behaviour, so a fluent description of an algorithm/field/flow the code does not actually have is worse than no doc. And a real mechanism outgrows the seeded skeleton: once it has genuine surface, the page carries tables, cross-links to specs and backlog gaps, and inline caveats about known limits — do not ship a page thinner than the house norm just because the toy example was four bare sections. An exemption is declared in config where a reviewer sees it, never granted silently. The structure rules — index agreement, required fields, internal links — have no such exemption: an exemption from being correct would not be an exemption, it would be a hole.
 
 **Two traps in writing that config, both of which have shipped.** The `exempt` field releases the *whole* mechanism, every path it declares — so using it to note that one path was deliberately left uncovered releases the covered ones too, and the doc a reader trusts most becomes the one nothing enforces. A deliberately-uncovered path belongs in the doc's own update-trigger prose, which disables nothing. And `paths` are matched with `fnmatch`, where `**` is a plain wildcard with no zero-segment meaning: `src/**/hooks/**` requires a directory between the two and silently covers none of `src/hooks/`. Declare both shapes when you mean both, and check a `!` exclusion actually excludes something — one whose include never reached the file is dead config advertising coverage the matcher does not deliver. Both traps read as working config, which is why they need naming rather than discovering.
 
@@ -87,19 +98,14 @@ The installer stops where the judgement starts, and the seeded config is a templ
 8. **Delete the seeded worked example once a real mechanism exists.** The installer leaves one, deliberately, as a shape to copy. Left in place beside real pages it is a document describing something the project does not have, in the one layer whose whole promise is that its pages match the code.
 9. **If `acknowledgedEmptyMechanisms` goes in, file the task to take it out.** The flag is an interim state a reader can see, not a resting place. An adoption that sets it and records nothing has installed a gate that passes because it covers nothing, which is worse than no gate: the next reader believes the coverage is real.
 
-## Acceptance criteria
+---
 
-A project that adopted this standard is done when:
+## Before you finish
 
-- Every layer declared in config has a directory that exists, and every one of those directories, except the frozen layer's, holds a `README.md`.
-- The mechanism list is non-empty, or `acknowledgedEmptyMechanisms` is set on purpose.
-- Every mechanism in the list names a doc that exists.
-- `scripts/docs-check.py` exits zero on the project.
-- The hook is wired, and a push that violates a declared pair is actually rejected — installed is not the same as working.
-- No document sits under two declared layer roots.
-- The project's agent-instruction file follows the content rules above; only the line cap is machine-checked, the rest is a human read.
-- `surfaceRules.paths` names an instruction file that exists, and the seeded worked example is gone.
-- Every layer the project actually has is declared, the frozen one included, and none of them is split across two directories.
-- No docs directory holds a single document, and every directory that survives has a reason a reader can state. This is the one criterion about the ungoverned bucket, and it is here because a project can satisfy every other item with its sprawl untouched — which is the shape of a green gate over an unchanged tree.
-
-The first four items are what the check tests. The last three it cannot see, and each was missed by a real adoption: a line cap pointed at an absent path reports nothing, an undeclared layer is coverage the config claims and lacks, and the worked example is a page describing something the project does not have. Read them by eye before calling an adoption done.
+1. `python3 scripts/docs-check.py` exits zero — the deterministic half (paths, index agreement,
+   declared pairs) passes.
+2. By eye, walk the items the check cannot see: every layer the project has is declared (frozen
+   included) and none is split across two roots; the instruction file the line cap points at exists;
+   the seeded worked example is gone; no docs directory holds a single document.
+3. A change touching a declared mechanism updated that mechanism's doc in the SAME change.
+4. Any item fails? Fix it and return to step 1. The full expectations → `evals/rubric.json`.

@@ -1,5 +1,5 @@
 ---
-description: Use when adding or handling any error path on any layer — throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend).
+description: "Use when adding or handling any error path on any layer — throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend). Do NOT use to design the whole app's error-handling architecture — the single code-to-UX policy table (error:architecture) — or to wrap one component in a boundary or style one error tile (your framework's component skill); this skill owns the wire envelope and the reason vocabulary."
 ---
 
 # error:format — one error format everywhere
@@ -7,6 +7,17 @@ description: Use when adding or handling any error path on any layer — throwin
 Errors follow the **Google AIP-193 / `google.rpc.Status`** standard (RFC 9457 lineage) on every
 layer — backend and frontend use the SAME envelope, so an error is handled identically regardless
 of where it came from.
+
+## Contract
+
+**In:** an error path being added or handled on any layer — a throw from a service/route/controller,
+a mapping of an upstream failure, or reading an error on the client.
+
+**Out:** the error travels as the `google.rpc.Status` envelope with a registry-resolved `reason`, raw
+and upstream failures normalized at the boundary, and the client branching on `status`/`reason` — the
+checkable expectations are in `evals/rubric.json`.
+
+---
 
 ## The envelope
 
@@ -33,29 +44,15 @@ of where it came from.
 3. **Register every new reason** in the registry doc in the SAME change.
 4. **Frontend consumes by `status` / `reason`** (never a magic number); `message` is display text.
 
-## Acceptance criteria
+---
 
-A reviewer confirms an app follows THIS skill (the envelope + reason vocabulary) when every check
-below holds. Each is objective and applies to any layer/stack.
+## Before you finish
 
-1. **Envelope at every boundary.** Every error crossing a layer boundary (service/route/controller →
-   transport → client) is the `google.rpc.Status` envelope `{ error: { code, status, message,
-   details } }`. No boundary emits an ad-hoc shape such as `{ error: "some string" }` or a bare
-   text/HTTP body — e.g. a failed `POST /api/items` returns the envelope, not a raw string.
-2. **Branchable status + code.** `status` is one of the canonical enum values and `code` is its
-   matching HTTP integer; a consumer can branch on `status` without parsing `message`.
-3. **Exactly one reason registry.** One enumerable `reason` registry exists per side, and every
-   app-specific failure resolves its `reason` there. Each `reason` maps to a `status` + an HTTP code
-   in that one place — no call site mints a bespoke numeric/string code inline.
-4. **reason lives in ErrorInfo.** App-specific codes appear only as `details[].ErrorInfo.reason`,
-   never as a bespoke top-level `name` / `codeNumber` / sibling field.
-5. **Normalized at the boundary.** Every raw/upstream failure is converted to the envelope where it
-   crosses in; no raw driver text, stack trace, or internal identifier (e.g. a `Pkg__` platform
-   error) leaks past it. `DebugInfo` appears only in sandbox/dev, never in a prod client response.
-6. **Message text is dictionary-sourced.** Human `message` text comes from the `reason → text`
-   dictionary (extracted, i18n-ready), not hardcoded string literals at throw sites.
-7. **Client reads structurally.** The client branches on `status` / `reason` only; no code path keys
-   off a `message` substring or a magic number to decide UX.
-8. **One place to extend.** Adding a new failure (e.g. an `Order__c` lock on `myOrg`, or a rejected
-   `WidgetConfig`) adds exactly one `reason` entry — registry + dictionary — in a single change; the
-   reason is not duplicated across call sites or re-declared per layer.
+1. Walk each error path you changed: does it emit the `google.rpc.Status` envelope at the boundary, or
+   an ad-hoc `{ error: "string" }` / bare body? Every boundary must be the envelope.
+2. Its app-specific code is a `details[].ErrorInfo.reason` resolved through the ONE registry — not a
+   bespoke top-level field and not an inline magic number.
+3. Raw/upstream text, stacks, and internal identifiers are normalized away at the boundary; `DebugInfo`
+   is dev-only. The client branches on `status`/`reason`, never a `message` substring.
+4. A new failure added exactly one `reason` entry (registry + dictionary) in this change.
+5. Any check fails? Fix it and return to step 1. Full expectations → `evals/rubric.json`.

@@ -1,0 +1,181 @@
+{
+  "trigger": {
+    "skill": "layout-components",
+    "measured_at": "2026-09-07T09:41:13",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "9/12",
+    "accuracy": 0.75,
+    "baseline_accuracy": null,
+    "description_hash": "76f11d2fd7550f8615f185d9de668daaded6f4078d1987e858232896488bf309",
+    "queryset_hash": "c08af924b101d0417d6125bd047dbb28d9c006c7d3cd757f70ac2cd2d30eae21",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "add a collapsible section to the sidebar nav for the new admin area",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "the top bar needs a global search / command palette trigger button, where should that live?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "we need a global overlay that shows a maintenance banner across every page — how should I structure it?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "refactor the app shell so the sidebar can collapse to icons only",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "add a new nav item and route guard for the reports section in the app chrome",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "build a command palette (cmd+k) component that overlays the whole app",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "build a CustomerOrdersTable component that fetches and renders order line items",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "do we already have a reusable dropdown primitive before I build a new one?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "how should I organize this component's folder — tsx, scss, and index files?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a loading skeleton for the async-loaded dashboard widget",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a Storybook story covering the empty and error states for this card",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "route this button's label text through the project's i18n setup",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.55,
+    "skillscore": 0.95,
+    "guide_faults": [
+      "The guide's output format leans into a rule-by-rule audit narration (\"Rule 1... Rule 2...\") rather than producing an integrated design doc; this satisfies the rubric's checklist but yields less concrete, directly-usable output (no actual CSS/grid mechanics, no a11y/responsive treatment) than a plain competent design would naturally include."
+    ],
+    "verdict": "With-guide explicitly satisfies all six rubric criteria (chrome-vs-feature placement + folder path, primitives sourcing, routing-config discipline for nav, i18n, story convention) that the isolated baseline never addresses at all, though baseline compensates with richer concrete CSS/a11y/responsive detail the guide doesn't push for."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "0d270abbcfe8715d4694e58e2b5e34c078ad3835558266bb912ea0db39248f4c",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "SKILL.md is plain rules/contract prose for a React layout-components skill; no directives aimed at the model to override instructions."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network calls or data-sending logic present; skill has no scripts/references at all."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials anywhere in the file."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts/ directory exists; skill contains no shell commands whatsoever."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Entire file is readable markdown prose, no encoded blobs or eval."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No fetch/download/curl logic; nothing but a text rubric."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, .env, keychain, or any credential store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, cron, launch agent, or persistence mechanism anywhere in the skill."
+      }
+    ]
+  }
+}

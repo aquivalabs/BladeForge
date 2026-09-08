@@ -1,0 +1,112 @@
+{
+  "secretAllowlist": [
+    "AKIA0000000000000000"
+  ],
+  "agents": [
+    {
+      "name": "craft",
+      "enabled": false,
+      "threshold": 7,
+      "skills": []
+    },
+    {
+      "name": "architecture",
+      "enabled": false,
+      "threshold": 8,
+      "skills": []
+    },
+    {
+      "name": "tests",
+      "enabled": false,
+      "threshold": 7,
+      "skills": []
+    },
+    {
+      "name": "security",
+      "enabled": false,
+      "threshold": 9,
+      "skills": []
+    },
+    {
+      "name": "skill",
+      "enabled": true,
+      "threshold": 8,
+      "skills": [
+        "meta:new-skill",
+        "meta:update-skill",
+        "meta:skill-eval",
+        "meta:ockham",
+        "scout:scout"
+      ],
+      "checks": [
+        {
+          "name": "catalog-compiles",
+          "command": "python3 scripts/gen_catalog.py"
+        },
+        {
+          "name": "eval-shapes-valid",
+          "command": "for f in $(git diff --name-only origin/main...HEAD | grep 'evals/rubric.json$'); do python3 scripts/validate_eval.py \"$f\" >/dev/null || echo \"INVALID: $f\"; done"
+        }
+      ]
+    },
+    {
+      "name": "docs",
+      "enabled": true,
+      "threshold": 8,
+      "skills": [
+        "docs:standard",
+        "meta:wittgenstein"
+      ],
+      "pairedDocs": [
+        {
+          "code": "scripts/eval-gate.sh",
+          "doc": "docs/mechanisms/skill-eval.md",
+          "severity": "major"
+        },
+        {
+          "code": "scripts/validate_eval.py",
+          "doc": "docs/mechanisms/skill-eval.md",
+          "severity": "major"
+        },
+        {
+          "code": "scripts/validate_acceptance.py",
+          "doc": "docs/mechanisms/skill-eval.md",
+          "severity": "major"
+        },
+        {
+          "code": "scripts/validate_security.py",
+          "doc": "docs/mechanisms/skill-eval.md",
+          "severity": "major"
+        },
+        {
+          "code": "plugins/meta/skills/skill-eval/scripts/*",
+          "doc": "docs/mechanisms/skill-eval.md",
+          "severity": "major"
+        },
+        {
+          "code": "hooks/pre-push",
+          "doc": "docs/mechanisms/skill-eval.md",
+          "severity": "major"
+        }
+      ]
+    },
+    {
+      "name": "leak",
+      "enabled": true,
+      "threshold": 9,
+      "skills": [
+        "cerberus:leak-check"
+      ]
+    },
+    {
+      "name": "security-scan",
+      "enabled": true,
+      "threshold": 9,
+      "skills": [
+        "cerberus:security-scan"
+      ],
+      "rules": [],
+      "pairedDocs": []
+    }
+  ]
+}

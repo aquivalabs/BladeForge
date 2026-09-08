@@ -4,6 +4,17 @@ description: "CLI fallback that deploys Salesforce Apex/metadata to an org and r
 
 # sf-deploy-test — deploy + run tests (CLI fallback, terse summary)
 
+## Contract
+
+**In:** a project dir with an `sf`-authed org (default `myOrg`) · what to deploy — `--source-dir`
+or `--metadata`, repeatable · optional `--tests <ClassA,ClassB>` · the colocated `sf-deploy-test.sh`.
+
+**Out:** a two-line summary instead of parsed CLI or MCP JSON — `deploy: Succeeded` /
+`deploy: Failed — <problems>` / `deploy: ERROR — <message>`, and, only when `--tests` was given,
+`tests: X/Y passed` (with `— FAIL: <names>` when any failed).
+
+---
+
 A colocated script (`sf-deploy-test.sh`, in this skill's directory) wraps
 `sf project deploy start` (+ optional `sf apex run test`) and prints a two-line summary.
 
@@ -41,3 +52,12 @@ If a deploy fails with `The filepath "../<other-repo>/…" contains unsafe chara
 the CLI is resolving a shared object across sibling repos. This is an environment/source-tracking
 issue, not a code problem — it will show up as `deploy: ERROR — …`. Deploy that shared object
 from its owning repo, or resolve the cross-repo source-tracking state before retrying.
+
+
+## Before you finish
+
+1. Read the two lines top-down: the `deploy:` line first, the `tests:` line only if you passed
+   `--tests`.
+2. `deploy: Succeeded` is the ONLY pass. `Failed` and `ERROR` both mean the org did NOT take the
+   code — a green `tests:` line under a failed deploy is testing the OLD deployed code, not yours.
+3. Wrong? Fix the deploy (see the Gotcha for the cross-repo path error) and repeat from 1.

@@ -1,0 +1,104 @@
+{
+  "trigger": [
+    {
+      "query": "i've got a spec for a new handler layer in this apex package (interface, abstract base, factory, concrete impl) — sketch how the classes connect, with their methods, so i can open it in a browser and read it",
+      "should_trigger": true
+    },
+    {
+      "query": "draw the data flow for the widget-config feature — the queueable that writes, the selector that reads, the DTO facade — i want a readable page, not a wall of text",
+      "should_trigger": true
+    },
+    {
+      "query": "can you make a diagram of how Widget_Config__c, the handlers and the two permission sets fit together? something i can actually click around and explore",
+      "should_trigger": true
+    },
+    {
+      "query": "draw the architecture of feature TICK-000 from the plan — every class with its methods and relations, and make it clean and readable",
+      "should_trigger": true
+    },
+    {
+      "query": "the record-flow diagram we have is hard to read, nodes overlap and the text is tiny — fix the layout and make it nicer",
+      "should_trigger": true
+    },
+    {
+      "query": "i want a picture of how the data-sync layer enters the controller and goes down to the store, with the methods on each block, as its own page",
+      "should_trigger": true
+    },
+    {
+      "query": "sketch the relationships between these ~12 apex classes so a new dev can understand the whole feature at a glance",
+      "should_trigger": true
+    },
+    {
+      "query": "make a how-it-works schematic of the data refresh pipeline that i can share as a standalone html file",
+      "should_trigger": true
+    },
+    {
+      "query": "visualize the object model — the object, its fields, and which permset grants what — as its own readable page",
+      "should_trigger": true
+    },
+    {
+      "query": "i need a flow diagram: where the brief is read from, where it's written, and what that DTO facade between them is",
+      "should_trigger": true
+    },
+    {
+      "query": "no spec for this, just the code — draw how these three files interact: RangeHandler.cls, RangeFieldHandler.cls, RangeHandlerFactory.cls",
+      "should_trigger": true
+    },
+    {
+      "query": "i inherited this module and there's zero documentation — read the classes in force-app/main/default/classes and draw me a readable how-it-works picture so i can get oriented",
+      "should_trigger": true
+    },
+    {
+      "query": "there's no design doc, just make a schema of everything in the brief flow by reading the source, as an html page i can browse",
+      "should_trigger": true
+    },
+    {
+      "query": "draw a diagram spanning our react app AND the apex backend AND a couple of lambdas — the node kinds are all different and i want them visually distinct",
+      "should_trigger": true
+    },
+    {
+      "query": "plot quarterly sales from this csv in my downloads as a bar chart with axis labels",
+      "should_trigger": false
+    },
+    {
+      "query": "explain in words how the sealed-base pattern works in RangeHandler — no picture needed, just walk me through it",
+      "should_trigger": false
+    },
+    {
+      "query": "this svg icon broke, fix the path data so it renders properly again",
+      "should_trigger": false
+    },
+    {
+      "query": "create an ERD for our salesforce objects in Lucidchart and share the link with the team",
+      "should_trigger": false
+    },
+    {
+      "query": "show me a dashboard of the metrics for the last full week — signups / active / churn",
+      "should_trigger": false
+    },
+    {
+      "query": "add a mermaid sequence diagram to the PR description showing the login handshake between the SPA and the BFF",
+      "should_trigger": false
+    },
+    {
+      "query": "convert this hand-drawn architecture photo i took of the whiteboard into an editable excalidraw",
+      "should_trigger": false
+    },
+    {
+      "query": "just render the existing record-flow.html and take a screenshot, don't change anything",
+      "should_trigger": false
+    },
+    {
+      "query": "generate an ascii flowchart of the CI pipeline steps to paste into the README",
+      "should_trigger": false
+    }
+  ],
+  "acceptance": [
+    "a diagram-model JSON (<name>.diagram.json) is the single source of truth — nodes carry id / name / kind / summary and, where the kind implies members, rows; ownership is a parent nesting and every real dependency is an edge, never memory or a raw code read",
+    "the model was hardened by 3 diverse-lens Sextants returning JSON findings, applied deterministically by the Shaper until a round surfaced no new S1 (hard cap 3 rounds), not trusted from a single pass",
+    "built into ONE self-contained docs/diagrams/<name>/<name>.html via build-spec-diagram.mjs (model inlined, libraries from CDN, no sibling files); a malformed model, a dangling edge, a duplicate id, or a parent cycle fails the build loud",
+    "the render was captured with shot.mjs and the PNG was actually Read and judged — legible nodes, non-garish CVD-safe colours, no overlaps, minimal crossings, a generated legend, working select/panel — not trusted from the source",
+    "the encoding is automatic from the model: kind -> colour is stable and name-derived (a curated KIND_HUE override pins common kinds to conventional, well-separated hues, else a stable name-hash into the fixed OKLCH palette) + shape past the hue cap; the badge GLYPH is curated for common kinds with a generic fallback for the rest; domain -> translucent zone; a react/apex/lambda mix stays visually distinct",
+    "no THIN nodes: every node's detail panel is worth opening — a fuller description, real rows with a plain-language means, and a source ref, not a one-line summary; build-spec-diagram.mjs reports thin nodes and a detail panel was actually opened and judged"
+  ]
+}

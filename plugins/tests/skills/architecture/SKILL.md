@@ -4,6 +4,17 @@ description: "Use when writing, reviewing, moving, or speeding up a unit test �
 
 # Test Architecture
 
+## Contract
+
+**In:** a unit test being written, reviewed, moved, or sped up — deciding which execution tier it
+belongs to, what it must satisfy to be accepted, or how the coverage and mutation gates apply.
+
+**Out:** the test's tier is declared by its filename, it satisfies the §2 unit-test contract, its case
+space was derived by the axis walk, it reads as an open book, and the coverage and mutation gates pass.
+The checkable expectations are in `evals/rubric.json`.
+
+---
+
 ## Find it fast
 
 | the question | where the answer is |
@@ -680,3 +691,18 @@ minutes, so it belongs on a schedule and never in the pre-push hook. The rate it
 
 What is not allowed: a retry count. Automatic retries convert a real intermittent defect into a
 green build, which is the single most expensive thing a test suite can do.
+
+
+---
+
+## Before you finish
+
+1. The test file's execution tier is declared by its filename (the `*.dom.test.ts` marker for the DOM
+   tier), and the test satisfies §2's unit-test contract — one behaviour, deterministic, no shared
+   mutable state, a legible assertion.
+2. The case space was derived by walking the fixed axis list — each inapplicable axis named — not by
+   inventing cases; and the test reads as an open book (the name states the scenario, no logic in the
+   body).
+3. The coverage gate (uncovered-line cap + floor) and the mutation gate (the configured `break`) both
+   pass; every §5 in-force rule holds, a not-yet-enforced one marked rather than dropped.
+4. A line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

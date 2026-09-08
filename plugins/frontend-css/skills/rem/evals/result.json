@@ -1,0 +1,227 @@
+{
+  "trigger": {
+    "skill": "rem",
+    "measured_at": "2026-09-04T18:07:17",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "18/18",
+    "accuracy": 1.0,
+    "baseline_accuracy": null,
+    "description_hash": "380363b26431012631bee21868374e7ca15839d8b27d5390da64b5bf9649b966",
+    "queryset_hash": "dce2ca86a1bc4cd0894090198cd294664ef45f7781dfdda6b411a6f31e09f9b7",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "the SidebarNav.tsx padding is 14px hardcoded, make it consistent with our spacing scale",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add margin-top: 24px to the card header in card-header.scss",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "I see font-size: 16px in DashboardPanel.scss, should that be in rem?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "convert all the px values in modal.scss to the right units for accessibility",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the gap between widget cards is gap: 12px — change it to scale with browser zoom",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "tailwind class p-[10px] on Button.tsx — is that correct or should it be something else?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "our h2 font-size is hardcoded to 20px in typography.scss, fix that",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "review the spacing in data-table.scss for any absolute pixel values that break zoom accessibility",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "width: 320px on the sidebar feels wrong — what unit should we use so it respects the root font size?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add a 1px border-bottom to the table header row in DataTable.scss",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "set box-shadow: 0 2px 8px rgba(0,0,0,0.1) on the dropdown card",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the svg icon in NavIcon.tsx has width='24' height='24' — fix the svg attributes",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "switch the component stylesheet from .css to .scss and add the variables import",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add $color-primary to the variables file and use it in the button styles",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "create a new SCSS module for the EntryForm component following BEM",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the button label says 'Submit' in JSX, route it through useTranslation",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "set letter-spacing: 0.5px on the badge text — is that acceptable?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "stroke-width on the chart SVG paths should stay in px, right?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.2,
+    "skillscore": 1,
+    "guide_faults": [],
+    "verdict": "Both agents converted all four values correctly to rem (this task has no px-allowed edge cases to distinguish them); the guide added a bit more rigor — an explicit rule citation and a verification grep — while the isolated agent padded the answer with an unrequested, hedged guess at token variable names, so the guide's version is marginally cleaner but not meaningfully more correct."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "43ae515037e1b8f10d85b8f7a731b949f938bc7d70dabf65871f5dbabc7a975c",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "No directives aimed at the model beyond normal skill instructions."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network or data transmission of any kind."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials present."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Only a documented read-only grep example; no scripts exist in this skill dir."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain markdown, fully readable, no encoded blobs."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No URLs or fetch/download logic anywhere."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, or any credential store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, cron, launch agent, or profile edits."
+      }
+    ]
+  }
+}

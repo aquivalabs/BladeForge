@@ -1,0 +1,60 @@
+{
+  "trigger": [
+    {
+      "query": "i need to build an OrderHistoryPanel that fetches a customer's past orders and lets support reps issue refunds — where does this go and how should it be structured?",
+      "should_trigger": true
+    },
+    {
+      "query": "add a new InvoiceTable feature that joins line items with customer data and computes totals with our business rules",
+      "should_trigger": true
+    },
+    {
+      "query": "we're adding a whole new domain area for subscription management — plans, billing cycles, upgrade/downgrade logic — how should i lay out the feature components?",
+      "should_trigger": true
+    },
+    {
+      "query": "editing the ShipmentTracker block: it needs to call the data layer for live status and hold the retry/escalation logic itself",
+      "should_trigger": true
+    },
+    {
+      "query": "this ProductCatalogEditor component mixes business rules for pricing tiers with UI — is that logic supposed to live here or somewhere else?",
+      "should_trigger": true
+    },
+    {
+      "query": "building a CustomerProfileCard that renders real account data and needs to compose existing buttons/inputs instead of hand-rolling new controls",
+      "should_trigger": true
+    },
+    {
+      "query": "i need a generic reusable Tooltip component for the whole app — nothing domain-specific, just a UI primitive",
+      "should_trigger": false
+    },
+    {
+      "query": "this component file is in the wrong folder — help me restructure it into its own directory with proper BEM class names",
+      "should_trigger": false
+    },
+    {
+      "query": "add a loading skeleton for the OrderHistoryPanel while its data fetches",
+      "should_trigger": false
+    },
+    {
+      "query": "write a Storybook story covering the default, empty, and error states of the InvoiceTable component",
+      "should_trigger": false
+    },
+    {
+      "query": "set up the top navigation bar and sidebar shell for the app",
+      "should_trigger": false
+    },
+    {
+      "query": "convert this component's hardcoded pixel padding values to rem units",
+      "should_trigger": false
+    }
+  ],
+  "acceptance": [
+    "the thing is confirmed domain-coupled, not a generic primitive (a generic control goes to ui-primitive-reuse first)",
+    "it is placed under the features area grouped by domain, reusing an existing domain where it fit — a new top-level domain only when none fits",
+    "the UI is composed from existing primitives; no control was re-implemented inside the feature (a missing control is a primitive task first)",
+    "data access goes through the project's data hooks/client, never ad hoc inside the component and never bypassing the layer",
+    "business logic, state, and domain rules live in the feature, not pushed into the primitives",
+    "structure follows component-structure, user-visible strings route through the project's i18n, and a story was added if the repo has a catalog"
+  ]
+}

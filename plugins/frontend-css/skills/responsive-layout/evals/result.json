@@ -1,0 +1,245 @@
+{
+  "trigger": {
+    "skill": "responsive-layout",
+    "measured_at": "2026-09-07T09:33:16",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "13/20",
+    "accuracy": 0.65,
+    "baseline_accuracy": null,
+    "description_hash": "df2265c78bc9dc24209d41009e963e0308fbc9f18fba74fe8640467360587549",
+    "queryset_hash": "fef8ab03dd3ada4f6315c7e2d0a975a0a5d84458a87d0a24477af7ffa376340b",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "im building a new PricingCard component in React with three tiers side by side, can you scaffold it with the price, feature list and a CTA button",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "add a sidebar filter panel to the products page — checkboxes for category and a price range slider on the left, results grid on the right",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "this InvoiceTable looks cramped on my laptop, the last two columns get cut off. can you fix the layout",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "make the dashboard header responsive — logo left, nav center, user menu right, should collapse to a hamburger on mobile",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "i wrote a hero section with a big heading, subtext and an image on the right but on my phone the image is tiny and the text overflows",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "we dont have any breakpoints defined in this project yet, i want to start making the marketing page adapt to mobile and tablet",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "restyle the settings form so the labels and inputs sit in two columns on desktop but stack on small screens",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "creating a KpiTile that shows a number, a delta arrow and a sparkline — make sure it doesnt break on narrow widths",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "the modal footer buttons wrap weirdly and overlap on a 320px screen, and the border eats half the dialog",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "build a photo gallery grid, 4 across on desktop, 2 on tablet, 1 on phone",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "convert all these hardcoded px values in card.scss to rem",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "our BEM naming is inconsistent, can you refactor button.scss to use proper block__element--modifier structure",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "where should i put a new useDebounce hook, is there a registry for custom hooks in this repo",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "this react-query call refetches on every focus, how do i configure staleTime so the KPI cards stop hammering the API",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the /api/items endpoint returns a 502 sometimes, add proper error handling and a retry",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "translate all the hardcoded english strings in the checkout flow into i18n keys",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write jest tests for the formatCurrency util covering negative numbers and zero",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "my print stylesheet is wrong — the invoice should fit on one A4 page when printed, page-break after the totals",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the chart colors clash with our brand, update the palette tokens in _colors.scss",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "set up a Storybook story for the existing Avatar component with size and status variants",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.55,
+    "skillscore": 0.85,
+    "guide_faults": [
+      "The guide's rubric includes 'no content trapped behind sticky/fixed/overlay elements at any width', but the with-guide rationale table silently omits this axis entirely — no sticky header/footer/overlay is considered or ruled out as inapplicable, leaving it unclear whether it was checked or simply missed."
+    ],
+    "verdict": "Guide-assisted output hits ~10/11 rubric axes (respond-to() tokens, reflow-not-shrink, touch targets, chrome restraint, full-area states) versus the isolated baseline's ~8/11 — the baseline's biggest miss is exactly what the guide targets: hardcoded 768/1024/1440px breakpoints instead of project tokens."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "6812f90c69122d4ca5de6b0c0abb8224d2f0dee298d45142bf4a7ef34393c948",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Content is a normal how-to skill; no model-directed steering language."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network calls or data-sending logic anywhere in the material."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials present."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "No scripts/ directory exists; SKILL.md contains no shell commands at all."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain markdown, no encoded blobs or eval of decoded content."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No fetch/download/install references; only mentions browser devtools and Storybook addon by name."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, or any credential store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, cron, or persistence mechanisms mentioned."
+      }
+    ]
+  }
+}

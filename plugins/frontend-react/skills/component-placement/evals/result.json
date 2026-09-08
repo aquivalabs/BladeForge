@@ -1,0 +1,181 @@
+{
+  "trigger": {
+    "skill": "component-placement",
+    "measured_at": "2026-09-07T09:42:29",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "11/12",
+    "accuracy": 0.917,
+    "baseline_accuracy": null,
+    "description_hash": "d0e1477cc9f6d1f337b3907fcb6c45d2813c7a83ed6142887422e799b82a92f8",
+    "queryset_hash": "81f9fd771095360bb9101af9a8f157baa97d4781dbeee153459a140f4df7344e",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "I need to add a new card component to show order summaries — where should it live?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "can you scaffold a new React component for a notification badge?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "we need a settings panel widget, help me build it from scratch",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "I'm about to hand-roll a modal dialog component, what should I check first?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "add a new control for filtering the results table — should this be its own component?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "before I create this dashboard section component, is there something like it already?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "should this reusable button primitive live in the shared UI library or get built one-off?",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "review this diff for SCSS BEM naming and folder structure issues",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write a Storybook story for the Card component I just finished",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "our top nav bar needs a new dropdown item — how should the layout shell code be organized?",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "rename this custom hook and move it to the shared hooks folder",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "convert these hardcoded pixel margins in the panel's stylesheet to rem units",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.7,
+    "skillscore": 0.9,
+    "guide_faults": [
+      "Step 1.2 says \"search the catalog (Storybook)\" but gives no fallback method when no live Storybook/MCP search tool is available in-session — the with-guide agent hit exactly this gap and had to substitute a path-grep, leaving the catalog-search leg of Step 1 only partially satisfied."
+    ],
+    "verdict": "Guide-grounded output actually greps the real repo, finds real files (a file, a project a file), routes to the correct project-local skill, and gives a concrete conventions-matched folder structure; baseline invents plausible-but-wrong sibling component names (TextInput/NumberInput) with no repo verification — guide made this substantially more correct and actionable."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "89491a59e8b883d35ff071f935fedf837ed46d101a0081417c9c9388a995da72",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Only instructs the reading agent to invoke other named skills; no adversarial directive."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network/data-send actions of any kind."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No embedded keys/tokens/credentials."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts/ dir; SKILL.md contains no shell commands at all."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain markdown prose, nothing encoded."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No URLs or fetch/download instructions."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, or any credential store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, persistence, or profile/cron edits mentioned."
+      }
+    ]
+  }
+}

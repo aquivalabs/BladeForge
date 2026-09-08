@@ -1,7 +1,7 @@
 {
   "name": "frontend-react",
-  "description": "Frontend React skills \u2014 component structure, hooks registry, skeleton components, Storybook stories.",
-  "version": "2.0.0",
+  "description": "Frontend React skills — component structure, hooks registry, skeleton components, Storybook stories.",
+  "version": "2.0.1",
   "keywords": [
     "react",
     "components",

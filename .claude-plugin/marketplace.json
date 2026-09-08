@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "cerberus",
-      "description": "CERBERUS — leak guard for a public skills marketplace. A PostToolUse hook reminds you to run the cerberus:leak-check skill on every skill/reference/eval edit; that agent pass rewrites anything pointing to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an employer brand, or the aggregate product flavor) into a neutral fictional demo. No denylist by design.",
+      "description": "CERBERUS — the two-headed guard at the gate for a PUBLIC skills marketplace. A PostToolUse hook fires on every skill / reference / script / eval / manifest edit and reminds you to run BOTH heads before committing: cerberus:leak-check (outward — no real work identifier or secret escapes into the public marketplace) and cerberus:security-scan (inward — the eight-point consumer-safety checklist: prompt injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation, so nothing unsafe reaches whoever installs the skill). Both are agent judgment passes, no denylist by design — a list of the real names to catch would itself be the leak; the intelligence lives in the agent, not a regex.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -20,7 +20,7 @@
     },
     {
       "name": "cicero",
-      "description": "CICERO — the house voice. The numbered communication rules under one governing readability rule (result first, plain words, avoid a specialized term instead of glossing it, recommend one option, push back with reasons, honesty about verification, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level; a SessionStart hook shows a banner with a worked example of the finding-tree notation and picks the conversation language, and a UserPromptSubmit hook keeps the reply language current.",
+      "description": "CICERO — the house voice. The numbered communication rules under one governing readability rule (result first, plain words, recommend one option, push back with reasons, honesty about verification, stay in scope) ship as a force-for-plugin output style applied at the system-prompt level. Four floor rules are invariants; every other rule is a user-overridable default. 2.3.0 inverts the shape default: prose unless a trigger fires, with a checkable situation-to-shape map, a ban on two adjacent blocks sharing a shape, a measured device inventory in which bold is no longer load-bearing, and a bar-and-title heading. The honesty floor now forbids ending a turn on a promise — a turn ends DONE, BLOCKED, or CONTINUING-and-continuing — because asking an agent to narrate its progress is itself a documented cause of premature stopping. A SessionStart hook shows a banner with a worked example of the finding-tree notation and picks the conversation language; a UserPromptSubmit hook keeps the reply language current.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -29,7 +29,7 @@
     },
     {
       "name": "critique",
-      "description": "Adversarial critique — the house method for red-teaming a design, spec, or plan with diverse independent lenses, so a critique detects real defects instead of laundering a green stamp.",
+      "description": "Adversarial critique — the house method for red-teaming a design, spec, or plan with diverse independent lenses so a critique detects real defects instead of laundering a green stamp.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -39,7 +39,7 @@
     },
     {
       "name": "diagram",
-      "description": "Architecture / flow diagram authoring — turn a spec or raw code into a readable, clickable D2→ELK diagram (classes with methods, objects, permission sets, relations) as a browsable HTML page under docs/diagrams/<name>/. Node contents come from an Atlas entity list that parallel Sextant reviewer agents harden to zero edits.",
+      "description": "Architecture / flow diagram authoring — turn a spec or raw code into a readable, clickable diagram (classes with methods, objects, permission sets, relations) rendered as one browsable HTML page under docs/diagrams/<name>/. Builds a <name>.diagram.json model laid out with React Flow + ELK (elkjs), hardened by parallel Sextant reviewer agents over a capped review loop.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -77,7 +77,7 @@
     },
     {
       "name": "frontend-css",
-      "description": "Personal frontend CSS skills — rem units, SCSS modules.",
+      "description": "Frontend CSS/SCSS skills — rem units and SCSS-module structure, scoping & naming.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -131,7 +131,7 @@
     },
     {
       "name": "meta",
-      "description": "Personal meta skills — authoring new skills.",
+      "description": "Meta skills — authoring new skills, the OCKHAM minimal-entities discipline, and the WITTGENSTEIN clarity gate for specs & plans.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -140,7 +140,7 @@
     },
     {
       "name": "plan-gate",
-      "description": "Spec+Plan+Branch gate — a PreToolUse hook that blocks Edit/Write to code unless you are off the base branch (default `main`) AND a plan exists for the work: a branch task-id (e.g. FS-1234) must match a plan filename, else any branch-new or uncommitted plan file suffices. docs/ is always writable so the spec/plan itself is never blocked. Opt-in per repo via .claude/plan-gate.config.json; bypass one edit with AS_SKIP_PLAN_GATE=1.",
+      "description": "Spec+Plan+Branch gate — a PreToolUse hook that blocks Edit/Write to code unless you are off the base branch (default `main`) AND a plan exists for the work: a branch task-id (e.g. PROJ-1234) must match a plan filename, else any branch-new or uncommitted plan file suffices. docs/ is always writable so the spec/plan itself is never blocked. Opt-in per repo via .claude/plan-gate.config.json; bypass one edit with SKIP_PLAN_GATE=1.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -150,7 +150,7 @@
     },
     {
       "name": "review",
-      "description": "Stack-agnostic pre-push review framework — 5 reviewer agents, the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
+      "description": "Stack-agnostic pre-push review framework — eight reviewer agents (five on by default, plus skill, leak and security-scan for repos that publish skills), the /review orchestrator, and the secret-scan + attestation gate, all driven by a per-project .claude/review.config.json.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -188,7 +188,7 @@
     },
     {
       "name": "skillcraft",
-      "description": "Skill quality & improvement — measuring whether a guide skill actually helps, diagnosing where it falls short, and improving it without regressions.",
+      "description": "Skill quality & improvement — measuring whether a guide skill actually helps, diagnosing where it falls short, and improving it without regressions. Home for skill-improvement methods and metrics.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"
@@ -198,7 +198,7 @@
     },
     {
       "name": "tests",
-      "description": "Test standard as an installable plugin — the execution-tier split, the test contract, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent and the config a repository states its own numbers in.",
+      "description": "Test standard as an installable plugin — the execution-tier split, the test contract, the axes a case space is derived from, factories, matchers and fakes, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent and the config a repository states its own numbers in.",
       "author": {
         "name": "Roman Maslennikov",
         "email": "rmaslennikov@aquivalabs.com"

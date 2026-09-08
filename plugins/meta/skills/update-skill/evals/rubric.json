@@ -1,0 +1,74 @@
+{
+  "trigger": [
+    {
+      "query": "i just changed the body of the widget-catalog skill — can you refresh its metadata.yaml?",
+      "should_trigger": true
+    },
+    {
+      "query": "i added a new bundled script to this skill and swapped its allowed-tools — update the metadata sidecar",
+      "should_trigger": true
+    },
+    {
+      "query": "the scout hook nudged me after editing this SKILL.md, walk me through updating metadata.yaml before i commit",
+      "should_trigger": true
+    },
+    {
+      "query": "i rewrote the hooks.json for this skill — does its changes.tags still match reality?",
+      "should_trigger": true
+    },
+    {
+      "query": "this skill's purpose and needs fields are stale after my edits, re-run the metadata interview",
+      "should_trigger": true
+    },
+    {
+      "query": "i changed what the order-sync skill actually does — its metadata.yaml purpose no longer matches, fix it",
+      "should_trigger": true
+    },
+    {
+      "query": "this skill has no Contract section and still carries a When to Activate — bring it up to the standard",
+      "should_trigger": true
+    },
+    {
+      "query": "audit the order-sync skill against the house standard and rework whatever fails",
+      "should_trigger": true
+    },
+    {
+      "query": "add acceptance criteria to this existing skill — it has no evals/rubric.json acceptance half",
+      "should_trigger": true
+    },
+    {
+      "query": "its description summarises the workflow instead of saying when to use it — rewrite the frontmatter and fix the boundary",
+      "should_trigger": true
+    },
+    {
+      "query": "i want to create a brand-new skill for handling widget import errors — where does the SKILL.md go?",
+      "should_trigger": false
+    },
+    {
+      "query": "improve this skill's description so it triggers more reliably — run evals and score it",
+      "should_trigger": false
+    },
+    {
+      "query": "how do i structure a new React component in this project?",
+      "should_trigger": false
+    },
+    {
+      "query": "what's the naming convention for scss module files in this repo?",
+      "should_trigger": false
+    },
+    {
+      "query": "run the pre-push review before i merge this branch",
+      "should_trigger": false
+    }
+  ],
+  "acceptance": [
+    "the probe was run before any edit, and the path it selected was stated — a failing probe forces path A whatever the request asked for",
+    "the updated skill's body carries exactly one ## Contract section and no ## When to Activate section",
+    "the body ends in a ## Before you finish procedure that loops until clean, and repeats no expectation from the acceptance half of evals/rubric.json",
+    "evals/rubric.json (acceptance half) exists beside the skill, holding either an array of expectations or a not-applicable reason",
+    "conversation 1 was read out of the existing body and stated back, not re-asked; conversation 2 was re-asked with the human",
+    "for a marketplace skill, metadata.yaml matches what the skill now does and was written atomically",
+    "the owning plugin.json version was bumped, and the README.md line still describes the skill",
+    "meta:skill-eval was invoked and its script run from the repository, leaving a current evals/result.json — a rewritten description was re-measured rather than inheriting the old result (measurement is mandatory; no clone reachable means not done, never skipped)"
+  ]
+}

@@ -8,18 +8,18 @@ description: Before creating ANY shared/reusable UI primitive in a React codebas
 > library or styling system the project uses. Apply the discipline here; take the
 > concrete library and styling bindings from the project's *local* skills.
 
-## When to Activate
+## Contract
 
-Before creating or hand-rolling any **shared/reusable** control:
+**In:** about to create or hand-roll any shared/reusable UI primitive in a React codebase — a
+field/control (button, input, select, combobox…) or a structural/overlay primitive (dialog, tooltip,
+dropdown, badge, card…).
 
-- A field/control: button, input, textarea, checkbox, radio, switch, select,
-  combobox, slider, date picker, etc.
-- A shared overlay/structural primitive: dialog, sheet, popover, tooltip, dropdown,
-  menu, badge, card, separator, tabs, etc.
-- You're about to write raw `<input>`/`<select>`/`<button>` that other screens will
-  also need.
+**Out:** the primitives library was searched first, an existing primitive reused or extended where one
+fit, a genuinely-new one placed by scope and matching the project's UI-library + styling conventions
+(wrapping an accessible headless primitive over hand-rolled DOM), and a story added if the repo has a
+catalog. The checkable expectations are in `evals/rubric.json`.
 
-One-off, page-specific control → lighter (step 4), but still check the library first.
+---
 
 ## Instructions
 
@@ -45,10 +45,13 @@ One-off, page-specific control → lighter (step 4), but still check the library
 If the repo has a component catalog (Storybook…), a primitive isn't done until it has
 a story, so it surfaces in `component-placement`'s search step.
 
-## Checklist
-- [ ] Searched the primitives library/barrel for an existing one
-- [ ] Reused or extended it if present (no duplicate created)
-- [ ] If new: decided reusable vs page-local placement
-- [ ] Matched the project's existing UI-library + styling conventions
-- [ ] Preferred wrapping an accessible headless primitive over hand-rolled DOM
-- [ ] Added a story if the project has a catalog
+## Before you finish
+
+1. The project's primitives library/barrel was searched for the control by name (grep, not memory) —
+   an existing one reused, or extended via a `variant`/`size`/prop, rather than forked; no duplicate
+   created.
+2. A genuinely-new primitive was placed by scope (reusable → primitives folder matching the repo's
+   UI-library + styling conventions; one-off → the page's folder) and introduced no new stack; an
+   accessible headless primitive was wrapped over hand-rolled DOM where the project uses one.
+3. A story was added if the repo has a component catalog.
+4. A line fails? Fix it and re-check. Full expectations → `evals/rubric.json`.

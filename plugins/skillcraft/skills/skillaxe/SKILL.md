@@ -11,7 +11,7 @@ skill has fired, does its guidance make the output better, and where does it fal
 ## Contract
 
 **In:** a guide skill under test · a task it is meant to help with · the skill's own
-`evals/acceptance.json` (the expectations that define "done right") · optionally an embedding model
+`evals/rubric.json` (the expectations that define "done right") · optionally an embedding model
 for the two geometric axes.
 
 **Out:** a per-axis score with numbers (Quality Impact `d·m`, Instruction Compliance SkillScore, and —
@@ -33,7 +33,7 @@ Run the pipeline. Full worked detail, formulas, and the measured evidence → `r
    Instruction-Compliance rubric extracted from the guide — per rule: weight `w`, adherence `a`,
    rule-quality `g`, and **skill-fault `f`** (is a low score the guide's fault or the agent's).
 3. **Embeddings (optional, ~0 tokens).** Trigger Precision (cosine geometry over the produced
-   `trigger-eval.json`) and Solution-Path Coverage (mean-max cosine of plausible paths vs skill
+   `rubric.json`) and Solution-Path Coverage (mean-max cosine of plausible paths vs skill
    chunks). Skip cleanly and say so if no embedding model is reachable.
 4. **Attribute.** Rules with `f > 0` are the guide's own fixable weak spots. Everything else is agent
    behaviour, not a guide defect.

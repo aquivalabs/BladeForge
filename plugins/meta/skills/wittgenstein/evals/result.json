@@ -1,0 +1,229 @@
+{
+  "trigger": {
+    "skill": "wittgenstein",
+    "measured_at": "2026-09-04T20:05:40",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "10/18",
+    "accuracy": 0.556,
+    "baseline_accuracy": null,
+    "description_hash": "d20679c808f51720eb59aa80ddaafd6c97d24abb75ad1baac52885e21fa34ad9",
+    "queryset_hash": "3487cb53969936c4ac56ac573753a82b79b013c17cfce5456c0d30d9a4e39da8",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "review docs/superpowers/specs/widget-engine.md — is it clear enough for a non-technical manager?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "audit this implementation plan under docs/superpowers/plans/layout-modes.md for bloat and clarity",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "the design doc for TICK-000 has gotten long — run the clarity check on it",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "just finished writing the RFC for the error envelope format, check if a manager could follow it",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "this spec has a 40-line wall of prose in section 3, fix it",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "the plan doc buries the decision at the end — flip it so the bottom line is first",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "review the metric engine spec for undefined jargon and unclear sections",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "docs/superpowers/plans/transport-refactor.md feels padded — audit it and trim",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "i wrote a design note explaining the data-sync layer — check if a non-technical reader could understand it",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "write the design spec for the custom metric feature",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "i'm about to create a new RangeResolverFactory — do we need it?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "this apex class has too many responsibilities, refactor it",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write the brainstorm summary for the transport layer options — keep it terse",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "check my commit message for clarity",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "is the jira comment i wrote clear and short?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "this code comment in the BFF route is confusing — rewrite it",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "update the README for the docs repo",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "review this diff for security vulnerabilities",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.3,
+    "skillscore": 0.8,
+    "guide_faults": [
+      "The persona's fixed vocabulary ('Unsinn') is itself undefined jargon left ungloosed in an output whose own acceptance bar (#2) demands a non-technical reader grasp the point on first read — the guide's template isn't self-consistent with its stated criterion."
+    ],
+    "verdict": "Guide output hits the persona format tightly (Struck citations by section, terse verdict with word-count delta, refuses to fabricate the missing cases) while isolated baseline is equally rigorous but more verbose and hedges across three rewrite variants instead of committing — a modest, real edge for the guide, not a decisive one."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "5ff1553e2c6ff3b1cfd4cf8254519e171491bd34e75cb1fdb65926c9f00c8310",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Persona directives target the doc being reviewed, not the reading agent's own instructions; no override-prior-instructions language."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "n/a",
+        "note": "No network/data-send capability anywhere in the material."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials in SKILL.md or lore.md."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts/ directory and no shell commands executed by this skill."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain readable markdown prose throughout, no encoded payloads."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "n/a",
+        "note": "No fetch/download instructions present."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "n/a",
+        "note": "No references to ~/.ssh, ~/.aws, .env, or credential stores."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "n/a",
+        "note": "No sudo, cron, or profile/persistence edits anywhere in the material."
+      }
+    ]
+  }
+}

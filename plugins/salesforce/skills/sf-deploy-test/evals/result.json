@@ -1,0 +1,218 @@
+{
+  "trigger": {
+    "skill": "sf-deploy-test",
+    "measured_at": "2026-09-07T10:12:18",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "9/18",
+    "accuracy": 0.5,
+    "baseline_accuracy": null,
+    "description_hash": "438428f4364cc005d076fa197d86248706f2220e500afdeb6a39a38954352252",
+    "queryset_hash": "75c5ed43f1f12e055be3df3c90512a3c4c846cd9c882671f2fdf972363fcb6ce",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "deploy WidgetConfigResource.cls and WidgetConfigResourceTest.cls then run the tests",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "push the widgetSettings apex classes to myOrg and run MetricBuilderTest",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "deploy the whole widgetSettings package to the org and check test results",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "I updated RangeResolver — deploy it and verify the tests still pass",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "deploy metadata ApexClass:MetricBuilder and run MetricBuilderTest,RangeResolverTest",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "the deploy failed with a source-tracking unsafe path error — how do I fix it",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "deploy all classes under force-app/widgetSettings/default/classes/ to myOrg",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "run the apex tests for WidgetConfigResourceTest after deploying the latest changes",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "quick deploy-and-test cycle for OrderHandlerTest on the scratch org",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "run anonymous apex on the org: System.debug(UserInfo.getUserId());",
+        "should_trigger": false,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "quick soql: SELECT Id FROM Pkg__Widget_Config__c LIMIT 10",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "write the test class for WidgetConfigResource",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "how does Pkg__RangeHandler work",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "build an lwc dashboard component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "retrieve the WidgetConfigResource metadata from myOrg",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "check this diff for security issues",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "run a tooling query to check code coverage for MetricBuilder",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "list all connected orgs and their aliases",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "b2069d033b153fcaa0147a7248533397a3c12799b5302eeb546bad9b7379946e",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "No model-directed steering text; SKILL.md is plain usage/contract prose."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "Script only calls local sf CLI and parses its JSON output to stdout; nothing sent elsewhere."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No embedded keys/tokens/credentials; org auth relies on pre-existing sf CLI session via --org alias."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Only sf project deploy start / sf apex run test are run; no rm, force-push, dd, or chmod."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Inline python3 parsing blocks are plain readable JSON-handling code, not encoded payloads."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No curl/wget/network calls beyond the sf CLI's own org communication, which is the stated purpose."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reads of ~/.ssh, ~/.aws, .env, or keychain; relies on sf CLI's own auth store implicitly, not accessed directly."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, or persistence (cron/profile/launch agent) edits present."
+      }
+    ]
+  }
+}

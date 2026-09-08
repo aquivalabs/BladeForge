@@ -9,7 +9,7 @@ fan-out of agents.
 ## Contract
 
 **In:** a guide skill under test · a task the guide is supposed to help with · its own
-`evals/acceptance.json` (the expectations that define "done right").
+`evals/rubric.json` (the expectations that define "done right").
 
 **Out:** a per-axis score with numbers, a fault-attributed list of the guide's own weak spots
 (fixable) separated from agent mistakes (not the guide's problem), and — if you apply fixes — a
@@ -21,7 +21,7 @@ The paper carries heavy ML the marketplace does not need. Drop it; keep the judg
 
 | Original SkillAxe | In this method |
 |---|---|
-| Trigger Precision via embedding zones / UMAP | keep the axis, compute cosine on the skill's own `trigger-eval.json` positives/negatives; skip if no embedding model is reachable |
+| Trigger Precision via embedding zones / UMAP | keep the axis, compute cosine on the skill's own `rubric.json` positives/negatives; skip if no embedding model is reachable |
 | Solution-Path Coverage via embeddings | same — mean-max cosine of plausible solution paths against skill chunks; optional |
 | Quality Impact (LLM judge, `d·m`) | keep — LLM judge, no embeddings needed |
 | Instruction Compliance + fault attribution | **keep — this is the core.** It turns "came out bad" into a concrete guide edit |

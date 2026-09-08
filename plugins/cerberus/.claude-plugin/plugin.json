@@ -1,7 +1,7 @@
 {
   "name": "cerberus",
-  "description": "CERBERUS \u2014 the leak guard at the gate for a PUBLIC skills marketplace. A PostToolUse hook fires on every skill / reference / eval / manifest edit and reminds you to run the cerberus:leak-check skill; that skill is an AGENT judgment pass that reviews the change for anything pointing to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails, an employer brand, or the aggregate 'one specific company's product' flavor) and rewrites it to a neutral fictional demo before it ships. No denylist by design \u2014 a list of the real names to catch would itself be the leak; the intelligence lives in the agent, not a regex.",
-  "version": "2.0.2",
+  "description": "CERBERUS — the two-headed guard at the gate for a PUBLIC skills marketplace. A PostToolUse hook fires on every skill / reference / script / eval / manifest edit and reminds you to run BOTH heads before committing: cerberus:leak-check (outward — no real work identifier or secret escapes into the public marketplace) and cerberus:security-scan (inward — the eight-point consumer-safety checklist: prompt injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation, so nothing unsafe reaches whoever installs the skill). Both are agent judgment passes, no denylist by design — a list of the real names to catch would itself be the leak; the intelligence lives in the agent, not a regex.",
+  "version": "2.1.1",
   "keywords": [
     "security",
     "leak-guard",

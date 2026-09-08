@@ -4,9 +4,17 @@ description: "CSS Units \u2014 enforce rem for CSS/SCSS/Tailwind dimensions. Use
 
 # CSS Units — Always Use rem
 
-## When to Activate
+## Contract
 
-This is a passive rule that applies whenever writing or reviewing CSS, Tailwind, or inline styles.
+**In:** a stylesheet, component style, or Tailwind class carrying a hardcoded dimensional value —
+`px`, an arbitrary Tailwind px like `p-[10px]`, or an SCSS length — that is being written, reviewed,
+or made responsive.
+
+**Out:** every dimensional value that governs spacing, sizing, or typography is expressed in `rem`
+against a 16px base; `px` survives ONLY where it is genuinely pixel-bound (see the rule). This IS the
+skill's acceptance criteria — the property the changed styles must hold.
+
+---
 
 ## Rule
 
@@ -43,8 +51,22 @@ Use `px` only where `rem` is technically not appropriate:
 
 ## Why
 
-rem scales with the user's root font size preference, making the UI accessible and responsive to browser-level zoom/font-size settings. px is absolute and ignores user preferences.
+`rem` scales with the user's root font size preference, so the UI honours browser-level zoom and
+font-size settings. `px` is absolute and ignores them.
 
 ## Tailwind Note
 
-Tailwind's spacing scale is already rem-based. Prefer Tailwind utility classes (`p-2`, `text-sm`, `gap-4`) over arbitrary values (`p-[8px]`). When Tailwind doesn't have the exact value, use arbitrary rem: `p-[0.625rem]`, not `p-[10px]`.
+Tailwind's spacing scale is already rem-based. Prefer Tailwind utility classes (`p-2`, `text-sm`,
+`gap-4`) over arbitrary values (`p-[8px]`). When Tailwind lacks the exact value, use arbitrary rem —
+`p-[0.625rem]`, not `p-[10px]`.
+
+---
+
+## Before you finish
+
+1. Grep the styles you changed for a bare px in a size, spacing, or typography value:
+   `grep -nE ':\s*-?[0-9.]+px|\[[0-9.]+px\]' <changed files>`.
+2. Every hit is either converted to `rem` against the 16px base, or it is one of the allowed
+   pixel-bound cases (border-width, box-shadow offset, SVG attribute) — nothing else stays in px.
+3. Not clean? Convert the offender and return to step 1. You are done only when every remaining px is
+   an allowed case.

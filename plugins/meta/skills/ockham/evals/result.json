@@ -1,0 +1,227 @@
+{
+  "trigger": {
+    "skill": "ockham",
+    "measured_at": "2026-09-04T19:51:26",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "15/18",
+    "accuracy": 0.833,
+    "baseline_accuracy": null,
+    "description_hash": "b586951f759e35b0bf1fb6c87de542c16cd8b49a01d3b7950328e1a52470b1cc",
+    "queryset_hash": "9eaa9e1bacdd3139d49290316a590aeeefc807a2f3a0cbdd1eb87febb5e5f318",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "i'm about to add a new utils2.ts file for some date helpers",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "thinking of creating a new ErrorMapper class to sit between the BFF and the client",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": false
+      },
+      {
+        "query": "let me add a new top-level /helpers folder for shared stuff",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "going to create a new useWidgetCardData hook — we already have useWidgetMetrics but it's a bit different",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "adding a new AbstractBaseTransport wrapper around HttpClient — just in case we need it later",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "i want to create a new DateFormatterService class, it will just call toLocaleDateString",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "spinning up a new config key for list vs grid mode — might be useful in the future",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "creating a new EmbedErrorHandler.ts because the BFF one doesn't handle embed errors — well actually the BFF one does",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "adding a new prop variant=\"compact\" to the WidgetCard component for a future dashboard view",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "this function does two things — split it per SRP or is that overkill?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the widget-engine spec is bloated, audit it for clarity",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "how should i name a new skill i'm adding to the meta plugin",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "write the brainstorm summary for the transport refactor",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "review this diff for security issues",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "i have 3 call sites all doing the same date formatting — should i hoist that into a shared util?",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "what's the right model to use when spawning a fan-out agent?",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": false
+      },
+      {
+        "query": "add a storybook story for the new DashboardCard component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "my existing useApiClient hook is getting large — refactor it or leave it?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": {
+    "runner": "skillcraft:skillaxe",
+    "measured_at": "2026-09-07",
+    "model": "sonnet",
+    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
+    "quality_impact": 0.75,
+    "skillscore": 0.92,
+    "guide_faults": [],
+    "verdict": "Guide-driven output explicitly ran all three gates, named concrete triggers per entity, reused the existing Badge primitive and TanStack Query (avoiding the baseline's rule-violating speculative Zustand store), and shipped 9 justified entities vs. the isolated baseline's ~15 ungated ones with no reuse check."
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "57b7b0203d037022847486be9e7101f7c648a47e9e2f97def0c8923ae020f171",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Directives are self-addressed persona instructions to the acting agent about entity creation, not covert steering against the user's interest."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No network calls or data collection of any kind; pure reasoning checklist."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No keys/tokens/credentials present."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "n/a",
+        "note": "No scripts directory exists; no shell commands anywhere in the skill."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "ASCII art and prose only, fully readable, no encoded blobs."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No URLs, downloads, or external hosts referenced."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No references to ~/.ssh, ~/.aws, .env, or any credential store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, cron, launch agent, or profile edits; skill only contains philosophy/checklist text."
+      }
+    ]
+  }
+}
