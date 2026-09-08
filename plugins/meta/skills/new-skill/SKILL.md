@@ -137,7 +137,7 @@ expectations is not repeated there; it lives once, in `evals/rubric.json`.
 3. Create `plugins/<domain>/skills/<name>/SKILL.md` using the structure above.
 4. Make the `description:` frontmatter specific enough that Claude activates it only when truly relevant.
 5. **New domain only:** also create `plugins/<domain>/.claude-plugin/plugin.json`
-   (`{name, description, version, keywords, author:{name:"aquivalabs"}}` — `version` is semver,
+   (`{name, description, version, keywords, author:{name:"Roman Maslennikov", email:"rmaslennikov@aquivalabs.com"}}` — `version` is semver,
    `keywords` an array for marketplace discovery), then enable `<domain>@bladeforge` in the
    consuming repo's `.claude/settings.json → enabledPlugins`. `.claude-plugin/marketplace.json` is
    **hand-maintained** — add the entry yourself. There is no generator: `sync.sh` was deleted in

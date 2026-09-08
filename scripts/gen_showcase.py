@@ -9,7 +9,7 @@ Deliberately shows only REAL, curated data — purpose, when-it-fires, side effe
 the file bundle (names only), and the measured trigger score from evals/result.json.
 The SKILL.md BODY is NOT embedded: bodies can carry real identifiers, and this page is
 public, so the site links to the body on GitHub instead of copying it. Effect and
-security-scan metrics land here once stored per skill.
+the security-scan checklist and (where measured) the skillaxe effect score.
 """
 import json, os, math, html as _html
 
@@ -221,7 +221,7 @@ footer code{font-family:"JetBrains Mono",monospace;color:var(--muted)}
 </header>
 <main><div class="grid" id="grid"></div><div class="empty" id="empty" hidden>no skills match</div></main>
 <footer>Generated from <code>catalog.json</code> by <code>scripts/gen_showcase.py</code> — one source, no hand-maintained list.
-Each card shows what a skill does, when it fires, what it touches, and links out to its <code>SKILL.md</code> on GitHub. Quality &amp; security metrics land here once measured.</footer>
+Each card shows what a skill does, when it fires, what it touches, its measured trigger and security-scan results, and links out to its <code>SKILL.md</code> on GitHub.</footer>
 <div class="scrim" id="scrim"><div class="modal" id="modal"></div></div>
 <script id="data" type="application/json">__DATA__</script>
 <script>
@@ -257,7 +257,7 @@ function measureBlock(s){if(!s.trig)return'';const t=s.trig;
     <div class="mcell"><div class="k">best score</div><div class="v ${trigCls(t.acc)}">${esc(t.score)}</div><small>description-triggering</small></div>
     <div class="mcell"><div class="k">accuracy</div><div class="v">${pct}</div><small>vs baseline ${base}</small></div>
     <div class="mcell"><div class="k">runs/query</div><div class="v">${t.runs||'—'}</div><small>model ${esc(t.model||'—')}</small></div>
-  </div><div class="bmeta" style="margin-top:.5rem">measured ${esc((t.at||'').slice(0,10))} · security scan lands here once stored per skill</div></div>`;}
+  </div><div class="bmeta" style="margin-top:.5rem">measured ${esc((t.at||'').slice(0,10))} · ${t.runs} run(s)/query on ${esc(t.model||'')}</div></div>`;}
 function effectBlock(s){if(!s.effect)return'';const e=s.effect;
   return `<div class="m-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
     <div class="mcell"><div class="k">quality impact</div><div class="v ${effCls(e.qi)}">${(e.qi>=0?'+':'')+e.qi.toFixed(2)}</div><small>d·m, −1…+1</small></div>

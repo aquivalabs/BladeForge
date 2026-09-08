@@ -25,7 +25,7 @@ trigger score.
 ticket refs) and the site is public; `cerberus:leak-check` only runs on skill *edits*,
 not on this export path, so a verbatim body dump would publish any pre-existing leak.
 The page links to the body on GitHub instead of copying it. Effect and security-scan
-metrics are omitted until they are stored per skill.
+The measured trigger score is shown, the security-scan checklist is shown per skill, and the skillaxe effect score is shown where it has been measured.
 
 ## The `[skip ci]` trap (why the trigger looks the way it does)
 

@@ -1,7 +1,7 @@
 {
   "name": "diagram",
-  "description": "Architecture / flow diagram authoring — turn a spec or raw code into a readable, clickable D2→ELK diagram (classes with methods, objects, permission sets, relations) as a browsable HTML page under docs/diagrams/<name>/. Node contents come from an Atlas entity list that parallel Sextant reviewer agents harden to zero edits.",
-  "version": "2.1.0",
+  "description": "Architecture / flow diagram authoring — turn a spec or raw code into a readable, clickable diagram (classes with methods, objects, permission sets, relations) rendered as one browsable HTML page under docs/diagrams/<name>/. Builds a <name>.diagram.json model laid out with React Flow + ELK (elkjs), hardened by parallel Sextant reviewer agents over a capped review loop.",
+  "version": "2.2.0",
   "keywords": [
     "diagram",
     "architecture",
@@ -9,8 +9,7 @@
     "elk",
     "visualization",
     "flow",
-    "how-it-works",
-    "atlas"
+    "how-it-works"
   ],
   "author": {
     "name": "Roman Maslennikov",
