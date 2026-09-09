@@ -16,7 +16,8 @@
     "fix":           { "type": "string", "minLength": 1, "description": "the corrected shape, one plain sentence" },
     "fix_rationale": { "type": "string", "minLength": 1, "description": "why this fix removes the cause and beats the alternative" },
     "confidence":    { "enum": ["high", "medium", "low"], "description": "optional; add when the call is not obvious" },
-    "falsifier":     { "type": "string", "minLength": 1, "description": "optional; what evidence would overturn the finding" }
+    "falsifier":     { "type": "string", "minLength": 1, "description": "optional; what evidence would overturn the finding" },
+    "convergence":   { "type": "integer", "minimum": 1, "description": "DECLARED here only so a synthesized finding can validate — a lone critic never sets it; critique-run.schema.json is what REQUIRES it. Without this declaration `additionalProperties:false` rejects the field the run schema's allOf adds, and no synthesized run can ever validate." }
   },
   "allOf": [
     {

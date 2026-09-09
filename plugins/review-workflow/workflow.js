@@ -43,12 +43,42 @@ export const meta = {
 };
 
 const parsedArgs = typeof args === "string" ? JSON.parse(args) : args;
-const { base, hash, round, changedFiles, diffPath, config, agentsDir, machineFacts, priorPerAgent } =
+const { base, hash, round, attempt, changedFiles, diffPath, config, agentsDir, machineFacts, gateResults, priorPerAgent } =
   parsedArgs;
+
+// Deterministic gates — the external oracle layer. `machineFacts` are soft: a
+// failing one is EVIDENCE a lens weighs, never a block. Gates are the opposite —
+// each is a command `/review` ran over the change set (eval-gate, typecheck, the
+// test suite), and a nonzero exit REFUSES the attestation outright, exactly like
+// the secret scan does, regardless of how green every lens looks. This is what
+// stops the review gate from attesting a diff the deterministic pre-push gate
+// then rejects: the review now runs the same oracle the push does. Absent or
+// empty → nothing to enforce, and the review behaves as before.
+const gateList = Array.isArray(gateResults) ? gateResults : [];
+const failedGates = gateList.filter((gate) => gate && gate.exitCode !== 0);
 
 const changedFileList = Array.isArray(changedFiles) ? changedFiles : [];
 const configAgents = Array.isArray(config?.agents) ? config.agents : [];
 const persona = config?.persona || "";
+
+// The convergence clock. `round` resets to 1 whenever the diff hash changes — which
+// is EVERY time a finding is fixed — so it counts re-reviews of one frozen diff, not
+// the fix-and-re-review cycles a branch actually goes through. That reset is why the
+// minor-damper (round >= 3) never fired in practice and a review could grind on
+// indefinitely, one fixed finding surfacing the next. `attempt` is the cumulative
+// count the orchestrator derives from the distinct hashes already reviewed on the
+// branch (`.review/lens-stats.jsonl`); it does NOT reset on a fix. A caller that does
+// not pass it falls back to `round`, so the value is never below the per-hash clock.
+const cumulativeAttempt = Number.isInteger(attempt) && attempt > 0 ? attempt : round;
+// The hard cap. Adversarial review, like adversarial critique, never runs dry on its
+// own — each fix opens fresh surface, so "loop until every lens is green" has no fixed
+// point and a real run once ground through nine rounds. Convergence is imposed, not
+// awaited: past the cap the gate stops inviting another round and hands whatever
+// remains to a human to dispose (fix decisively, file to the backlog, or make the call
+// to override) — the manual "stop the ping-pong" intervention, encoded. The cap does
+// NOT lower the bar: a genuinely green round at the cap still attests; a still-red one
+// refuses AND says it will not loop again.
+const CONVERGENCE_CAP = 6;
 
 // ── The forced response schema ──────────────────────────────────────
 // One object, passed to every dispatched lens unchanged. `evidence` is
@@ -981,8 +1011,21 @@ const failedLenses = roundAdjustedAgents
 // full run and cannot be attested however green it looks. This is the other half of
 // the delta dispatch: cheap rounds are allowed, cheap attestations are not.
 const carriedNames = roundAdjustedAgents.filter((entry) => entry.carried).map((entry) => entry.name);
+// A run that judged zero lenses is not a review: an empty or all-disabled
+// `config.agents` used to satisfy every one of the eight criteria vacuously and
+// attest — the worst false-green in the system (a filed P0). Attestation now
+// requires at least one enabled lens to exist for this run to have judged.
+const noLensToJudge = enabledSet.length === 0;
 const attest =
-  failedLenses.length === 0 && refusedCriterion === null && carriedNames.length === 0;
+  !noLensToJudge &&
+  failedLenses.length === 0 &&
+  refusedCriterion === null &&
+  carriedNames.length === 0 &&
+  failedGates.length === 0;
+// True only when the gate is refusing AND the branch has already spent its budget of
+// re-review cycles. The orchestrator reads this to STOP looping — never to attest,
+// which the two gates above still decide on their own.
+const capReached = !attest && cumulativeAttempt >= CONVERGENCE_CAP;
 if (carriedNames.length > 0 && failedLenses.length === 0 && refusedCriterion === null) {
   log(
     `Gate: every dispatched lens passed, but ${carriedNames.length} verdict(s) were CARRIED ` +
@@ -990,13 +1033,26 @@ if (carriedNames.length > 0 && failedLenses.length === 0 && refusedCriterion ===
       `what an attestation rests on.`
   );
 }
-if (failedLenses.length > 0) {
+if (noLensToJudge) {
+  log("Gate: refused — no enabled lens in config; a review that judges zero lenses cannot attest.");
+} else if (failedLenses.length > 0) {
   const named = failedLenses
     .map((lens) => `${lens.name} ${lens.score}/${lens.threshold}${lens.blockers > 0 ? ` with ${lens.blockers} blocker(s)` : ""}`)
     .join(", ");
   log(`Gate: refused — lens verdict: ${named}`);
 } else {
   log(refusedCriterion === null ? "Gate: all eight criteria satisfied" : `Gate: refused — ${refusalReason}`);
+}
+if (failedGates.length > 0) {
+  const named = failedGates.map((gate) => `${gate.name} (exit ${gate.exitCode})`).join(", ");
+  log(`Gate: refused — deterministic gate failed: ${named}. The review runs the same oracle the pre-push gate does; a green lens table cannot attest over a red gate.`);
+}
+if (capReached) {
+  log(
+    `Gate: convergence cap reached — ${cumulativeAttempt} review attempts on this branch without a clean ` +
+      `full round. The gate will NOT invite another round; the remaining findings are for a human to ` +
+      `dispose (fix decisively, file to the backlog, or override).`
+  );
 }
 
 // ── Phase 7: Below-floor notice ──────────────────────────────────────
@@ -1044,8 +1100,33 @@ const uniquenessLine = (() => {
   return parts.length > 0 ? `\nuniqueness: ${parts.join(" · ")}${tail}` : "";
 })();
 
+// Both notices ride IN the report, which `/review` prints verbatim — a reader who
+// saw neither would take a zero-lens or capped run for an ordinary FAIL.
+const noLensNotice = noLensToJudge
+  ? "\n**NO ENABLED LENS:** `config.agents` is empty or every entry is disabled. A review that judges " +
+    "zero lenses cannot attest — enable at least one lens and re-run."
+  : "";
+const capNotice = capReached
+  ? `\n**CONVERGENCE CAP REACHED:** ${cumulativeAttempt} review attempts on this branch without a clean ` +
+    `full round. The gate will NOT loop again on its own — dispose the remaining findings (fix them ` +
+    `decisively, file them to the backlog, or make the call to override), then start a fresh review.`
+  : "";
+// A failed deterministic gate rides IN the report too: it refuses the attestation
+// exactly like a lens FAIL, and a reader seeing every lens green needs the one line
+// that says the oracle — eval-gate, typecheck, the suite — came back red.
+const gateNotice =
+  failedGates.length > 0
+    ? `\n**DETERMINISTIC GATE FAILED:** ${failedGates
+        .map((gate) => `\`${gate.name}\` (exit ${gate.exitCode})`)
+        .join(", ")}. The review runs the same external oracle the pre-push/CI gate runs, so a green ` +
+      `lens table cannot attest over a red gate. Fix what the gate reports, then re-review.` +
+      failedGates
+        .map((gate) => (gate.output ? `\n  ${gate.name}: ${String(gate.output).trim().split("\n").slice(-6).join(" ")}` : ""))
+        .join("")
+    : "";
 const report =
-  (notice ? `${preliminaryReport}\n${notice}` : preliminaryReport) + uniquenessLine + carriedNotice;
+  (notice ? `${preliminaryReport}\n${notice}` : preliminaryReport) +
+  uniquenessLine + carriedNotice + noLensNotice + capNotice + gateNotice;
 
 // ── Result ───────────────────────────────────────────────────────────
 
@@ -1074,8 +1155,10 @@ const perAgent = roundAdjustedAgents.map((entry) => ({
 
 return {
   attest,
+  capReached,
   refusedCriterion,
   failedLenses,
+  failedGates,
   perAgent,
   report
 };

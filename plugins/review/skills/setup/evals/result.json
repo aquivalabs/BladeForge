@@ -13,7 +13,7 @@
     "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
     "results": [
       {
-        "query": "this repo has no .claude/review.config.json yet — can you install the pre-push review gate?",
+        "query": "this repo has no .claude/review.config.json yet \u2014 can you install the pre-push review gate?",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
@@ -45,7 +45,7 @@
         "pass": true
       },
       {
-        "query": "onboard this repo onto the org's pre-push review gate — it's greenfield, nothing configured yet",
+        "query": "onboard this repo onto the org's pre-push review gate \u2014 it's greenfield, nothing configured yet",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
@@ -69,7 +69,7 @@
         "pass": true
       },
       {
-        "query": "the review gate flagged issues in my diff — walk me through fixing them",
+        "query": "the review gate flagged issues in my diff \u2014 walk me through fixing them",
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
@@ -113,9 +113,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-08T20:32:37",
+    "scanned_at": "2026-09-09T12:59:41",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "bdf987d4d8eed1a799ea1c448c647f8ae187f0dc7f12d32648becc237e54813d",
+    "scanned_hash": "18252127163281fe384b5bb29fc75a05660cbd500562fcd3b7851888fab17b43",
     "checklist": [
       {
         "n": 1,

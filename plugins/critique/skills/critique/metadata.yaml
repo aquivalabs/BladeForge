@@ -3,5 +3,5 @@ purpose: The house method for running an adversarial critique of a design, spec,
 best-for: Any team or pipeline that runs critique or red-team passes over designs, specs, and plans and wants the critique to actually catch defects rather than agree with the author.
 needs: [meta:model-routing]
 changes:
-  tags: []
-  notes: "Advisory only: gives the rules, biases, and anti-patterns for structuring an adversarial critique. It does not itself spawn critic agents, call APIs, or write files — the fan-out happens in whatever Workflow or agent-spawning code invokes the method (which is why it needs meta:model-routing)."
+  tags: [files, network, org]
+  notes: "Mostly advisory: gives the rules, biases, and anti-patterns for structuring an adversarial critique; the critic fan-out happens in whatever Workflow or agent-spawning code invokes the method (which is why it needs meta:model-routing). ONE exception — the 'Prototype to settle it' step: to settle an empirical finding the method MAY build and run a throwaway prototype (a spike) against the real environment, which executes code and writes scratch files, and whose further reach (network / API / org) depends on the claim being probed. That step is PERMISSION-GATED — the critic asks the human first and only skips the ask in an autonomous or pre-authorized run — and the spike is throwaway, never left in the artifact."

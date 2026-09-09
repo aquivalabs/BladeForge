@@ -1,0 +1,34 @@
+name: critique-tests
+# Guards the one thing `critique:critique` cannot self-check: that its two response schemas COMPOSE.
+# The run schema builds a finding as `allOf: [{$ref: critique/finding}, {required: [convergence]}]`,
+# while finding.schema.json is `additionalProperties: false` — so any property contributed only by
+# the allOf branch is "additional" and rejected. That shipped broken (v1.4.1 and earlier): every
+# synthesized run failed the validation the skill's own step 10 mandates, and nothing in the
+# repository checked it. The suite asserts the structural invariant (every allOf-added property is
+# declared in the finding schema — catching the CLASS, not just `convergence`) and then proves it
+# live with a real validator.
+#
+# Path-filtered on plugins/critique/** because the schemas and the suite are the whole subject —
+# nothing outside this plugin changes what it asserts.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "plugins/critique/**"
+
+permissions:
+  contents: read
+
+jobs:
+  critique-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the validator
+        # The structural half runs on stdlib alone; these two turn on the live-validation half.
+        run: pip install --quiet jsonschema referencing
+      - name: schema composability
+        run: python3 plugins/critique/tests/schema-composability.test.py

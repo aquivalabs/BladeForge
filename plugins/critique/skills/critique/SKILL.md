@@ -8,14 +8,14 @@ description: "Use when someone wants an existing design, spec, or plan ATTACKED 
 
 **In:** an artifact to critique — a design, spec, plan, or document — that can be split into
 layers or sections · the ability to spawn independent critic agents (not the author) · one rubric
-per critic. Read the evidence behind each rule in `references/evidence.md` when you need the why.
+per critic · permission to prototype where a finding is empirical, asked per spike or standing in an autonomous run. Read the evidence behind each rule in `references/evidence.md` when you need the why.
 
 **Out:** a single synthesized findings object as JSON — deduped, each finding grounded in an exact
 location with its failure mode and severity, weighted up where independent lenses converged (the shape
 is in *The answer — a JSON of findings*). Prose in the session's voice is rendered from it for the
 reader; the JSON is the source of truth. The critique FINDS; the human DECIDES what to fix.
 
-**Not in scope:** fixing the artifact (the human disposes), judging one document's clarity
+**Not in scope:** fixing the artifact (the human disposes — though a throwaway prototype to SETTLE whether a finding is real is in scope; see *Prototype to settle it*), judging one document's clarity
 (`meta:wittgenstein`), and reviewing a code diff (`review`). This skill is the method; a pipeline
 that has a critique phase calls it.
 
@@ -42,7 +42,11 @@ Ten rules. The first six shape the run; the last four keep the findings honest.
 2. **Diverse lenses — the single biggest factor.** Run 3–4 critics, each a DISTINCT angle
    (coherence · Ockham/minimalism · completeness/under-spec · breaks-under-real-cases). Vary the
    framing, and where you can the seed, tier, or model family. Identical critics just agree; the
-   diversity is what removes the shared blind spot.
+   diversity is what removes the shared blind spot. The 3–4 is the default a high-stakes artifact
+   earns; like rounds, the panel is **stakes-sized** — a calling pipeline may run a **single
+   disciplined critic** on a lower-stakes layer where the full panel is not worth its cost, and that
+   critic still carries every rule here, alone. What that forbids is a *lazy* lone critic standing in
+   for a panel that was warranted; a deliberately right-sized one is not that.
 
 3. **Per-layer, not whole-artifact.** Scope each critic to ONE component, in its own lane — "only
    layer X, do not stray". Step-level attention beats one outcome-level verdict by a wide margin and
@@ -62,7 +66,8 @@ Ten rules. The first six shape the run; the last four keep the findings honest.
 
 7. **Ground every finding in a location.** Each finding cites the exact field, section, or line and
    states the failure mode — why it bites. An ungrounded finding is noise; a grounded one is
-   checkable.
+   checkable. Where the claim is empirical rather than textual — a *can-it / does-it* — the grounding
+   is a probe and its output, not an argument (see *Prototype to settle it*).
 
 8. **Dedup by location, weight convergence.** When several lenses land on the same spot, that is a
    high-confidence signal — weight it up, do not collapse it to a single line.
@@ -72,6 +77,34 @@ Ten rules. The first six shape the run; the last four keep the findings honest.
 
 10. **Rounds: critique → revise → re-critique.** Fix between rounds; the next round attacks the
     FIXED artifact, so it finds the defects the fixes introduced rather than the ones already closed.
+
+---
+
+## Prototype to settle it — evidence over argument
+
+Rule 7 grounds a finding in a LOCATION. A whole class of findings, though, turns on an **empirical**
+question no amount of reading settles — a *can-it / does-it* claim: does this API actually return that
+shape, does a write from that execution context succeed, does the timing or ordering hold, does it
+really break at N. Reasoning about these confirms a plausible story, not the real one. **Where a
+finding is checkable by running something, ground it in a PROBE and its output, not in argument** — a
+critique that rests on a real result is far stronger than one resting on a convincing paragraph, and
+the spec or plan it hardens inherits that empirical floor. Do it as often as a finding is checkable,
+not only at the last round; the more of a critique stands on probes, the less of it is opinion.
+
+**Ask before you build; in an autonomous run you already may.** A prototype runs code and touches the
+environment, so it is gated. Name the finding and the exact question it turns on and ask the human —
+*"this hinges on whether X actually happens; may I spike it to settle it?"* — building only on a yes.
+When the run is **autonomous** — the user launched it to completion, or standing-authorized spikes —
+skip the ask and build. Either way keep the spike the **smallest thing that exercises the risky action
+itself** against the real environment, never an adjacent precondition: verifying "the data is present"
+does not prove "the write from that context succeeds". Observe, and record the verdict on the finding
+— **confirmed · refuted · unproven** — with the probe and its output in the finding's `evidence`. A
+refuted finding is dropped; an unproven one is stated as unproven, never as fact.
+
+**A spike is evidence, not a fix.** This does not breach rule 9: the prototype settles whether the
+finding is REAL; the human still disposes what to do about it. The spike is throwaway — it proves or
+kills the claim and is not left in the artifact. At the stopping boundary the same move is the exit: a
+persistent S1 says *prototype*, not argue a fourth round (see **Building is the real oracle**).
 
 ---
 
@@ -93,7 +126,8 @@ it: **S1** structural (the idea is wrong or breaks), **S2** significant, **S3** 
 - **The human is the oracle-substitute.** With no machine ground truth, a human calls "real hole vs
   nitpick" and calls done. Not optional — it is what replaces the missing oracle.
 - **Building is the real oracle.** After 2–3 rounds the return drops; if round 3 still finds S1, that
-  says PROTOTYPE, not run round 4. A spike is the test a design lacks.
+  says PROTOTYPE, not run round 4. A spike is the test a design lacks. The prototype tool is available
+  throughout, not only here (see *Prototype to settle it*); this is its use at the exit.
 - **Right-size effort.** Three rounds on a high-risk layer where a structural error is expensive, one
   on a low-risk one. Not every layer earns three.
 - **Entanglement is a stop signal.** When a round's new findings belong to an ADJACENT layer, this one
@@ -119,7 +153,7 @@ it: **S1** structural (the idea is wrong or breaks), **S2** significant, **S3** 
 
 ## Anti-patterns
 
-- One generalist critic instead of diverse lenses.
+- One *lazy* generalist critic standing in for a warranted panel (a deliberately stakes-sized single disciplined critic, per rule 2, is not this).
 - The author — or its model family, un-caveated — grading itself and being trusted.
 - Critics debating their way into agreement.
 - "Find any problems" with no rubric and no lane.
@@ -205,6 +239,10 @@ developer reading hundreds of these grasps each in a single pass. No stacked cla
 - `confidence` (`high`/`medium`/`low`) and `falsifier` (what evidence would overturn the finding) are
   optional — add them when the call is not obvious. They keep the critic honest, not dogmatic.
 - **No `convergence` here** — a lone critic cannot know how many others agree; the synthesizer adds it.
+  `finding.schema.json` DECLARES the field (optional) purely so a synthesized finding can validate at
+  all: with `additionalProperties: false`, a property contributed only by the run schema's `allOf`
+  branch is "additional" and gets rejected. `critique-run.schema.json` is what REQUIRES it.
+  `plugins/critique/tests/schema-composability.test.py` guards that composition.
 
 **The synthesizer merges all the critics into the whole output:**
 
@@ -229,7 +267,7 @@ developer reading hundreds of these grasps each in a single pass. No stacked cla
 **The shape is enforced, not requested.** The two schemas in `references/` are the authority —
 `finding.schema.json` for one critic's finding, `critique-run.schema.json` for the synthesizer's whole
 output. Both are strict: `additionalProperties: false` (no stray fields), `enum` on `severity` and
-`confidence`, `example` required for S1/S2, `lenses` at least 3, `rounds` at most 3, `stopped_because`
+`confidence`, `example` required for S1/S2, `lenses` at least 1 (a full panel is >= 3; a stakes-sized low-stakes layer may be one — rule 2), `rounds` at most 3, `stopped_because`
 one of the three allowed reasons. Enforce them in two places, because an LLM's "it matched" is not
 trusted:
 
@@ -248,12 +286,14 @@ instead of enumerating every one.
 
 ## Before you finish
 
-1. Count the critics that actually ran: `>= 3`, and name the DISTINCT lens each carried. Two lenses
-   that are the same angle count as one — fix it and recount.
+1. Count the critics that actually ran against the panel size this layer's stakes called for (rule 2):
+   a full panel is `>= 3` DISTINCT lenses, each named; a deliberately right-sized low-stakes layer may
+   be one disciplined critic. Two lenses that are the same angle count as one — fix it and recount.
 2. Every critic was a separate agent from the author, and no critic debated another. Not true? The
    run is invalid; re-run parallel-then-synthesize.
 3. Open every finding: each cites an exact location AND a failure mode. Strip or fix any that does
-   not — an ungrounded finding is noise.
+   not — an ungrounded finding is noise. An empirical finding grounds in a probe + its output, or is
+   stated as unproven — never argued as fact.
 4. Findings on the same location are merged into one weighted entry, not scattered.
 5. If every critic shares the artifact's model family, the self-preference caveat is stated in the
    output — not omitted.
