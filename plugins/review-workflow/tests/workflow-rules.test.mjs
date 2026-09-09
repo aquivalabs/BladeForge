@@ -514,8 +514,10 @@ console.log("\nnever writes");
     args,
     agents: { "lens:solo": lensResponse({ agentName: "solo", findings: [], score: 10 }) }
   });
-  checkEqual("the result object carries exactly its five documented keys and no more", Object.keys(run.result ?? {}).sort(), [
+  checkEqual("the result object carries exactly its seven documented keys and no more", Object.keys(run.result ?? {}).sort(), [
     "attest",
+    "capReached",
+    "failedGates",
     "failedLenses",
     "perAgent",
     "refusedCriterion",
@@ -840,6 +842,117 @@ console.log("\nfix verification");
   const run = await runWorkflow({ args, agents: { "lens:solo": lensResponse({ agentName: "solo" }) } });
   const prompt = run.calls.find((c) => c.label === "lens:solo")?.prompt || "";
   check("a full round carries no fix-verification block", !prompt.includes("Fix verification"));
+}
+
+// ── Group: zero-lens guard ─────────────────────────────────────────────
+// A run that judged no lens satisfies every one of the eight criteria vacuously.
+// Attestation must still refuse it — the false-green a filed P0 named.
+
+console.log("\nzero-lens guard");
+{
+  const args = baseArgs({ config: { agents: [] } });
+  const run = await runWorkflow({ args, agents: {} });
+  check("zero-lens: no exception escapes the run", run.error === null, String(run.error));
+  checkEqual("zero-lens: an empty config does not attest", run.result?.attest, false);
+  checkEqual("zero-lens: perAgent is empty", run.result?.perAgent?.length, 0);
+  checkIncludes("zero-lens: the report names the missing lens", run.result?.report, "NO ENABLED LENS");
+}
+{
+  const args = baseArgs({ config: { agents: [lensEntry("solo", { enabled: false })] } });
+  const run = await runWorkflow({ args, agents: {} });
+  checkEqual("zero-lens: an all-disabled config does not attest", run.result?.attest, false);
+}
+
+// ── Group: convergence cap ──────────────────────────────────────────────
+// `attempt` is the cumulative re-review count that does NOT reset on a fix. Past
+// CONVERGENCE_CAP a still-red gate flags `capReached` so the orchestrator stops
+// looping; a clean round at the cap still attests — the cap never lowers the bar.
+
+console.log("\nconvergence cap");
+const failingLens = () =>
+  lensResponse({ agentName: "solo", findings: [finding({ severity: "blocker", where: "src/x.ts:1" })] });
+{
+  const args = baseArgs({
+    round: 1,
+    attempt: 6,
+    config: { agents: [lensEntry("solo", { threshold: 8 })], evidenceCritic: false }
+  });
+  const run = await runWorkflow({ args, agents: { "lens:solo": failingLens() } });
+  checkEqual("cap: a failing lens at attempt 6 does not attest", run.result?.attest, false);
+  checkEqual("cap: capReached is true at the cap", run.result?.capReached, true);
+  checkIncludes("cap: the report carries the cap notice", run.result?.report, "CONVERGENCE CAP REACHED");
+}
+{
+  const args = baseArgs({
+    round: 1,
+    attempt: 3,
+    config: { agents: [lensEntry("solo", { threshold: 8 })], evidenceCritic: false }
+  });
+  const run = await runWorkflow({ args, agents: { "lens:solo": failingLens() } });
+  checkEqual("cap: below the cap, a failing lens does not flag capReached", run.result?.capReached, false);
+}
+{
+  const args = baseArgs({
+    round: 1,
+    attempt: 9,
+    config: { agents: [lensEntry("solo", { threshold: 7 })], evidenceCritic: false }
+  });
+  const run = await runWorkflow({
+    args,
+    agents: { "lens:solo": lensResponse({ agentName: "solo", findings: [], score: 10 }) }
+  });
+  checkEqual("cap: a clean round at the cap still attests", run.result?.attest, true);
+  checkEqual("cap: a clean round is never capReached", run.result?.capReached, false);
+}
+{
+  const args = baseArgs({
+    round: 2,
+    config: { agents: [lensEntry("solo", { threshold: 8 })], evidenceCritic: false }
+  });
+  const run = await runWorkflow({ args, agents: { "lens:solo": failingLens() } });
+  checkEqual("cap: with no attempt arg, round 2 is well below the cap", run.result?.capReached, false);
+}
+
+// ── Group: deterministic gates ───────────────────────────────────────
+// A gate is an external oracle /review ran over the change set (eval-gate, a
+// typecheck, the suite). A nonzero exit REFUSES the attestation like the secret
+// scan does, regardless of how green every lens is — this is what stops the
+// review gate from attesting a diff the pre-push/CI gate then rejects. A passing
+// gate blocks nothing; no gateResults key at all leaves the old behaviour intact.
+
+console.log("\ndeterministic gates");
+{
+  const greenSolo = { "lens:solo": lensResponse({ agentName: "solo", score: 10 }) };
+
+  // A passing gate does not block a green run.
+  const passArgs = baseArgs({
+    round: 1,
+    config: { agents: [lensEntry("solo")] },
+    gateResults: [{ name: "eval-gate", command: "bash scripts/eval-gate.sh", exitCode: 0, output: "ok" }]
+  });
+  const passRun = await runWorkflow({ args: passArgs, agents: greenSolo });
+  check("gate: a passing gate leaves a green run attesting", passRun.result?.attest === true, JSON.stringify(passRun.result?.failedGates));
+  checkEqual("gate: no failed gates on a passing gate", passRun.result?.failedGates, []);
+
+  // A failing gate refuses a run whose every lens is green.
+  const failArgs = baseArgs({
+    round: 1,
+    config: { agents: [lensEntry("solo")] },
+    gateResults: [{ name: "eval-gate", command: "bash scripts/eval-gate.sh", exitCode: 1, output: "stale: new-skill security" }]
+  });
+  const failRun = await runWorkflow({ args: failArgs, agents: greenSolo });
+  check("gate: a failing gate refuses attest even with every lens green", failRun.result?.attest === false);
+  checkEqual("gate: refusedCriterion stays null — a gate is not one of the eight criteria", failRun.result?.refusedCriterion, null);
+  checkEqual("gate: the failed gate is named in failedGates", failRun.result?.failedGates?.map((g) => g.name), ["eval-gate"]);
+  checkIncludes("gate: the report names the deterministic gate failure", failRun.result?.report, "DETERMINISTIC GATE FAILED");
+  checkIncludes("gate: the report carries the gate name", failRun.result?.report, "eval-gate");
+
+  // Backwards compatibility: an older /review passes no gateResults at all.
+  const noGateArgs = baseArgs({ round: 1, config: { agents: [lensEntry("solo")] } });
+  const noGateRun = await runWorkflow({ args: noGateArgs, agents: greenSolo });
+  check("gate: no gateResults key → no exception", noGateRun.error === null, String(noGateRun.error));
+  check("gate: no gateResults key → still attests", noGateRun.result?.attest === true);
+  checkEqual("gate: no gateResults key → empty failedGates", noGateRun.result?.failedGates, []);
 }
 
 // ── Summary ──────────────────────────────────────────────────────────
