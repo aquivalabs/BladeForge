@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["lenses", "rounds", "stopped_because", "findings"],
   "properties": {
-    "lenses":  { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 3, "description": ">= 3 distinct lenses ran" },
+    "lenses":  { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1, "description": "the lenses that ran — a full panel is >= 3 distinct; a deliberately stakes-sized low-stakes layer may be one disciplined critic (rule 2)" },
     "rounds":  { "type": "integer", "minimum": 1, "maximum": 3, "description": "the per-layer cap" },
     "stopped_because": { "type": "string", "pattern": "^(no new S1|cap reached|entangled — parked to .+)$" },
     "self_preference_caveat": { "type": ["string", "null"] },
