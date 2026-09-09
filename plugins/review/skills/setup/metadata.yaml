@@ -10,4 +10,6 @@ changes:
     a seeded .claude/review.config.json into the target repo, and merge the marketplace + plugin
     entry into the repo's committed .claude/settings.json. No harness is vendored — the gate is the
     published bladeforge-review-harness npm package, run via `npx …@latest`. The skill itself then
-    hand-edits .claude/review.config.json (skills/rules/pairedDocs/extensionSkill) to tailor it to the project.
+    hand-edits .claude/review.config.json — the per-agent skills/rules/pairedDocs/extensionSkill,
+    plus the top-level gates array that wires the repo's own attestation-blocking oracle command — to
+    tailor it to the project.

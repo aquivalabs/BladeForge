@@ -72,20 +72,42 @@ Two rules, both load-bearing:
 - **A failing check is a fact, not a gate.** Its FAIL goes to the lens as evidence to weigh and cite;
   it does not block the run by itself. The lens decides severity — that is the judgment half.
 
+## Step 2.6 — deterministic gates, once per round
+
+Read the top-level `gates` array straight from `.claude/review.config.json` — `review-info` normalizes
+the config and does not surface `gates` yet, so take it from the file, not from the `config` object
+review-info returned. Its shape: `[{ "name": "...", "command": "..." }]`. A gate is the
+opposite of a `check`: it is an **external oracle** — the repo's own `eval-gate`, a typecheck, the test
+suite, a mutation run — whose nonzero exit **REFUSES the attestation outright**, exactly like the secret
+scan, regardless of how green every lens is. This is the layer that stops the review gate from
+attesting a diff the deterministic pre-push / CI gate then rejects: the review runs the SAME oracle the
+push runs, so the two can no longer disagree.
+
+For each gate, run its command once, over the SAME change set (the pre-push gate's own scope — a full
+`bash scripts/eval-gate.sh`, not a `--changed` subset), capturing the exit code and the LAST 60 lines of
+combined output. Build `gateResults = [{name, command, exitCode, output}]` and pass it in step 3. No
+`gates` in the config → pass `gateResults: null` and skip this step. A gate that fails BLOCKS on every
+round, including the final full round — never attest over a red gate.
+
+The line between the two: a `check` is that lens's evidence (soft, judged); a `gate` is the run's oracle
+(hard, deterministic). eval-gate belongs in `gates`, not a lens's `checks`.
+
 ## Step 3 — build the args and invoke the Workflow script
 
-Build the following object and hand it to the `Workflow` tool as `args`. This is the whole contract: exactly nine keys, flat, no nested quoted keys — the shapes belong in the table beside it, not in the block itself.
+Build the following object and hand it to the `Workflow` tool as `args`. This is the whole contract: exactly eleven keys, flat, no nested quoted keys — the shapes belong in the table beside it, not in the block itself.
 
 ```json
 {
   "base": "<base ref>",
   "hash": "<diff hash>",
   "round": 1,
+  "attempt": 1,
   "changedFiles": "<see table below>",
   "diffPath": "<see table below>",
   "config": "<see table below>",
   "agentsDir": "<see table below>",
   "machineFacts": "<see table below>",
+  "gateResults": "<see table below>",
   "priorPerAgent": null
 }
 ```
@@ -94,12 +116,14 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
 |---|---|
 | `base` | the base ref the run is measured against (step 1) |
 | `hash` | the diff hash, from `review-info` |
-| `round` | the round counter — 1 for a diff hash `/review` has not attempted before; incremented by one each time `/review` re-invokes the script against the SAME hash after a FAIL; reset to 1 the moment the hash changes |
+| `round` | the round counter — 1 for a diff hash `/review` has not attempted before; incremented by one each time `/review` re-invokes the script against the SAME hash after a FAIL; reset to 1 the moment the hash changes. This is the minor-scoring clock, and it deliberately resets on a fix |
+| `attempt` | the CUMULATIVE re-review count for this branch, and unlike `round` it does NOT reset when a fix changes the hash. Resolve it from `.review/lens-stats.jsonl` (step 5.5): `attempt` = the number of DISTINCT `hash` values already logged there + 1 (this run). No file yet → `1`. It is what makes the convergence cap real: a review whose every fix resets `round` would never converge, but `attempt` counts the fix-and-re-review cycles the branch has actually spent, so the gate can stop after enough of them |
 | `changedFiles` | `git diff --numstat <base>..HEAD`, reshaped to `[{path, added, removed}]` (step 1) |
 | `diffPath` | the file `/review` wrote in step 1 holding `git diff <base>..HEAD`; the lens prompts the script builds name this path, and each lens reads it itself |
 | `config` | the loaded config from `review-info` |
 | `agentsDir` | the ABSOLUTE directory holding `review-<lens>.md`, resolved by `/review` alongside `workflow.js` in step 3 — the `agents/` sibling of whichever `plugins/review/` won there. The script cannot resolve it: it reads nothing, by design. Passing a relative path instead is the defect this key exists to close (see below) |
 | `machineFacts` | the results of step 2.5's per-lens checks, `{"<lens>": [{name, command, exitCode, output}]}` — `null` when no lens configures any. Computed by `/review`, once per round; the script only renders them into the lens prompts |
+| `gateResults` | the results of step 2.6's deterministic gates, `[{name, command, exitCode, output}]` — `null` when the config declares no `gates`. Computed by `/review`, once per round; a gate with a nonzero `exitCode` makes the script refuse the attestation outright (like the secret scan), whatever the lens verdicts. This is the review↔pre-push convergence: the review runs the same oracle the push runs |
 | `priorPerAgent` | the `perAgent` array this command received on the previous round — this is what makes the round a DELTA, dispatching only the lenses that failed. Pass it WHOLE, findings included: a re-dispatched lens is prompted to verify its own prior findings rather than cold-review the diff again, which is where repeat rounds mint noise. Pass `null` for the final, attestable full round. It survives a hash change on purpose (see the round shape above): a fix that changes the diff does not un-pass an unrelated lens |
 
 Resolve `workflow.js` before calling anything. Two layouts hold it, and a single relative hop from `${CLAUDE_PLUGIN_ROOT}` reaches neither — that path points at the versioned install cache, `…/cache/<marketplace>/review/<version>/`, whose sibling directory is another version of `review`, not another plugin. Try these in order and use the first that exists:
@@ -121,14 +145,15 @@ The `Workflow` tool runs in the background and notifies `/review` on completion;
 
 ## Step 5 — consume the return
 
-The script hands back exactly `{ attest, refusedCriterion, failedLenses, perAgent, report }` and nothing else.
+The script hands back exactly `{ attest, capReached, refusedCriterion, failedLenses, failedGates, perAgent, report }` and nothing else.
 
-- Print `report` verbatim. It already carries the per-lens lines, the disputed pairs, the deferred Majors and Minors, the untouched-set section, and — when the run earned one — the below-floor notice. `/review` builds no notice of its own: the one line inside `report` is the only one printed, because two authors reading the same config would print it twice.
+- Print `report` verbatim. It already carries the per-lens lines, the disputed pairs, the deferred Majors and Minors, the untouched-set section, and — when the run earned one — the below-floor notice or the deterministic-gate notice. `/review` builds no notice of its own: the one line inside `report` is the only one printed, because two authors reading the same config would print it twice.
 - Build the results table (below) from `perAgent`.
-- `attest` is `true` only when **both** gates opened: no lens failed its threshold, and all eight criteria passed. The two answer different questions — the lens verdicts decide whether the change passes review, the criteria decide whether the run's own output is honest and well formed. A blocker reported in the correct shape violates no criterion, which is exactly why the verdicts have to be checked separately.
-- When `attest` is `false`, say which gate refused and go to step 6. `failedLenses` is non-empty when a lens did — name each one as `<lens> <score>/<threshold>`, with its blocker count when it has one. `refusedCriterion` is the number, 1 through 8, when a criterion did. Both can be set; report both. Never read a `null` `refusedCriterion` as a pass — check `attest` itself.
+- `attest` is `true` only when **every** gate opened: no lens failed its threshold, all eight criteria passed, and no deterministic gate came back red. The three answer different questions — the lens verdicts decide whether the change passes review, the criteria decide whether the run's own output is honest and well formed, and the gates decide whether the repo's own deterministic oracle (eval-gate, typecheck, the suite) accepts the diff. A blocker reported in the correct shape violates no criterion, which is exactly why the verdicts have to be checked separately.
+- When `attest` is `false`, say which gate refused and go to step 6. `failedLenses` is non-empty when a lens did — name each one as `<lens> <score>/<threshold>`, with its blocker count when it has one. `refusedCriterion` is the number, 1 through 8, when a criterion did. `failedGates` is non-empty when a deterministic gate did — name each as `<gate> (exit <code>)`; this is the case the review used to MISS, attesting a diff the pre-push gate then rejected, so treat a red gate as final. Any of the three can be set; report all that are. Never read a `null` `refusedCriterion` as a pass — check `attest` itself. A run can also refuse with all three empty — that is the zero-lens case: `config.agents` was empty or every lens was disabled, so the run judged nothing and cannot attest. The `report` names it (`NO ENABLED LENS`); fix the config, do not loop.
+- **`capReached` — the convergence stop.** When `true`, the branch has spent its budget of re-review cycles (see `attempt`) and the gate is still red. Do NOT invoke another round: print the `report` (it carries the `CONVERGENCE CAP REACHED` notice and every remaining finding) and hand the decision to the human — fix the remaining findings decisively, file them to the backlog, or make the deliberate call to override. `capReached` never means attest; it means the automatic per-finding loop stops here so a person decides, instead of grinding on round after round.
 
-**The script decides; `/review` persists.** `attest`, `refusedCriterion`, `failedLenses`, `perAgent`, and `report` are a verdict, not a write — the script touches no disk anywhere in its run. Step 7 below is the only step in this whole system that writes and commits an attestation.
+**The script decides; `/review` persists.** `attest`, `refusedCriterion`, `failedLenses`, `failedGates`, `perAgent`, and `report` are a verdict, not a write — the script touches no disk anywhere in its run. Step 7 below is the only step in this whole system that writes and commits an attestation.
 
 ## Step 5.5 — the uniqueness log
 
@@ -182,6 +207,10 @@ Then a **Recommendations** section: for each lens with any findings, list each a
 
 State plainly that the gate is RED, then stop. Do not write an attestation and do not edit code — the lenses and the script both report only.
 
+**If `capReached` is `true`, the loop ENDS here — do not invoke another round.** The branch has spent
+its re-review budget with the gate still red; a person decides now (fix decisively, backlog, or
+override), per step 5. The rounds below are for a still-red gate that has NOT hit the cap.
+
 The next `/review` invocation is the next round, and it is a DELTA: rebuild `args` with `round`
 incremented by one and `priorPerAgent` set to **this run's `perAgent`**, then invoke the script again
 from step 3. It dispatches only what failed. Keep passing `priorPerAgent` across rounds — including
@@ -189,6 +218,9 @@ across the hash changes that fixing findings causes — until a delta round retu
 Then run ONE more time with `priorPerAgent` omitted; that full round is the attestable one.
 
 A changed diff resets `round` to 1 (the minor-scoring clock) and leaves `priorPerAgent` alone.
+`attempt`, though, keeps climbing — re-derive it from the distinct hashes in `.review/lens-stats.jsonl`
+each round (step 3), so the cap counts fix-and-re-review cycles that a `round` reset would otherwise
+hide.
 
 ## Step 7 — on PASS, attest immediately
 

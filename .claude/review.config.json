@@ -2,6 +2,12 @@
   "secretAllowlist": [
     "AKIA0000000000000000"
   ],
+  "gates": [
+    {
+      "name": "eval-gate",
+      "command": "bash scripts/eval-gate.sh"
+    }
+  ],
   "agents": [
     {
       "name": "craft",

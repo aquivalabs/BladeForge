@@ -30,9 +30,25 @@
       "items": {
         "$ref": "#/definitions/agent"
       }
+    },
+    "gates": {
+      "type": "array",
+      "description": "Deterministic external oracles /review runs over the change set (e.g. the repo's own eval-gate, a typecheck, the test suite). A gate whose command exits non-zero REFUSES the attestation outright, like the secret scan — this is what keeps the review gate from attesting a diff the pre-push/CI gate then rejects. Unlike a lens's soft `checks`, a gate is hard and deterministic.",
+      "items": {
+        "$ref": "#/definitions/gate"
+      }
     }
   },
   "definitions": {
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "command"],
+      "properties": {
+        "name": { "type": "string", "description": "short label shown when the gate refuses (e.g. \"eval-gate\")" },
+        "command": { "type": "string", "description": "the shell command run over the change set; a non-zero exit blocks attestation" }
+      }
+    },
     "agent": {
       "type": "object",
       "additionalProperties": false,
@@ -42,7 +58,7 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "Reviewer id. Seven ship built in: craft, architecture, tests, docs, security are enabled by default; skill and leak are for repositories that publish skills and must be enabled deliberately; others are appended."
+          "description": "Reviewer id. Eight ship built in: craft, architecture, tests, docs, security are enabled by default; skill, leak and security-scan are for repositories that publish skills and must be enabled deliberately; others are appended."
         },
         "enabled": {
           "type": "boolean"

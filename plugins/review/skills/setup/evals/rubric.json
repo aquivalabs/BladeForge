@@ -53,6 +53,7 @@
     ".claude/review.config.json exists and names only the lenses this repo has a subject for — a built-in lens with no subject is disabled explicitly, not left implicitly enabled",
     "the config is tailored to the repo (thresholds, pairedDocs, skills), not the seeded template left verbatim",
     "the pre-push hook is wired and a push with no valid attestation is actually rejected — installed is not the same as working",
-    "the secret-scan / CI gate is wired where the repo runs CI"
+    "the secret-scan / CI gate is wired where the repo runs CI",
+    "if the repo has its own deterministic oracle (eval-gate, a typecheck, the test suite), it is wired into the top-level gates array so a failing run refuses attestation — or gates is deliberately omitted because the repo has none"
   ]
 }
