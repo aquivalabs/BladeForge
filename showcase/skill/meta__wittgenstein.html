@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>meta:wittgenstein · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-meta)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">meta</div>
+    <h1 class="p-id"><span class="ns">meta:</span>wittgenstein <span class="p-ver">v2.6.4</span></h1>
+    <p class="p-purpose">Review an already-written spec/plan/design doc/RFC for clarity — cut filler, front-load the bottom line, and rewrite walls of prose into skimmable bullets a non-technical manager could follow.</p>
+    <div class="metrics"><span class="mchip c-warn"><span class="ic">🎯</span><span class="lab">trig</span>10/18</span><span class="mchip c-warn"><span class="ic">⚡</span><span class="lab">effect</span>+0.30</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install meta@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/meta/skills/wittgenstein" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/meta/skills/wittgenstein/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Clarity gate for an already-written spec, plan, design doc/note, or RFC — a reviewer persona, not a writing guide. Activate to REVIEW or AUDIT such a doc (often under docs/superpowers/specs or docs/superpowers/plans) when checking whether a non-technical manager or reader could follow it; when it feels padded, wordy, or has grown long; when a section is a wall of prose or full of undefined jargon; or when the decision is buried at the end and should lead — then fix it in place. NOT for WRITING or drafting a doc from scratch (that&#x27;s meta:lean-writing — wittgenstein reviews one that already exists), and NOT for chat, code, comments, commit messages, jira, or READMEs.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Anyone whose spec/plan/design doc has grown long, padded, or jargon-heavy and needs a laconic pass before a non-technical reader signs off on it.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-warn">10/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">56%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-04</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-warn">+0.30</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.80</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v ">1</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide output hits the persona format tightly (Struck citations by section, terse verdict with word-count delta, refuses to fabricate the missing cases) while isolated baseline is equally rigorous but more verbose and hedges across three rewrite variants instead of committing — a modest, real edge for the guide, not a decisive one.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">Persona directives target the doc being reviewed, not the reading agent&#x27;s own instructions; no override-prior-instructions language.</span></div><div class="row"><span class="st na">–</span><span class="nm">data-exfiltration</span><span class="dt">No network/data-send capability anywhere in the material.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No keys/tokens/credentials in SKILL.md or lore.md.</span></div><div class="row"><span class="st na">–</span><span class="nm">dangerous-commands</span><span class="dt">No scripts/ directory and no shell commands executed by this skill.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">Plain readable markdown prose throughout, no encoded payloads.</span></div><div class="row"><span class="st na">–</span><span class="nm">external-fetches</span><span class="dt">No fetch/download instructions present.</span></div><div class="row"><span class="st na">–</span><span class="nm">credential-access</span><span class="dt">No references to ~/.ssh, ~/.aws, .env, or credential stores.</span></div><div class="row"><span class="st na">–</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, cron, or profile/persistence edits anywhere in the material.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">6.6 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">623 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">7.4 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">3.1 KB</span></div><div class="f"><span><span class="lead">references/</span>lore.md</span><span class="sz">832 B</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/meta/skills/wittgenstein/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 5 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

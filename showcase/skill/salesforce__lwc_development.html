@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>salesforce:lwc_development · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-salesforce)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">salesforce</div>
+    <h1 class="p-id"><span class="ns">salesforce:</span>lwc_development <span class="p-ver">v2.0.3</span></h1>
+    <p class="p-purpose">House rules for authoring LWC/Aura bundles — DOM access boundaries and CSS-only (no SCSS) styling conventions.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>13/18</span><span class="mchip c-warn"><span class="ic">⚡</span><span class="lab">effect</span>+0.40</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install salesforce@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/salesforce/skills/lwc_development" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/salesforce/skills/lwc_development/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">House rules for developing Salesforce Lightning Web Components (LWC) and Aura — the .js controller, .html template, .js-meta.xml, and CSS of a bundle, plus every LWC authoring idiom. Use whenever creating or editing an LWC/Aura bundle or writing any Salesforce-side frontend JS — including adding an @api or @track property, wiring an @wire to an Apex class, emitting or handling a custom event, a lifecycle hook, DOM access (querySelector), styling a component (CSS custom properties, scss→css conversion), or writing the js-meta.xml targets / isExposed config.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Any Salesforce project team writing or reviewing LWC/Aura component JS, HTML, or CSS who wants a consistent authoring standard.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">13/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">72%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-06</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-warn">+0.40</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.93</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v ">1</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide&#x27;s checklist drove concrete, verifiable wins on its own rubric — real CSS-custom-property styling plus an explicit self-check the isolated agent never performed — while isolated skipped the CSS file and left two competing unfinished implementations instead of one coherent bundle.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">Plain house-style doc with no instructions aimed at overriding model behavior.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No network calls or data transmission of any kind; only local grep guidance.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No embedded keys/tokens/credentials found.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">Only command is a read-only grep check for global DOM access, nothing destructive.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">No encoded blobs or unreadable logic; plain markdown prose.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">No URLs, downloads, or external host references present.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reference to ~/.ssh, ~/.aws, .env, keychain, or token stores.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, setuid, or persistence-mechanism edits anywhere in the file.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">2.6 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">320 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">7.5 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">2.8 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/salesforce/skills/lwc_development/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

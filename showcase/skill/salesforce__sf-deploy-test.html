@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>salesforce:sf-deploy-test · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-salesforce)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">salesforce</div>
+    <h1 class="p-id"><span class="ns">salesforce:</span>sf-deploy-test <span class="p-ver">v2.0.3</span></h1>
+    <p class="p-purpose">CLI fallback that deploys Apex/metadata to a Salesforce org and runs Apex tests, returning a terse two-line pass/fail summary — no MCP dependency.</p>
+    <div class="metrics"><span class="mchip c-warn"><span class="ic">🎯</span><span class="lab">trig</span>9/18</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install salesforce@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/salesforce/skills/sf-deploy-test" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/salesforce/skills/sf-deploy-test/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">CLI fallback that deploys Salesforce Apex/metadata to an org and returns a compact TWO-LINE pass/fail summary (deploy: Succeeded / tests: X/Y passed) via a bash wrapper over `sf project deploy` + `sf apex run test` — no MCP dependency.\n\nPREFER the salesforce-dx MCP (`mcp__salesforce-dx__deploy_metadata` + `mcp__salesforce-dx__run_apex_test`, per the `dx_mcp` skill) for programmatic deploy/test when the project has it — structured, resumable results, no shell/path friction. Reach for THIS skill instead when: you want a terse one-line pass/fail without parsing MCP JSON; the salesforce-dx MCP is unavailable (headless / cron / MCP server not connected); or you need combined deploy-then-test in a single call. If the project&#x27;s CLAUDE.md names the dx MCP as the default deploy+test harness, follow that and treat this as the fallback.\n\nStill covers interpreting a failed deploy (source-tracking, unsafe-path, cross-repo shared-object errors). Don&#x27;t use for anonymous Apex snippets, ad-hoc SOQL, listing orgs, code review, or UI work with no deploy.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Projects without the salesforce-dx MCP connected (headless/cron use), or anyone who wants a single combined deploy+test call with a one-glance result instead of parsing MCP JSON.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-warn">9/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">50%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-07</div></section>
+    
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">No model-directed steering text; SKILL.md is plain usage/contract prose.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">Script only calls local sf CLI and parses its JSON output to stdout; nothing sent elsewhere.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No embedded keys/tokens/credentials; org auth relies on pre-existing sf CLI session via --org alias.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">Only sf project deploy start / sf apex run test are run; no rm, force-push, dd, or chmod.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">Inline python3 parsing blocks are plain readable JSON-handling code, not encoded payloads.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">No curl/wget/network calls beyond the sf CLI&#x27;s own org communication, which is the stated purpose.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reads of ~/.ssh, ~/.aws, .env, or keychain; relies on sf CLI&#x27;s own auth store implicitly, not accessed directly.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, setuid, or persistence (cron/profile/launch agent) edits present.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-org">org</span><span class="badge b-network">network</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">3.9 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">602 B</span></div><div class="f"><span><span class="lead"></span>sf-deploy-test.sh</span><span class="sz">3.0 KB</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">6.6 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">2.7 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/salesforce/skills/sf-deploy-test/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 5 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>skillcraft:skillaxe · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-skillcraft)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">skillcraft</div>
+    <h1 class="p-id"><span class="ns">skillcraft:</span>skillaxe <span class="p-ver">v0.1.5</span></h1>
+    <p class="p-purpose">Measure whether a guide skill helps (with/without run), attribute shortfalls to the guide vs the agent, and improve it without regressions.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>9/10</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install skillcraft@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/skillcraft/skills/skillaxe" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/skillcraft/skills/skillaxe/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use to diagnose, audit, or improve a GUIDE skill — one that tells an agent how to produce something (an authoring guide, a review lens, a house-convention skill). Fires when you ask: does this skill actually help or is it decorative; diagnose where a guide skill falls short and propose fixes; audit a skill and measure its real effect on the output; the guide skill doesn&#x27;t seem to change what the agent produces, prove it either way; improve a guide skill without dropping what already worked; run a with-and-without comparison on a skill. It holds the comparison protocol itself — invoke it whenever someone is about to run such a diagnosis by hand, and whenever a prior edit made a skill worse and you need regression protection. Do NOT use to measure whether a skill&#x27;s DESCRIPTION triggers (meta:skill-eval scores activation; this scores the produced result); to scaffold a brand-new skill (meta:new-skill); or to refresh a skill&#x27;s metadata.yaml (meta:update-skill).</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Auditing a high-traffic guide skill, or one that seems not to help, before trusting or rewriting it.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">9/10</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">90%</div><small>vs baseline 50%</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">5</div><small>model opus</small></div>
+  </div><div class="bmeta">measured 2026-09-04</div></section>
+    
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">Pure prose instructions to the operating agent about running a measurement pipeline; no embedded directive attempts to override the reading agent&#x27;s own instructions.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No network calls or send-data-elsewhere logic; only local scratch-dir file writes described.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No keys/tokens/credentials present in SKILL.md or method.md.</span></div><div class="row"><span class="st na">–</span><span class="nm">dangerous-commands</span><span class="dt">No scripts/ directory and no shell commands anywhere in the material; nothing executes.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">All content is readable Markdown prose; no base64/hex blobs or eval-of-decoded logic.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">References an arXiv paper by id (2606.10546) only as citation text; no fetch/download-and-run behavior.</span></div><div class="row"><span class="st na">–</span><span class="nm">credential-access</span><span class="dt">No file/credential-store reads described; skill only reads its own evals/rubric.json within the target skill under test.</span></div><div class="row"><span class="st na">–</span><span class="nm">privilege-escalation</span><span class="dt">No sudo/cron/profile-editing content; nothing executes at all.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-files">files</span><span class="badge b-network">network</span></div>
+      <div class="kv"><span class="lab">needs</span><a class="dep" href="meta__model-routing.html">meta:model-routing</a></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">4.4 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">791 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">4.8 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">1.9 KB</span></div><div class="f"><span><span class="lead">references/</span>method.md</span><span class="sz">4.5 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/skillcraft/skills/skillaxe/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 5 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>
