@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tests:apex · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-tests)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">tests</div>
+    <h1 class="p-id"><span class="ns">tests:</span>apex <span class="p-ver">v2.2.3</span></h1>
+    <p class="p-purpose">The Apex delta of the shared test standard. States only what the platform changes — Assert.* with a message, @IsTest(SeeAllData=false), @TestSetup and the rollback, Test.startTest/stopTest, factory DML terminals, System.runAs with a permission set for user-mode and FLS, governor limits and the 200-record boundary, RestContext mocking — and cites tests:architecture for every rule the two runtimes share.
+</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>16/22</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.70</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install tests@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/tests/skills/apex" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/tests/skills/apex/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use when writing, fixing, or extending an Apex test — a test class for a new or changed Apex class, a negative or bulk path, a `@TestSetup` factory, swapping `System.assertEquals` for `Assert.*`, removing a hardcoded record Id, mocking a `RestRequest` for a `@RestResource`, covering a `WITH USER_MODE` or `System.runAs` path, or updating a test after changing the class under test. Also whenever you create or edit any Apex `.cls`, and when reviewing an Apex test somebody else wrote. Apex only — a test in any other runtime needs `tests:architecture` and not this page.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">A Salesforce project that has adopted tests:architecture and needs the Apex-side rules on top of it. Not readable alone: the shared clauses, the axis walk and the factory rule live in tests:architecture, and this page is the delta rather than a second standard.
+</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">16/22</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">73%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-07</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.70</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.95</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v c-good">0</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guided output hits all 11 rubric acceptance items (Assert.* messages, no hardcoded Ids, runAs positive+negative pair, the managed-package namespace namespace, three-terminal factories, re-SELECT-not-static-Id discipline); the isolated baseline fails message-bearing asserts, omits the negative-permission runAs case, under-specifies factory terminals, and drops the the managed-package namespace namespace entirely.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">No model-directed steering text found in SKILL.md or references/; content is Apex testing guidance addressed to the developer.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No code paths or instructions send repo/user/context data anywhere; skill is documentation only.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">grep for key/token/secret/password patterns returned no matches.</span></div><div class="row"><span class="st na">–</span><span class="nm">dangerous-commands</span><span class="dt">No scripts/ directory exists in this skill; nothing executable to run.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">No base64/hex/eval patterns found; all content is plain markdown prose.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">No http(s):// URLs, curl, or wget found in any material file.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No references to ~/.ssh, ~/.aws, .env, keychain, or token stores.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, setuid, cron/launch-agent, or shell-profile edits present.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><a class="dep" href="tests__architecture.html">tests:architecture</a></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">13.2 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">965 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">8.2 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">3.8 KB</span></div><div class="f"><span><span class="lead">references/</span>axes-in-apex.md</span><span class="sz">5.3 KB</span></div><div class="f"><span><span class="lead">references/</span>factories.md</span><span class="sz">5.4 KB</span></div><div class="f"><span><span class="lead">references/</span>fls-and-rest.md</span><span class="sz">3.3 KB</span></div><div class="f"><span><span class="lead">references/</span>skeleton.md</span><span class="sz">2.5 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/tests/skills/apex/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 8 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

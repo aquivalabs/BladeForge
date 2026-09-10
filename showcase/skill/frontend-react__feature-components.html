@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>frontend-react:feature-components · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-frontend-react)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">frontend-react</div>
+    <h1 class="p-id"><span class="ns">frontend-react:</span>feature-components <span class="p-ver">v2.0.2</span></h1>
+    <p class="p-purpose">Rules for structuring domain-coupled &quot;feature&quot; components — composed from primitives, business logic kept out of primitives, data via the project&#x27;s data layer.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>10/12</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.60</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install frontend-react@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/frontend-react/skills/feature-components" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-react/skills/feature-components/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Rules for FEATURE components in a React codebase — domain-coupled blocks that compose primitives and hold business logic/data. Activate when building or editing a domain feature (a panel/table/editor tied to your business data), or adding a new domain area. Framework-agnostic. Reached via frontend-react:component-placement.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Teams building a React app&#x27;s domain/feature panels who want features assembled from primitives instead of hand-rolled controls duplicating the primitive library.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">10/12</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">83%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-07</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.60</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.95</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v c-good">0</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide-following output nails all six acceptance points (explicit domain-gate confirmation, correct nesting under an existing domain, a reuse-primitives table with a fallback rule, layer-agnostic data/i18n phrasing) while the isolated baseline never addresses top-level placement and reinvents its own badge/toolbar/action-bar components instead of composing from existing primitives — a real, guide-attributable quality gain on a task where structure IS the deliverable.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">No text steering the reading model; content is standard rule-list guidance.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No data collection or transmission of any kind mentioned.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No keys/tokens/credentials present.</span></div><div class="row"><span class="st na">–</span><span class="nm">dangerous-commands</span><span class="dt">No scripts/ directory at all — nothing executes.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">Entire SKILL.md is plain readable markdown.</span></div><div class="row"><span class="st na">–</span><span class="nm">external-fetches</span><span class="dt">No scripts or code that could fetch anything; only references/ and scripts/ are absent.</span></div><div class="row"><span class="st na">–</span><span class="nm">credential-access</span><span class="dt">No code path exists to read any credential store.</span></div><div class="row"><span class="st na">–</span><span class="nm">privilege-escalation</span><span class="dt">No shell/persistence mechanism present in the skill.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">2.8 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">403 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">6.3 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">2.9 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-react/skills/feature-components/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

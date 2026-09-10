@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>git:commit · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-git)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">git</div>
+    <h1 class="p-id"><span class="ns">git:</span>commit <span class="p-ver">v2.0.2</span></h1>
+    <p class="p-purpose">Split staged/unstaged changes into atomic, well-ordered conventional-commit-style commits, after first syncing any docs/skills owned by the changed area.</p>
+    <div class="metrics"><span class="mchip c-warn"><span class="ic">🎯</span><span class="lab">trig</span>12/19</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.55</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install git@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/git/skills/commit" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/git/skills/commit/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use this skill whenever the user asks to commit, create a commit, or push changes — e.g. &quot;commit this&quot;, &quot;let&#x27;s commit&quot;, &quot;make a commit&quot;. First syncs docs/skills owned by the changed area, then splits into atomic logical commits.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Personal or small-team repos where the user wants commits auto-split by logical concern instead of committing everything in one lump.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-warn">12/19</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">63%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-04</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.55</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.92</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v c-good">0</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide-driven output nails the skill&#x27;s distinguishing Step 0 doc/skill-sync check (correctly scoping it to only the feature&#x27;s owned mechanism doc) and mirrors the skill&#x27;s exact execute-steps and finish-checklist verbatim, while the isolated baseline never performs any doc/skill ownership check and stays a generic templated plan rather than concrete ordered git commands — both split concerns atomically and order foundational-before-consumer reasonably, but only the guided run satisfies acceptance criterion 4.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">No directives aimed at the model beyond ordinary skill instructions; no &#x27;ignore previous instructions&#x27; style text.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">Only local git commands (status/diff/log); nothing sent externally.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No embedded keys/tokens/credentials.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">Uses git restore --staged, git add, git commit, git log — no rm -rf, force-push, or mass delete.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">Plain readable markdown, no encoded blobs or eval.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">No network calls or downloads.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reference to ~/.ssh, ~/.aws, .env, or keychain.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, setuid, cron, or shell-profile edits.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-git">git</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">3.1 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">599 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">6.9 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">2.4 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/git/skills/commit/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>frontend-css:scss-modules · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-frontend-css)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">frontend-css</div>
+    <h1 class="p-id"><span class="ns">frontend-css:</span>scss-modules <span class="p-ver">v2.1.3</span></h1>
+    <p class="p-purpose">House rules for authoring component SCSS — SCSS-over-CSS, the color/spacing/radius token system, BEM structure, and when position:absolute is/isn&#x27;t justified.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>14/18</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.50</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install frontend-css@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/frontend-css/skills/scss-modules" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-css/skills/scss-modules/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">House rules for authoring component SCSS — the .scss-over-.css convention, SCSS file structure, the color/spacing/radius variable &amp; token system (never hardcode hex or magic numbers — add to variables first), and BEM structure (block → &amp;__element → &amp;--modifier). Use when writing or refactoring a component&#x27;s styles, setting up the SCSS token/variable system, or consolidating hardcoded values to the scale. NOT for choosing a dimensional unit or converting px→rem (frontend-css:rem), naming a component&#x27;s folder or its non-style files (frontend-react:component-structure), style import-alias policy (frontend-js:conventions), LWC/Aura styling (salesforce:lwc_development), or skeleton/Storybook files.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Frontend projects with their own bundler (Vite/Webpack/Next.js, non-Salesforce) that want a consistent SCSS token system and BEM convention instead of scattered hardcoded values.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">14/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">78%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-07</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.50</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.95</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v c-good">0</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide-following output nails all six acceptance rules explicitly (tokenized shadows/duration, strict 2-level BEM, rem exceptions called out, absolute correctly unused); the isolated baseline is competent but leaks two magic numbers (150ms transition, -2px translateY) and over-nests BEM a level deeper than the house pattern.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">pure style-guide directives to the coding agent about SCSS conventions, no instruction-override language</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">no network calls or data transmission anywhere in the material</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">no keys/tokens/credentials present</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">no scripts/ directory exists and SKILL.md contains no shell commands</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">all content is plain readable markdown/SCSS examples</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">no URLs or fetch/download instructions</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">no reference to ~/.ssh, ~/.aws, .env, or credential stores</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">no sudo, cron, shell-profile, or persistence mechanisms</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">6.2 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">567 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">7.1 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">3.1 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-css/skills/scss-modules/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

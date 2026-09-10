@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>critique:critique · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-critique)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">critique</div>
+    <h1 class="p-id"><span class="ns">critique:</span>critique <span class="p-ver">v1.4.0</span></h1>
+    <p class="p-purpose">The house method for running an adversarial critique of a design, spec, or plan — diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize — so the critique detects real defects instead of laundering a green stamp.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>10/12</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install critique@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/critique/skills/critique" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/critique/skills/critique/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use when someone wants an existing design, spec, or plan ATTACKED for soundness before it is built from — \&quot;tear this apart\&quot;, \&quot;assume it is wrong and show me where\&quot;, \&quot;find what breaks\&quot;, \&quot;critique this hard\&quot;, \&quot;red-team it\&quot;, \&quot;poke holes in it\&quot; — whether they want one hard pass or several independent critics each from a different angle. It sets HOW the attack runs so it catches real defects instead of agreeing with the author. It attacks an idea on paper that already exists — NOT writing or drawing one, NOT polishing a document\&#x27;s wording (`meta:wittgenstein`), NOT already-written code. A pipeline with a critique phase — speccy, a Sprut critic role — invokes this method.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Any team or pipeline that runs critique or red-team passes over designs, specs, and plans and wants the critique to actually catch defects rather than agree with the author.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">10/12</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">83%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">5</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-03</div></section>
+    
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">schema/doc fix + a stdlib-and-jsonschema test; no directive aimed at the reading agent</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">test reads two local schema files, sends nothing</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">no credential; the test fixture is invented prose</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">test only reads JSON and exits with a status; no destructive shell</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">plain python and JSON</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">no host reach at runtime; CI pip-installs two named public libs in its own job</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">no credential-store read</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">no sudo/setuid/persistence</span></div></div>
+    <div class="bmeta">scanned 2026-09-09 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-files">files</span><span class="badge b-network">network</span><span class="badge b-org">org</span></div>
+      <div class="kv"><span class="lab">needs</span><a class="dep" href="meta__model-routing.html">meta:model-routing</a></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">20.3 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">1.2 KB</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">5.0 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">4.3 KB</span></div><div class="f"><span><span class="lead">references/</span>critique-run.schema.json</span><span class="sz">1.2 KB</span></div><div class="f"><span><span class="lead">references/</span>evidence.md</span><span class="sz">3.7 KB</span></div><div class="f"><span><span class="lead">references/</span>finding.schema.json</span><span class="sz">2.2 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/critique/skills/critique/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 7 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

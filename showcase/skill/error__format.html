@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>error:format · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-error)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">error</div>
+    <h1 class="p-id"><span class="ns">error:</span>format <span class="p-ver">v2.0.2</span></h1>
+    <p class="p-purpose">Enforce one Google AIP-193 style error envelope (code/status/message/details) across backend and frontend so every error is handled the same way regardless of layer.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>17/18</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.85</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install error@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/error/skills/format" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/error/skills/format/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use when adding or handling any error path on any layer — throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend). Do NOT use to design the whole app&#x27;s error-handling architecture — the single code-to-UX policy table (error:architecture) — or to wrap one component in a boundary or style one error tile (your framework&#x27;s component skill); this skill owns the wire envelope and the reason vocabulary.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Any project defining or touching an error path — a new service/route/controller throw, mapping an upstream failure, or a frontend reading an error — that wants one consistent, i18n-ready error contract instead of ad-hoc shapes per layer.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">17/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">94%</div><small>vs baseline 100%</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-04</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.85</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.95</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v c-good">0</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">With-guide hits all 8 rubric criteria and even matches this repo&#x27;s real conventions (code=HTTP int, ErrorInfo/DebugInfo split, registry+dictionary, reused the actual existing INSUFFICIENT_ACCESS reason); isolated baseline invents a generic google.rpc.Status pattern that gets the house convention backwards (code=rpc-numeric instead of HTTP int), skips the central registry, hardcodes messages at throw sites, and omits ErrorInfo.reason from 3 of 4 envelopes — a guide-driven, substantial quality win.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">Pure instructional prose about error envelopes; no directives aimed at overriding agent behavior.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No network calls or data transmission of any kind; doc-only skill.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No keys/tokens/credentials present anywhere in SKILL.md.</span></div><div class="row"><span class="st na">–</span><span class="nm">dangerous-commands</span><span class="dt">No scripts/ directory exists; nothing executable to run.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">Plain readable markdown/JSON example, no encoded blobs.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">No URLs or fetch/download instructions anywhere in the file.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reference to ~/.ssh, ~/.aws, .env, or any credential store.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, cron, launch agent, or shell profile edits mentioned.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">3.2 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">487 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">7.9 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">4.3 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/error/skills/format/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

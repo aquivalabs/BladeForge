@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>frontend-react:storybook-stories · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-frontend-react)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">frontend-react</div>
+    <h1 class="p-id"><span class="ns">frontend-react:</span>storybook-stories <span class="p-ver">v2.0.2</span></h1>
+    <p class="p-purpose">Writes a colocated Storybook story (with a separate mock-data file) covering a component&#x27;s key states, after asking once per project whether stories are wanted at all.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>18/18</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.80</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install frontend-react@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/frontend-react/skills/storybook-stories" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-react/skills/storybook-stories/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use this skill whenever writing, adding, or asking about a Storybook story for a React/UI component \u2014 including \&quot;add a story for X\&quot;, \&quot;write a .stories file\&quot;, questions about which states/variants a story should cover (default, empty, error, loading, disabled), how to show a component&#x27;s skeleton alongside it in a story, what mock data a story should use, or whether a just-finished component needs a story at all. Also use right after creating any new React component to decide whether a story is warranted: on the first component in a project, explain Storybook and ask the user yes/no, record the choice in CLAUDE.md, then honor it for every component after. Do NOT use for general code review, component file placement, hooks, i18n, or repo/CI setup scripts.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Projects using Storybook where the team wants every new/finished React component to get a reviewable, state-driving story without re-litigating the yes/no decision each time.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">18/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">100%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-07</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.80</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.90</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v c-good">0</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide-following output hits every mechanical acceptance item (colocated stories/ folder, separate *.a file with neutral fixtures, one controls-driven Playground story instead of per-state exports, explicit ErrorBoundary reasoning, preview URL surfaced) while the isolated baseline places a flat .a file with no mock-file separation and sprawls into a dozen per-variant named exports — exactly the anti-pattern the guide exists to prevent.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">No model-directed steering text; plain instructional skill content only</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No network calls or data-sending behavior; only reads local CLAUDE.md and writes a preference line</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No embedded keys/tokens/credentials found</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">No shell commands at all in SKILL.md; only prose (e.g. suggests running npx storybook@latest init, user-initiated, non-destructive)</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">No encoded blobs or eval of decoded content; plain readable markdown</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">No external host references; mentions an optional Storybook MCP by name only, no fetch/download-and-run</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reads of ~/.ssh, ~/.aws, .env, keychain, or cookie stores</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, setuid, cron/profile edits, or persistence mechanisms</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-files">files</span></div>
+      <div class="kv"><span class="lab">needs</span><a class="dep" href="frontend-react__skeleton-components.html">frontend-react:skeleton-components</a></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">6.6 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">695 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">7.3 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">3.0 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-react/skills/storybook-stories/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

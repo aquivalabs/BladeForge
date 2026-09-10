@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tests:architecture · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-tests)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">tests</div>
+    <h1 class="p-id"><span class="ns">tests:</span>architecture <span class="p-ver">v2.2.3</span></h1>
+    <p class="p-purpose">The test standard — which execution tier a test file belongs to and how its name declares it, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates.</p>
+    <div class="metrics"><span class="mchip c-warn"><span class="ic">🎯</span><span class="lab">trig</span>14/22</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.60</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install tests@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/tests/skills/architecture" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/tests/skills/architecture/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use when writing, reviewing, moving, or speeding up a unit test — deciding which execution tier a test file belongs to, what a test must satisfy to be accepted, or how coverage and mutation-score gates apply. Also when a test is slow, flaky, or green while the code under it is wrong.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">A repo whose test suite is slow, or green while the code under it is wrong, or has no written contract for what a test owes. Also a repo adopting the standard end to end, since the transition section states what is in force before every mechanism exists.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-warn">14/22</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">64%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-07</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.60</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.90</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v c-good">0</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide-driven output hits every rubric point (tier marker, fixed-axis walk with explicit n/a/deferred axes, factory/constant/error-shape rules named and traced, open-book test bodies) while the isolated baseline invents its own ad-hoc axis taxonomy and never writes an actual test body — a clear, non-decorative win for the guide.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">No model-directed steering language; all text is normal documentation/rubric guidance.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No network calls or data transmission of any kind in the material.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No embedded keys/tokens/credentials found.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">No scripts/ directory exists and no destructive shell commands appear anywhere.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">No base64/hex/encoded payloads or eval-of-decoded-blob logic.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">Only markdown links to public doc sites (github.com/stryker, vitest.dev) cited as reading references, none fetched/executed by any script.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reads of ~/.ssh, ~/.aws, .env, keychain, or cookie stores.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, setuid, or persistence via shell profile/cron/launch agents.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-files">files</span><span class="badge b-network">network</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">51.1 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">1.6 KB</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">7.7 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">3.2 KB</span></div><div class="f"><span><span class="lead">references/</span>case-space.md</span><span class="sz">18.1 KB</span></div><div class="f"><span><span class="lead">references/</span>component-tests.md</span><span class="sz">18.2 KB</span></div><div class="f"><span><span class="lead">references/</span>copy-and-i18n.md</span><span class="sz">9.0 KB</span></div><div class="f"><span><span class="lead">references/</span>coverage-gate.md</span><span class="sz">11.3 KB</span></div><div class="f"><span><span class="lead">references/</span>environment.md</span><span class="sz">9.7 KB</span></div><div class="f"><span><span class="lead">references/</span>execution-tiers.md</span><span class="sz">20.3 KB</span></div><div class="f"><span><span class="lead">references/</span>factories.md</span><span class="sz">11.5 KB</span></div><div class="f"><span><span class="lead">references/</span>failure-envelope.md</span><span class="sz">13.1 KB</span></div><div class="f"><span><span class="lead">references/</span>fakes.md</span><span class="sz">7.8 KB</span></div><div class="f"><span><span class="lead">references/</span>mutation-gate.md</span><span class="sz">21.1 KB</span></div><div class="f"><span><span class="lead">references/</span>readable-tests.md</span><span class="sz">9.6 KB</span></div><div class="f"><span><span class="lead">references/</span>what-not-to-test.md</span><span class="sz">4.8 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/tests/skills/architecture/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 16 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

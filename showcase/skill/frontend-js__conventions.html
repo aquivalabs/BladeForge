@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>frontend-js:conventions · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-frontend-js)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">frontend-js</div>
+    <h1 class="p-id"><span class="ns">frontend-js:</span>conventions <span class="p-ver">v2.0.2</span></h1>
+    <p class="p-purpose">House JS/TS coding style — arrow functions, single quotes, full variable names, braces on all control structures, small readable functions, and alias-over-relative-import rules.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>16/18</span><span class="mchip c-warn"><span class="ic">⚡</span><span class="lab">effect</span>-0.10</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install frontend-js@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/frontend-js/skills/conventions" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-js/skills/conventions/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">House JavaScript/TypeScript coding style — arrow functions, single quotes, full variable names (not sel/fn/e), braces on all control structures, small readable functions, and imports (a registered path alias always beats a ../../../ relative import; register one @alias per top-level dir in vite + tsconfig). Use whenever writing, editing, or reviewing JS/TS (React, Node, any JS/TS) — including renaming a variable to a full name, breaking up a long function, converting quotes or adding braces, replacing a deep relative import with an alias, registering a new @alias, or a pre-push style review. NOT for SCSS/styling (frontend-css:scss-modules), scaffolding a component&#x27;s folder (frontend-react:component-structure), i18n strings, or Apex.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Any project writing or reviewing JS/TS (React, Node, or plain JS/TS) that wants consistent house style enforced on every edit.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">16/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">89%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-04</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-warn">-0.10</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.80</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v ">1</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Both outputs already hit single quotes/braces/full-names/small-functions on their own; the guide&#x27;s only clear, demonstrable win was forcing the @shared alias import, while its literal &#x27;extract everything&#x27; pressure produced a self-admitted typo&#x27;d helper (and a `function` keyword the guide itself bans) that the cleaner, more feature-complete isolated baseline never had — net effect roughly a wash, tilted slightly negative.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">Plain style-guide prose, no directives steering the reading agent&#x27;s behavior beyond the stated coding rules.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No mention of sending any data anywhere; skill only edits/greps local files.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No keys/tokens/credentials present.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">Only grep commands shown for self-check (grep -nE for quotes/relative imports); nothing destructive.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">No base64/hex/eval or unreadable logic anywhere.</span></div><div class="row"><span class="st na">–</span><span class="nm">external-fetches</span><span class="dt">No scripts/ or references/ exist; SKILL.md contains no network calls or download instructions.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reference to ~/.ssh, ~/.aws, .env, keychain, or cookies.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, setuid, or persistence mechanisms; skill directory contains only SKILL.md, no scripts/ or references/ subfolders.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">3.7 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">386 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">7.7 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">2.9 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-js/skills/conventions/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>
