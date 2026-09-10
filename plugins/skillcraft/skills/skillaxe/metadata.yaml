@@ -1,4 +1,5 @@
 schema-version: 1
+category: authoring
 purpose: Measure whether a guide skill helps (with/without run), attribute shortfalls to the guide vs the agent, and improve it without regressions.
 best-for: Auditing a high-traffic guide skill, or one that seems not to help, before trusting or rewriting it.
 needs: [meta:model-routing]

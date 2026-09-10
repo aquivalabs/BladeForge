@@ -1,4 +1,5 @@
 schema-version: 1
+category: workflow
 purpose: Forces an explicit, cost-tiered model choice (head/work/sweep) on every spawned agent before any multi-agent fan-out, workflow script, or eval loop launches.
 best-for: Anyone about to spawn subagents, write a Workflow script with agent()/parallel()/pipeline(), or run an eval/optimization loop, who wants to avoid silently inheriting the expensive session model across every spawned instance.
 needs: []

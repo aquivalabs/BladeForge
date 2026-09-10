@@ -1,4 +1,5 @@
 schema-version: 1
+category: authoring
 purpose: Guide the agent to discover, recommend, and install marketplace skills from the compiled catalog.
 best-for: Any session where the user wants to browse what skills exist, get a fit recommendation for a task, or install a skill from this marketplace.
 needs: []

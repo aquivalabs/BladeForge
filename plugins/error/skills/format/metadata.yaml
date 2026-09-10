@@ -1,4 +1,5 @@
 schema-version: 1
+category: quality
 purpose: Enforce one Google AIP-193 style error envelope (code/status/message/details) across backend and frontend so every error is handled the same way regardless of layer.
 best-for: Any project defining or touching an error path — a new service/route/controller throw, mapping an upstream failure, or a frontend reading an error — that wants one consistent, i18n-ready error contract instead of ad-hoc shapes per layer.
 needs: []

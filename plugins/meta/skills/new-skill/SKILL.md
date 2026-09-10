@@ -154,10 +154,22 @@ expectations is not repeated there; it lives once, in `evals/rubric.json`.
    | field | rule |
    |---|---|
    | `purpose` | One-line human gloss. REQUIRED, non-blank. |
+   | `category` | Recommended — EXACTLY ONE purpose bucket from the glossary below (a legacy skill may omit it). What the skill is FOR, so the catalog and showcase group by purpose, not by plugin namespace. |
    | `best-for` | Adoption-fit sentence. Optional — may be blank. |
    | `needs` | Other skill ids (`<domain>:<name>`) this one depends on. `[]` if none. |
    | `changes.tags` | MULTI-SELECT from the fixed glossary below. `[]` if the skill changes nothing. |
    | `changes.notes` | Free text. REQUIRED non-blank if `other` is among `changes.tags`. |
+
+   `category` glossary (pick the ONE that best fits; validated by `scout_validate.py` when set):
+
+   | category | means |
+   |---|---|
+   | `frontend` | building UI — CSS, JS, React, i18n |
+   | `salesforce` | the Salesforce platform — Apex, LWC, org tooling |
+   | `quality` | review, critique, security, tests, error handling |
+   | `docs` | docs, writing, diagrams, voice |
+   | `authoring` | building skills themselves — scout, meta, skillaxe |
+   | `workflow` | process — commits, planning, routing, triage |
 
    `changes.tags` glossary (present these plain-language meanings when asking):
 
@@ -183,6 +195,7 @@ expectations is not repeated there; it lives once, in `evals/rubric.json`.
 
    ```yaml
    schema-version: 1
+   category: quality               # exactly one purpose bucket from the glossary above
    purpose: One-line human gloss — required, non-blank.
    best-for: Adoption-fit sentence — optional, may be blank.
    needs: [salesforce:dx_mcp]     # skill ids in this marketplace; [] = nothing

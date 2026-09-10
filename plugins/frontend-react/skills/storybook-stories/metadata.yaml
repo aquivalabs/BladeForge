@@ -1,4 +1,5 @@
 schema-version: 1
+category: frontend
 purpose: Writes a colocated Storybook story (with a separate mock-data file) covering a component's key states, after asking once per project whether stories are wanted at all.
 best-for: Projects using Storybook where the team wants every new/finished React component to get a reviewable, state-driving story without re-litigating the yes/no decision each time.
 needs:

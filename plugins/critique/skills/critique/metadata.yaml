@@ -1,4 +1,5 @@
 schema-version: 1
+category: quality
 purpose: The house method for running an adversarial critique of a design, spec, or plan — diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize — so the critique detects real defects instead of laundering a green stamp.
 best-for: Any team or pipeline that runs critique or red-team passes over designs, specs, and plans and wants the critique to actually catch defects rather than agree with the author.
 needs: [meta:model-routing]

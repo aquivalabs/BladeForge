@@ -25,6 +25,13 @@ OUTDIR = os.path.join(ROOT, "showcase")
 REPO = "https://github.com/aquivalabs/BladeForge"
 MARKET = "bladeforge"
 
+# --- purpose categories (the browse filter groups by these, not by plugin namespace) ---
+CATEGORY_ORDER = ["frontend", "salesforce", "quality", "docs", "authoring", "workflow"]
+CATEGORY_LABELS = {
+    "frontend": "Frontend", "salesforce": "Salesforce", "quality": "Quality & safety",
+    "docs": "Docs & writing", "authoring": "Skill authoring", "workflow": "Workflow",
+}
+
 # --- featured curation ---
 HERO_IDS = ["scout:scout", "cicero"]
 FLAGSHIP_IDS = ["cerberus:security-scan", "review:setup", "critique:critique", "diagram:diagram"]
@@ -118,7 +125,7 @@ def load():
             "purpose":it.get("purpose","") or "","activates":it.get("activates-when","") or "",
             "best":it.get("best-for","") or "","needs":it.get("needs") or [],
             "tags":ch.get("tags") or [],"hooks":bool(it.get("hooks")),
-            "tree":tree,"trig":trig,"effect":effect,"security":security,
+            "tree":tree,"trig":trig,"effect":effect,"security":security,"category":it.get("category"),
         })
     out.sort(key=lambda s:s["id"])
     return out
@@ -310,10 +317,12 @@ def index_page(skills, doms, pal):
     gdata=[{"id":s["id"],"plugin":s["plugin"],"slug":s["slug"],"version":s["version"],
             "purpose":s["purpose"],"activates":s["activates"],"best":s["best"],
             "needs":s["needs"],"tags":s["tags"],
+            "category":s.get("category"),
             "trig":(s["trig"]["score"] if s["trig"] else None),"trigAcc":(s["trig"]["acc"] if s["trig"] else None),
             "effect":(s["effect"]["qi"] if s["effect"] else None),
             "sec":([s["security"]["passed"],s["security"]["total"]] if s["security"] else None)} for s in skills]
-    payload=json.dumps({"skills":gdata,"palette":pal,"domains":doms}, ensure_ascii=False).replace("</script>","<\\/script>")
+    cats=[c for c in CATEGORY_ORDER if any(s.get("category")==c for s in skills)]
+    payload=json.dumps({"skills":gdata,"palette":pal,"domains":doms,"categories":cats,"catLabels":CATEGORY_LABELS}, ensure_ascii=False).replace("</script>","<\\/script>")
     h=head("Skill Marketplace", rel="")
     h+=f"""
 <div class="wrap">
@@ -332,7 +341,7 @@ def index_page(skills, doms, pal):
   <section class="browse">
     <div class="sect-label">all skills</div>
     <input class="search" id="q" type="search" placeholder="Search id, purpose, or trigger…" autocomplete="off">
-    <div class="filters" id="df"><span class="flabel">domain</span></div>
+    <div class="filters" id="df"><span class="flabel">purpose</span></div>
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" hidden>no skills match</div>
   </section>
@@ -348,15 +357,15 @@ def index_page(skills, doms, pal):
 
 INDEX_JS = r"""
 const D=JSON.parse(document.getElementById('data').textContent);
-const PAL=D.palette, SK=D.skills, DOMS=D.domains;
+const PAL=D.palette, SK=D.skills, DOMS=D.domains, CATS=D.categories, CATLAB=D.catLabels;
 const esc=s=>(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const st={q:'',dom:null};
+const st={q:'',cat:null};
 document.getElementById('doms').textContent=DOMS.length;
 const df=document.getElementById('df');
-DOMS.forEach(d=>{const n=SK.filter(s=>s.plugin===d).length;const b=document.createElement('button');
-  b.className='chip';b.setAttribute('aria-pressed','false');b.dataset.dom=d;b.innerHTML=`${d} <span class="n">${n}</span>`;
-  b.onclick=()=>{st.dom=st.dom===d?null:d;sync();render();};df.appendChild(b);});
-function sync(){df.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.dom===st.dom));}
+CATS.forEach(c=>{const n=SK.filter(s=>s.category===c).length;const b=document.createElement('button');
+  b.className='chip';b.setAttribute('aria-pressed','false');b.dataset.cat=c;b.innerHTML=`${CATLAB[c]||c} <span class="n">${n}</span>`;
+  b.onclick=()=>{st.cat=st.cat===c?null:c;sync();render();};df.appendChild(b);});
+function sync(){df.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.cat===st.cat));}
 document.getElementById('q').addEventListener('input',e=>{st.q=e.target.value.toLowerCase().trim();render();});
 function tagB(t){return t.length?t.map(x=>`<span class="badge b-${x}">${x}</span>`).join(''):'<span class="badge b-ro">read-only</span>';}
 function trigCls(a){return a==null?'c-none':(a>=0.7?'c-good':'c-warn');}
@@ -366,7 +375,7 @@ function chips(s){const c=[];
   if(s.effect!=null)c.push(`<span class="mchip ${effCls(s.effect)}"><span class="ic">⚡</span><span class="lab">effect</span>${(s.effect>=0?'+':'')+s.effect.toFixed(2)}</span>`);
   if(s.sec)c.push(`<span class="mchip ${s.sec[0]===s.sec[1]?'c-good':'c-warn'}"><span class="ic">\u{1F6E1}</span><span class="lab">scan</span>${s.sec[0]}/${s.sec[1]}</span>`);
   return c.length?`<div class="metrics">${c.join('')}</div>`:'';}
-function match(s){if(st.dom&&s.plugin!==st.dom)return false;
+function match(s){if(st.cat&&s.category!==st.cat)return false;
   if(st.q){const h=(s.id+' '+s.purpose+' '+s.activates+' '+s.best).toLowerCase();if(!h.includes(st.q))return false;}return true;}
 function card(s){const[ns,nm]=s.id.split(':');const a=document.createElement('a');a.className='card';a.href='skill/'+s.slug+'.html';
   a.style.setProperty('--dc',PAL[s.plugin]);

@@ -21,7 +21,7 @@
         "pass": true
       },
       {
-        "query": "adding a new skill to the meta plugin — where does the SKILL.md go and what should be in it?",
+        "query": "adding a new skill to the meta plugin \u2014 where does the SKILL.md go and what should be in it?",
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
@@ -37,7 +37,7 @@
         "pass": true
       },
       {
-        "query": "creating a new domain plugin for database stuff — do i need a plugin.json?",
+        "query": "creating a new domain plugin for database stuff \u2014 do i need a plugin.json?",
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
@@ -53,7 +53,7 @@
         "pass": true
       },
       {
-        "query": "the new frontend-css:rem skill needs a SKILL.md — show me what it should look like",
+        "query": "the new frontend-css:rem skill needs a SKILL.md \u2014 show me what it should look like",
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
@@ -61,7 +61,7 @@
         "pass": true
       },
       {
-        "query": "adding embed-test as a project-local skill — how is that different from a marketplace skill?",
+        "query": "adding embed-test as a project-local skill \u2014 how is that different from a marketplace skill?",
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
@@ -69,7 +69,7 @@
         "pass": true
       },
       {
-        "query": "i need a skill that fires before any apex test is authored — help me scaffold it",
+        "query": "i need a skill that fires before any apex test is authored \u2014 help me scaffold it",
         "should_trigger": true,
         "triggers": 1,
         "runs": 2,
@@ -85,7 +85,7 @@
         "pass": true
       },
       {
-        "query": "improve this skill's description so it triggers more reliably — run evals on it",
+        "query": "improve this skill's description so it triggers more reliably \u2014 run evals on it",
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
@@ -93,7 +93,7 @@
         "pass": true
       },
       {
-        "query": "the ockham skill is triggering on the wrong things — optimize it",
+        "query": "the ockham skill is triggering on the wrong things \u2014 optimize it",
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
@@ -101,7 +101,7 @@
         "pass": true
       },
       {
-        "query": "the lean-writing skill needs better examples in references/ — add some",
+        "query": "the lean-writing skill needs better examples in references/ \u2014 add some",
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
@@ -125,7 +125,7 @@
         "pass": true
       },
       {
-        "query": "should the WidgetCard use SRP — it's doing fetch and render",
+        "query": "should the WidgetCard use SRP \u2014 it's doing fetch and render",
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
@@ -166,13 +166,13 @@
     "quality_impact": 0.55,
     "skillscore": 0.65,
     "guide_faults": [],
-    "verdict": "Guide-following output hits the structural must-haves the rubric actually checks for (nine-question dialogue before the body, metadata.yaml + evals/rubric.json scaffold, explicit Contract In/Out, honest flagging of the plugin.json/README/skill-eval steps left undone) while the isolated baseline — despite a competently written procedural body — never produces metadata.yaml, never touches evals/, and shows no sign of the nine-question groundwork at all."
+    "verdict": "Guide-following output hits the structural must-haves the rubric actually checks for (nine-question dialogue before the body, metadata.yaml + evals/rubric.json scaffold, explicit Contract In/Out, honest flagging of the plugin.json/README/skill-eval steps left undone) while the isolated baseline \u2014 despite a competently written procedural body \u2014 never produces metadata.yaml, never touches evals/, and shows no sign of the nine-question groundwork at all."
   },
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-08T22:30:07",
+    "scanned_at": "2026-09-10T19:39:30",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "5759facaf4806099f55d00717634be601893dc2ab1eee481c90ca76d78306716",
+    "scanned_hash": "bd69e4f403ec8949faa7c5e10dcf163288c07b67c3d195a11d53fbdfbe764338",
     "checklist": [
       {
         "n": 1,

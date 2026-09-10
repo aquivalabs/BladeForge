@@ -1,4 +1,5 @@
 schema-version: 1
+category: salesforce
 purpose: CLI fallback that deploys Apex/metadata to a Salesforce org and runs Apex tests, returning a terse two-line pass/fail summary — no MCP dependency.
 best-for: Projects without the salesforce-dx MCP connected (headless/cron use), or anyone who wants a single combined deploy+test call with a one-glance result instead of parsing MCP JSON.
 needs: []
