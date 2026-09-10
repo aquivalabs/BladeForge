@@ -1,4 +1,5 @@
 schema-version: 1
+category: docs
 purpose: Turn a spec/code scope into a hardened diagram-model JSON, then render it into ONE committable HTML page (one file, React Flow + ELK, libraries loaded from a CDN at view time) where node kind and subsystem are encoded automatically for readability.
 best-for: Teams who want an accurate, clickable "how it works" diagram (classes/objects/components/permission sets + relations) committed alongside a spec or module — with a heterogeneous mix of node kinds (react / apex / lambda / object) kept visually distinct — instead of a hand-drawn or memory-derived picture.
 needs: []

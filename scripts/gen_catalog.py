@@ -33,8 +33,8 @@ Output shape:
     "schema-version": 1,
     "marketplace": "<.claude-plugin/marketplace.json:name>",
     "generated": "YYYY-MM-DD",
-    "skills": [ {name, plugin, plugin-version, activates-when, purpose,
-                 best-for, needs, changes, hooks}, ... ]
+    "skills": [ {name, plugin, plugin-version, activates-when, category,
+                 purpose, best-for, needs, changes, hooks}, ... ]
   }
 
 CLI:
@@ -237,6 +237,7 @@ def _build_entry(domain: str, skill_dir: Path, plugin_json: dict, hooks: list) -
         "plugin": plugin_json.get("name"),
         "plugin-version": plugin_json.get("version"),
         "activates-when": description,
+        "category": metadata.get("category"),
         "purpose": metadata.get("purpose"),
         "best-for": metadata.get("best-for"),
         "needs": metadata.get("needs", []),

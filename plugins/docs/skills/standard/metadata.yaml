@@ -1,4 +1,5 @@
 schema-version: 1
+category: docs
 purpose: Teach the four-layer documentation standard — decision, mechanism, rule, frozen record — and how to install it in a target repo.
 best-for: A repo whose docs are drifting from its code, or that wants a first opinion on where a decision/mechanism/rule belongs, or is adopting this documentation standard end to end.
 needs: []

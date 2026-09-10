@@ -128,6 +128,7 @@ this order:
 | field | rule |
 |---|---|
 | `purpose` | One-line human gloss. REQUIRED, non-blank. |
+| `category` | Recommended — EXACTLY ONE purpose bucket: `frontend`, `salesforce`, `quality`, `docs`, `authoring`, or `workflow` (a legacy skill may omit it; validated by `scout_validate.py` when set). What the skill is FOR, so the catalog and showcase group by purpose, not by plugin namespace. |
 | `best-for` | Adoption-fit sentence. Optional — may be blank. |
 | `needs` | Other skill ids (`<domain>:<name>`) this one depends on. `[]` if none. |
 | `changes.tags` | MULTI-SELECT from the fixed glossary below. `[]` if the skill changes nothing. |
@@ -149,6 +150,7 @@ leaves a half-written sidecar:
 
 ```yaml
 schema-version: 1
+category: quality               # exactly one purpose bucket (see the table above)
 purpose: One-line human gloss — required, non-blank.
 best-for: Adoption-fit sentence — optional, may be blank.
 needs: [salesforce:dx_mcp]     # skill ids in this marketplace; [] = nothing

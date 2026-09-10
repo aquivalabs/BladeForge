@@ -1,4 +1,5 @@
 schema-version: 1
+category: frontend
 purpose: Rules for building app-chrome layout components (shell, top bar, sidebar, command palette, global overlays) that stay free of domain logic.
 best-for: Teams building a React app shell/nav who want layout kept separate from feature/domain components and routed through project primitives and config.
 needs:

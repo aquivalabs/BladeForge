@@ -1,4 +1,5 @@
 schema-version: 1
+category: frontend
 purpose: Route every user-facing UI string through the project's localization system (or Custom Labels on Salesforce) instead of hardcoding it.
 best-for: Any project with user-facing UI text — teams that want new labels/messages/toasts to land in the existing i18n catalog/namespace rather than as scattered string literals.
 needs: []

@@ -1,4 +1,5 @@
 schema-version: 1
+category: frontend
 purpose: Enforce rem (not px) for CSS/SCSS/Tailwind dimensional values so layouts respect user font-size/zoom preferences.
 best-for: Frontend projects with a shared CSS/SCSS/Tailwind codebase that want consistent, accessible, zoom-responsive sizing instead of scattered hardcoded px.
 needs: []

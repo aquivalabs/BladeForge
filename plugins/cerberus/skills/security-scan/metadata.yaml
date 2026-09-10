@@ -1,4 +1,5 @@
 schema-version: 1
+category: quality
 purpose: The consumer-safety head of cerberus — reviews a skill/script/fixture for the eight-point security checklist (injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation) before it ships.
 best-for: Any marketplace where an installed skill runs on someone else's machine and must be certified safe, not just leak-free.
 needs: []

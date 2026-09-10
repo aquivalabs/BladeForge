@@ -1,4 +1,5 @@
 schema-version: 1
+category: frontend
 purpose: Typecheck a frontend repo with tsc and run (optionally targeted) vitest tests, printing one terse pass/fail summary instead of two noisy tool outputs.
 best-for: Any TypeScript/React repo with tsc + vitest configured, pulled in right after editing code to confirm types and relevant tests still pass before moving on.
 needs: []

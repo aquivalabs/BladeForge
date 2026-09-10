@@ -1,4 +1,5 @@
 schema-version: 1
+category: quality
 purpose: Install and tailor the pre-push review framework (eight reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.
 best-for: A repo that has the review plugin enabled but no .claude/review.config.json yet, and wants the pre-push review gate adopted and tuned to its stack — including deciding which of the eight bundled lenses it has a subject for.
 needs: []

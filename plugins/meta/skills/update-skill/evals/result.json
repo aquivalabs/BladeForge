@@ -13,7 +13,7 @@
     "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
     "results": [
       {
-        "query": "i just changed the body of the widget-catalog skill — can you refresh its metadata.yaml?",
+        "query": "i just changed the body of the widget-catalog skill \u2014 can you refresh its metadata.yaml?",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
@@ -21,7 +21,7 @@
         "pass": true
       },
       {
-        "query": "i added a new bundled script to this skill and swapped its allowed-tools — update the metadata sidecar",
+        "query": "i added a new bundled script to this skill and swapped its allowed-tools \u2014 update the metadata sidecar",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
@@ -37,7 +37,7 @@
         "pass": true
       },
       {
-        "query": "i rewrote the hooks.json for this skill — does its changes.tags still match reality?",
+        "query": "i rewrote the hooks.json for this skill \u2014 does its changes.tags still match reality?",
         "should_trigger": true,
         "triggers": 0,
         "runs": 3,
@@ -53,7 +53,7 @@
         "pass": true
       },
       {
-        "query": "i changed what the order-sync skill actually does — its metadata.yaml purpose no longer matches, fix it",
+        "query": "i changed what the order-sync skill actually does \u2014 its metadata.yaml purpose no longer matches, fix it",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
@@ -61,7 +61,7 @@
         "pass": true
       },
       {
-        "query": "this skill has no Contract section and still carries a When to Activate — bring it up to the standard",
+        "query": "this skill has no Contract section and still carries a When to Activate \u2014 bring it up to the standard",
         "should_trigger": true,
         "triggers": 2,
         "runs": 3,
@@ -77,7 +77,7 @@
         "pass": true
       },
       {
-        "query": "add acceptance criteria to this existing skill — it has no evals/rubric.json acceptance half",
+        "query": "add acceptance criteria to this existing skill \u2014 it has no evals/rubric.json acceptance half",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
@@ -85,7 +85,7 @@
         "pass": true
       },
       {
-        "query": "its description summarises the workflow instead of saying when to use it — rewrite the frontmatter and fix the boundary",
+        "query": "its description summarises the workflow instead of saying when to use it \u2014 rewrite the frontmatter and fix the boundary",
         "should_trigger": true,
         "triggers": 1,
         "runs": 3,
@@ -93,7 +93,7 @@
         "pass": false
       },
       {
-        "query": "i want to create a brand-new skill for handling widget import errors — where does the SKILL.md go?",
+        "query": "i want to create a brand-new skill for handling widget import errors \u2014 where does the SKILL.md go?",
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
@@ -101,7 +101,7 @@
         "pass": true
       },
       {
-        "query": "improve this skill's description so it triggers more reliably — run evals and score it",
+        "query": "improve this skill's description so it triggers more reliably \u2014 run evals and score it",
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
@@ -142,13 +142,13 @@
     "quality_impact": 0.9,
     "skillscore": 0.95,
     "guide_faults": [],
-    "verdict": "Guide-following output hits all 8 rubric acceptance points (probe-first path decision, Contract+delete-When-to-Activate, looping Before-you-finish, rubric.json with escape hatch, conv1-read-back/conv2-reask, sidecar+plugin.json+README, mandatory meta:skill-eval); isolated baseline misses nearly every one — it even explicitly keeps '## When to Activate' (contradicting the standard), invents a differently-named/located acceptance file, and skips the probe, the conversation-reopening rule, the sidecar/version bump, and any measurement step."
+    "verdict": "Guide-following output hits all 8 rubric acceptance points (probe-first path decision, Contract+delete-When-to-Activate, looping Before-you-finish, rubric.json with escape hatch, conv1-read-back/conv2-reask, sidecar+plugin.json+README, mandatory meta:skill-eval); isolated baseline misses nearly every one \u2014 it even explicitly keeps '## When to Activate' (contradicting the standard), invents a differently-named/located acceptance file, and skips the probe, the conversation-reopening rule, the sidecar/version bump, and any measurement step."
   },
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-08T16:50:42",
+    "scanned_at": "2026-09-10T19:39:30",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "85c34d35a547c813017b371d1e167c81779a71e4ca65e1cf55e2b8425a88ad41",
+    "scanned_hash": "4c6699d7b6949ccb275e4ec095bacabe234778c8867e850c29af3f99bb133164",
     "checklist": [
       {
         "n": 1,

@@ -1,4 +1,5 @@
 schema-version: 1
+category: salesforce
 purpose: >
   The Apex delta of the shared test standard. States only what the platform changes — Assert.* with a
   message, @IsTest(SeeAllData=false), @TestSetup and the rollback, Test.startTest/stopTest, factory
