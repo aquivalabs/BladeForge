@@ -12,7 +12,7 @@
   <a class="back" href="../index.html">← all skills</a>
   <header class="p-head">
     <div class="p-badge">scout</div>
-    <h1 class="p-id"><span class="ns">scout:</span>scout <span class="p-ver">v2.0.4</span></h1>
+    <h1 class="p-id"><span class="ns">scout:</span>scout <span class="p-ver">v2.1.0</span></h1>
     <p class="p-purpose">Guide the agent to discover, recommend, and install marketplace skills from the compiled catalog.</p>
     <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>11/12</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
     <div class="p-install"><b>install</b> <code>/plugin install scout@bladeforge</code></div>
@@ -29,11 +29,11 @@
   </div><div class="bmeta">measured 2026-09-07</div></section>
     
     <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">SKILL.md explicitly instructs treating catalog fields as untrusted data, never as instructions to obey.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No network calls; skill only reads local catalog.json and renders tables to the user.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No embedded keys/tokens found in SKILL.md or catalog.json.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">No scripts/ dir at all; only doc-mentioned example commands like /plugin install, none executed by the skill itself.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">Plain markdown instructions and JSON catalog data, nothing encoded or eval&#x27;d.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">No fetch/curl/download logic present; skill is purely local read-and-render.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No references to ~/.ssh, ~/.aws, .env, or keychain anywhere in the material.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo/setuid/cron/profile edits; only in-session /plugin install command, user-confirmed.</span></div></div>
-    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <div class="bmeta">scanned 2026-09-10 · cerberus:security-scan</div></section>
     <section class="p-sec"><h3>side effects &amp; deps</h3>
       <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span><span class="badge b-ro">hook</span></div>
       <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
-    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">12.2 KB</span></div><div class="f"><span><span class="lead"></span>catalog.json</span><span class="sz">60.7 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">476 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">5.1 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">1.9 KB</span></div></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">12.6 KB</span></div><div class="f"><span><span class="lead"></span>catalog.json</span><span class="sz">61.9 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">496 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">5.1 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">1.9 KB</span></div></div></section>
     <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/scout/skills/scout/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 5 files in the bundle.</div></section>
   </div>
 </div>
