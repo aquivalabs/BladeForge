@@ -43,6 +43,19 @@ import yaml
 # The ONLY allowed values for changes.tags in metadata.yaml.
 ALLOWED_TAGS = {"git", "files", "network", "org", "money", "other"}
 
+# The ONLY allowed values for `category` in metadata.yaml — the purpose bucket a
+# skill belongs to, so the catalog and the showcase can group by what a skill is
+# FOR rather than which plugin namespace it lives in. Optional (a legacy skill may
+# omit it), but when set it must be exactly one of these.
+ALLOWED_CATEGORIES = {
+    "frontend",    # building UI — CSS, JS, React, i18n
+    "salesforce",  # the Salesforce platform — Apex, LWC, org tooling
+    "quality",     # review, critique, security, tests, error handling
+    "docs",        # docs, writing, diagrams, voice
+    "authoring",   # building skills themselves — scout, meta, skillaxe
+    "workflow",    # process — commits, planning, routing, triage
+}
+
 # Tool -> (tags implied, mutation class).
 #   "mutating"  == unambiguously a side-effecting grant -> a clear contradiction
 #                  if the skill declares no matching tag.
@@ -145,6 +158,13 @@ def _validate_metadata_fields(
     best_for = data.get("best-for", "")
     if best_for is not None and not isinstance(best_for, str):
         raise SystemExit(f"{name} :: best-for must be a string if present")
+
+    category = data.get("category")
+    if category is not None and category not in ALLOWED_CATEGORIES:
+        raise SystemExit(
+            f"{name} :: category, when set, must be exactly one of "
+            f"{sorted(ALLOWED_CATEGORIES)} (got {category!r})"
+        )
 
     needs = data.get("needs", [])
     if not isinstance(needs, list) or not all(isinstance(n, str) for n in needs):

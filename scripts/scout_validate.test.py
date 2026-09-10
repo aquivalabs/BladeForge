@@ -16,6 +16,7 @@ def run(skill_dir):
 
 VALID_META = """\
 schema-version: 1
+category: authoring
 purpose: Does a thing that helps.
 best-for: When you need the thing.
 needs: []
@@ -33,12 +34,13 @@ def make_skill(root: Path, name="myskill", plugin="myplugin"):
 
 
 def write_meta(skill_dir: Path, tags, notes="", purpose="Does a thing.",
-               schema_version=1, needs=None, best_for=""):
+               schema_version=1, needs=None, best_for="", category="authoring"):
     needs = needs if needs is not None else []
     tags_yaml = "[]" if not tags else "[" + ", ".join(tags) + "]"
     needs_yaml = "[]" if not needs else "[" + ", ".join(needs) + "]"
     content = (
         f"schema-version: {schema_version}\n"
+        f"category: {category}\n"
         f"purpose: {purpose}\n"
         f"best-for: {best_for}\n"
         f"needs: {needs_yaml}\n"
@@ -361,6 +363,41 @@ class MetadataValidityTests(unittest.TestCase):
             r = run(skill_dir)
             self.assertNotEqual(r.returncode, 0)
             self.assertIn("purpose", r.stderr)
+
+    def test_valid_category_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill_dir = make_skill(root)
+            write_meta(skill_dir, tags=[], category="quality")
+            write_skill_md(skill_dir)
+
+            r = run(skill_dir)
+            self.assertEqual(r.returncode, 0, r.stderr)
+
+    def test_unknown_category_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill_dir = make_skill(root)
+            write_meta(skill_dir, tags=[], category="bogus")
+            write_skill_md(skill_dir)
+
+            r = run(skill_dir)
+            self.assertNotEqual(r.returncode, 0)
+            self.assertIn("category", r.stderr)
+
+    def test_missing_category_is_ok(self):
+        # category is optional — a legacy skill may omit it entirely
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill_dir = make_skill(root)
+            (skill_dir / "metadata.yaml").write_text(
+                "schema-version: 1\npurpose: Does a thing.\nbest-for: \n"
+                "needs: []\nchanges:\n  tags: []\n  notes: ''\n"
+            )
+            write_skill_md(skill_dir)
+
+            r = run(skill_dir)
+            self.assertEqual(r.returncode, 0, r.stderr)
 
     def test_other_tag_without_notes_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
