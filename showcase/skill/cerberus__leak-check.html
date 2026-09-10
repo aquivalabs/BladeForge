@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cerberus:leak-check · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-cerberus)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">cerberus</div>
+    <h1 class="p-id"><span class="ns">cerberus:</span>leak-check <span class="p-ver">v2.1.2</span></h1>
+    <p class="p-purpose">Agent judgment pass that reviews a skill/reference/script/eval change for anything pointing to a real work codebase — secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate &quot;one company&#x27;s product&quot; flavor — and rewrites it to a neutral fictional demo.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>9/10</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install cerberus@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/cerberus/skills/leak-check" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/cerberus/skills/leak-check/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace — review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate &quot;this is one specific company&#x27;s product&quot; flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Any contributor to this public skills marketplace, right before committing a new or edited skill, reference, or eval fixture — also triggered automatically by the cerberus PostToolUse hook on skill edits.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">9/10</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">90%</div><small>vs baseline 80%</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-08</div></section>
+    
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">instructional prose only, no directives steering the reading model beyond normal skill guidance</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">no network calls or data transmission anywhere in the file</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">only placeholder examples like /Users/&lt;name&gt;/... and ABC-1234, no real embedded credentials</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">mentions git filter-repo and force-push only as prose advice for escalation scenarios, not executed by any script</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">plain readable markdown, no encoded payloads</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">no fetch/download logic present; skill has no scripts/ directory at all</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">no reading of ~/.ssh, .env, keychain, etc.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">no sudo/setuid/persistence mechanisms; skill is documentation-only with no scripts</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-files">files</span><span class="badge b-ro">hook</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">4.5 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">768 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">4.8 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">1.9 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/cerberus/skills/leak-check/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

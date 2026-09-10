@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>frontend-react:component-structure · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-frontend-react)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">frontend-react</div>
+    <h1 class="p-id"><span class="ns">frontend-react:</span>component-structure <span class="p-ver">v2.0.2</span></h1>
+    <p class="p-purpose">Standardizes how a React component&#x27;s files, folder, BEM classes, and styling conventions are organized so structure stays consistent across the codebase.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>16/18</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.85</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install frontend-react@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/frontend-react/skills/component-structure" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-react/skills/component-structure/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use when creating, editing, restructuring, or reviewing a React frontend component \u2014 including its folder layout and file organization (tsx/scss/index), where a component or sub-component should live, BEM class naming, SCSS styling, rem sizing, i18n of user-visible strings, barrel exports, and replacing inline JS style/hover handlers (e.g. onMouseEnter toggling classes) with CSS. Covers \&quot;this component file is in the wrong place \u2014 fix the structure\&quot;, moving a flat .tsx into its own folder, and any question about how a component&#x27;s files, styles, or markup should be organized.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Teams building a React app who want every component (and sub-component) to follow the same folder/file/BEM/i18n/error-boundary conventions instead of drifting per-author.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">16/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">89%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-07</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.85</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.95</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v ">1</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">The guide drove near-total compliance with all six rubric criteria (BEM/kebab-case/PascalCase, tokens+rem+breakpoints, i18n with correct namespace, ErrorBoundary/QueryState isolation, one controllable Storybook story) that the isolated baseline had no way to know and largely missed (CSS Modules instead of BEM/.scss, no i18n, no ErrorBoundary, one story per state instead of a controlled single story) — a substantial, clearly guide-attributable improvement.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">Plain instructional prose to the reading agent; no embedded directive attempting to override or hijack the session.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No network calls or data transmission of any kind; docs only.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No keys, tokens, or credentials present in SKILL.md or references/i18n.md.</span></div><div class="row"><span class="st na">–</span><span class="nm">dangerous-commands</span><span class="dt">No scripts/ directory and no shell commands executed anywhere in the material.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">All content is readable Markdown/TSX/SCSS examples; no base64/hex/eval blobs.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">No URLs, downloads, or external host references anywhere in the two files.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reference to ~/.ssh, ~/.aws, .env, keychain, or cookie stores.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, cron, launch agent, or shell-profile edits; skill only governs React component folder/BEM/i18n conventions.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><a class="dep" href="frontend-css__scss-modules.html">frontend-css:scss-modules</a><a class="dep" href="frontend-css__rem.html">frontend-css:rem</a><a class="dep" href="i18n__ui-strings.html">i18n:ui-strings</a><a class="dep" href="frontend-react__storybook-stories.html">frontend-react:storybook-stories</a></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">10.3 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">658 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">7.8 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">3.3 KB</span></div><div class="f"><span><span class="lead">references/</span>i18n.md</span><span class="sz">1.7 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-react/skills/component-structure/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 5 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

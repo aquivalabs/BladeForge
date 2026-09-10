@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>meta:triage · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-meta)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">meta</div>
+    <h1 class="p-id"><span class="ns">meta:</span>triage <span class="p-ver">v2.6.4</span></h1>
+    <p class="p-purpose">Run a cheap full-coverage sorting pass over a large batch of items before spending an expensive pass only on the ones that need it.</p>
+    <div class="metrics"><span class="mchip c-warn"><span class="ic">🎯</span><span class="lab">trig</span>9/18</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install meta@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/meta/skills/triage" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/meta/skills/triage/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use when you&#x27;re about to attack a LARGE batch of items the same expensive way \u2014 a repo-wide sweep for dead code, unused exports, or bugs; a big multi-file diff to review; dozens of call sites to migrate; a fleet of skills, files, or docs to audit or read; every TODO to classify; hundreds of failing tests to work through. Any \&quot;do X across the whole repo / all of them / everything\&quot; request where the set is too big to give each item full attention. Instead of paying deep cost on every item, first run one CHEAP shallow pass over ALL of them to sort into skip vs. worth-it, then spend the expensive deep pass only on the shortlist. Invoke at planning time, before touching the first item. NOT for a single file or function (just do it), NOT for picking a model tier (meta:model-routing), NOT for a plain parallel spawn with no sorting step.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Anyone about to sweep, review, migrate, or classify a large set of files/items uniformly and wants to avoid paying deep-pass cost on every single one.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-warn">9/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">50%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-04</div></section>
+    
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">pure prose methodology doc, no directives aimed at the reading model</span></div><div class="row"><span class="st na">–</span><span class="nm">data-exfiltration</span><span class="dt">no scripts or network code present at all</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">no keys/tokens/credentials anywhere in SKILL.md</span></div><div class="row"><span class="st na">–</span><span class="nm">dangerous-commands</span><span class="dt">no scripts/ directory exists; nothing executes</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">plain readable markdown, no encoded blobs</span></div><div class="row"><span class="st na">–</span><span class="nm">external-fetches</span><span class="dt">no fetch/download logic present</span></div><div class="row"><span class="st na">–</span><span class="nm">credential-access</span><span class="dt">no code reading ~/.ssh, .env, etc.</span></div><div class="row"><span class="st na">–</span><span class="nm">privilege-escalation</span><span class="dt">no sudo/cron/profile-editing code present</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">4.6 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">362 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">6.0 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">2.5 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/meta/skills/triage/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

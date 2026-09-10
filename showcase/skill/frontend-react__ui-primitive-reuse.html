@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>frontend-react:ui-primitive-reuse · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-frontend-react)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">frontend-react</div>
+    <h1 class="p-id"><span class="ns">frontend-react:</span>ui-primitive-reuse <span class="p-ver">v2.0.2</span></h1>
+    <p class="p-purpose">Before hand-rolling a shared UI primitive (button, input, dialog, tooltip, etc.), search the project&#x27;s existing primitive library and reuse or extend it instead of creating a duplicate.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>12/12</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.85</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install frontend-react@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/frontend-react/skills/ui-primitive-reuse" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-react/skills/ui-primitive-reuse/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Before creating ANY shared/reusable UI primitive in a React codebase (button, input, checkbox, radio, switch, select, textarea, dialog, tooltip, dropdown, badge, card, separator…), search the project&#x27;s primitive library first to avoid duplicates — reuse or extend what exists; build new only when truly absent. Framework-agnostic (no specific UI or styling library assumed). Activate whenever about to add or hand-roll a reusable field/control/primitive.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">React codebases with (or growing) a shared primitives folder, pulled in whenever someone is about to add a new reusable field/control/overlay component.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">12/12</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">100%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-07</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.85</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.95</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v c-good">0</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide-driven agent grepped the actual primitives folder and named the exact reuse target (a project artifact) with props and story-check; the isolated baseline only reasoned abstractly about headless-UI best practice and would have proposed building a wrapper that already exists.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">instructional guidance only, no directives aimed at overriding the reading agent&#x27;s instructions</span></div><div class="row"><span class="st na">–</span><span class="nm">data-exfiltration</span><span class="dt">no scripts or network-capable code present; SKILL.md contains no data-sending logic</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">no keys/tokens/credentials found in SKILL.md</span></div><div class="row"><span class="st na">–</span><span class="nm">dangerous-commands</span><span class="dt">skill has no scripts/ directory; only a grep-based search is described in prose, nothing destructive</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">plain markdown prose, fully readable, no encoded blobs</span></div><div class="row"><span class="st na">–</span><span class="nm">external-fetches</span><span class="dt">no scripts or fetch calls; only references/ mention is a project-local docs-retrieval step, not executed by this skill</span></div><div class="row"><span class="st na">–</span><span class="nm">credential-access</span><span class="dt">no file/credential access code exists in this skill&#x27;s material</span></div><div class="row"><span class="st na">–</span><span class="nm">privilege-escalation</span><span class="dt">no shell execution capability in this skill at all</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">3.3 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">615 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">5.9 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">2.4 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/frontend-react/skills/ui-primitive-reuse/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

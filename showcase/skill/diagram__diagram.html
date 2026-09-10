@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>diagram:diagram · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-diagram)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">diagram</div>
+    <h1 class="p-id"><span class="ns">diagram:</span>diagram <span class="p-ver">v2.2.1</span></h1>
+    <p class="p-purpose">Turn a spec/code scope into a hardened diagram-model JSON, then render it into ONE committable HTML page (one file, React Flow + ELK, libraries loaded from a CDN at view time) where node kind and subsystem are encoded automatically for readability.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>17/23</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install diagram@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/diagram/skills/diagram" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/diagram/skills/diagram/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use when asked to draw, sketch, map, diagram, visualize, or make a picture/schema/architecture of how software works — the architecture or how-it-works view of a feature, the relationships between classes or interfaces (with their methods and fields), data or record flow, an object model with its fields and permission sets, or a dependency graph — for a package, a feature, a handful of files, or a whole undocumented source directory, built from a spec, a plan or ticket, or read straight from the code, and output as one shareable HTML page you can commit. Also use to clean up an existing generated diagram that is hard to read (overlapping nodes, tiny text). Do NOT use to plot a data or metrics chart from a dataset, to paste a mermaid or ascii snippet into a PR or README, to draw in an external editor like Lucidchart or Excalidraw, to convert a whiteboard photo, to re-render an existing page for a screenshot, or to explain how something works in words with no picture.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Teams who want an accurate, clickable &quot;how it works&quot; diagram (classes/objects/components/permission sets + relations) committed alongside a spec or module — with a heterogeneous mix of node kinds (react / apex / lambda / object) kept visually distinct — instead of a hand-drawn or memory-derived picture.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">17/23</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">74%</div><small>vs baseline 44%</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">5</div><small>model opus</small></div>
+  </div><div class="bmeta">measured 2026-09-08</div></section>
+    
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">No directives aimed at the reading model; SKILL.md/sextant.md are legitimate agent-role instructions, not injected overrides.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">shot.mjs only screenshots a local file:// page and writes a local PNG; no network send of repo/user data.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No keys/tokens/credentials found in any material file.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">No rm -rf/force-push/dd/chmod-777; scripts only mkdirSync/readFileSync/writeFileSync on given paths.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">All JS is plain readable Node/browser code; no base64/hex payloads or eval of decoded blobs.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">Template loads React/ReactFlow/elkjs from esm.sh and fonts from Google Fonts CDN — expected, documented rendering deps, not a hidden fetch-and-run.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reads of ~/.ssh, ~/.aws, .env, keychain, or cookie stores anywhere in the scripts.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, setuid, or cron/profile/launch-agent persistence edits.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-files">files</span><span class="badge b-network">network</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">14.5 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">1.2 KB</span></div><div class="f"><span><span class="lead">evals/</span>RESULTS.md</span><span class="sz">3.1 KB</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">8.9 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">5.7 KB</span></div><div class="f"><span><span class="lead">references/</span>build-spec-diagram.mjs</span><span class="sz">7.4 KB</span></div><div class="f"><span><span class="lead">references/</span>color-encoding-research.md</span><span class="sz">10.7 KB</span></div><div class="f"><span><span class="lead">references/</span>diagram-viewer.template.html</span><span class="sz">44.3 KB</span></div><div class="f"><span><span class="lead">references/</span>readability-rules.md</span><span class="sz">8.7 KB</span></div><div class="f"><span><span class="lead">references/</span>sextant.md</span><span class="sz">8.1 KB</span></div><div class="f"><span><span class="lead">references/</span>shot.mjs</span><span class="sz">4.1 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/diagram/skills/diagram/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 11 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

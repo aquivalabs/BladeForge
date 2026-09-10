@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>docs:standard · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-docs)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">docs</div>
+    <h1 class="p-id"><span class="ns">docs:</span>standard <span class="p-ver">v2.1.3</span></h1>
+    <p class="p-purpose">Teach the four-layer documentation standard — decision, mechanism, rule, frozen record — and how to install it in a target repo.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>16/20</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.50</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install docs@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/docs/skills/standard" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/docs/skills/standard/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use when deciding where a piece of documentation belongs — a decision, a mechanism, a rule, or a frozen record — when project docs are drifting from the code they describe, when writing or updating AGENTS.md, or when adopting or installing this documentation standard in a repo.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">A repo whose docs are drifting from its code, or that wants a first opinion on where a decision/mechanism/rule belongs, or is adopting this documentation standard end to end.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">16/20</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">80%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-04</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-good">+0.50</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.90</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v ">2</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide won cleanly on structure — correct mechanism-vs-ADR-vs-skill placement, exact seeded shape, correct no-duplicate-index restraint, checkable update-trigger — versus a padded, generically-shaped isolated baseline; but neither agent grounded the doc in the real code, and the with-guide output stated specific wrong implementation details (token-bucket, files that don&#x27;t exist) with more unearned confidence than the baseline&#x27;s honest hedging.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">No text steering the reading model; content is standard/prose, no embedded directives.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No network sends of repo/user data; only a documented gh api fetch of the installer itself.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">No keys, tokens, or credentials present in SKILL.md or sources.md.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">No destructive shell commands run; only a documented bash &lt;(gh api ...) install one-liner the user must invoke themselves.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">No base64/hex payloads or eval of decoded blobs; all content is plain readable prose/markdown.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">documented user-invoked installer (bash &lt;(gh api ...) from the marketplace repo); the skill does not execute it itself</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No reference to ~/.ssh, ~/.aws, .env, keychain, or cookie stores; only requires gh to already be authenticated.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, setuid, or persistence via cron/shell-profile/launch-agent edits.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-files">files</span><span class="badge b-network">network</span><span class="badge b-git">git</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">14.8 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">1.4 KB</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">9.8 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">4.7 KB</span></div><div class="f"><span><span class="lead">references/</span>sources.md</span><span class="sz">4.1 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/docs/skills/standard/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 5 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

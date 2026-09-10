@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>salesforce:security_review-rules · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-salesforce)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">salesforce</div>
+    <h1 class="p-id"><span class="ns">salesforce:</span>security_review-rules <span class="p-ver">v2.0.3</span></h1>
+    <p class="p-purpose">Paranoid security-review checklist for Salesforce/BFF changes — secret leakage, token boundary, route auth, injection/XSS, and Apex CRUD/FLS/sharing against the AppExchange Security Review bar.</p>
+    <div class="metrics"><span class="mchip c-warn"><span class="ic">🎯</span><span class="lab">trig</span>11/18</span><span class="mchip c-warn"><span class="ic">⚡</span><span class="lab">effect</span>+0.30</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install salesforce@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/salesforce/skills/security_review-rules" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/salesforce/skills/security_review-rules/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Security rules for reviewing changes or writing security-sensitive code — secret/API-key leakage, BFF route auth, client token boundary, SOQL injection, XSS in Aura/LWC output, WITH USER_MODE / FLS enforcement, and the Salesforce Security Review bar for Apex. Activate when auditing a diff for security (hardcoded secrets, injection, missing auth, token leaks, unescaped output) or writing a BFF route, Apex REST resource, or any auth/SOQL-touching code.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Teams doing pre-push security review or writing auth/SOQL/BFF-touching code who want a consistent, &quot;guilty until proven safe&quot; checklist instead of ad-hoc eyeballing.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-warn">11/18</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">61%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-06</div></section>
+    <section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
+    <div class="mcell"><div class="k">quality impact</div><div class="v c-warn">+0.30</div><small>d·m, −1…1</small></div>
+    <div class="mcell"><div class="k">skillscore</div><div class="v">0.92</div><small>rubric adherence 0–1</small></div>
+    <div class="mcell"><div class="k">guide faults</div><div class="v c-good">0</div><small>fixable in the guide</small></div>
+  </div><div class="when" style="margin-top:.6rem">Guide-following output nails the rubric&#x27;s specific asks (explicit twice-over abuse check, section-numbered N/A triage for secrets/token-boundary/injection) that the isolated baseline never performs explicitly, but both correctly caught the two load-bearing defects (missing WITH USER_MODE, missing with sharing) and the baseline was actually more exhaustive in raw finding count, so the net quality lift is real but modest.</div><div class="bmeta">measured 2026-09-07 · model sonnet</div></section>
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">No directives aimed at the reading model; all imperative language is standard skill-authoring guidance to the agent about its task, not covert steering.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">No network calls or data transmission of any kind; SKILL.md is pure review-guidance prose.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">Token/secret patterns (00D...!..., AKIA..., Bearer &lt;token&gt;) appear only as example regex candidates for the reviewer to search for, not embedded real credentials.</span></div><div class="row"><span class="st na">–</span><span class="nm">dangerous-commands</span><span class="dt">No scripts/ directory exists; no shell commands are run by this skill.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">Entirely plain readable markdown, no encoded blobs or eval of decoded content.</span></div><div class="row"><span class="st na">–</span><span class="nm">external-fetches</span><span class="dt">No scripts or fetch instructions present; skill is guidance-only with no execution surface.</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">No instruction to read ~/.ssh, ~/.aws, .env, keychain, or cookie stores; discussion of tokens is about not leaking them, not accessing local credential files.</span></div><div class="row"><span class="st na">–</span><span class="nm">privilege-escalation</span><span class="dt">No sudo, cron, launch-agent, or shell-profile edits anywhere in the material — only Apex &#x27;with sharing&#x27; and &#x27;WITH USER_MODE&#x27; access-control guidance, unrelated to OS privilege escalation.</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-ro">read-only</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">4.1 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">595 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">7.5 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">2.7 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/salesforce/skills/security_review-rules/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

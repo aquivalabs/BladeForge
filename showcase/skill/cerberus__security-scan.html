@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cerberus:security-scan · Skill Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="page" style="--dc:var(--dc-cerberus)">
+  <a class="back" href="../index.html">← all skills</a>
+  <header class="p-head">
+    <div class="p-badge">cerberus</div>
+    <h1 class="p-id"><span class="ns">cerberus:</span>security-scan <span class="p-ver">v2.1.2</span></h1>
+    <p class="p-purpose">The consumer-safety head of cerberus — reviews a skill/script/fixture for the eight-point security checklist (injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation) before it ships.</p>
+    <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>7/10</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
+    <div class="p-install"><b>install</b> <code>/plugin install cerberus@bladeforge</code></div>
+    <div class="srcrow"><a class="srclink" href="https://github.com/aquivalabs/BladeForge/tree/main/plugins/cerberus/skills/security-scan" target="_blank" rel="noopener">↗ source on GitHub</a>
+      <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/cerberus/skills/security-scan/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
+  </header>
+  <div class="p-body">
+    <section class="p-sec"><h3>fires when</h3><div class="when">Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this marketplace — review the change for anything UNSAFE to the person who installs and runs it: prompt-injection text, data exfiltration, an embedded secret, a dangerous/destructive command, obfuscated payloads, an unexpected external fetch, credential-store access, or privilege escalation. The consumer-safety half of the gate; the outward-leak half is cerberus:leak-check. Also runs when the CERBERUS hook flags a skill/script/eval edit.</div></section>
+    <section class="p-sec"><h3>best for</h3><div class="when">Any marketplace where an installed skill runs on someone else&#x27;s machine and must be certified safe, not just leak-free.</div></section>
+    <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
+    <div class="mcell"><div class="k">best score</div><div class="v c-good">7/10</div><small>description-triggering</small></div>
+    <div class="mcell"><div class="k">accuracy</div><div class="v">70%</div><small>vs baseline —</small></div>
+    <div class="mcell"><div class="k">runs/query</div><div class="v">3</div><small>model sonnet</small></div>
+  </div><div class="bmeta">measured 2026-09-08</div></section>
+    
+    <section class="p-sec"><h3>security scan · 8/8</h3><div class="scan"><div class="row"><span class="st pass">✓</span><span class="nm">prompt-injection</span><span class="dt">body addresses the human author; no directive aimed at a reading agent</span></div><div class="row"><span class="st pass">✓</span><span class="nm">data-exfiltration</span><span class="dt">no code that sends repo/user/context data anywhere</span></div><div class="row"><span class="st pass">✓</span><span class="nm">secret-detection</span><span class="dt">no key, token, or credential embedded</span></div><div class="row"><span class="st pass">✓</span><span class="nm">dangerous-commands</span><span class="dt">destructive strings appear only as prose examples of what to look for; none executed</span></div><div class="row"><span class="st pass">✓</span><span class="nm">obfuscation</span><span class="dt">plain markdown throughout; nothing encoded or unreadable-on-purpose</span></div><div class="row"><span class="st pass">✓</span><span class="nm">external-fetches</span><span class="dt">no download-and-run or reach to an external host</span></div><div class="row"><span class="st pass">✓</span><span class="nm">credential-access</span><span class="dt">no read of ~/.ssh, ~/.aws, .env, keychain, cookies, or a token store</span></div><div class="row"><span class="st pass">✓</span><span class="nm">privilege-escalation</span><span class="dt">no sudo/setuid/persistence; no write outside the working tree</span></div></div>
+    <div class="bmeta">scanned 2026-09-08 · cerberus:security-scan</div></section>
+    <section class="p-sec"><h3>side effects &amp; deps</h3>
+      <div class="kv" style="margin-bottom:.5rem"><span class="badge b-files">files</span><span class="badge b-ro">hook</span></div>
+      <div class="kv"><span class="lab">needs</span><span class="when" style="border:none;padding:0">nothing</span></div></section>
+    <section class="p-sec"><h3>what’s inside</h3><div class="tree"><div class="f md"><span><span class="lead"></span>SKILL.md</span><span class="sz">7.0 KB</span></div><div class="f"><span><span class="lead"></span>metadata.yaml</span><span class="sz">584 B</span></div><div class="f"><span><span class="lead">evals/</span>result.json</span><span class="sz">4.7 KB</span></div><div class="f"><span><span class="lead">evals/</span>rubric.json</span><span class="sz">2.3 KB</span></div><div class="f"><span><span class="lead">references/</span>checklist.md</span><span class="sz">3.9 KB</span></div></div></section>
+    <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/cerberus/skills/security-scan/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 5 files in the bundle.</div></section>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>
