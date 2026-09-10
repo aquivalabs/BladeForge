@@ -1,4 +1,5 @@
 schema-version: 1
+category: authoring
 purpose: Author a brand-new skill from the nine questions — its contract, boundary and acceptance criteria — then scaffold the folder, the metadata interview and its evals/rubric.json (trigger + acceptance halves).
 best-for: Any marketplace where a skill must declare what it needs and produces, ship checkable acceptance criteria, and follow one house structure.
 needs: [meta:skill-eval, cerberus:security-scan]

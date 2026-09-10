@@ -1,4 +1,5 @@
 schema-version: 1
+category: quality
 purpose: Agent judgment pass that reviews a skill/reference/script/eval change for anything pointing to a real work codebase — secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate "one company's product" flavor — and rewrites it to a neutral fictional demo.
 best-for: Any contributor to this public skills marketplace, right before committing a new or edited skill, reference, or eval fixture — also triggered automatically by the cerberus PostToolUse hook on skill edits.
 needs: []

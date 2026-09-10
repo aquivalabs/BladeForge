@@ -1,4 +1,5 @@
 schema-version: 1
+category: frontend
 purpose: Keep custom React hooks deduplicated and discoverable by requiring reuse-first checks and a maintained docs/mechanisms/hooks-registry.md.
 best-for: Teams with a growing React codebase where duplicate/overlapping use* hooks keep creeping in and need a single source of truth.
 needs:

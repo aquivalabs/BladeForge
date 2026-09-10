@@ -1,4 +1,5 @@
 schema-version: 1
+category: frontend
 purpose: House rules for authoring component SCSS — SCSS-over-CSS, the color/spacing/radius token system, BEM structure, and when position:absolute is/isn't justified.
 best-for: Frontend projects with their own bundler (Vite/Webpack/Next.js, non-Salesforce) that want a consistent SCSS token system and BEM convention instead of scattered hardcoded values.
 needs: []

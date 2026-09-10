@@ -1,4 +1,5 @@
 schema-version: 1
+category: salesforce
 purpose: Directs org-touching work (SOQL/Tooling queries, Apex test runs, metadata deploy/retrieve, org/alias resolution) through the salesforce-dx MCP tools instead of raw `sf` CLI shell calls.
 best-for: Any Salesforce project with the salesforce-dx MCP connected, where an agent would otherwise reach for `sf` CLI via Bash to query, deploy, or test against a live org.
 needs: []

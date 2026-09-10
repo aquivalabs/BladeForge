@@ -1,4 +1,5 @@
 schema-version: 1
+category: authoring
 purpose: Bring an existing skill up to the house standard — contract, boundary, checking loop, acceptance criteria — and refresh its metadata.yaml when only the wiring changed.
 best-for: Any marketplace with skills written before a standard existed, where each one must be reworked without re-scaffolding it from scratch.
 needs: [meta:new-skill, meta:skill-eval]

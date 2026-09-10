@@ -1,4 +1,5 @@
 schema-version: 1
+category: quality
 purpose: The test standard — which execution tier a test file belongs to and how its name declares it, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates.
 best-for: A repo whose test suite is slow, or green while the code under it is wrong, or has no written contract for what a test owes. Also a repo adopting the standard end to end, since the transition section states what is in force before every mechanism exists.
 needs: []
