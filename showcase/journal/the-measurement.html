@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Measurement — a field journal of the quality gate</title>
+<meta name="description" content="How this marketplace measures a skill — triggering, acceptance, and safety — and why the gate is deterministic. A recovered manuscript.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/journal.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="j-wrap">
+  <a class="j-back" href="index.html">← the journal</a>
+
+  <header class="j-head">
+    <div class="j-kicker">Field notes · for the engineer</div>
+    <h1 class="j-title">The Measurement</h1>
+    <p class="j-dek">In which an expedition sets out to learn whether a skill actually <em>works</em>, and returns with two numbers, one that could not be trusted, and a warning it should have read sooner.</p>
+    <div class="j-byline">recovered from <code>docs/mechanisms/skill-eval.md</code> · transcribed for the curious · English throughout</div>
+  </header>
+
+  <div class="j-foreword">
+    <p>I write this for whoever inherits the gate after me. You will be tempted, as I was, to believe a skill is good because it is <em>present</em> — because the file exists, the description reads well, the tests are green. I believed that. I no longer do. There are two questions, and they are not the same question, and the day I learned to keep them apart is the day the measurements stopped lying to me.</p>
+  </div>
+
+  <div class="j-body">
+
+    <div class="j-entry"><span>Day the First</span><span class="n">— two questions, held apart</span></div>
+    <p>A skill is instructions we hand to the agent. We wish to know two things about it, and the whole apparatus exists to stop us from confusing them:</p>
+    <ul>
+      <li><strong>Did it fire?</strong> When a request arrives that the skill is <em>for</em>, is the skill reached for — and, just as important, is it left alone when the request only <em>looks</em> like its work?</li>
+      <li><strong>Did it help?</strong> Once fired, did the guidance change the result for the better — or would the model have done the same thing unaided?</li>
+    </ul>
+    <p>They come apart in the cruelest way. A skill can fire flawlessly and change <em>nothing</em> — a costume worn over the model's own instincts. Under the first metric it looks radiant. Under the second it is hollow. Merge the two numbers into one and the hollow skill borrows the radiant one's score, and you never find out. So we do not merge them. Ever.</p>
+
+    <div class="j-entry"><span>Day the Second</span><span class="n">— the firing</span></div>
+    <p>Triggering is measured by a self-contained instrument, <code>score-description.py</code>. It reads the skill's <code>rubric.json</code> — an array of natural-language queries, each labelled with whether the description <em>should</em> make the skill fire — and it runs each one as a nested agent, watching only whether the Skill tool activates.</p>
+    <div class="fragment">
+      <div class="cap">recovered fragment — evals/rubric.json, the trigger half</div>
+      <pre><code>[
+  {"query": "convert the px in this stylesheet to rem", "should_trigger": true},
+  {"query": "make these sizes scale with the base font",  "should_trigger": true},
+  {"query": "fix the border-width on this chart svg",     "should_trigger": false}
+]</code></pre>
+    </div>
+    <p>At least six cases, at least one of each polarity, because a test set that only proves the skill fires cannot prove it stays quiet. The score reads as a fraction — <code>16/18</code>, an accuracy of <code>0.889</code> — and it is anchored to two hashes: one over the description it measured, one over the queryset. Edit either and the record marks itself stale, because the thing this eval measures <em>is</em> the description, and a rewritten description must not keep an old score.</p>
+    <p>One rule outranks the fraction. <em>A negative case that fires is a real failure, whatever the skill's type.</em> A missed positive can be forgiven in an advisory skill; a description broad enough to grab work that was never yours cannot. The narrator learned to fear the false positive more than the false negative — the former is a skill that will fire on a thousand unrelated prompts, forever, quietly.</p>
+
+    <div class="vignette">   ~ ~ ~   .   ~ ~   .   ~ ~ ~
+  the queries went out. we watched the tool-line.
+   some fired. some, mercifully, did not.  ~ ~</div>
+
+    <div class="j-entry"><span>Day the Third</span><span class="n">— the helping, and the honest trick</span></div>
+    <p>The second question needs a different run entirely — you cannot learn whether guidance <em>helped</em> by watching whether a tool fired. So acceptance is graded by a separate rite, built as <code>skillcraft:skillaxe</code>, an embedding-optional adaptation of SkillAxe (arXiv 2606.10546). It gives an agent a real task, lets it work <em>with</em> the skill, and grades the output against the <code>acceptance</code> half of the rubric — one yes/no per line, never one holistic 1–10 number, because a decomposed check is measurably more reliable and a single score hides which part failed.</p>
+    <p>Then comes the step that makes the whole thing honest. <strong>It runs the same task again with the skill switched off</strong>, and the grader compares the two outputs <em>blind</em> — not told which had the skill. Without that fourth step you cannot separate <em>"the skill was read"</em> from <em>"the skill changed something"</em>, and the difference between those two is the entire reason the document exists.</p>
+    <div class="fragment">
+      <div class="cap">recovered fragment — result.json, the acceptance half, once skillaxe has run</div>
+      <pre><code>"acceptance": {
+  "runner": "skillcraft:skillaxe",
+  "method": "generate with-guide vs isolated baseline, LLM judge vs rubric acceptance",
+  "quality_impact": 0.75,   // d·m, in [-1, 1] — did the guide move the result
+  "skillscore": 0.92,       // instruction compliance, 0..1
+  "guide_faults": ["a weak spot the guide itself owns, or none"]
+}</code></pre>
+    </div>
+    <p>It is deliberately not run in the gate. It spawns agents; agents are expensive and non-deterministic; a merge must not wait on a jury. So skillaxe is run <em>locally and selectively</em> — a high-traffic guide, a large rewrite — and roughly ten paired tasks is the floor. A difference visible only across hundreds of runs is a difference not worth the ink.</p>
+
+    <div class="j-entry"><span>Day the Fourth</span><span class="n">— the third thing, that harms the reader</span></div>
+    <p>A skill runs on someone else's machine. So a third confirmation rides in the same per-skill file, written not by the scorer but by <code>cerberus:security-scan</code>: an eight-point consumer-safety walk — prompt-injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation — one verdict per point, and the whole passes only when none is flagged.</p>
+    <p>Its freshness key is broader than the trigger's, and on purpose: it hashes the skill's <em>installer-facing material</em> — <code>SKILL.md</code>, <code>references/</code>, and <code>scripts/</code> — because a script edit changes what reaches a consumer even when the description never moves. Consumer safety has no skip flag. None. You do not get to push a skill whose safety scan is stale.</p>
+
+    <div class="ednote">
+      <span class="lab">Editor's note — for those untouched by these arts</span>
+      <dl>
+        <dt>rubric.json</dt><dd>what a skill is measured <em>against</em>: the trigger queries and the acceptance claims.</dd>
+        <dt>result.json</dt><dd>what the last run <em>measured</em>: the trigger score, the skillaxe run (or null), the safety walk.</dd>
+        <dt>eval-gate</dt><dd>the deterministic check that blocks a touched skill whose measurement is missing or stale.</dd>
+        <dt>material hash</dt><dd>a fingerprint of everything a consumer actually runs; when it changes, the safety scan is stale.</dd>
+      </dl>
+    </div>
+
+    <div class="j-entry"><span>Day the Fifth</span><span class="n">— the revelation, mundane and total</span></div>
+    <p>Here is the horror, and it is worse for being ordinary. For <em>months</em>, nothing wrote the measurement at all. The scoring had been moved to a new instrument when the marketplace replaced its upstream harness; the <em>saving</em> of the result did not move with it. Runs happened. They landed in <code>*-workspace/</code> directories that <code>.gitignore</code> swallows as scratch. They evaporated. There was no evidence any skill had ever been measured.</p>
+    <p>And the gate <em>said so</em>, every time, honestly:</p>
+    <div class="fragment">
+      <div class="cap">recovered fragment — what the gate printed, on everything</div>
+      <pre><code>⚠ eval present but never measured (push allowed — refresh when you can)</code></pre>
+    </div>
+    <p>Forty-two skills carried that line. It was true. It was ignored. Because <strong>a warning that appears on everything distinguishes nothing</strong> — it becomes background, weather, the hum of the fan. The mechanism whose breakage is reported as a warning breaks silently. It had been there all along. Warning. Twice a push. Seen by no one.</p>
+
+  </div>
+
+  <section class="protocol">
+    <h2>The survivor's protocol</h2>
+    <p class="sub">What must never be done again — stated plainly, so a reader who skips the rest still leaves with every lesson.</p>
+    <ol>
+      <li><b>Measure two questions, never one.</b> Firing and helping are separate metrics with separate runs. A skill that fires while changing nothing must not be able to borrow the trigger score — keep the halves in one file, scored apart.</li>
+      <li><b>Grade acceptance against a baseline with the skill OFF.</b> Blind, paired, same task both ways. Otherwise a green result cannot be told from a model that needed no help.</li>
+      <li><b>One yes/no per criterion.</b> Not a holistic 1–10. Decomposed checks are more reliable and they tell you <em>which</em> part failed.</li>
+      <li><b>Fear the false positive.</b> A negative case that fires is a real failure whatever the skill's type — a too-broad description fires forever on work that was never yours.</li>
+      <li><b>Hash what you measure.</b> Key each score to the exact description and queryset; key the safety scan to the installer-facing material. A rewritten thing must never keep an old number.</li>
+      <li><b>No LLM in the gate.</b> The blocking check is deterministic and agent-free; the jury (skillaxe) runs locally and selectively. A merge must not wait on a non-deterministic verdict.</li>
+      <li><b>Never let breakage speak as a warning.</b> A signal that fires on everything is silence. When a measurement is a live lie — the author is editing the very skill — make it a blocker, not a whisper.</li>
+    </ol>
+  </section>
+
+  <div class="j-foot">
+    Chronicle recovered for the marketplace journal · the numbers and commands are exact ·
+    read the real mechanism at <a href="https://github.com/aquivalabs/BladeForge/blob/main/docs/mechanisms/skill-eval.md">docs/mechanisms/skill-eval.md</a> ·
+    <a href="index.html">← back to the journal</a>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

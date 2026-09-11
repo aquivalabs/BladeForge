@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Makes a Good Skill — a plain account</title>
+<meta name="description" content="What a good skill is, why the description is the whole game, and how to tell a real one from a costume — for anyone deciding what to build.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/journal.css">
+</head><body>
+<canvas id="dots" aria-hidden="true"></canvas>
+<div class="j-wrap">
+  <a class="j-back" href="index.html">← the journal</a>
+
+  <header class="j-head">
+    <div class="j-kicker">Field notes · for whoever decides what to build</div>
+    <h1 class="j-title">What Makes a Good Skill</h1>
+    <p class="j-dek">You do not need to write the code to know a good skill from a poor one. You need to know the two things it must do — and the one line that decides both.</p>
+    <div class="j-byline">a plain account · no jargon it can avoid · English throughout</div>
+  </header>
+
+  <div class="j-foreword">
+    <p>I set out believing a skill was measured by how much it <em>contained</em> — how clever, how thorough, how much ground it covered. I came back knowing the opposite. The best skill in our catalogue is barely a page. What made it good was not its size. It was that it appeared at exactly the right moment, and never at the wrong one, and that when it appeared, the work came out different. Everything else is decoration.</p>
+  </div>
+
+  <div class="j-body">
+
+    <div class="j-entry"><span>First</span><span class="n">— a skill is an instinct you can install</span></div>
+    <p>Think of a skill as a good habit you hand to the assistant. "When someone asks you to write a commit message, do it <em>this</em> way." "When you touch a chart, use the house colours." The assistant already knows a great deal; a skill is a nudge that makes it do a specific thing the way <em>you</em> want it done — consistently, without being reminded each time.</p>
+    <p>Which means a skill only earns its keep if two separate things are true. Miss either and it is dead weight, however good it looks.</p>
+    <ul>
+      <li><strong>It shows up.</strong> The right request arrives and the skill is reached for automatically — and, just as important, an unrelated request that only <em>looks</em> similar leaves it asleep.</li>
+      <li><strong>It changes the outcome.</strong> Once it shows up, the result is actually better than it would have been without it.</li>
+    </ul>
+
+    <div class="j-entry"><span>Second</span><span class="n">— the description is the whole game</span></div>
+    <p>Here is the part that surprises everyone. The thing that decides whether a skill <em>shows up</em> is not its cleverness. It is one short paragraph — the <em>description</em> — written in plain language, that tells the assistant when to reach for it.</p>
+    <p>A good description does one job: it <strong>routes</strong>. It says, in the words a real person would use, "reach for me when the task is <em>X</em>." It names the moments — "when writing a commit", "when converting sizes to scale with the font", "when someone asks what tools exist for this." It does <em>not</em> ramble about how the skill works inside. Nobody reaching for a tool needs its schematics; they need to know it is the right tool.</p>
+    <p>The most common way a skill fails is quiet and expensive: a description written too broadly, so the skill wakes for a thousand requests that were never its own — forever, in the background, slowing everything and helping nothing. A description that is <em>too shy</em> merely goes unused. A description that is <em>too greedy</em> is a leak that never stops. Aim narrow. Name the real moments; name a near-miss it should ignore.</p>
+
+    <div class="vignette">   ·   ~   ·   ~   ·   ~   ·   ~   ·
+  the good ones sleep until they are needed.
+     the poor ones never stop talking.  ·  ~</div>
+
+    <div class="j-entry"><span>Third</span><span class="n">— showing up is not helping</span></div>
+    <p>This is the trap, and it is worth stopping on. A skill can appear <em>flawlessly</em>, every single time, and change <em>nothing</em> — a costume the assistant wears over what it would have done anyway. It looks busy. It looks adopted. It is hollow.</p>
+    <p>So we never trust "it fired" as proof it worked. We check the second thing separately: we run the same real task twice — once with the skill, once without — and compare the two results honestly, without telling the judge which was which. If the output is no better with it than without it, the skill is a costume, and no amount of "it fired reliably" redeems that. <em>A skill has to earn its place by changing the answer.</em></p>
+
+    <div class="j-entry"><span>Fourth</span><span class="n">— it runs on someone else's machine</span></div>
+    <p>One more thing separates a skill you would publish from one you would only keep to yourself. When someone installs your skill, its instructions run in <em>their</em> assistant, on <em>their</em> work. So before anything ships, every skill is walked through an eight-point safety check — could it be tricked, could it leak something, could it run something it shouldn't. A skill that cannot pass that walk does not go out, no exceptions. Publishing is a promise: <em>this is safe to let into your work.</em></p>
+
+    <div class="ednote">
+      <span class="lab">In plain words</span>
+      <dl>
+        <dt>skill</dt><dd>an installable habit for the assistant — "when the task is X, do it this way."</dd>
+        <dt>description</dt><dd>the one paragraph that decides when the skill shows up. The most important line you write.</dd>
+        <dt>fires / shows up</dt><dd>the skill was automatically reached for, without being named.</dd>
+        <dt>the catalogue</dt><dd>the browsable list of every skill — what each is for, and whether it was measured.</dd>
+      </dl>
+    </div>
+
+  </div>
+
+  <section class="protocol">
+    <h2>What to remember</h2>
+    <p class="sub">If you skip the rest, take these.</p>
+    <ol>
+      <li><b>Spend your care on the description.</b> It decides whether the skill is ever used. Write it in the words a real person would ask — name the moments to reach for it.</li>
+      <li><b>Aim narrow, not broad.</b> A skill that wakes for everything is worse than one that wakes for nothing — it costs on every request and helps on few. Name a near-miss it should ignore.</li>
+      <li><b>A skill must change the answer.</b> "It fired" is not success. If the result is no better with it than without, it is a costume — cut it.</li>
+      <li><b>Small is fine. Good is not the same as big.</b> The best skills are short. Cover one thing, cover it well.</li>
+      <li><b>If it ships, it must be safe.</b> It runs on other people's work. The eight-point safety check is the price of publishing, and there is no way around it.</li>
+      <li><b>Measured, not asserted.</b> A good skill can show its numbers — that it fires when it should, and that it helped. "Trust me" is not a metric.</li>
+    </ol>
+  </section>
+
+  <div class="j-foot">
+    Chronicle recovered for the marketplace journal · want the engineer's version, with the real numbers and gates?
+    Read <a href="the-measurement.html">The Measurement</a> · <a href="index.html">← back to the journal</a>
+  </div>
+</div>
+<script src="../assets/dots.js"></script>
+</body></html>

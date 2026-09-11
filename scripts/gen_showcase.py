@@ -330,6 +330,7 @@ def index_page(skills, doms, pal):
     <div class="brand"><h1>Skill Marketplace<span class="d">.</span></h1>
       <span class="counts"><b id="total">{len(skills)}</b> skills · <b id="doms">{len(doms)}</b> domains</span></div>
     <p class="lede">A curated marketplace of Claude Code skills — each one shows what it does, when it fires, what it touches, and its measured trigger, effect and safety.</p>
+    <p class="lede-more"><a href="journal/index.html">The Journal — field notes on building a good skill, and how we measure one →</a></p>
   </header>
 
   <section class="featured">
@@ -428,6 +429,7 @@ a{color:var(--accent);text-decoration:none}
 h1{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:800;margin:0;letter-spacing:-.02em}h1 .d{color:var(--accent)}
 .counts{font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--muted)}.counts b{color:var(--ink);font-weight:600}
 .lede{max-width:44rem;margin:.7rem 0 0;color:var(--muted);font-size:1.02rem}
+.lede-more{margin:.7rem 0 0;font-size:.95rem}.lede-more a{font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--hd);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--hd) 40%,transparent);padding-bottom:.1rem}.lede-more a:hover{color:var(--accent);border-color:var(--accent)}
 .sect-label{font-family:"JetBrains Mono",monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:0 0 .8rem;display:flex;align-items:center;gap:.7rem}
 .sect-label::after{content:"";flex:1;height:1px;background:var(--line-2)}
 /* featured */
