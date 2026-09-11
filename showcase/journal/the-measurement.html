@@ -17,7 +17,7 @@
     <div class="j-kicker">Field notes · for the engineer</div>
     <h1 class="j-title">The Measurement</h1>
     <p class="j-dek">In which an expedition sets out to learn whether a skill actually <em>works</em>, and returns with two numbers, one that could not be trusted, and a warning it should have read sooner.</p>
-    <div class="j-byline">recovered from <code>docs/mechanisms/skill-eval.md</code> · transcribed for the curious · English throughout</div>
+    <div class="j-byline">recovered from <code>docs/mechanisms/skill-eval.md</code> and the <code>meta:new-skill</code> interview · grounded in the <a href="https://github.com/aquivalabs/BladeForge/blob/main/docs/authoring.md">authoring guide</a>, not invented · English throughout</div>
   </header>
 
   <div class="j-foreword">
@@ -33,6 +33,28 @@
       <li><strong>Did it help?</strong> Once fired, did the guidance change the result for the better — or would the model have done the same thing unaided?</li>
     </ul>
     <p>They come apart in the cruelest way. A skill can fire flawlessly and change <em>nothing</em> — a costume worn over the model's own instincts. Under the first metric it looks radiant. Under the second it is hollow. Merge the two numbers into one and the hollow skill borrows the radiant one's score, and you never find out. So we do not merge them. Ever.</p>
+
+    <div class="j-entry"><span>An earlier page</span><span class="n">— the nine questions, asked before the first line</span></div>
+    <p>Those two questions are not first answered by a measurement. They are answered by the author, out loud, before a line of the body is written — nine of them, and the record of an expedition that skipped them is a skill that measures well and means nothing:</p>
+    <div class="fragment">
+      <div class="cap">recovered fragment — the interview, from meta:new-skill</div>
+      <pre><code>WHY IT EXISTS
+  1a  Name ONE live occasion where it should fire. Not a category.
+  1b  What comes out in that case WITHOUT it? Show it, don't describe it.
+  1c  And WITH it? Show that too.
+
+HOW IT IS USED
+  2a  What has to be in place for it to work at all?
+  2b  What exists at the end? Show it literally.
+  2c  What checks that? Name a command — or say where to look.
+
+THIS ONE, OR THE NEIGHBOUR
+  3a  Take one query it must fire on. Who else answers it? Name them.
+  3b  If someone did — which of you wins, and under what condition?
+  3c  What work looks like yours but isn't? Name it, and whose it is.</code></pre>
+    </div>
+    <p><strong>Question 1b is the one that kills the skill.</strong> If the output is already fine without it, the skill should not exist — you say so and you stop. Everything downstream assumes 1b showed a real wound.</p>
+    <p>And the questions are not paperwork — each answer becomes a load-bearing part of what is later measured. <em>1b/1c become the eval's trigger queries. 2a/2b become the <code>## Contract</code>. 2c becomes the acceptance check and <code>rubric.json</code>. 3b becomes the boundary sentence in the description. 3c becomes the negative eval cases — the ones that must stay quiet.</em> The interview you answer up front IS the rubric you are graded against later; the measurement only reads back what the questions already decided.</p>
 
     <div class="j-entry"><span>Day the Second</span><span class="n">— the firing</span></div>
     <p>Triggering is measured by a self-contained instrument, <code>score-description.py</code>. It reads the skill's <code>rubric.json</code> — an array of natural-language queries, each labelled with whether the description <em>should</em> make the skill fire — and it runs each one as a nested agent, watching only whether the Skill tool activates.</p>
