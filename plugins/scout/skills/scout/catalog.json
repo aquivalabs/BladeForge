@@ -1,12 +1,12 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-09-10",
+  "generated": "2026-09-11",
   "skills": [
     {
       "name": "cerberus:leak-check",
       "plugin": "cerberus",
-      "plugin-version": "2.1.2",
+      "plugin-version": "2.1.3",
       "activates-when": "Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace \u2014 review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate \"this is one specific company's product\" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
       "category": "quality",
       "purpose": "Agent judgment pass that reviews a skill/reference/script/eval change for anything pointing to a real work codebase \u2014 secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate \"one company's product\" flavor \u2014 and rewrites it to a neutral fictional demo.",
@@ -25,7 +25,7 @@
     {
       "name": "cerberus:security-scan",
       "plugin": "cerberus",
-      "plugin-version": "2.1.2",
+      "plugin-version": "2.1.3",
       "activates-when": "Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this marketplace \u2014 review the change for anything UNSAFE to the person who installs and runs it: prompt-injection text, data exfiltration, an embedded secret, a dangerous/destructive command, obfuscated payloads, an unexpected external fetch, credential-store access, or privilege escalation. The consumer-safety half of the gate; the outward-leak half is cerberus:leak-check. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
       "category": "quality",
       "purpose": "The consumer-safety head of cerberus \u2014 reviews a skill/script/fixture for the eight-point security checklist (injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation) before it ships.",
@@ -44,7 +44,7 @@
     {
       "name": "critique:critique",
       "plugin": "critique",
-      "plugin-version": "1.4.1",
+      "plugin-version": "1.4.2",
       "activates-when": "Use when someone wants an existing design, spec, or plan ATTACKED for soundness before it is built from \u2014 \\\"tear this apart\\\", \\\"assume it is wrong and show me where\\\", \\\"find what breaks\\\", \\\"critique this hard\\\", \\\"red-team it\\\", \\\"poke holes in it\\\" \u2014 whether they want one hard pass or several independent critics each from a different angle. It sets HOW the attack runs so it catches real defects instead of agreeing with the author. It attacks an idea on paper that already exists \u2014 NOT writing or drawing one, NOT polishing a document\\'s wording (`meta:wittgenstein`), NOT already-written code. A pipeline with a critique phase \u2014 speccy, a Sprut critic role \u2014 invokes this method.",
       "category": "quality",
       "purpose": "The house method for running an adversarial critique of a design, spec, or plan \u2014 diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize \u2014 so the critique detects real defects instead of laundering a green stamp.",
@@ -65,7 +65,7 @@
     {
       "name": "diagram:diagram",
       "plugin": "diagram",
-      "plugin-version": "2.2.1",
+      "plugin-version": "2.2.2",
       "activates-when": "Use when asked to draw, sketch, map, diagram, visualize, or make a picture/schema/architecture of how software works \u2014 the architecture or how-it-works view of a feature, the relationships between classes or interfaces (with their methods and fields), data or record flow, an object model with its fields and permission sets, or a dependency graph \u2014 for a package, a feature, a handful of files, or a whole undocumented source directory, built from a spec, a plan or ticket, or read straight from the code, and output as one shareable HTML page you can commit. Also use to clean up an existing generated diagram that is hard to read (overlapping nodes, tiny text). Do NOT use to plot a data or metrics chart from a dataset, to paste a mermaid or ascii snippet into a PR or README, to draw in an external editor like Lucidchart or Excalidraw, to convert a whiteboard photo, to re-render an existing page for a screenshot, or to explain how something works in words with no picture.",
       "category": "docs",
       "purpose": "Turn a spec/code scope into a hardened diagram-model JSON, then render it into ONE committable HTML page (one file, React Flow + ELK, libraries loaded from a CDN at view time) where node kind and subsystem are encoded automatically for readability.",
@@ -83,7 +83,7 @@
     {
       "name": "docs:standard",
       "plugin": "docs",
-      "plugin-version": "2.1.3",
+      "plugin-version": "2.1.4",
       "activates-when": "Use when deciding where a piece of documentation belongs \u2014 a decision, a mechanism, a rule, or a frozen record \u2014 when project docs are drifting from the code they describe, when writing or updating AGENTS.md, or when adopting or installing this documentation standard in a repo.",
       "category": "docs",
       "purpose": "Teach the four-layer documentation standard \u2014 decision, mechanism, rule, frozen record \u2014 and how to install it in a target repo.",
@@ -102,7 +102,7 @@
     {
       "name": "error:architecture",
       "plugin": "error",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Use when defining, adopting, or reviewing a client/UI app's WHOLE error-handling architecture \u2014 where every failure surfaces and how adherence is checked \u2014 across any framework (React, Vue, Angular, Svelte). Triggers on \\\"design our app-wide error handling\\\", \\\"is our error handling consistent / does this codebase follow one pattern\\\", \\\"audit how errors are shown\\\", \\\"we map error codes to UX in a dozen places\\\", \\\"one place to decide retry vs redirect vs toast\\\", or reviewing a diff for error-surfacing consistency. Foreground: the single code\u2192UX policy table that classifies every error once. NOT for wrapping one component in a boundary or styling one error tile (that is your framework's component/primitive skill), and NOT for the wire envelope or reason-code vocabulary (that is error:format).",
       "category": "quality",
       "purpose": "Codifies a single client/UI error-handling architecture \u2014 one code\u2192UX policy table classifies every error, and role-named consumers (dispatcher, shared tile renderer, boundary tiers, outer floor) surface it consistently across any framework.",
@@ -119,7 +119,7 @@
     {
       "name": "error:format",
       "plugin": "error",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Use when adding or handling any error path on any layer \u2014 throwing from a service/route/controller, mapping an upstream failure, or reading an error on the client (backend or frontend). Do NOT use to design the whole app's error-handling architecture \u2014 the single code-to-UX policy table (error:architecture) \u2014 or to wrap one component in a boundary or style one error tile (your framework's component skill); this skill owns the wire envelope and the reason vocabulary.",
       "category": "quality",
       "purpose": "Enforce one Google AIP-193 style error envelope (code/status/message/details) across backend and frontend so every error is handled the same way regardless of layer.",
@@ -134,7 +134,7 @@
     {
       "name": "frontend:fe-check",
       "plugin": "frontend",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Typecheck and run (targeted) unit tests for a frontend repo, returning a terse one-block summary. Use after editing TypeScript/React to quickly confirm types are clean and the relevant tests pass \u2014 instead of running tsc and vitest separately and reading full output. Do NOT use for reviewing a diff, nor for any Apex or Salesforce-org check \u2014 this runs the frontend tsc + vitest and nothing else.",
       "category": "frontend",
       "purpose": "Typecheck a frontend repo with tsc and run (optionally targeted) vitest tests, printing one terse pass/fail summary instead of two noisy tool outputs.",
@@ -151,7 +151,7 @@
     {
       "name": "frontend-css:rem",
       "plugin": "frontend-css",
-      "plugin-version": "2.1.3",
+      "plugin-version": "2.1.4",
       "activates-when": "CSS Units \\u2014 enforce rem for CSS/SCSS/Tailwind dimensions. Use whenever a hardcoded pixel length appears in a stylesheet or component's layout \\u2014 spacing, sizing, or typography such as gap, padding, margin, width, height, or font-size \\u2014 and the user wants it changed, reviewed, made consistent with a spacing scale, or made responsive to browser zoom/font-size. Applies whether the value is stated as px, an arbitrary Tailwind value like p-[10px], or an SCSS property. Do NOT trigger for genuinely pixel-appropriate values that stay in px: border-width, box-shadow offsets, or SVG attributes like width, height, and stroke-width on chart/vector elements.",
       "category": "frontend",
       "purpose": "Enforce rem (not px) for CSS/SCSS/Tailwind dimensional values so layouts respect user font-size/zoom preferences.",
@@ -166,7 +166,7 @@
     {
       "name": "frontend-css:responsive-layout",
       "plugin": "frontend-css",
-      "plugin-version": "2.1.3",
+      "plugin-version": "2.1.4",
       "activates-when": "Use when creating or editing ANY UI component, page, or layout style \u2014 the acceptance bar that it must render validly at every defined viewport breakpoint (no overflow, readable text, discernible images, restrained borders, sane density). Also use when a project has no breakpoint/grid system yet: propose one before verifying. NOT for choosing px\u2192rem (frontend-css:rem), SCSS tokens/BEM structure (frontend-css:scss-modules), or component folder placement (frontend-react:component-structure).",
       "category": "frontend",
       "purpose": "The acceptance bar that any UI component/page renders validly at every defined viewport breakpoint \u2014 no overflow, readable text, discernible images, restrained borders, sane density \u2014 plus a step-0 that establishes a breakpoint scale when a project has none.",
@@ -181,7 +181,7 @@
     {
       "name": "frontend-css:scss-modules",
       "plugin": "frontend-css",
-      "plugin-version": "2.1.3",
+      "plugin-version": "2.1.4",
       "activates-when": "House rules for authoring component SCSS \u2014 the .scss-over-.css convention, SCSS file structure, the color/spacing/radius variable & token system (never hardcode hex or magic numbers \u2014 add to variables first), and BEM structure (block \u2192 &__element \u2192 &--modifier). Use when writing or refactoring a component's styles, setting up the SCSS token/variable system, or consolidating hardcoded values to the scale. NOT for choosing a dimensional unit or converting px\u2192rem (frontend-css:rem), naming a component's folder or its non-style files (frontend-react:component-structure), style import-alias policy (frontend-js:conventions), LWC/Aura styling (salesforce:lwc_development), or skeleton/Storybook files.",
       "category": "frontend",
       "purpose": "House rules for authoring component SCSS \u2014 SCSS-over-CSS, the color/spacing/radius token system, BEM structure, and when position:absolute is/isn't justified.",
@@ -196,7 +196,7 @@
     {
       "name": "frontend-js:conventions",
       "plugin": "frontend-js",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "House JavaScript/TypeScript coding style \u2014 arrow functions, single quotes, full variable names (not sel/fn/e), braces on all control structures, small readable functions, and imports (a registered path alias always beats a ../../../ relative import; register one @alias per top-level dir in vite + tsconfig). Use whenever writing, editing, or reviewing JS/TS (React, Node, any JS/TS) \u2014 including renaming a variable to a full name, breaking up a long function, converting quotes or adding braces, replacing a deep relative import with an alias, registering a new @alias, or a pre-push style review. NOT for SCSS/styling (frontend-css:scss-modules), scaffolding a component's folder (frontend-react:component-structure), i18n strings, or Apex.",
       "category": "frontend",
       "purpose": "House JS/TS coding style \u2014 arrow functions, single quotes, full variable names, braces on all control structures, small readable functions, and alias-over-relative-import rules.",
@@ -211,7 +211,7 @@
     {
       "name": "frontend-react:component-placement",
       "plugin": "frontend-react",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Entry point BEFORE creating ANY React component, in any React codebase \u2014 search for an existing one first, decide placement (primitive / feature / layout / page-local), then route to the matching per-type skill. Framework-agnostic: governs component ARCHITECTURE, not any specific UI or styling library. Activate whenever about to add, scaffold, or hand-roll a component, panel, card, widget, or control.",
       "category": "frontend",
       "purpose": "Entry-point decision guide that makes you search for an existing React component before building a new one, then routes placement (primitive/feature/layout/page-local) to the matching per-type skill.",
@@ -226,7 +226,7 @@
     {
       "name": "frontend-react:component-structure",
       "plugin": "frontend-react",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Use when creating, editing, restructuring, or reviewing a React frontend component \\u2014 including its folder layout and file organization (tsx/scss/index), where a component or sub-component should live, BEM class naming, SCSS styling, rem sizing, i18n of user-visible strings, barrel exports, and replacing inline JS style/hover handlers (e.g. onMouseEnter toggling classes) with CSS. Covers \\\"this component file is in the wrong place \\u2014 fix the structure\\\", moving a flat .tsx into its own folder, and any question about how a component's files, styles, or markup should be organized.",
       "category": "frontend",
       "purpose": "Standardizes how a React component's files, folder, BEM classes, and styling conventions are organized so structure stays consistent across the codebase.",
@@ -246,7 +246,7 @@
     {
       "name": "frontend-react:feature-components",
       "plugin": "frontend-react",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Rules for FEATURE components in a React codebase \u2014 domain-coupled blocks that compose primitives and hold business logic/data. Activate when building or editing a domain feature (a panel/table/editor tied to your business data), or adding a new domain area. Framework-agnostic. Reached via frontend-react:component-placement.",
       "category": "frontend",
       "purpose": "Rules for structuring domain-coupled \"feature\" components \u2014 composed from primitives, business logic kept out of primitives, data via the project's data layer.",
@@ -261,7 +261,7 @@
     {
       "name": "frontend-react:hooks-registry",
       "plugin": "frontend-react",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Use when about to add, hand-roll, rename, move, or remove a custom React `use*` hook.",
       "category": "frontend",
       "purpose": "Keep custom React hooks deduplicated and discoverable by requiring reuse-first checks and a maintained docs/mechanisms/hooks-registry.md.",
@@ -278,7 +278,7 @@
     {
       "name": "frontend-react:layout-components",
       "plugin": "frontend-react",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Rules for LAYOUT / app-chrome components in a React codebase \u2014 the shell, top bar, sidebar, command palette, and global overlays that frame every page. Activate when editing or adding app chrome. Framework-agnostic. Reached via frontend-react:component-placement.",
       "category": "frontend",
       "purpose": "Rules for building app-chrome layout components (shell, top bar, sidebar, command palette, global overlays) that stay free of domain logic.",
@@ -295,7 +295,7 @@
     {
       "name": "frontend-react:skeleton-components",
       "plugin": "frontend-react",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "When building or editing a React component that renders asynchronously-loaded data, decide whether it needs a loading skeleton \u2014 and if so, build a separate skeleton component colocated next to it from the shared Skeleton primitive. Activate whenever a component gains a loading state, shows a blank/\"Loading\u2026\" gap, or you are reviewing async data UI.",
       "category": "frontend",
       "purpose": "Decide whether an async-loading React component actually needs a loading skeleton, and if so, house rules for building it as a colocated sibling composed from the shared Skeleton primitive.",
@@ -310,7 +310,7 @@
     {
       "name": "frontend-react:storybook-stories",
       "plugin": "frontend-react",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Use this skill whenever writing, adding, or asking about a Storybook story for a React/UI component \\u2014 including \\\"add a story for X\\\", \\\"write a .stories file\\\", questions about which states/variants a story should cover (default, empty, error, loading, disabled), how to show a component's skeleton alongside it in a story, what mock data a story should use, or whether a just-finished component needs a story at all. Also use right after creating any new React component to decide whether a story is warranted: on the first component in a project, explain Storybook and ask the user yes/no, record the choice in CLAUDE.md, then honor it for every component after. Do NOT use for general code review, component file placement, hooks, i18n, or repo/CI setup scripts.",
       "category": "frontend",
       "purpose": "Writes a colocated Storybook story (with a separate mock-data file) covering a component's key states, after asking once per project whether stories are wanted at all.",
@@ -329,7 +329,7 @@
     {
       "name": "frontend-react:ui-primitive-reuse",
       "plugin": "frontend-react",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Before creating ANY shared/reusable UI primitive in a React codebase (button, input, checkbox, radio, switch, select, textarea, dialog, tooltip, dropdown, badge, card, separator\u2026), search the project's primitive library first to avoid duplicates \u2014 reuse or extend what exists; build new only when truly absent. Framework-agnostic (no specific UI or styling library assumed). Activate whenever about to add or hand-roll a reusable field/control/primitive.",
       "category": "frontend",
       "purpose": "Before hand-rolling a shared UI primitive (button, input, dialog, tooltip, etc.), search the project's existing primitive library and reuse or extend it instead of creating a duplicate.",
@@ -344,7 +344,7 @@
     {
       "name": "git:commit",
       "plugin": "git",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Use this skill whenever the user asks to commit, create a commit, or push changes \u2014 e.g. \"commit this\", \"let's commit\", \"make a commit\". First syncs docs/skills owned by the changed area, then splits into atomic logical commits.",
       "category": "workflow",
       "purpose": "Split staged/unstaged changes into atomic, well-ordered conventional-commit-style commits, after first syncing any docs/skills owned by the changed area.",
@@ -361,7 +361,7 @@
     {
       "name": "i18n:ui-strings",
       "plugin": "i18n",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Route every user-facing UI string through the project's localization system instead of hardcoding it. Activate whenever writing or editing display text a user will see \u2014 labels, buttons, messages, errors, toasts, placeholders, empty states, flavor copy \u2014 in any project and any stack. Do NOT use for text a user never reads: log lines, internal error codes, test fixtures, code identifiers, enum keys, slugs, or proper-noun/canonical identifiers (those stay as plain data).",
       "category": "frontend",
       "purpose": "Route every user-facing UI string through the project's localization system (or Custom Labels on Salesforce) instead of hardcoding it.",
@@ -376,7 +376,7 @@
     {
       "name": "jira:comment-style",
       "plugin": "jira",
-      "plugin-version": "2.0.2",
+      "plugin-version": "2.0.3",
       "activates-when": "Use whenever writing or posting a comment on a Jira issue/ticket \u2014 a status update, decision note, handoff, or \"what's done / what's left\" note, including via the Atlassian MCP addCommentToJiraIssue tool. Keeps comments short, essence-first, and understandable on the first read.",
       "category": "docs",
       "purpose": "Keeps Jira ticket comments short, essence-first, and readable on the first pass instead of rambling status narration.",
@@ -391,7 +391,7 @@
     {
       "name": "meta:lean-writing",
       "plugin": "meta",
-      "plugin-version": "2.7.0",
+      "plugin-version": "2.7.1",
       "activates-when": "Use this skill to WRITE terse technical documents. Trigger when asked to write, draft, summarize, present, or update a spec, design doc, RFC, brainstorming/exploration summary, or a decision log of options considered \u2014 e.g. \"write the spec for\u2026\", \"draft a design doc\u2026\", \"write up the options we considered\u2026\", \"present the brainstorming results\u2026\", \"summarize the exploration we did\u2026\" \u2014 even if the user never says \"concise\". Produce short plain sentences, bullets over prose, no filler; caveman-simple but technically precise. NOT for normal conversation, code, or commit/jira messages, and NOT for reviewing or auditing an already-written doc for clarity or bloat (that's meta:wittgenstein).",
       "category": "docs",
       "purpose": "Write terse, caveman-simple specs, design docs, or brainstorming summaries \u2014 lead with the decision, bullets over prose, no filler.",
@@ -406,7 +406,7 @@
     {
       "name": "meta:model-routing",
       "plugin": "meta",
-      "plugin-version": "2.7.0",
+      "plugin-version": "2.7.1",
       "activates-when": "Use whenever the plan is to spawn, fan out, or parallelize agents \\u2014 ANY multi-agent work, not just when models are mentioned. Triggers: \\\"spawn/kick off subagents\\\", \\\"a bunch of agents in parallel\\\", fleets that audit/comb/sweep/hunt across files, verify or skeptic stages, reviewer fan-outs, loop-until-done runs, authoring or editing a Workflow script (agent()/parallel()/pipeline()), or writing agent-definition frontmatter. Every spawned agent must get an EXPLICIT model tier assigned BEFORE it launches: reserve expensive head models for a small bounded set of final judges/synthesizers; mid-tier for judgment (review, verify, hunt); cheap tier for mechanical sweeps (grep, list, count, rename). Activate even when the user says nothing about models or cost \\u2014 an omitted model silently inherits the pricey session model, and fan-out multiplies that waste by the agent count.",
       "category": "workflow",
       "purpose": "Forces an explicit, cost-tiered model choice (head/work/sweep) on every spawned agent before any multi-agent fan-out, workflow script, or eval loop launches.",
@@ -421,7 +421,7 @@
     {
       "name": "meta:new-skill",
       "plugin": "meta",
-      "plugin-version": "2.7.0",
+      "plugin-version": "2.7.1",
       "activates-when": "Use this skill to author a brand-new skill FROM SCRATCH \\u2014 deciding its plugin/domain, folder name, file placement, and writing its SKILL.md, frontmatter, and initial metadata.yaml sidecar. Triggers for \\\"create/add/write a new skill for X\\\", \\\"where does the SKILL.md go\\\", \\\"what's the naming convention or folder structure for a new skill\\\", or \\\"what goes in the description frontmatter\\\" \\u2014 including standing up a NEW domain plugin with its plugin.json, and choosing between a marketplace skill and one local to a single repo. This is about scaffolding a NOT-YET-EXISTING skill's structure and location, NOT about tuning, evaluating, or fixing an EXISTING skill's trigger behavior (skill-creator), and NOT about refreshing an EXISTING skill's metadata.yaml after its body/tools/scripts/hooks changed \\u2014 that is the separate `meta:update-skill` skill. Also NOT for ordinary code, components, or config in a project. If the skill already exists, use `meta:update-skill` or `skill-creator` instead.",
       "category": "authoring",
       "purpose": "Author a brand-new skill from the nine questions \u2014 its contract, boundary and acceptance criteria \u2014 then scaffold the folder, the metadata interview and its evals/rubric.json (trigger + acceptance halves).",
@@ -441,7 +441,7 @@
     {
       "name": "meta:ockham",
       "plugin": "meta",
-      "plugin-version": "2.7.0",
+      "plugin-version": "2.7.1",
       "activates-when": "The Razor. Invoke before creating ANY new entity \u2014 file, folder, module, class, function, component, hook, util, type, prop, variant, config key, abstraction layer, doc, or top-level category \u2014 in ANY language or stack. Not domain-specific. If you are about to bring a new thing into existence, OCKHAM speaks first.",
       "category": "quality",
       "purpose": "Before creating any new file/module/class/function/prop/abstraction, forces a three-gate reuse-first check so entities aren't multiplied needlessly.",
@@ -456,7 +456,7 @@
     {
       "name": "meta:skill-eval",
       "plugin": "meta",
-      "plugin-version": "2.7.0",
+      "plugin-version": "2.7.1",
       "activates-when": "Use when you need to know whether a skill's `description` actually makes Claude reach for it \u2014 scoring an existing skill's trigger accuracy before shipping it, after editing its description, or when someone reports that a skill \\\"never triggers\\\" and you need to find out why. Also use to read a score you already have: what a miss means, and what a should-not-trigger query that fired means. Do NOT use to REWRITE a skill's description or body (use `meta:update-skill` \u2014 measuring is this skill's job, rewriting is that one's), and never measure with skill-creator's `run_eval`/`run_loop`, which produces systematic false zeros.",
       "category": "authoring",
       "purpose": "Faithful trigger scoring for an existing skill \u2014 the bundled score-description.py installs it as a real .claude/skills/ in a sandbox, runs real `claude -p` probes, scores 0-10 with current-vs-baseline no-regression, and says how to diagnose a miss rather than patch it. The canonical measurer; replaces skill-creator's false-negative-prone run_eval.",
@@ -474,7 +474,7 @@
     {
       "name": "meta:solid",
       "plugin": "meta",
-      "plugin-version": "2.7.0",
+      "plugin-version": "2.7.1",
       "activates-when": "SOLID is the design law for all code \u2014 SRP/OCP/LSP/ISP/DIP plus DRY, KISS, YAGNI. Activate at DESIGN time and whenever writing, editing, or reviewing code in ANY language or stack \u2014 ESPECIALLY when a class, function, hook, route, or method does several things (fetches + formats + writes, or auth + validation + DB in one method) and you're weighing whether to split it; a switch or if-chain keeps growing with new cases; you're deciding how one module should depend on or import another; or designing an interface or extension point. Pairs with meta:ockham (whether an entity should exist at all) \u2014 SOLID governs how the entities that DO exist are structured.",
       "category": "quality",
       "purpose": "Design-time guidance applying SOLID (SRP/OCP/LSP/ISP/DIP) plus DRY/KISS/YAGNI when writing, editing, or reviewing code structure.",
@@ -489,7 +489,7 @@
     {
       "name": "meta:triage",
       "plugin": "meta",
-      "plugin-version": "2.7.0",
+      "plugin-version": "2.7.1",
       "activates-when": "Use when you're about to attack a LARGE batch of items the same expensive way \\u2014 a repo-wide sweep for dead code, unused exports, or bugs; a big multi-file diff to review; dozens of call sites to migrate; a fleet of skills, files, or docs to audit or read; every TODO to classify; hundreds of failing tests to work through. Any \\\"do X across the whole repo / all of them / everything\\\" request where the set is too big to give each item full attention. Instead of paying deep cost on every item, first run one CHEAP shallow pass over ALL of them to sort into skip vs. worth-it, then spend the expensive deep pass only on the shortlist. Invoke at planning time, before touching the first item. NOT for a single file or function (just do it), NOT for picking a model tier (meta:model-routing), NOT for a plain parallel spawn with no sorting step.",
       "category": "workflow",
       "purpose": "Run a cheap full-coverage sorting pass over a large batch of items before spending an expensive pass only on the ones that need it.",
@@ -504,7 +504,7 @@
     {
       "name": "meta:update-skill",
       "plugin": "meta",
-      "plugin-version": "2.7.0",
+      "plugin-version": "2.7.1",
       "activates-when": "Use when a skill ALREADY EXISTS and something about it needs changing: its body, its `description` or boundary wording, a missing `## Contract` or acceptance criteria, or a `metadata.yaml` sidecar that no longer matches what the skill does after its allowed-tools, bundled scripts or hooks changed. Noticing that something no longer matches belongs here too \\u2014 checking whether a sidecar still agrees with reality, auditing a skill against the house standard, judging that a description reads like a workflow summary \\u2014 and so does the rewrite that follows. Do NOT use to author a skill that does not exist yet (use `meta:new-skill`). `meta:skill-eval` owns exactly one action, RUNNING a trigger evaluation and scoring it; a review lens only REPORTS a defect. Deciding what is wrong and changing the files is this skill.",
       "category": "authoring",
       "purpose": "Bring an existing skill up to the house standard \u2014 contract, boundary, checking loop, acceptance criteria \u2014 and refresh its metadata.yaml when only the wiring changed.",
@@ -524,7 +524,7 @@
     {
       "name": "meta:wittgenstein",
       "plugin": "meta",
-      "plugin-version": "2.7.0",
+      "plugin-version": "2.7.1",
       "activates-when": "Clarity gate for an already-written spec, plan, design doc/note, or RFC \u2014 a reviewer persona, not a writing guide. Activate to REVIEW or AUDIT such a doc (often under docs/superpowers/specs or docs/superpowers/plans) when checking whether a non-technical manager or reader could follow it; when it feels padded, wordy, or has grown long; when a section is a wall of prose or full of undefined jargon; or when the decision is buried at the end and should lead \u2014 then fix it in place. NOT for WRITING or drafting a doc from scratch (that's meta:lean-writing \u2014 wittgenstein reviews one that already exists), and NOT for chat, code, comments, commit messages, jira, or READMEs.",
       "category": "docs",
       "purpose": "Review an already-written spec/plan/design doc/RFC for clarity \u2014 cut filler, front-load the bottom line, and rewrite walls of prose into skimmable bullets a non-technical manager could follow.",
@@ -539,7 +539,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "2.8.1",
+      "plugin-version": "2.8.2",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the /review system in a new project.",
       "category": "quality",
       "purpose": "Install and tailor the pre-push review framework (eight reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.",
@@ -557,7 +557,7 @@
     {
       "name": "salesforce:dx_mcp",
       "plugin": "salesforce",
-      "plugin-version": "2.0.3",
+      "plugin-version": "2.0.4",
       "activates-when": "Interact with a Salesforce org through the salesforce-dx MCP tools instead of the raw `sf` CLI. Use for any org-touching task: running SOQL or Tooling queries against an org, running or resuming Apex tests, deploying/pushing or retrieving/pulling metadata and Apex classes to/from an org (scratch, sandbox, or prod), resuming a long-running deploy or test job by id, and resolving which org alias or username to target. Triggers on requests like \\\"query the org\\\", \\\"push/deploy these classes to the org\\\", \\\"run the Apex tests on <org>\\\", \\\"resume the deploy job\\\", or \\\"which org alias should I use\\\". If the action reaches out to a live org \\u2014 data, tests, metadata, or org/alias selection \\u2014 reach for this first.",
       "category": "salesforce",
       "purpose": "Directs org-touching work (SOQL/Tooling queries, Apex test runs, metadata deploy/retrieve, org/alias resolution) through the salesforce-dx MCP tools instead of raw `sf` CLI shell calls.",
@@ -575,7 +575,7 @@
     {
       "name": "salesforce:lwc_development",
       "plugin": "salesforce",
-      "plugin-version": "2.0.3",
+      "plugin-version": "2.0.4",
       "activates-when": "House rules for developing Salesforce Lightning Web Components (LWC) and Aura \u2014 the .js controller, .html template, .js-meta.xml, and CSS of a bundle, plus every LWC authoring idiom. Use whenever creating or editing an LWC/Aura bundle or writing any Salesforce-side frontend JS \u2014 including adding an @api or @track property, wiring an @wire to an Apex class, emitting or handling a custom event, a lifecycle hook, DOM access (querySelector), styling a component (CSS custom properties, scss\u2192css conversion), or writing the js-meta.xml targets / isExposed config.",
       "category": "salesforce",
       "purpose": "House rules for authoring LWC/Aura bundles \u2014 DOM access boundaries and CSS-only (no SCSS) styling conventions.",
@@ -590,7 +590,7 @@
     {
       "name": "salesforce:security_review-rules",
       "plugin": "salesforce",
-      "plugin-version": "2.0.3",
+      "plugin-version": "2.0.4",
       "activates-when": "Security rules for reviewing changes or writing security-sensitive code \u2014 secret/API-key leakage, BFF route auth, client token boundary, SOQL injection, XSS in Aura/LWC output, WITH USER_MODE / FLS enforcement, and the Salesforce Security Review bar for Apex. Activate when auditing a diff for security (hardcoded secrets, injection, missing auth, token leaks, unescaped output) or writing a BFF route, Apex REST resource, or any auth/SOQL-touching code.",
       "category": "salesforce",
       "purpose": "Paranoid security-review checklist for Salesforce/BFF changes \u2014 secret leakage, token boundary, route auth, injection/XSS, and Apex CRUD/FLS/sharing against the AppExchange Security Review bar.",
@@ -605,7 +605,7 @@
     {
       "name": "salesforce:sf-deploy-test",
       "plugin": "salesforce",
-      "plugin-version": "2.0.3",
+      "plugin-version": "2.0.4",
       "activates-when": "CLI fallback that deploys Salesforce Apex/metadata to an org and returns a compact TWO-LINE pass/fail summary (deploy: Succeeded / tests: X/Y passed) via a bash wrapper over `sf project deploy` + `sf apex run test` \u2014 no MCP dependency.\\n\\nPREFER the salesforce-dx MCP (`mcp__salesforce-dx__deploy_metadata` + `mcp__salesforce-dx__run_apex_test`, per the `dx_mcp` skill) for programmatic deploy/test when the project has it \u2014 structured, resumable results, no shell/path friction. Reach for THIS skill instead when: you want a terse one-line pass/fail without parsing MCP JSON; the salesforce-dx MCP is unavailable (headless / cron / MCP server not connected); or you need combined deploy-then-test in a single call. If the project's CLAUDE.md names the dx MCP as the default deploy+test harness, follow that and treat this as the fallback.\\n\\nStill covers interpreting a failed deploy (source-tracking, unsafe-path, cross-repo shared-object errors). Don't use for anonymous Apex snippets, ad-hoc SOQL, listing orgs, code review, or UI work with no deploy.",
       "category": "salesforce",
       "purpose": "CLI fallback that deploys Apex/metadata to a Salesforce org and runs Apex tests, returning a terse two-line pass/fail summary \u2014 no MCP dependency.",
@@ -623,7 +623,7 @@
     {
       "name": "salesforce:sf-run",
       "plugin": "salesforce",
-      "plugin-version": "2.0.3",
+      "plugin-version": "2.0.4",
       "activates-when": "Run anonymous Apex or a SOQL query against a Salesforce org and get a terse pass/fail result. Use whenever you need to execute anonymous Apex, reproduce an org-side error, or run a quick SOQL check against a dev/scratch org \u2014 instead of hand-rolling `sf org display` + curl to the Tooling API. Do NOT use to deploy or retrieve metadata (use `sf-deploy-test`), to describe an object schema or field names (use `dx_mcp`/`as_mcp`), or to build UI \u2014 this only runs anon Apex and SOQL.",
       "category": "salesforce",
       "purpose": "Run anonymous Apex or a SOQL query against a Salesforce org via a colocated script, returning a terse pass/fail instead of raw JSON.",
@@ -641,7 +641,7 @@
     {
       "name": "scout:scout",
       "plugin": "scout",
-      "plugin-version": "2.1.0",
+      "plugin-version": "2.1.1",
       "activates-when": "Use this skill when the user asks what skills exist in this marketplace, what could help with a task, to recommend or install a skill, or to browse the catalog \u2014 e.g. \\\"what skills are available for writing tests?\\\", \\\"recommend a skill for reviewing my SCSS\\\", \\\"install the skill that formats commit messages\\\", \\\"show me everything in this marketplace\\\". This skill is PASSIVE \u2014 it never runs code; it is instructions telling the agent to read the bundled catalog.json and act on it. NOT for authoring a brand-new skill (`meta:new-skill`), NOT for refreshing an existing skill's metadata.yaml (`meta:update-skill`), and NOT for ordinary unrelated coding tasks.",
       "category": "authoring",
       "purpose": "Guide the agent to discover, recommend, and install marketplace skills from the compiled catalog.",
@@ -659,7 +659,7 @@
     {
       "name": "skillcraft:skillaxe",
       "plugin": "skillcraft",
-      "plugin-version": "0.1.5",
+      "plugin-version": "0.1.6",
       "activates-when": "Use to diagnose, audit, or improve a GUIDE skill \u2014 one that tells an agent how to produce something (an authoring guide, a review lens, a house-convention skill). Fires when you ask: does this skill actually help or is it decorative; diagnose where a guide skill falls short and propose fixes; audit a skill and measure its real effect on the output; the guide skill doesn't seem to change what the agent produces, prove it either way; improve a guide skill without dropping what already worked; run a with-and-without comparison on a skill. It holds the comparison protocol itself \u2014 invoke it whenever someone is about to run such a diagnosis by hand, and whenever a prior edit made a skill worse and you need regression protection. Do NOT use to measure whether a skill's DESCRIPTION triggers (meta:skill-eval scores activation; this scores the produced result); to scaffold a brand-new skill (meta:new-skill); or to refresh a skill's metadata.yaml (meta:update-skill).",
       "category": "authoring",
       "purpose": "Measure whether a guide skill helps (with/without run), attribute shortfalls to the guide vs the agent, and improve it without regressions.",
@@ -679,7 +679,7 @@
     {
       "name": "tests:apex",
       "plugin": "tests",
-      "plugin-version": "2.2.3",
+      "plugin-version": "2.2.4",
       "activates-when": "Use when writing, fixing, or extending an Apex test \u2014 a test class for a new or changed Apex class, a negative or bulk path, a `@TestSetup` factory, swapping `System.assertEquals` for `Assert.*`, removing a hardcoded record Id, mocking a `RestRequest` for a `@RestResource`, covering a `WITH USER_MODE` or `System.runAs` path, or updating a test after changing the class under test. Also whenever you create or edit any Apex `.cls`, and when reviewing an Apex test somebody else wrote. Apex only \u2014 a test in any other runtime needs `tests:architecture` and not this page.",
       "category": "salesforce",
       "purpose": "The Apex delta of the shared test standard. States only what the platform changes \u2014 Assert.* with a message, @IsTest(SeeAllData=false), @TestSetup and the rollback, Test.startTest/stopTest, factory DML terminals, System.runAs with a permission set for user-mode and FLS, governor limits and the 200-record boundary, RestContext mocking \u2014 and cites tests:architecture for every rule the two runtimes share.\n",
@@ -696,7 +696,7 @@
     {
       "name": "tests:architecture",
       "plugin": "tests",
-      "plugin-version": "2.2.3",
+      "plugin-version": "2.2.4",
       "activates-when": "Use when writing, reviewing, moving, or speeding up a unit test \u2014 deciding which execution tier a test file belongs to, what a test must satisfy to be accepted, or how coverage and mutation-score gates apply. Also when a test is slow, flaky, or green while the code under it is wrong.",
       "category": "quality",
       "purpose": "The test standard \u2014 which execution tier a test file belongs to and how its name declares it, the numbered rules a test must satisfy, the axes a case space is derived from, factories and matchers, a JSON failure envelope, and the coverage and mutation gates.",
