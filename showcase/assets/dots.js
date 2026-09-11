@@ -13,14 +13,15 @@
   const MAX=5000;                 // hard cap on total points (field + star) — the plateau of the whole cycle
   const NEAR=175, NEAR2=NEAR*NEAR; // cursor influence + web radius
   const ABSORB=13, ABSORB2=ABSORB*ABSORB;
-  const BURST0=120;               // first star bursts small; the threshold climbs each cycle
-  const BURST_STEP=55, BURST_MAX=560; // each burst raises the next threshold — a bigger star each time, up to a ceiling
-  const REGROW=0.35;              // fraction of the star's mass ADDED as fresh points on burst — the field grows toward MAX
-  const ABSORB_RATE=1;            // points absorbed per frame — paces the growth so you can watch it climb
+  const BURST0=90;                // first star bursts small; the threshold roughly doubles each stage
+  const BURST_MUL=2.0;            // ~7 stages of a bigger-and-bigger star from BURST0 up to FINAL
+  const FINAL=4500;               // the top stage — just under MAX so it's reliably reachable; the star swallows ~the whole field, then dwells and detonates
+  const REGROW=1.0;               // each burst spits ~its own mass in fresh points, so the field climbs to FINAL over the ramp
+  const DWELL=600;                // ~10s hold at the full FINAL star before the finale burst
   const WEBCAP=90;                // cap the web to the nearest N points (keeps O(k^2) bounded)
 
   const COOL=80;                  // frames after a burst before gathering resumes — lets them disperse first
-  let W=0,H=0,DPR=1,pts=[],raf=0,frame=0,cool=0,burstAt=BURST0;
+  let W=0,H=0,DPR=1,pts=[],raf=0,frame=0,cool=0,burstAt=BURST0,dwell=0;
   const mouse={x:-9999,y:-9999,on:false};
   const star={x:0,y:0,mass:0,r:0};
 
@@ -33,7 +34,7 @@
 
   function mkpt(x,y,vx,vy){ const z=Math.random();
     return {x:(x==null?Math.random()*W:x), y:(y==null?Math.random()*H:y), z,
-      vx:(vx==null?(Math.random()-.5)*(.12+z*.22):vx), vy:(vy==null?(Math.random()-.5)*(.12+z*.22):vy)}; }
+      vx:(vx==null?(Math.random()-.5)*0.05:vx), vy:(vy==null?(Math.random()-.5)*0.05:vy)}; } // near-still field
 
   function resize(){
     DPR=Math.min(2,window.devicePixelRatio||1);
@@ -42,7 +43,7 @@
     ctx.setTransform(DPR,0,0,DPR,0,0);
     const target=Math.min(MAX, Math.round(W*H/6500)); // sparse start, like before — the burst cycle grows it toward MAX
     pts=[]; for(let i=0;i<target;i++) pts.push(mkpt());
-    star.mass=0; star.r=0; burstAt=BURST0;
+    star.mass=0; star.r=0; burstAt=BURST0; dwell=0;
   }
 
   function explode(){
@@ -51,8 +52,8 @@
     const emit=Math.min(headroom, star.mass+Math.round(star.mass*REGROW));
     for(let i=0;i<emit;i++){ const a=Math.random()*6.283, sp=4.0+Math.random()*8.0; // fling them across the screen
       pts.push(mkpt(star.x,star.y,Math.cos(a)*sp,Math.sin(a)*sp)); }
-    star.mass=0; star.r=0; cool=COOL;             // pause the gather so they scatter before regrouping
-    burstAt=Math.min(BURST_MAX,burstAt+BURST_STEP); // next star bursts bigger, until the ceiling
+    star.mass=0; star.r=0; cool=COOL; dwell=0;    // pause the gather so they scatter before regrouping
+    burstAt=Math.min(FINAL,Math.round(burstAt*BURST_MUL)); // next stage roughly doubles, up to FINAL
   }
 
   // two rings, each tumbling on its own axis — different tilt planes and speeds, like a gyroscope
@@ -93,14 +94,15 @@
     }
 
     const near=[]; let absorbed=0;
+    const rate=Math.min(24,Math.max(1,Math.round(burstAt/300))); // slow at small stages, fast enough to gather 5000 at the top
     for(let k=pts.length-1;k>=0;k--){
       const p=pts[k];
       p.x+=p.vx; p.y+=p.vy;
-      // scattered (fast) points bleed speed slowly, so a burst carries them far before they settle
-      if(p.vx*p.vx+p.vy*p.vy>0.4){ p.vx*=0.988; p.vy*=0.988; }
+      // burst debris coasts far; ambient drift is damped hard so the field settles nearly still
+      if(p.vx*p.vx+p.vy*p.vy>0.4){ p.vx*=0.988; p.vy*=0.988; } else { p.vx*=0.90; p.vy*=0.90; }
       if(mouse.on && cool===0){
         const dx=mouse.x-p.x, dy=mouse.y-p.y, d2=dx*dx+dy*dy;
-        if(d2<ABSORB2 && absorbed<ABSORB_RATE){ pts.splice(k,1); star.mass++; absorbed++; continue; } // absorbed, but paced
+        if(d2<ABSORB2 && absorbed<rate){ pts.splice(k,1); star.mass++; absorbed++; continue; } // absorbed, paced by stage
         if(d2<NEAR2){ const d=Math.sqrt(d2)+1, f=(1-d2/NEAR2)*0.35*(0.6+p.z)/d;
           p.vx+=dx*f; p.vy+=dy*f; if(near.length<WEBCAP) near.push(p); }
       }
@@ -119,9 +121,12 @@
     // the star follows the cursor, grows toward its mass, and bursts at the threshold
     if(mouse.on){ star.x+=(mouse.x-star.x)*0.1; star.y+=(mouse.y-star.y)*0.1; }
     if(star.mass>0){
-      const tr=5+Math.sqrt(star.mass)*2.8; star.r+=(tr-star.r)*0.07; // visible floor + gentle, slow growth
+      const tr=Math.min(150,5+Math.sqrt(star.mass)*2.8); star.r+=(tr-star.r)*0.07; // grows with mass, capped for the finale
       drawStar(star.x,star.y,star.r,Math.min(1,star.mass/burstAt));
-      if(star.mass>=burstAt) explode();
+      if(star.mass>=burstAt){
+        if(burstAt>=FINAL){ if(++dwell>=DWELL) explode(); } // top stage: gather all, hold ~10s, then detonate
+        else explode();                                     // a ramp stage: burst and step up to the next
+      }
     }
 
     raf=requestAnimationFrame(step);
