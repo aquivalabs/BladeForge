@@ -35,6 +35,7 @@ Copy the shape from any existing skill and fill it in:
 
 ```yaml
 schema-version: 1
+category: quality  # recommended — exactly one purpose bucket: frontend, salesforce, quality, docs, authoring, workflow
 purpose: One line — what the skill makes the agent do.
 best-for: One line — the situations where reaching for it pays off.
 needs: []          # other skills it depends on, as ["domain:name"], or [] if none
