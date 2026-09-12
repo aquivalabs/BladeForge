@@ -17,7 +17,8 @@
   const BURST_MUL=2.0;            // ~7 stages of a bigger-and-bigger star from BURST0 up to FINAL
   const FINAL=4500;               // the top stage — just under MAX so it's reliably reachable; the star swallows ~the whole field, then dwells and detonates
   const REGROW=1.0;               // each burst spits ~its own mass in fresh points, so the field climbs to FINAL over the ramp
-  const DWELL=600;                // ~10s hold at the full FINAL star before the finale burst
+  const DWELL=3600;               // ~60s hold once the whole field is gathered, before the finale burst
+  const FINALE_LEFT=15;           // top stage waits until this few points remain (~all gathered) before the timer starts
   const WEBCAP=90;                // cap the web to the nearest N points (keeps O(k^2) bounded)
 
   const COOL=80;                  // frames after a burst before gathering resumes — lets them disperse first
@@ -86,7 +87,7 @@
     ctx.clearRect(0,0,W,H);
 
     // spawn new points at an edge while gathering, up to the cap
-    if(mouse.on && cool===0 && (frame%7)===0 && pts.length+star.mass<MAX){
+    if(mouse.on && cool===0 && burstAt<FINAL && (frame%7)===0 && pts.length+star.mass<MAX){
       const e=frame%4; let x,y;
       if(e===0){x=Math.random()*W;y=-6;} else if(e===1){x=W+6;y=Math.random()*H;}
       else if(e===2){x=Math.random()*W;y=H+6;} else {x=-6;y=Math.random()*H;}
@@ -124,7 +125,10 @@
       const tr=Math.min(150,5+Math.sqrt(star.mass)*2.8); star.r+=(tr-star.r)*0.07; // grows with mass, capped for the finale
       drawStar(star.x,star.y,star.r,Math.min(1,star.mass/burstAt));
       if(star.mass>=burstAt){
-        if(burstAt>=FINAL){ if(++dwell>=DWELL) explode(); } // top stage: gather all, hold ~10s, then detonate
+        if(burstAt>=FINAL){                                 // top stage: gather the WHOLE field, then hold ~60s
+          if(pts.length>FINALE_LEFT) dwell=0;               // still points out there — keep collecting, timer not started
+          else if(++dwell>=DWELL) explode();                // field emptied — hold a minute, then detonate
+        }
         else explode();                                     // a ramp stage: burst and step up to the next
       }
     }
