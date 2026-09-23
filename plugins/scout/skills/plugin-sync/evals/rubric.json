@@ -5,7 +5,7 @@
       "should_trigger": true
     },
     {
-      "query": "/plugin says foo@acme-tools is enabled yet nothing from it appears \u2014 what's wrong?",
+      "query": "/plugin says foo@acme-tools is enabled yet nothing from it appears — what's wrong?",
       "should_trigger": true
     },
     {
@@ -37,7 +37,7 @@
       "should_trigger": false
     },
     {
-      "query": "the skill loaded fine but its advice was wrong \u2014 rewrite its body",
+      "query": "the skill loaded fine but its advice was wrong — rewrite its body",
       "should_trigger": false
     },
     {
@@ -50,10 +50,11 @@
     }
   ],
   "acceptance": [
-    "both halves are read before a cause is named \u2014 the project's enabledPlugins and the user-level installed_plugins.json registry",
+    "both halves are read before a cause is named — the project's enabledPlugins and the user-level installed_plugins.json registry",
     "every plugin reported as not installed for this project is named with its exact `claude plugin install <id> --scope project` command",
     "a user-scope install record is recognised as covering the project, and a project-scope record for a different projectPath is not",
     "the answer states that the fix takes effect at the next session start, not in the running one",
-    "nothing that fails the `<plugin>@<marketplace>` shape is echoed into the answer or the transcript, and no settings file is read whole \u2014 its keys are repository-controlled text and its `env` map holds secrets"
+    "nothing that fails the `<plugin>@<marketplace>` shape is echoed into the answer or the transcript, and no settings file is read whole — its keys are repository-controlled text and its `env` map holds secrets",
+    "a settings file whose `enabledPlugins` is not a map enables nothing, and a registry whose `plugins` key is null or a list is read as the SessionStart hook reads it — null falls back to the top-level map, a list yields no records — so the two Diagnose snippets and the hook give one answer on every shape"
   ]
 }
