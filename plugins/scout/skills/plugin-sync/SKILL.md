@@ -130,4 +130,6 @@ quotes such a warning, go straight to Fix.
    and no settings file was dumped whole.
 3. Every plugin reported as not installed is named with its exact install command.
 4. The user was told the fix takes effect at the NEXT session, not in this one.
-5. A line fails? Fix it and re-answer. Full expectations → `evals/rubric.json`.
+5. The Diagnose snippets and the SessionStart hook still agree on every shape: a rewrite kept the type
+   checks on `enabledPlugins` and on the registry's `plugins` key.
+6. A line fails? Fix it and re-answer. Full expectations → `evals/rubric.json`.
