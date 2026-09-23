@@ -113,9 +113,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-23T16:47:13",
+    "scanned_at": "2026-09-23T17:27:02",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "b90fbdf398f53f52ec87c58e6fb51db96d00f862d480d480e586e360ac51e882",
+    "scanned_hash": "6b32254cc2567d017f6609be38a81bef2641111d2cdc862c32a4dbece32669e1",
     "checklist": [
       {
         "n": 1,
@@ -157,7 +157,7 @@
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "Reads two project settings files' enabledPlugins key and the user-level installed_plugins.json — the two documented inputs the diagnosis needs and nothing else; no ~/.ssh, ~/.aws, .env, keychain or token store. The registry read now tolerates a missing or malformed file as a stated fact instead of a traceback."
+        "note": "Reads two project settings files' enabledPlugins key and the user-level installed_plugins.json — the two documented inputs the diagnosis needs and nothing else; no ~/.ssh, ~/.aws, .env, keychain or token store. The registry read now tolerates a missing or malformed file as a stated fact instead of a traceback. Re-walked after the shape fix: both snippets type-check the settings file, its enabledPlugins map, the registry and its plugins map before reading — the same two inputs, no new file, no new process."
       },
       {
         "n": 8,

@@ -56,7 +56,7 @@ e={}; seen=0
 for f in ('.claude/settings.json','.claude/settings.local.json'):
     path=os.path.join(root,f)
     if not os.path.exists(path): continue
-    try: e.update(json.load(open(path)).get('enabledPlugins') or {}); seen+=1
+    try: s=json.load(open(path)); ep=s.get('enabledPlugins') if isinstance(s,dict) else None; e.update(ep if isinstance(ep,dict) else {}); seen+=1
     except Exception as err: sys.exit(f'{path}: unreadable ({err})')
 if not seen: sys.exit(f'no .claude/settings.json under {root} — not a project that enables plugins')
 print(sorted(k for k,v in e.items() if v is True and ID.match(k)))"
@@ -68,14 +68,16 @@ path=os.path.expanduser('~/.claude/plugins/installed_plugins.json')
 try: r=json.load(open(path))
 except FileNotFoundError: sys.exit(f'{path}: absent — this machine has never installed a plugin')
 except Exception as err: sys.exit(f'{path}: unreadable ({err})')
-for k,v in (r.get('plugins', r) or {}).items():
+p=r.get('plugins') if isinstance(r,dict) else None
+recs=p if isinstance(p,dict) else {} if (isinstance(p,list) or not isinstance(r,dict)) else r
+for k,v in recs.items():
     if not ID.match(k): continue
     entries=v if isinstance(v,list) else []
     print(k, [(x.get('scope'), x.get('projectPath')) for x in entries if isinstance(x,dict)] or 'malformed record — counts as not installed')"
 ```
 
-Two constraints on those two commands, and neither is decoration — the SessionStart hook obeys the
-same two, for the same reasons:
+Three constraints on those two commands, and none is decoration — the SessionStart hook obeys the
+same three, for the same reasons:
 
 - **Read only `enabledPlugins`, never a settings file whole.** `settings.local.json` also carries an
   `env` map, and dumping it puts the user's secrets into the transcript.
@@ -84,6 +86,12 @@ same two, for the same reasons:
   lands in your own context as trusted tool output. A key of any other shape cannot name an
   installable plugin, so dropping it costs nothing and closes the injection. If you write your own
   variant of these commands, carry the filter into it.
+- **Read each file's shape the way the hook reads it, branch for branch.** The registry nests its records
+  under `plugins`; the older shape is a bare map. A `plugins` key that is present but not a map is not
+  the newer shape: for `null` the hook reads records from the top level, for a list it finds none — and
+  a settings file whose `enabledPlugins` is not a map enables nothing. The snippets take the same
+  branches, because a diagnosis that disagrees with the hook that prompted it is worse than none. If you
+  rewrite them, keep the type checks.
 
 A plugin id present in the first output and absent — or present only under another project's path —
 in the second is the answer. Report it as a fact from those two files; never assert a plugin is
