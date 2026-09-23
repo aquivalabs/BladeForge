@@ -1,0 +1,170 @@
+{
+  "trigger": {
+    "skill": "plugin-sync",
+    "measured_at": "2026-09-23T15:27:06",
+    "model": "sonnet",
+    "runs_per_query": 3,
+    "best_score": "11/12",
+    "accuracy": 0.917,
+    "baseline_accuracy": null,
+    "description_hash": "1f0a200226c657a6b4a2fc0dba12fe644dbd59df85303173da828fd13b0f3987",
+    "queryset_hash": "b507c01bda9c6d0a91bb545c808a2cf03885ba12e00231083be57c28d6f4abba",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "the plugin is enabled in .claude/settings.json but none of its skills show up in this session",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "/plugin says foo@acme-tools is enabled yet nothing from it appears \u2014 what's wrong?",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "I added a plugin to settings.json on this branch and the skill still isn't recognised",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "a skill that should be available is missing from my session, how do I find out why?",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "why would a plugin load in one of my repos but not in another one on the same machine?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 3,
+        "trigger_rate": 0.6666666666666666,
+        "pass": true
+      },
+      {
+        "query": "the marketplace lists this skill but the Skill tool says the name is unknown",
+        "should_trigger": true,
+        "triggers": 3,
+        "runs": 3,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "what skills are available in this marketplace for writing tests?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "recommend a plugin that would help me review SCSS, and install it",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 3,
+        "trigger_rate": 0.3333333333333333,
+        "pass": true
+      },
+      {
+        "query": "create a brand-new skill for validating invoice totals",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "the skill loaded fine but its advice was wrong \u2014 rewrite its body",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "fix the off-by-one bug in this pagination function",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "add a PostToolUse hook to my plugin that formats files after an edit",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 3,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-23T15:44:59",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "193e55121671cf6f85d6488e5e1589311a0f0783038464b942302de464c0e5d9",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Two occurrences of one class, both now closed. The SessionStart hook echoed keys read from the project's .claude/settings.json \u2014 a file a repository can ship \u2014 into a systemMessage the model reads; reported ids are constrained to the <plugin>@<marketplace> shape, with two tests pinning it. The FIRST scan of this skill fixed only that occurrence and wrongly recorded the class as handled: SKILL.md's own Diagnose snippets printed the same repository-controlled keys unfiltered into the agent's context as tool output. A review lens reproduced that live; both snippets now carry the same shape filter, the body states the rule so a rewritten variant keeps it, and it is an acceptance expectation in rubric.json."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "No data leaves the box. The skill reads two local files and reports; the hook writes only to stdout. No network call anywhere in the material."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "The Diagnose step reads only the enabledPlugins key, never a settings file whole: settings.local.json legitimately holds an env map, and dumping it would put the user's secrets into the transcript. Verified against a fixture carrying both a secret and a hostile key \u2014 neither reaches the output."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "No destructive shell. The prescribed `claude plugin install` / `claude plugin update` are the user's own documented tooling, stated as commands for the user to run and never executed by the skill; declared in metadata under changes.tags."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain markdown and plain JavaScript throughout \u2014 no encoded payload, no eval of a decoded blob, every branch readable."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No fetch, curl, or download-and-run. `claude plugin install` does reach the marketplace, but that is the documented user-initiated act this skill exists to prescribe, and it is disclosed in the body and the metadata notes."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No credential store is touched \u2014 not ~/.ssh, ~/.aws, a keychain, or a cookie jar. The only home-directory read is ~/.claude/plugins/installed_plugins.json, which holds install records and no secrets."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, cron, or shell-profile edit. The hook registers through the plugin's own hooks.json, the documented mechanism, and the SessionStart event is disclosed in the catalog's hooks field."
+      }
+    ]
+  }
+}
