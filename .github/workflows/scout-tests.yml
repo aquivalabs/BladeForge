@@ -1,0 +1,29 @@
+name: scout-tests
+# The SessionStart guard that warns when a project ENABLES a plugin the user-level registry has not
+# INSTALLED for that project. The hook is fail-open by construction — every read guarded, exit code
+# always 0 — so a regression in it is silent: it would simply stop warning, and nobody would notice
+# until a plugin failed to load again. This suite is what makes that failure loud, driving the real
+# hook as a process against throwaway fixture trees.
+#
+# Path-filtered on plugins/scout/** because the hook and the suite are the whole subject — nothing
+# outside this plugin changes what it asserts, and running it on every unrelated PR would spend CI
+# minutes proving the same green.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "plugins/scout/**"
+
+permissions:
+  contents: read
+
+jobs:
+  scout-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run the plugins-installed-check test suite
+        run: node plugins/scout/tests/plugins-installed-check.test.mjs

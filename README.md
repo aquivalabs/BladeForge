@@ -49,7 +49,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 
 | Plugin | What it does | Skills |
 |---|---|---|
-| scout | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data; never runs code itself. | [scout](#scout) |
+| scout | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data. A SessionStart hook also warns when this project enables a plugin the machine never installed for it — the silent reason a skill goes missing. | [scout](#scout) · [plugin-sync](#plugin-sync) |
 | cerberus | Two-headed guard at the gate — a PostToolUse hook reminds on any skill/eval edit to run both agent passes: `leak-check` (outward — rewrites work/client fingerprints to a fictional demo before they ship) and `security-scan` (inward — an eight-point consumer-safety checklist so nothing unsafe reaches whoever installs the skill). No denylist by design. | [leak-check](#leak-check), [security-scan](#security-scan) |
 | cicero | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | critique | Adversarial critique — the house method for red-teaming a design, spec, or plan: diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize. Consumed by pipelines (speccy, a critic role) rather than reinvented. | [critique](#critique) |
@@ -82,6 +82,12 @@ Grouped by plugin. Each group links back to [Plugins](#plugins).
   `changes` tags/notes — never "certified safe"), and Install (the unit is the plugin, not the skill —
   state sibling skills and needs before confirming, then run `/plugin install <plugin>@bladeforge` and
   prompt `/reload-plugins`).
+- <a id="plugin-sync"></a>**plugin-sync** — why an enabled plugin's skills never load. A plugin loads only
+  when the project ENABLES it (`.claude/settings.json`) and the user-level registry records it as INSTALLED
+  for that project (`~/.claude/plugins/installed_plugins.json`); nothing reconciles the two and a
+  disagreement is silent. Read both halves, then `claude plugin install <id> --scope project`,
+  `claude plugin update <id>`, or a session restart. The plugin's `SessionStart` hook runs the same
+  comparison automatically.
 
 ### cerberus &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="leak-check"></a>**leak-check** — the leak guard's agent pass. Before a new or edited skill,
