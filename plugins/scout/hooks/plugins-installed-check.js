@@ -10,8 +10,9 @@
 // a clean project prints nothing at all. A session must never be harder to start because a warning
 // could not be computed.
 //
-// Node, not bash: this reads JSON on stdin and parses three JSON documents, which is the deliberate
-// node exception in docs/adr/0002 — bash would need `jq`, a dependency this marketplace avoids.
+// Node, not bash: this reads JSON on stdin and parses three JSON documents. That is the deliberate node
+// exception in the hooks-are-shell-first ADR (`docs/adr/0002-hooks-are-shell-first.md` where this repo
+// carries its ADR layer) — bash would need `jq`, a dependency this marketplace avoids.
 
 const fs = require('fs');
 const os = require('os');

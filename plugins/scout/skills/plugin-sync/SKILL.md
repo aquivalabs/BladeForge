@@ -47,20 +47,31 @@ Read both halves and compare — do not guess from `/plugin`'s display, which sh
 only.
 
 ```bash
-# What this project asks for
-python3 -c "import json,re
-ID=re.compile(r'^[A-Za-z0-9][A-Za-z0-9._-]*@[A-Za-z0-9][A-Za-z0-9._-]*\Z')
-e={}
+# What this project asks for — run from anywhere inside the project; resolves the git root itself
+python3 -c "import json,os,re,subprocess,sys
+ID=re.compile(r'^[A-Za-z0-9][A-Za-z0-9._-]*@[A-Za-z0-9][A-Za-z0-9._-]*\\Z')
+try: root=subprocess.run(['git','rev-parse','--show-toplevel'],capture_output=True,text=True,check=True).stdout.strip()
+except Exception: root=os.getcwd()
+e={}; seen=0
 for f in ('.claude/settings.json','.claude/settings.local.json'):
-    try: e.update(json.load(open(f)).get('enabledPlugins') or {})
-    except Exception: pass
+    path=os.path.join(root,f)
+    if not os.path.exists(path): continue
+    try: e.update(json.load(open(path)).get('enabledPlugins') or {}); seen+=1
+    except Exception as err: sys.exit(f'{path}: unreadable ({err})')
+if not seen: sys.exit(f'no .claude/settings.json under {root} — not a project that enables plugins')
 print(sorted(k for k,v in e.items() if v is True and ID.match(k)))"
 
-# What the machine has, and for which projects
-python3 -c "import json,os,re
-ID=re.compile(r'^[A-Za-z0-9][A-Za-z0-9._-]*@[A-Za-z0-9][A-Za-z0-9._-]*\Z')
-r=json.load(open(os.path.expanduser('~/.claude/plugins/installed_plugins.json')))
-[print(k, [(x.get('scope'), x.get('projectPath')) for x in v]) for k,v in r.get('plugins', r).items() if ID.match(k)]"
+# What the machine has, and for which projects — a missing or malformed registry is a fact, not a crash
+python3 -c "import json,os,re,sys
+ID=re.compile(r'^[A-Za-z0-9][A-Za-z0-9._-]*@[A-Za-z0-9][A-Za-z0-9._-]*\\Z')
+path=os.path.expanduser('~/.claude/plugins/installed_plugins.json')
+try: r=json.load(open(path))
+except FileNotFoundError: sys.exit(f'{path}: absent — this machine has never installed a plugin')
+except Exception as err: sys.exit(f'{path}: unreadable ({err})')
+for k,v in (r.get('plugins', r) or {}).items():
+    if not ID.match(k): continue
+    entries=v if isinstance(v,list) else []
+    print(k, [(x.get('scope'), x.get('projectPath')) for x in entries if isinstance(x,dict)] or 'malformed record — counts as not installed')"
 ```
 
 Two constraints on those two commands, and neither is decoration — the SessionStart hook obeys the
