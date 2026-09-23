@@ -1,0 +1,8 @@
+schema-version: 1
+category: workflow
+purpose: Diagnose why a plugin that a project enables never loads — the enabled half in .claude/settings.json versus the installed half in the user-level registry — and give the exact command that reconciles them.
+best-for: A session where a skill that should exist is absent, or /plugin shows a plugin enabled while none of its skills appear.
+needs: []
+changes:
+  tags: [other]
+  notes: Read-only by default — compares .claude/settings.json against ~/.claude/plugins/installed_plugins.json and reports. The fixes it prescribes (claude plugin install / update) install software on the user's machine, so they are stated as commands for the user to run, never executed by the skill.

@@ -1,0 +1,59 @@
+{
+  "trigger": [
+    {
+      "query": "the plugin is enabled in .claude/settings.json but none of its skills show up in this session",
+      "should_trigger": true
+    },
+    {
+      "query": "/plugin says foo@acme-tools is enabled yet nothing from it appears \u2014 what's wrong?",
+      "should_trigger": true
+    },
+    {
+      "query": "I added a plugin to settings.json on this branch and the skill still isn't recognised",
+      "should_trigger": true
+    },
+    {
+      "query": "a skill that should be available is missing from my session, how do I find out why?",
+      "should_trigger": true
+    },
+    {
+      "query": "why would a plugin load in one of my repos but not in another one on the same machine?",
+      "should_trigger": true
+    },
+    {
+      "query": "the marketplace lists this skill but the Skill tool says the name is unknown",
+      "should_trigger": true
+    },
+    {
+      "query": "what skills are available in this marketplace for writing tests?",
+      "should_trigger": false
+    },
+    {
+      "query": "recommend a plugin that would help me review SCSS, and install it",
+      "should_trigger": false
+    },
+    {
+      "query": "create a brand-new skill for validating invoice totals",
+      "should_trigger": false
+    },
+    {
+      "query": "the skill loaded fine but its advice was wrong \u2014 rewrite its body",
+      "should_trigger": false
+    },
+    {
+      "query": "fix the off-by-one bug in this pagination function",
+      "should_trigger": false
+    },
+    {
+      "query": "add a PostToolUse hook to my plugin that formats files after an edit",
+      "should_trigger": false
+    }
+  ],
+  "acceptance": [
+    "both halves are read before a cause is named \u2014 the project's enabledPlugins and the user-level installed_plugins.json registry",
+    "every plugin reported as not installed for this project is named with its exact `claude plugin install <id> --scope project` command",
+    "a user-scope install record is recognised as covering the project, and a project-scope record for a different projectPath is not",
+    "the answer states that the fix takes effect at the next session start, not in the running one",
+    "nothing that fails the `<plugin>@<marketplace>` shape is echoed into the answer or the transcript, and no settings file is read whole \u2014 its keys are repository-controlled text and its `env` map holds secrets"
+  ]
+}
