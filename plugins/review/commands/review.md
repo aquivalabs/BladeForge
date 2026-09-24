@@ -33,7 +33,7 @@ diff.
 `priorPerAgent`, which is what you do deliberately for the final round; and a lens present in
 `config.agents` that `priorPerAgent` does not name, which is dispatched rather than assumed passing.
 
-**A changed diff does NOT reset the delta.** It resets the `round` COUNTER — the minor-scoring clock —
+**A changed diff does NOT reset the delta.** It resets the `round` COUNTER — the per-hash clock; `attempt`, the cumulative one, is what damps Minors —
 but the prior verdicts stay usable, because fixing a docs finding does not un-pass the security lens.
 That is the point: fixing findings changes the hash every time, so a rule that discarded prior verdicts
 on a hash change would make every round a full round. The final full round is what covers the risk that
@@ -116,7 +116,7 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
 |---|---|
 | `base` | the base ref the run is measured against (step 1) |
 | `hash` | the diff hash, from `review-info` |
-| `round` | the round counter — 1 for a diff hash `/review` has not attempted before; incremented by one each time `/review` re-invokes the script against the SAME hash after a FAIL; reset to 1 the moment the hash changes. This is the minor-scoring clock, and it deliberately resets on a fix |
+| `round` | the round counter — 1 for a diff hash `/review` has not attempted before; incremented by one each time `/review` re-invokes the script against the SAME hash after a FAIL; reset to 1 the moment the hash changes. This is the per-hash clock and it deliberately resets on a fix; the Minor damper reads `attempt`, below |
 | `attempt` | the CUMULATIVE re-review count for this branch, and unlike `round` it does NOT reset when a fix changes the hash. Resolve it from `.review/lens-stats.jsonl` (step 5.5): `attempt` = the number of DISTINCT `hash` values already logged there + 1 (this run). No file yet → `1`. It is what makes the convergence cap real: a review whose every fix resets `round` would never converge, but `attempt` counts the fix-and-re-review cycles the branch has actually spent, so the gate can stop after enough of them |
 | `changedFiles` | `git diff --numstat <base>..HEAD`, reshaped to `[{path, added, removed}]` (step 1) |
 | `diffPath` | the file `/review` wrote in step 1 holding `git diff <base>..HEAD`; the lens prompts the script builds name this path, and each lens reads it itself |
@@ -176,7 +176,7 @@ already does, so it accumulates on the branch without its own commit.
 
 ## Rules the run must satisfy
 
-**The round rule.** Rounds 1 and 2 score normally and open on any Blocker, Major, or Minor. From round 3, a Minor is still reported, still recorded in `report`, and still filed, but it deducts nothing and re-opens nothing — only a Blocker or a Major still moves a score or forces another round, and at most three Majors carry into the fix round (the rest are listed as deferred-this-round, never dropped). The scoring formula, applied once per lens inside the script: `10 − 20×blocker − 3×major − 1×countedMinor`, where `countedMinor` is every Minor in rounds 1 and 2 and zero from round 3 onward.
+**The round rule — counted in ATTEMPTS.** The first two attempts on a branch score normally and open on any Blocker, Major, or Minor. From the third attempt, a Minor is still reported, still recorded in `report`, and still filed, but it deducts nothing and re-opens nothing — only a Blocker or a Major still moves a score or forces another round, and at most three Majors carry into the fix round (the rest are listed as deferred-this-round, never dropped). The clock is `attempt`, the cumulative fix-and-re-review count from `.review/lens-stats.jsonl`, not `round`: `round` resets to 1 on every fix, so a rule keyed on it never damped anything — measured, eight attempts on one docs-only change set, each red round two or three fresh Minors of one class. The scoring formula, applied once per lens inside the script: `10 − 20×blocker − 3×major − 1×countedMinor`, where `countedMinor` is every Minor in attempts 1 and 2 and zero from the third attempt onward.
 
 **The full-run rule.** A full run of every enabled lens precedes every attestation, and it is that run — never a mix of runs against different diffs — that gets attested. A delta round may carry a prior PASS forward to save re-judging it, but the script marks it `carried` and refuses to attest while any entry is; the final round, run with `priorPerAgent` omitted, is the attestable one.
 
@@ -211,13 +211,15 @@ State plainly that the gate is RED, then stop. Do not write an attestation and d
 its re-review budget with the gate still red; a person decides now (fix decisively, backlog, or
 override), per step 5. The rounds below are for a still-red gate that has NOT hit the cap.
 
+**Fix the CLASS, not the citation.** A lens cites two lines; the defect is usually a class — a retired term left in five other sentences, a count typed by hand where a script should compute it, a generated copy (an inlined fallback, a standalone bundle) not regenerated from its source. Before the next round, grep the whole change set for the term, recompute every number of the same kind from its data, regenerate every derived copy — and where the repository ships a consistency script, run it and wire it as a `checks` entry on the docs lens so the next round receives the fact instead of hunting for it. A fix that touches only the cited lines buys exactly one more round: the eight-attempt run above found the next two instances every time.
+
 The next `/review` invocation is the next round, and it is a DELTA: rebuild `args` with `round`
 incremented by one and `priorPerAgent` set to **this run's `perAgent`**, then invoke the script again
 from step 3. It dispatches only what failed. Keep passing `priorPerAgent` across rounds — including
 across the hash changes that fixing findings causes — until a delta round returns every lens green.
 Then run ONE more time with `priorPerAgent` omitted; that full round is the attestable one.
 
-A changed diff resets `round` to 1 (the minor-scoring clock) and leaves `priorPerAgent` alone.
+A changed diff resets `round` to 1 (the per-hash clock) and leaves `priorPerAgent` alone.
 `attempt`, though, keeps climbing — re-derive it from the distinct hashes in `.review/lens-stats.jsonl`
 each round (step 3), so the cap counts fix-and-re-review cycles that a `round` reset would otherwise
 hide.

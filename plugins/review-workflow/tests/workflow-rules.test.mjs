@@ -224,8 +224,10 @@ console.log("\nscore");
 }
 
 // ── Group: countedMinor ─────────────────────────────────────────────────
-// In rounds 1 and 2 each minor costs 1; from round 3 each costs 0 — the same
-// fixture at round 2 and round 3 scores 8 and 10.
+// In attempts 1 and 2 each minor costs 1; from the third attempt each costs 0
+// — the same fixture at round 2 and round 3 scores 8 and 10, and `attempt`
+// (the cumulative clock a fix does not reset) decides it when the caller
+// passes one: round 1 at attempt 3 also scores 10, round 2 at attempt 2 still 8.
 
 console.log("\ncountedMinor");
 {
@@ -246,6 +248,23 @@ console.log("\ncountedMinor");
     agents: { "lens:solo": lensResponse({ agentName: "solo", findings: minorPair(), score: 10 }) }
   });
   checkEqual("round 3: the same two minors cost nothing, scoring 10", runRound3.result?.perAgent?.[0]?.score, 10);
+
+  // The fix that took eight attempts to attest: every fix reset `round` to 1, so the damper never fired.
+  const argsAttempt3 = baseArgs({ round: 1, attempt: 3, config: { agents: [lensEntry("solo")] } });
+  const runAttempt3 = await runWorkflow({
+    args: argsAttempt3,
+    agents: { "lens:solo": lensResponse({ agentName: "solo", findings: minorPair(), score: 10 }) }
+  });
+  checkEqual("round 1 at attempt 3: the two minors cost nothing — the damper keys on the cumulative attempt", runAttempt3.result?.perAgent?.[0]?.score, 10);
+  checkEqual("round 1 at attempt 3: the minors are deferred, not dropped", runAttempt3.result?.perAgent?.[0]?.deferredMinors?.length, 2);
+  check("round 1 at attempt 3: two minors alone re-open nothing and the run attests", runAttempt3.result?.attest === true && runAttempt3.result?.perAgent?.[0]?.reopensRound === false);
+
+  const argsAttempt2 = baseArgs({ round: 2, attempt: 2, config: { agents: [lensEntry("solo")] } });
+  const runAttempt2 = await runWorkflow({
+    args: argsAttempt2,
+    agents: { "lens:solo": lensResponse({ agentName: "solo", findings: minorPair(), score: 8 }) }
+  });
+  checkEqual("round 2 at attempt 2: the minors still cost 1 each", runAttempt2.result?.perAgent?.[0]?.score, 8);
 }
 
 // ── Group: criterion 6 accepts the round rule ───────────────────────────
@@ -309,7 +328,7 @@ console.log("\nround rule");
 }
 
 // ── Group: Major ceiling ─────────────────────────────────────────────────
-// From round 3, four Majors → three carried, one listed as deferred, none
+// From the third attempt, four Majors → three carried, one listed as deferred, none
 // rewritten to `minor` on the wire.
 
 console.log("\nMajor ceiling");

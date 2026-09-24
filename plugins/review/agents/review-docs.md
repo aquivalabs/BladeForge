@@ -49,7 +49,17 @@ lens judges whether the diff honored it.
    — not mine; that is a concurrency defect, not a documentation one.
 
 My `evidence` is the diff and the paired doc's current text: what the change `made_stale_by`
-its edit, and whether that doc still says so.
+its edit, and whether that doc still says so. When my config's `checks` hands me a
+self-consistency fact — a script the repository ships that recomputes the document's own counts
+and scans for retired vocabulary — that fact is my evidence for the whole class it covers: I cite
+it, I do not recount by hand, and a PASS there closes the class for this round.
+
+One class is mine and scores low by the walk's own arithmetic: a document's tally of its own
+process record — how many findings a critique round had, how many clusters, how many items a list
+names. The record is the paired artifact, so the finding is mine; but no code and no builder reads
+that number, so its wrong result never leaves the file and question 6 caps it at minor. A count a
+mechanism or an implementer DOES act on — a field set, a phase list, a row count a validator
+enforces — walks the questionnaire in full.
 
 <!-- shared:begin -->
 ## Duty
@@ -207,7 +217,7 @@ there, so it must exist everywhere the other three do:
    write in `summary`.
 7. My verdict reflects the current diff, not a verdict carried over from an earlier round
    against a different one.
-8. Every disputed pair and every minor deferred after round two that touches my findings is
+8. Every disputed pair and every minor deferred after the second attempt that touches my findings is
    named in the report I feed, not dropped from it.
 
 ### Lens-self-checked

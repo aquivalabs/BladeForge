@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-09-23",
+  "generated": "2026-09-24",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -83,7 +83,7 @@
     {
       "name": "docs:standard",
       "plugin": "docs",
-      "plugin-version": "2.1.4",
+      "plugin-version": "2.2.0",
       "activates-when": "Use when deciding where a piece of documentation belongs \u2014 a decision, a mechanism, a rule, or a frozen record \u2014 when project docs are drifting from the code they describe, when writing or updating AGENTS.md, or when adopting or installing this documentation standard in a repo.",
       "category": "docs",
       "purpose": "Teach the four-layer documentation standard \u2014 decision, mechanism, rule, frozen record \u2014 and how to install it in a target repo.",
@@ -539,7 +539,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "2.8.2",
+      "plugin-version": "2.9.0",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the /review system in a new project.",
       "category": "quality",
       "purpose": "Install and tailor the pre-push review framework (eight reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.",
@@ -641,7 +641,7 @@
     {
       "name": "scout:plugin-sync",
       "plugin": "scout",
-      "plugin-version": "2.2.2",
+      "plugin-version": "2.2.3",
       "activates-when": "Use when a skill or plugin that should be available is missing from the session \u2014 a plugin is enabled but its skills do not load, `/plugin` shows it enabled yet nothing appears, a skill id is unrecognised though the marketplace lists it, or a plugin was just added to `.claude/settings.json` on a branch and never showed up. Diagnoses whether the plugin is installed FOR THIS PROJECT and gives the exact fix. Do NOT use to find or choose a skill the user has not enabled yet, or to install one from the catalog (`scout:scout`) \u2014 this one starts from a plugin already enabled in settings that is not loading.",
       "category": "workflow",
       "purpose": "Diagnose why a plugin that a project enables never loads \u2014 the enabled half in .claude/settings.json versus the installed half in the user-level registry \u2014 and give the exact command that reconciles them.",
@@ -662,7 +662,7 @@
     {
       "name": "scout:scout",
       "plugin": "scout",
-      "plugin-version": "2.2.2",
+      "plugin-version": "2.2.3",
       "activates-when": "Use this skill when the user asks what skills exist in this marketplace, what could help with a task, to recommend or install a skill, or to browse the catalog \u2014 e.g. \\\"what skills are available for writing tests?\\\", \\\"recommend a skill for reviewing my SCSS\\\", \\\"install the skill that formats commit messages\\\", \\\"show me everything in this marketplace\\\". This skill is PASSIVE \u2014 it never runs code; it is instructions telling the agent to read the bundled catalog.json and act on it. NOT for authoring a brand-new skill (`meta:new-skill`), NOT for refreshing an existing skill's metadata.yaml (`meta:update-skill`), and NOT for ordinary unrelated coding tasks.",
       "category": "authoring",
       "purpose": "Guide the agent to discover, recommend, and install marketplace skills from the compiled catalog.",

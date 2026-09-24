@@ -189,9 +189,9 @@
   },
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_at": "2026-09-24T15:01:27",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "8422d6ba38f92180588772b0ec3be1267e942d11af049d15f2cad1bde3e73c6e",
+    "scanned_hash": "2e4a8f97abd5886be87ed3e470bc94e7fc1e20a1a437475d3defe677b9eafdc2",
     "checklist": [
       {
         "n": 1,
@@ -215,7 +215,7 @@
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "No destructive shell commands run; only a documented bash <(gh api ...) install one-liner the user must invoke themselves."
+        "note": "No destructive shell commands run; only a documented bash <(gh api ...) install one-liner the user must invoke themselves. Re-walked 2026-09-24: This edit adds prose only: counts in prose are computed by a repository script wired as a review `checks` entry; no command the skill itself runs."
       },
       {
         "n": 5,
