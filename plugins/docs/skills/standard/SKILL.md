@@ -116,4 +116,7 @@ The installer stops where the judgement starts, and the seeded config is a templ
    included) and none is split across two roots; the instruction file the line cap points at exists;
    the seeded worked example is gone; no docs directory holds a single document.
 3. A change touching a declared mechanism updated that mechanism's doc in the SAME change.
-4. Any item fails? Fix it and return to step 1. The full expectations → `evals/rubric.json`.
+4. Every number in prose that summarises a machine-readable artifact comes from a shipped script wired as
+   a review `checks` entry, and a term this change retired or renamed is grepped and gone from the whole
+   document — not just the cited line.
+5. Any item fails? Fix it and return to step 1. The full expectations → `evals/rubric.json`.

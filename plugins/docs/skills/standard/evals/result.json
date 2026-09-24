@@ -189,9 +189,9 @@
   },
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-24T14:59:28",
+    "scanned_at": "2026-09-24T15:01:27",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "4937c8fd2f10ef70b543332bb19689e1e2a35b0f0d027fad3c2d7911df5abaf5",
+    "scanned_hash": "2e4a8f97abd5886be87ed3e470bc94e7fc1e20a1a437475d3defe677b9eafdc2",
     "checklist": [
       {
         "n": 1,

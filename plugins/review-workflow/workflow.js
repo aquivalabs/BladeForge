@@ -957,7 +957,7 @@ function checkCriterion7(agents) {
   return missing ? `criterion 7: ${missing.name} has no response from this run` : null;
 }
 
-// Criterion 8 — every disputed pair and every Minor deferred after round 2
+// Criterion 8 — every disputed pair and every Minor deferred after the second attempt
 // appears in the report, never dropped.
 function checkCriterion8(agents, reportText) {
   for (const entry of agents) {

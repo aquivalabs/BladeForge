@@ -328,7 +328,7 @@ console.log("\nround rule");
 }
 
 // ── Group: Major ceiling ─────────────────────────────────────────────────
-// From round 3, four Majors → three carried, one listed as deferred, none
+// From the third attempt, four Majors → three carried, one listed as deferred, none
 // rewritten to `minor` on the wire.
 
 console.log("\nMajor ceiling");

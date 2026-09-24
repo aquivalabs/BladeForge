@@ -201,7 +201,7 @@ there, so it must exist everywhere the other three do:
    write in `summary`.
 7. My verdict reflects the current diff, not a verdict carried over from an earlier round
    against a different one.
-8. Every disputed pair and every minor deferred after round two that touches my findings is
+8. Every disputed pair and every minor deferred after the second attempt that touches my findings is
    named in the report I feed, not dropped from it.
 
 ### Lens-self-checked
