@@ -64,8 +64,12 @@ const persona = config?.persona || "";
 // The convergence clock. `round` resets to 1 whenever the diff hash changes — which
 // is EVERY time a finding is fixed — so it counts re-reviews of one frozen diff, not
 // the fix-and-re-review cycles a branch actually goes through. That reset is why the
-// minor-damper (round >= 3) never fired in practice and a review could grind on
-// indefinitely, one fixed finding surfacing the next. `attempt` is the cumulative
+// minor-damper, while it was keyed on `round`, never fired in practice and a review
+// could grind on indefinitely, one fixed finding surfacing the next — measured: eight
+// attempts on one docs-only change set, every red round two or three minors, `round`
+// always 1. The damper, the Major ceiling and the deferrals below all key on the
+// cumulative attempt now, so 'from the third round' means the third fix-and-re-review
+// cycle on the branch, whatever the per-hash clock says. `attempt` is the cumulative
 // count the orchestrator derives from the distinct hashes already reviewed on the
 // branch (`.review/lens-stats.jsonl`); it does NOT reset on a fix. A caller that does
 // not pass it falls back to `round`, so the value is never below the per-hash clock.
@@ -594,9 +598,9 @@ function renderUntouchedReport() {
 
 // ── Phase 4: Score ───────────────────────────────────────────────────
 // Every lens score is recomputed from its findings, never taken from what
-// it wrote into its own summary. `countedMinor` is every minor in rounds 1
-// and 2 and zero from round 3 on — the term phase 5 and the gate both
-// reference, stated once here.
+// it wrote into its own summary. `countedMinor` is every minor in attempts 1
+// and 2 and zero from the third attempt on — the term phase 5 and the gate
+// both reference, stated once here.
 phase("Score");
 
 function fileOf(where) {
@@ -619,7 +623,7 @@ function scenarioNamesAnotherFile(finding) {
 }
 
 function countedMinorFor(minorCount) {
-  return round < 3 ? minorCount : 0;
+  return cumulativeAttempt < 3 ? minorCount : 0;
 }
 
 function scoreFromCounts(counts) {
@@ -732,11 +736,11 @@ const allResults = [...dispatchResults, ...carriedResults].sort(
 const scoredAgents = allResults.map((entry) => scoreLens(entry));
 
 // ── Phase 5: Round rules ─────────────────────────────────────────────
-// Rounds 1 and 2 open on a Blocker, a Major, or a Minor. From round 3 a
-// Minor deducts nothing (already folded into `countedMinorFor` above) and
-// re-opens nothing; only a Blocker or a Major still does, and at most three
-// Majors carry into the fix round — the rest are reported and filed as
-// deferred-this-round, never dropped.
+// Attempts 1 and 2 open on a Blocker, a Major, or a Minor. From the third
+// attempt a Minor deducts nothing (already folded into `countedMinorFor`
+// above) and re-opens nothing; only a Blocker or a Major still does, and at
+// most three Majors carry into the fix round — the rest are reported and
+// filed as deferred-this-round, never dropped.
 phase("Round rules");
 
 function reachScore(finding) {
@@ -753,14 +757,14 @@ function applyRoundRules(scored) {
   const minors = scored.findings.filter((finding) => finding.severity === "minor");
   let carriedMajors = majors;
   let deferredMajors = [];
-  if (round >= 3 && majors.length > 3) {
+  if (cumulativeAttempt >= 3 && majors.length > 3) {
     const ranked = [...majors].sort((a, b) => reachScore(b) - reachScore(a));
     carriedMajors = ranked.slice(0, 3);
     deferredMajors = ranked.slice(3);
   }
-  const deferredMinors = round >= 3 ? minors : [];
+  const deferredMinors = cumulativeAttempt >= 3 ? minors : [];
   const reopensRound =
-    round < 3
+    cumulativeAttempt < 3
       ? scored.counts.blocker > 0 || scored.counts.major > 0 || scored.counts.minor > 0
       : scored.counts.blocker > 0 || majors.length > 0;
   return { ...scored, carriedMajors, deferredMajors, deferredMinors, reopensRound };
@@ -927,7 +931,7 @@ function checkCriterion5(agents) {
 // Criterion 6 — every score equals the round-aware formula, recomputed
 // here rather than trusted from the lens: 10 minus 20 times blocker minus
 // 3 times major minus 1 times countedMinor, where countedMinor is every
-// minor in rounds 1 and 2 and zero from round 3 on.
+// minor in attempts 1 and 2 and zero from the third attempt on.
 function checkCriterion6(agents) {
   for (const entry of agents) {
     if (!entry.dispatched) continue;
