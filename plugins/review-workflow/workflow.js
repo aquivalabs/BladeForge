@@ -29,7 +29,7 @@ export const meta = {
     { title: "Score", detail: "Recompute each lens's score from its findings" },
     {
       title: "Round rules",
-      detail: "Apply the Minor floor and the three-Major ceiling from round 3"
+      detail: "Apply the Minor floor and the three-Major ceiling from the third attempt on the branch"
     },
     {
       title: "Gate",
@@ -928,7 +928,7 @@ function checkCriterion5(agents) {
   return null;
 }
 
-// Criterion 6 — every score equals the round-aware formula, recomputed
+// Criterion 6 — every score equals the attempt-aware formula, recomputed
 // here rather than trusted from the lens: 10 minus 20 times blocker minus
 // 3 times major minus 1 times countedMinor, where countedMinor is every
 // minor in attempts 1 and 2 and zero from the third attempt on.

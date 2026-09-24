@@ -2,8 +2,9 @@
 
 A skill-less plugin holding one Workflow script: `workflow.js`. It dispatches the `review` plugin's
 configured lenses in parallel against a forced response schema, reconciles their findings, computes the
-untouched set, recomputes each lens's score with the round-aware formula, and checks the eight gate
-criteria before the `/review` command may attest.
+untouched set, recomputes each lens's score with the attempt-aware formula — a Minor stops deducting from
+the third attempt on a branch, and `attempt` does not reset when a fix changes the hash — and checks the
+eight gate criteria before the `/review` command may attest.
 
 There is no skill here, no metadata sidecar, and no agent of its own — nothing the marketplace
 catalog reads, so this plugin does not appear in it. `plugins/plan-gate/` is the existing example of
