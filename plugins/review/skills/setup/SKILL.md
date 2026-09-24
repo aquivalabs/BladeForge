@@ -122,6 +122,17 @@ subject for.
 
 After editing, run `/review` to confirm the gate runs end-to-end.
 
+## What `.review/` holds
+
+Two content-addressed stores, both committed on the branch by `/review` and never edited by hand:
+`attestations/<diffHash>.json` — one per reviewed diff; `review-attest` prunes only the branch's own
+stale ones and keeps every file the base tracks — and `lens-stats/<diffHash>.jsonl` — one per judged
+hash, one line per dispatched lens per round; the non-redundancy record and the source of `attempt`.
+One file per hash is what lets two branches never touch the same path, so the store merges without
+conflicts. A repo that still carries the older single log `.review/lens-stats.jsonl` keeps it as an
+archive — nothing appends to it any more — and adds `.review/lens-stats.jsonl merge=union` to
+`.gitattributes` for the branches created before the switch, which still append to it until they merge.
+
 ## Compatibility with older installs
 
 The floor for this setup is `review@1.6.0`.
