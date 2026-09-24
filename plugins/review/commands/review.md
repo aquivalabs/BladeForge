@@ -117,7 +117,7 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
 | `base` | the base ref the run is measured against (step 1) |
 | `hash` | the diff hash, from `review-info` |
 | `round` | the round counter — 1 for a diff hash `/review` has not attempted before; incremented by one each time `/review` re-invokes the script against the SAME hash after a FAIL; reset to 1 the moment the hash changes. This is the per-hash clock and it deliberately resets on a fix; the Minor damper reads `attempt`, below |
-| `attempt` | the CUMULATIVE re-review count for this branch, and unlike `round` it does NOT reset when a fix changes the hash. Resolve it from `.review/lens-stats.jsonl` (step 5.5): `attempt` = the number of DISTINCT `hash` values already logged there + 1 (this run). No file yet → `1`. It is what makes the convergence cap real: a review whose every fix resets `round` would never converge, but `attempt` counts the fix-and-re-review cycles the branch has actually spent, so the gate can stop after enough of them |
+| `attempt` | the CUMULATIVE re-review count for THIS BRANCH, and unlike `round` it does NOT reset when a fix changes the hash. Resolve it from the branch's own hash files under `.review/lens-stats/` (step 5.5): `attempt` = the number of `.review/lens-stats/<hash>.jsonl` files the branch ADDED over the base (`git diff --name-only --diff-filter=A <base>..HEAD -- .review/lens-stats/`) + 1 (this run). None yet → `1`. Counting the whole store instead is the defect this sentence replaces: the store merges to `main` and carries every merged branch's history, so a fresh branch once started at attempt 13 — the Minor damper on from its first round and the convergence cap one red round away. It is what makes the cap real: a review whose every fix resets `round` would never converge, but `attempt` counts the fix-and-re-review cycles the branch has actually spent, so the gate can stop after enough of them |
 | `changedFiles` | `git diff --numstat <base>..HEAD`, reshaped to `[{path, added, removed}]` (step 1) |
 | `diffPath` | the file `/review` wrote in step 1 holding `git diff <base>..HEAD`; the lens prompts the script builds name this path, and each lens reads it itself |
 | `config` | the loaded config from `review-info` |
@@ -125,6 +125,13 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
 | `machineFacts` | the results of step 2.5's per-lens checks, `{"<lens>": [{name, command, exitCode, output}]}` — `null` when no lens configures any. Computed by `/review`, once per round; the script only renders them into the lens prompts |
 | `gateResults` | the results of step 2.6's deterministic gates, `[{name, command, exitCode, output}]` — `null` when the config declares no `gates`. Computed by `/review`, once per round; a gate with a nonzero `exitCode` makes the script refuse the attestation outright (like the secret scan), whatever the lens verdicts. This is the review↔pre-push convergence: the review runs the same oracle the push runs |
 | `priorPerAgent` | the `perAgent` array this command received on the previous round — this is what makes the round a DELTA, dispatching only the lenses that failed. Pass it WHOLE, findings included: a re-dispatched lens is prompted to verify its own prior findings rather than cold-review the diff again, which is where repeat rounds mint noise. Pass `null` for the final, attestable full round. It survives a hash change on purpose (see the round shape above): a fix that changes the diff does not un-pass an unrelated lens |
+
+**Launch from the repository under review.** A lens runs in whatever working directory the session's
+shell holds when the Workflow starts — the script passes no repository path, by design. `cd` into the
+repository and confirm it with `pwd` in the same command before invoking the script. Measured: a
+session that had just merged a sibling repository launched the next gate without moving, and the docs
+lens ran `git` in that other checkout, found its attested commit, and returned a Major against a diff
+that was not stale — the whole round void.
 
 Resolve `workflow.js` before calling anything. Two layouts hold it, and a single relative hop from `${CLAUDE_PLUGIN_ROOT}` reaches neither — that path points at the versioned install cache, `…/cache/<marketplace>/review/<version>/`, whose sibling directory is another version of `review`, not another plugin. Try these in order and use the first that exists:
 
@@ -157,8 +164,9 @@ The script hands back exactly `{ attest, capReached, refusedCriterion, failedLen
 
 ## Step 5.5 — the uniqueness log
 
-After every run, append one line per DISPATCHED lens to `.review/lens-stats.jsonl` (create it if
-absent):
+After every run, append one line per DISPATCHED lens to `.review/lens-stats/<diffHash>.jsonl` — one
+file per judged hash, created on the hash's first round, appended to by its later rounds (create the
+directory if absent):
 
 ```json
 {"at":"<ISO timestamp>","hash":"<diffHash>","round":N,"lens":"docs","verdict":"PASS","score":9,"findings":2,"unique":1,"refuted":0}
@@ -171,12 +179,21 @@ judged nothing.
 This log is the non-redundancy record: over enough rounds it answers "does this lens ever say
 anything nobody else says" with a number instead of a feeling. The decision to trim or keep a lens is
 made FROM THIS FILE after tens of rounds — never from one round, where a quiet lens may simply have
-had no subject in the diff. The file rides in the same `git add -A .review/` the attestation commit
-already does, so it accumulates on the branch without its own commit.
+had no subject in the diff. Read it across hashes with `cat .review/lens-stats/*.jsonl`. The store rides
+in the same `git add -A .review/` the attestation commit already does, so it accumulates on the branch
+without its own commit.
+
+One file per hash is not a filing preference: two branches never judge the same diff, so they never
+touch the same path, and the store merges without a conflict. Its predecessor was one
+`.review/lens-stats.jsonl` every branch appended to — a textual conflict on every merge of `main` into
+a branch, measured — and the `attempt` count read that whole file, history of every merged branch
+included (see the `attempt` row). Where the old file exists it stays as an archive: nothing appends
+to it any more, and `.review/lens-stats.jsonl merge=union` in `.gitattributes` covers the branches
+created before the switch, which still append to it until they merge.
 
 ## Rules the run must satisfy
 
-**The round rule — counted in ATTEMPTS.** The first two attempts on a branch score normally and open on any Blocker, Major, or Minor. From the third attempt, a Minor is still reported, still recorded in `report`, and still filed, but it deducts nothing and re-opens nothing — only a Blocker or a Major still moves a score or forces another round, and at most three Majors carry into the fix round (the rest are listed as deferred-this-round, never dropped). The clock is `attempt`, the cumulative fix-and-re-review count from `.review/lens-stats.jsonl`, not `round`: `round` resets to 1 on every fix, so a rule keyed on it never damped anything — measured, eight attempts on one docs-only change set, each red round two or three fresh Minors of one class. The scoring formula, applied once per lens inside the script: `10 − 20×blocker − 3×major − 1×countedMinor`, where `countedMinor` is every Minor in attempts 1 and 2 and zero from the third attempt onward.
+**The round rule — counted in ATTEMPTS.** The first two attempts on a branch score normally and open on any Blocker, Major, or Minor. From the third attempt, a Minor is still reported, still recorded in `report`, and still filed, but it deducts nothing and re-opens nothing — only a Blocker or a Major still moves a score or forces another round, and at most three Majors carry into the fix round (the rest are listed as deferred-this-round, never dropped). The clock is `attempt`, the cumulative fix-and-re-review count from the branch's hash files under `.review/lens-stats/`, not `round`: `round` resets to 1 on every fix, so a rule keyed on it never damped anything — measured, eight attempts on one docs-only change set, each red round two or three fresh Minors of one class. The scoring formula, applied once per lens inside the script: `10 − 20×blocker − 3×major − 1×countedMinor`, where `countedMinor` is every Minor in attempts 1 and 2 and zero from the third attempt onward.
 
 **The full-run rule.** A full run of every enabled lens precedes every attestation, and it is that run — never a mix of runs against different diffs — that gets attested. A delta round may carry a prior PASS forward to save re-judging it, but the script marks it `carried` and refuses to attest while any entry is; the final round, run with `priorPerAgent` omitted, is the attestable one.
 
@@ -220,14 +237,14 @@ across the hash changes that fixing findings causes — until a delta round retu
 Then run ONE more time with `priorPerAgent` omitted; that full round is the attestable one.
 
 A changed diff resets `round` to 1 (the per-hash clock) and leaves `priorPerAgent` alone.
-`attempt`, though, keeps climbing — re-derive it from the distinct hashes in `.review/lens-stats.jsonl`
-each round (step 3), so the cap counts fix-and-re-review cycles that a `round` reset would otherwise
+`attempt`, though, keeps climbing — re-derive it from the hash files the branch added under
+`.review/lens-stats/` each round (step 3), so the cap counts fix-and-re-review cycles that a `round` reset would otherwise
 hide.
 
 ## Step 7 — on PASS, attest immediately
 
 Writing and committing the attestation is the IMMEDIATE next action once `attest` is `true` — do it FIRST, before ANY other edit. **Never touch code between a green verdict and the committed attestation.** Any edit — even fixing a reported finding — changes the diff hash and VOIDS the review, forcing a re-run; address findings only AFTER the attestation is committed, as a separate change that gets its own `/review`. ALWAYS write and commit the attestation — automatically, without asking. This is not optional: the committed `.review/attestations/<diffHash>.json` is the branch anchor that lets the NEXT `/review` short-circuit (step 0) instead of re-running the whole cycle. Build the per-lens JSON `{ "<lens>": {"score":N,"verdict":"PASS"}, ... }` from `perAgent` and write it:
 `npx -y -p bladeforge-review-harness@latest review-attest '<perAgentJson>'`
-This stamps the current `diffHash` AND the `commitSha` (HEAD SHA the review covers) into the content-addressed `.review/attestations/<diffHash>.json`, pruning any stale sibling attestation. Then commit the store to the branch — stage additions AND the pruned deletions:
+This stamps the current `diffHash` AND the `commitSha` (HEAD SHA the review covers) into the content-addressed `.review/attestations/<diffHash>.json`, pruning only the branch's OWN stale attestations — every file the base already tracks stays (harness 0.3.1 and later), so a branch never deletes an attestation `main` holds; that delete-versus-add pair is what git used to turn into a rename conflict with markers written inside the JSON. Then commit the store to the branch — stage additions AND the pruned deletions:
 `git add -A .review/ && git commit -m "chore: review attestation"`
 Tell the user the gate is green and they can push.
