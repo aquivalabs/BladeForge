@@ -19,7 +19,7 @@ and security-scan results.
 
 > **Adding or publishing a skill?** Read [`docs/`](docs/) first — [authoring.md](docs/authoring.md)
 > (create a skill, write its `metadata.yaml`, run the evals) and [publishing.md](docs/publishing.md)
-> (how a merge auto-regenerates the catalog and bumps the version — the scout bot).
+> (how a merge auto-bumps the version and regenerates the catalog — the scout bot).
 
 ## Guard the gate — [`cerberus`](#leak-check)
 
@@ -201,8 +201,8 @@ Also in the plugin, and neither is a skill: a read-only whole-tree audit agent t
 
 Skills are curated internally and published here after review. Two PR checks validate every change
 before it lands: **eval-gate** (each touched skill has a valid `trigger-eval.json`) and **scout-gate**
-(the catalog is self-consistent). On merge, the **scout-publish** workflow regenerates `catalog.json`,
-PATCH-bumps the affected plugin version(s), and pushes the result — no manual catalog or version step.
+(the catalog is self-consistent). On merge, the **scout-publish** workflow PATCH-bumps the affected plugin
+version(s), regenerates `catalog.json`, and pushes the result — no manual catalog or version step.
 
 See **[docs/](docs/)** for the contributor guides: [authoring.md](docs/authoring.md) (adding a
 plugin/skill, writing `metadata.yaml`, running evals) and [publishing.md](docs/publishing.md)

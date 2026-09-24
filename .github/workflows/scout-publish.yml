@@ -1,7 +1,10 @@
 name: scout-publish
 # Keeps catalog.json current "by construction": on every push to main (i.e. every PR
-# merge), regenerate the catalog, PATCH-bump the affected plugin's version, and
-# auto-commit + push the result back to main.
+# merge), PATCH-bump the affected plugin's version, THEN regenerate the catalog, and
+# auto-commit + push the result back to main. The order matters: the catalog carries each
+# plugin's version, so a catalog generated before the bump describes the version that was
+# just replaced — and every branch that regenerates it afterwards inherits a two-line diff
+# it never authored.
 #
 # NOTE on gate interaction: scout-gate.yml and eval-gate.yml trigger on `pull_request`
 # only. A direct push to `main` (as this workflow performs) does NOT hit those PR gates.
@@ -37,9 +40,6 @@ jobs:
 
       - name: Install PyYAML (metadata.yaml parser)
         run: python -m pip install --quiet pyyaml
-
-      - name: Regenerate catalog
-        run: python3 scripts/gen_catalog.py
 
       - name: Compute affected plugin(s) and PATCH-bump version
         run: |
@@ -79,6 +79,10 @@ jobs:
             fi
             rm -f /tmp/bump-error.$$
           done
+
+      # After the bump, so the catalog's plugin-version fields match the versions being pushed.
+      - name: Regenerate catalog
+        run: python3 scripts/gen_catalog.py
 
       - name: Commit and push regenerated catalog + bumped version(s)
         run: |
