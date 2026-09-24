@@ -70,8 +70,8 @@ const persona = config?.persona || "";
 // always 1. The damper, the Major ceiling and the deferrals below all key on the
 // cumulative attempt now, so 'from the third round' means the third fix-and-re-review
 // cycle on the branch, whatever the per-hash clock says. `attempt` is the cumulative
-// count the orchestrator derives from the distinct hashes already reviewed on the
-// branch (`.review/lens-stats.jsonl`); it does NOT reset on a fix. A caller that does
+// count the orchestrator derives from the hash files the branch added under
+// `.review/lens-stats/`; it does NOT reset on a fix. A caller that does
 // not pass it falls back to `round`, so the value is never below the per-hash clock.
 const cumulativeAttempt = Number.isInteger(attempt) && attempt > 0 ? attempt : round;
 // The hard cap. Adversarial review, like adversarial critique, never runs dry on its
