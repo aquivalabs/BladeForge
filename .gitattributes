@@ -1,0 +1,9 @@
+# `.review/lens-stats.jsonl` is append-only: every /review round adds one line per dispatched
+# lens, so two branches that both ran a review always differ at the file's tail, and git's
+# line merge reports a conflict that is not a real disagreement. `union` is a built-in merge
+# driver (no `git config` needed on a clone) that keeps both sides' lines. Each line is a
+# self-contained JSON record, so the union is still valid JSONL; nothing relies on line order.
+# GitHub's mergeability check ignores this attribute (community discussion #9288): a PR can
+# still show CONFLICTING until the branch is rebased locally, where the driver applies.
+# Not covered: `.review/attestations/` — content-addressed, one file per reviewed diff.
+.review/lens-stats.jsonl  merge=union
