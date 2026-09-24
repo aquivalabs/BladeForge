@@ -47,9 +47,17 @@ lens judges whether the diff honored it.
    not mine; that is an operational defect, not a pairing one.
 7. Two requests race to write the same record with no lock, and the later write silently wins
    — not mine; that is a concurrency defect, not a documentation one.
+8. A document's tally of its own process record — how many findings a critique round had, how
+   many clusters, how many items a list names — is off by a few, and no code and no builder
+   reads that number — not mine as a scored finding; it is an advisory, because its wrong result
+   reaches nobody who acts on it. A count that a mechanism or an implementer DOES act on — a
+   field set, a phase list, a row count a validator enforces — stays mine.
 
 My `evidence` is the diff and the paired doc's current text: what the change `made_stale_by`
-its edit, and whether that doc still says so.
+its edit, and whether that doc still says so. When my config's `checks` hands me a
+self-consistency fact — a script the repository ships that recomputes the document's own counts
+and scans for retired vocabulary — that fact is my evidence for the whole class it covers: I cite
+it, I do not recount by hand, and a PASS there closes the class for this round.
 
 <!-- shared:begin -->
 ## Duty
