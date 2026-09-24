@@ -13,7 +13,7 @@
     "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
     "results": [
       {
-        "query": "this repo has no .claude/review.config.json yet \u2014 can you install the pre-push review gate?",
+        "query": "this repo has no .claude/review.config.json yet — can you install the pre-push review gate?",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
@@ -45,7 +45,7 @@
         "pass": true
       },
       {
-        "query": "onboard this repo onto the org's pre-push review gate \u2014 it's greenfield, nothing configured yet",
+        "query": "onboard this repo onto the org's pre-push review gate — it's greenfield, nothing configured yet",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
@@ -69,7 +69,7 @@
         "pass": true
       },
       {
-        "query": "the review gate flagged issues in my diff \u2014 walk me through fixing them",
+        "query": "the review gate flagged issues in my diff — walk me through fixing them",
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
@@ -113,9 +113,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-09T12:59:41",
+    "scanned_at": "2026-09-24T14:28:29",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "18252127163281fe384b5bb29fc75a05660cbd500562fcd3b7851888fab17b43",
+    "scanned_hash": "d4f7b230f3b0d476641a2cb510f99444bbf14dd60cf2e7a505d9fe12f02d8f14",
     "checklist": [
       {
         "n": 1,
@@ -139,7 +139,7 @@
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "No rm -rf, force-push, dd, chmod -R 777, or mass delete present anywhere in the file."
+        "note": "No rm -rf, force-push, dd, chmod -R 777, or mass delete present anywhere in the file. Re-walked 2026-09-24: This edit adds prose only: a second example of a `checks` entry (a read-only consistency script the repository ships). No new command the skill runs."
       },
       {
         "n": 5,

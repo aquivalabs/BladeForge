@@ -93,6 +93,8 @@
     "every layer the project actually has is declared, the frozen one included, and none is split across two directories",
     "no docs directory holds a single document, and every directory that survives has a reason a reader can state",
     "every technical claim in a mechanism doc was verified against the shipped code before writing — no fluent description of behaviour the code does not actually have",
-    "a mechanism with real surface is documented at the house norm (tables, cross-links to specs/backlog, inline caveats about known limits), not shipped as a bare four-section skeleton"
+    "a mechanism with real surface is documented at the house norm (tables, cross-links to specs/backlog, inline caveats about known limits), not shipped as a bare four-section skeleton",
+    "a number in prose that summarises a machine-readable artifact — findings in a record, rows in a table, entries in a log — is computed by a script the repository ships and wires as a checks entry on the review's docs lens, never typed by hand",
+    "a term a decision retires or renames appears nowhere in the document after the change, and the consistency script scans for it — the fix is the whole document, never the cited line alone"
   ]
 }

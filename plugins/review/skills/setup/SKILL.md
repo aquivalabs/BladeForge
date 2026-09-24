@@ -91,6 +91,10 @@ falls back to sane defaults:
   on the docs lens. Wire the repo's own gate scripts here rather than letting the lens re-derive
   their verdicts by reading — measured: a docs lens spent 25 tool calls re-proving what the repo's
   paired-doc script decides in seconds. A failing check is evidence the lens weighs, never a gate.
+  The second shape worth wiring on the docs lens is a **self-consistency script** for a large
+  design document — one that recomputes every count the prose states from the data it summarises
+  and scans for vocabulary a decision retired; without it, a docs lens finds that class two lines
+  at a time, one round each (measured: eight attempts on one change set).
 - **skills** — project skill ids that encode its rules; the agent loads each. Discover from the repo's
   CLAUDE.md / available skills.
 - **rules** — deterministic `{id, pattern, severity}` greps (forbidden patterns, required namespaces).
