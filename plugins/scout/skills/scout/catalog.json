@@ -83,7 +83,7 @@
     {
       "name": "docs:standard",
       "plugin": "docs",
-      "plugin-version": "2.2.0",
+      "plugin-version": "2.2.1",
       "activates-when": "Use when deciding where a piece of documentation belongs \u2014 a decision, a mechanism, a rule, or a frozen record \u2014 when project docs are drifting from the code they describe, when writing or updating AGENTS.md, or when adopting or installing this documentation standard in a repo.",
       "category": "docs",
       "purpose": "Teach the four-layer documentation standard \u2014 decision, mechanism, rule, frozen record \u2014 and how to install it in a target repo.",
@@ -539,7 +539,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "2.9.0",
+      "plugin-version": "2.9.1",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the /review system in a new project.",
       "category": "quality",
       "purpose": "Install and tailor the pre-push review framework (eight reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.",
