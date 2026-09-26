@@ -113,57 +113,57 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-24T17:14:14",
+    "scanned_at": "2026-09-26T05:45:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "fde4c50e1d8eb0304bcc26591089f864e3d9b995245f2e56645c7261b21db51e",
+    "scanned_hash": "d54762ab865edf634737260716aa1b73183a72ad0ab6c86344e564e1c1028312",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "No directives aimed at the reading model; all imperative text is normal skill instruction, not injected steering."
+        "note": "instructional prose for a human installing the gate; the added table cell names a lens wiring and steers no reading agent"
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "No data sent anywhere beyond the documented gh api fetch of the marketplace's own install script."
+        "note": "no data leaves the box; the skill installs config in the user’s own repo"
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "No embedded keys/tokens; relies on the user's own gh auth login."
+        "note": "no key, token or credential in the material"
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "No rm -rf, force-push, dd, chmod -R 777, or mass delete present anywhere in the file. Re-walked 2026-09-24: This edit adds prose only: a second example of a `checks` entry (a read-only consistency script the repository ships). No new command the skill runs."
+        "note": "no command was added; the ones it prescribes are the documented installer and the review harness"
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "No base64/hex blobs or eval-of-decoded-data; the bootstrap one-liner is plain, readable curl-equivalent via gh api."
+        "note": "plain Markdown; the change is one table cell"
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "documented user-invoked installer (bash <(gh api ...) from the marketplace repo); the skill does not execute it itself"
+        "note": "the only host named is this repository’s own bootstrap URL, unchanged by this diff"
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "No reading of ~/.ssh, ~/.aws, .env, keychain, or cookie stores; only requires the user already be gh-authenticated."
+        "note": "no credential store, dotfile or keychain is read"
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "No sudo/setuid; husky/pre-push and CI workflow wiring are ordinary repo-local git hooks, not shell-profile/cron/launch-agent persistence outside the repo."
+        "note": "no sudo, setuid, cron, shell profile or launch agent"
       }
     ]
   }

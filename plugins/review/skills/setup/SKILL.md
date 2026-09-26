@@ -66,7 +66,7 @@ with the org plugins enabled has them; a project-local hyphen-id skill is NOT sa
 | React | `frontend-react:component-structure`, `frontend-react:hooks-registry`, `frontend-react:storybook-stories` → craft |
 | Salesforce / Apex | `tests:apex` → tests · `salesforce:security_review-rules` → security |
 | i18n | `i18n:ui-strings` → craft |
-| always | `meta:solid` → craft · `meta:ockham` → craft |
+| always | `meta:solid` → craft · `meta:ockham` → craft · `no-code-prose:policy` → craft |
 
 After wiring from the answers, REMIND the adopter to add their PROJECT-LOCAL skills (their own
 `.claude/skills/`, hyphen ids) on top — those encode repo-specific rules a generic map can't know.
