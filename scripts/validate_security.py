@@ -42,6 +42,18 @@ POINTS = [
 VERDICTS = {"pass", "flag", "n/a"}
 # Directories whose every file is installer-facing material.
 MATERIAL_DIRS = ("references", "scripts")
+# An installer never reads a build artefact, and the filesystem walk below would otherwise fold
+# one into the hash. A stray `__pycache__` then made the same skill hash differently on a
+# contributor's machine and in a clean CI checkout, so the gate passed locally and failed there.
+ARTEFACT_DIRS = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", "node_modules"}
+ARTEFACT_SUFFIXES = {".pyc", ".pyo"}
+
+
+def is_material(rel: Path) -> bool:
+    """Whether a path under a material directory is something an installer actually reads."""
+    return not (
+        ARTEFACT_DIRS.intersection(rel.parts) or rel.suffix in ARTEFACT_SUFFIXES
+    )
 
 
 def material_hash(skill_dir: Path) -> str:
@@ -57,8 +69,9 @@ def material_hash(skill_dir: Path) -> str:
         if not base.is_dir():
             continue
         for f in base.rglob("*"):
-            if f.is_file():
-                entries.append((f.relative_to(skill_dir), f))
+            rel = f.relative_to(skill_dir)
+            if f.is_file() and is_material(rel):
+                entries.append((rel, f))
     entries.sort(key=lambda e: str(e[0]))
     h = hashlib.sha256()
     for rel, f in entries:

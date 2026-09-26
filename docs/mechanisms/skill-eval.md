@@ -80,9 +80,16 @@ A skill with nothing to check — one that only explains how a system is built �
 ## result.json — what was measured
 
 Written by `plugins/meta/skills/skill-eval/scripts/score-description.py` at the end of a run, unless
-`--no-save` is passed. Its two keys mirror `rubric.json`: `trigger` carries the queryset hash, the
-score, the model and runs used, the date, the method, and the per-query rows; `acceptance` carries
-the skillaxe run, or `null` until one has been taken.
+`--no-save` is passed. `trigger` carries the queryset hash, the score, the model and runs used, the
+date, the method, and the per-query rows; `acceptance` carries the skillaxe run, or `null` until one
+has been taken; `security` carries the eight-point walk, written by a different mechanism entirely.
+
+**A run replaces `trigger` and carries every other key forward untouched.** It used to carry only
+`acceptance`, by name — so re-scoring a description silently deleted the `security` walk beside it
+and un-shipped the skill, which `eval-gate` then refused with a staleness message naming neither the
+cause nor the re-measurement that caused it. `plugins/meta/tests/save-result.test.py` pins the
+carry-forward, and the CI job `meta-tests` runs it. A record with no `trigger` key is not one of
+these records, and nothing in it is carried.
 
 The record's shape, and the reason for it:
 
@@ -165,6 +172,13 @@ or reference edit changes what reaches a consumer even when the description is u
 sidecars and eval files, which a consumer never runs. `scripts/validate_security.py` both checks the
 section's shape and, with `--print-material-hash <skill-dir>`, computes the hash — one implementation,
 shared by the head that writes and the gate that checks, so the two can never disagree.
+
+**It also excludes build artefacts** — a `__pycache__`, a `.pyc`, a `node_modules` — because an
+installer never reads one. The walk is over the FILESYSTEM, not over git, so an ignored artefact
+used to fold into the hash: running any bundled script left a `__pycache__` beside it, the machine
+that wrote the scan hashed it, and a clean CI checkout did not. The gate then called a freshly
+written walk stale, on that skill only, with no way to reproduce it locally.
+`scripts/validate_security.test.py` pins the exclusion.
 
 ## Who reads what
 

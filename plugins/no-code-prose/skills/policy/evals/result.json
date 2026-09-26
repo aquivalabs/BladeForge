@@ -1,0 +1,178 @@
+{
+  "trigger": {
+    "skill": "policy",
+    "measured_at": "2026-09-26T02:40:13",
+    "model": "sonnet",
+    "runs_per_query": 2,
+    "best_score": "11/13",
+    "accuracy": 0.846,
+    "baseline_accuracy": 0.769,
+    "description_hash": "ce7c20fe8347510d2ce2ef1cad6d43e40639ef725facea861b896567014b2b08",
+    "queryset_hash": "71c8a93821b428e3c096bfded0a2bf24616ae770ba2a3bcb11d14af9f7b84c8b",
+    "eval_type": "description-triggering",
+    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "results": [
+      {
+        "query": "Add a comment above resolveLedgerRevision explaining why we match on externalRef instead of the row id — it bit us once.",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 2,
+        "trigger_rate": 0.5,
+        "pass": true
+      },
+      {
+        "query": "Write a JSDoc block for the exported parseInvoiceTotals function in src/lib/invoices/parse.ts.",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 2,
+        "trigger_rate": 0.5,
+        "pass": true
+      },
+      {
+        "query": "Review this diff for me: the new service class has a 40-line header comment describing the retry strategy and how the queue used to work.",
+        "should_trigger": true,
+        "triggers": 1,
+        "runs": 2,
+        "trigger_rate": 0.5,
+        "pass": true
+      },
+      {
+        "query": "I'm writing an Apex trigger handler — should I document the ordering assumption in a comment at the top of the class?",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 2,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "Add a docstring to the Python migration script so the next person knows why the batch size is 500.",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 2,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "This test file has a ten-line comment before each case saying what it pins and why the case exists. Clean it up.",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 2,
+        "trigger_rate": 1.0,
+        "pass": true
+      },
+      {
+        "query": "Leave a note in the code that this endpoint is deprecated and point people at the replacement.",
+        "should_trigger": true,
+        "triggers": 0,
+        "runs": 2,
+        "trigger_rate": 0.0,
+        "pass": false
+      },
+      {
+        "query": "Write the ADR for our decision to match ledger entries by external reference instead of row id.",
+        "should_trigger": false,
+        "triggers": 2,
+        "runs": 2,
+        "trigger_rate": 1.0,
+        "pass": false
+      },
+      {
+        "query": "Draft the PR description for the invoice-parsing change — summarise what changed and why.",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 2,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "Update docs/mechanisms/ledger-lookup.md to describe the new revision-matching behaviour.",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 2,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "Write a commit message for these three files.",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 2,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "Review this diff for duplicated logic — I think the two editors share the same validate() body.",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 2,
+        "trigger_rate": 0.0,
+        "pass": true
+      },
+      {
+        "query": "Rename errMsg to errorMessage across the module and add braces to the one-line ifs.",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 2,
+        "trigger_rate": 0.0,
+        "pass": true
+      }
+    ]
+  },
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-09-26T02:52:00",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "8b463c4fbb5f767afdf6a1d888ad7934999f4a9af70845e5ff516b6fdaad69be",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "instructional prose only; the description steers skill selection, not the reading agent"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "no network call and no data leaves the box"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "no key, token or credential; every example is invented"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "ships no script - nothing is executed by the skill"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain Markdown throughout; no encoded or unreadable payload"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "no external host is named or reached"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "no credential store, dotfile or keychain is read"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "no sudo, setuid, shell profile, cron or launch agent"
+      }
+    ]
+  }
+}

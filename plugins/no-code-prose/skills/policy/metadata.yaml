@@ -1,0 +1,8 @@
+schema-version: 1
+category: quality
+purpose: One language-agnostic rule for comments — a pointer, a directive, a three-line doc block on an export, a member of one or the module itself, or a comment another house standard requires — and nothing else; every "why" lives in a document the code points at.
+best-for: Any repository, in any language, that keeps its decisions in ADRs and mechanism pages and wants code comments to stop rotting into stale essays.
+needs: []
+changes:
+  tags: []
+  notes: ""

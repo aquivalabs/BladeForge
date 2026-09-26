@@ -122,6 +122,20 @@ class MaterialHash(unittest.TestCase):
         self.assertNotEqual(run("--print-material-hash", d1).stdout,
                             run("--print-material-hash", d2).stdout)
 
+    def test_a_build_artefact_does_not_affect_hash(self):
+        # Setup — a `__pycache__` beside a bundled script, as any local python run leaves behind.
+        # It used to fold into the hash, so a clean CI checkout disagreed with the machine that
+        # wrote the scan and eval-gate called a fresh walk stale.
+        d = self._skill()
+        before = run("--print-material-hash", d).stdout
+        cache = d / "scripts" / "__pycache__"
+        cache.mkdir(parents=True, exist_ok=True)
+        (cache / "x.cpython-314.pyc").write_bytes(b"\x00compiled\x00")
+        (d / "scripts" / "stray.pyc").write_bytes(b"\x00compiled\x00")
+
+        # Exercise + Verify
+        self.assertEqual(before, run("--print-material-hash", d).stdout)
+
     def test_metadata_does_not_affect_hash(self):
         d = self._skill()
         before = run("--print-material-hash", d).stdout

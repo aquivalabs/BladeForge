@@ -139,6 +139,16 @@
       "source": "./plugins/meta"
     },
     {
+      "name": "no-code-prose",
+      "description": "A comment is a pointer, a directive, a three-line doc block on an export, a member of one or the module itself, or one another house standard requires — never an essay. One language-agnostic rule with a per-language syntax table, enforced by the review gate's craft lens.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/no-code-prose",
+      "category": "engineering"
+    },
+    {
       "name": "plan-gate",
       "description": "Spec+Plan+Branch gate — a PreToolUse hook that blocks Edit/Write to code unless you are off the base branch (default `main`) AND a plan exists for the work: a branch task-id (e.g. PROJ-1234) must match a plan filename, else any branch-new or uncommitted plan file suffices. docs/ is always writable so the spec/plan itself is never blocked. Opt-in per repo via .claude/plan-gate.config.json; bypass one edit with SKIP_PLAN_GATE=1.",
       "author": {

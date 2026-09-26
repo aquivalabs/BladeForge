@@ -397,14 +397,19 @@ def save_result(skill_path, queryset, current, cur_result, base_acc, args):
         "results": cur_result.get("results", []),
     }
     dest = Path(skill_path, "evals", "result.json")
-    prev_acc = None
+    # Every sibling key survives a re-measurement. Only `acceptance` used to, so a re-measure
+    # dropped the `security` walk cerberus had written and silently un-shipped the skill —
+    # caught by eval-gate, which refuses a skill whose security key is missing.
+    prev = {}
     if dest.exists():
         try:
-            prev = json.loads(dest.read_text())
-            prev_acc = prev.get("acceptance") if "trigger" in prev else None
+            loaded = json.loads(dest.read_text())
+            if isinstance(loaded, dict) and "trigger" in loaded:
+                prev = loaded
         except Exception:
-            prev_acc = None
-    wrapped = {"trigger": out, "acceptance": prev_acc}
+            prev = {}
+    wrapped = {**prev, "trigger": out}
+    wrapped.setdefault("acceptance", None)
     tmp = dest.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(wrapped, indent=2) + "\n")
     tmp.replace(dest)
