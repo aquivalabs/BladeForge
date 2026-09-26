@@ -6,7 +6,7 @@
     {
       "name": "cerberus:leak-check",
       "plugin": "cerberus",
-      "plugin-version": "2.1.3",
+      "plugin-version": "2.1.4",
       "activates-when": "Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace \u2014 review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate \"this is one specific company's product\" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
       "category": "quality",
       "purpose": "Agent judgment pass that reviews a skill/reference/script/eval change for anything pointing to a real work codebase \u2014 secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate \"one company's product\" flavor \u2014 and rewrites it to a neutral fictional demo.",
@@ -25,7 +25,7 @@
     {
       "name": "cerberus:security-scan",
       "plugin": "cerberus",
-      "plugin-version": "2.1.3",
+      "plugin-version": "2.1.4",
       "activates-when": "Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this marketplace \u2014 review the change for anything UNSAFE to the person who installs and runs it: prompt-injection text, data exfiltration, an embedded secret, a dangerous/destructive command, obfuscated payloads, an unexpected external fetch, credential-store access, or privilege escalation. The consumer-safety half of the gate; the outward-leak half is cerberus:leak-check. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
       "category": "quality",
       "purpose": "The consumer-safety head of cerberus \u2014 reviews a skill/script/fixture for the eight-point security checklist (injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation) before it ships.",
@@ -554,7 +554,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "2.10.2",
+      "plugin-version": "2.10.3",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the /review system in a new project.",
       "category": "quality",
       "purpose": "Install and tailor the pre-push review framework (eight reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.",
@@ -656,7 +656,7 @@
     {
       "name": "scout:plugin-sync",
       "plugin": "scout",
-      "plugin-version": "2.2.3",
+      "plugin-version": "2.2.4",
       "activates-when": "Use when a skill or plugin that should be available is missing from the session \u2014 a plugin is enabled but its skills do not load, `/plugin` shows it enabled yet nothing appears, a skill id is unrecognised though the marketplace lists it, or a plugin was just added to `.claude/settings.json` on a branch and never showed up. Diagnoses whether the plugin is installed FOR THIS PROJECT and gives the exact fix. Do NOT use to find or choose a skill the user has not enabled yet, or to install one from the catalog (`scout:scout`) \u2014 this one starts from a plugin already enabled in settings that is not loading.",
       "category": "workflow",
       "purpose": "Diagnose why a plugin that a project enables never loads \u2014 the enabled half in .claude/settings.json versus the installed half in the user-level registry \u2014 and give the exact command that reconciles them.",
@@ -677,7 +677,7 @@
     {
       "name": "scout:scout",
       "plugin": "scout",
-      "plugin-version": "2.2.3",
+      "plugin-version": "2.2.4",
       "activates-when": "Use this skill when the user asks what skills exist in this marketplace, what could help with a task, to recommend or install a skill, or to browse the catalog \u2014 e.g. \\\"what skills are available for writing tests?\\\", \\\"recommend a skill for reviewing my SCSS\\\", \\\"install the skill that formats commit messages\\\", \\\"show me everything in this marketplace\\\". This skill is PASSIVE \u2014 it never runs code; it is instructions telling the agent to read the bundled catalog.json and act on it. NOT for authoring a brand-new skill (`meta:new-skill`), NOT for refreshing an existing skill's metadata.yaml (`meta:update-skill`), and NOT for ordinary unrelated coding tasks.",
       "category": "authoring",
       "purpose": "Guide the agent to discover, recommend, and install marketplace skills from the compiled catalog.",
