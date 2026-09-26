@@ -1,7 +1,7 @@
 {
   "name": "no-code-prose",
-  "description": "A comment is a pointer, a directive, a three-line doc block on an export, a member of one or the module itself, or one another house standard requires — never an essay. One language-agnostic rule with a per-language syntax table, enforced by the review gate's craft lens.",
-  "version": "1.4.1",
+  "description": "A comment is a pointer, a directive, a three-line doc block on an export, a member of one or the module itself, or one another house standard requires \u2014 never an essay. One language-agnostic rule with a per-language syntax table, enforced by the review gate's craft lens.",
+  "version": "1.4.2",
   "keywords": [
     "comments",
     "code-style",
