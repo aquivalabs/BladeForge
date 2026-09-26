@@ -666,7 +666,7 @@
         "tags": [
           "other"
         ],
-        "notes": "Read-only by default \u2014 compares .claude/settings.json against ~/.claude/plugins/installed_plugins.json and reports. The fixes it prescribes (claude plugin install / update) install software on the user's machine, so they are stated as commands for the user to run, never executed by the skill."
+        "notes": "Read-only by default \u2014 compares .claude/settings.json against ~/.claude/plugins/installed_plugins.json and reports; the project root is resolved with one local, read-only `git rev-parse` call, the skill's only subprocess. The fixes it prescribes (claude plugin install / update) install software on the user's machine, so they are stated as commands for the user to run, never executed by the skill."
       },
       "hooks": [
         "SessionStart",
