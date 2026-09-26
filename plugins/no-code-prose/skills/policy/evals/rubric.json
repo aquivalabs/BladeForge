@@ -1,0 +1,64 @@
+{
+  "trigger": [
+    {
+      "query": "Add a comment above resolveLedgerRevision explaining why we match on externalRef instead of the row id — it bit us once.",
+      "should_trigger": true
+    },
+    {
+      "query": "Write a JSDoc block for the exported parseInvoiceTotals function in src/lib/invoices/parse.ts.",
+      "should_trigger": true
+    },
+    {
+      "query": "Review this diff for me: the new service class has a 40-line header comment describing the retry strategy and how the queue used to work.",
+      "should_trigger": true
+    },
+    {
+      "query": "I'm writing an Apex trigger handler — should I document the ordering assumption in a comment at the top of the class?",
+      "should_trigger": true
+    },
+    {
+      "query": "Add a docstring to the Python migration script so the next person knows why the batch size is 500.",
+      "should_trigger": true
+    },
+    {
+      "query": "This test file has a ten-line comment before each case saying what it pins and why the case exists. Clean it up.",
+      "should_trigger": true
+    },
+    {
+      "query": "Leave a note in the code that this endpoint is deprecated and point people at the replacement.",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the ADR for our decision to match ledger entries by external reference instead of row id.",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft the PR description for the invoice-parsing change — summarise what changed and why.",
+      "should_trigger": false
+    },
+    {
+      "query": "Update docs/mechanisms/ledger-lookup.md to describe the new revision-matching behaviour.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a commit message for these three files.",
+      "should_trigger": false
+    },
+    {
+      "query": "Review this diff for duplicated logic — I think the two editors share the same validate() body.",
+      "should_trigger": false
+    },
+    {
+      "query": "Rename errMsg to errorMessage across the module and add braces to the one-line ifs.",
+      "should_trigger": false
+    }
+  ],
+  "acceptance": [
+    "Every comment in the changed code is one of the four forms — a pointer, a directive, a doc block on an export, a member of one or the module itself, or a comment another house standard requires — and no fifth kind is written.",
+    "A doc block on an export, on a member of one — an interface field, an enum case, a class property — or on the module itself, is at most three lines of eighty characters and states what it is, not why it is that way. A tag block such as `@example` below the prose is kept as written.",
+    "A reason the user asked to put in a comment is redirected to an ADR, a decision log or a mechanism page, with a pointer left in the code — or dropped.",
+    "A test comment that narrates what a case pins is replaced by a better test title, not shortened.",
+    "The rule is applied in the language the file is in, using that language's comment delimiters and export keyword from the syntax table.",
+    "A comment another house standard requires — a test standard's Setup/Exercise/Verify markers, its axis walk, its named-constant note, its boundary note — is kept, and that standard is read before any comment in a file it governs is cut."
+  ]
+}
