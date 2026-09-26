@@ -65,6 +65,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | jira | Jira — comment style. | [comment-style](#comment-style) |
 | meta | Meta — design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| no-code-prose | A comment is never an essay — one language-agnostic rule for what may live in one, judged by the craft review lens. | [policy](#policy) |
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [setup](#setup) |
 | review-workflow | Workflow script that dispatches the review plugin's lenses in parallel (five on by default, plus skill, leak and security-scan where enabled), reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | salesforce | Salesforce — LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
@@ -166,6 +167,13 @@ cuts the fluff. **See the difference:**
 - <a id="solid"></a>**solid** — The design law: SRP/OCP/LSP/ISP/DIP plus DRY, KISS, YAGNI.
 - <a id="triage"></a>**triage** — Cheap shallow pass over a large batch first, then spend the expensive pass only on the shortlist.
 - <a id="wittgenstein"></a>**wittgenstein** — Clarity gate for an already-written spec, plan, or RFC — a reviewer persona.
+
+### no-code-prose &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="policy"></a>**policy** — The rule for what may live inside a comment, and what must move out
+  of the file into a document. A "why" has no place in code — it belongs in an ADR, a decision log or
+  a mechanism page, and the code points at it. Any language, tests included; a new language is a new
+  row in its syntax table. **The forms a comment may take are enumerated in the skill itself and
+  nowhere else** — that list moved four times in one night, and every copy of it went stale.
 
 ### review &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="setup"></a>**setup** — Install and target the pre-push review framework in a repo (`.claude/review.config.json`).

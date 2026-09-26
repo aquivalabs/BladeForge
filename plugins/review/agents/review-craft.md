@@ -28,6 +28,13 @@ gives it, or a name that breaks with everything beside it.
    everywhere else, an abbreviation here — mine, because naming consistency is mine to hold.
 7. A block of commented-out code rides along in the diff instead of being deleted — mine,
    because that is cruft the change is carrying forward.
+8. A comment in the diff is none of the four forms the `no-code-prose:policy` skill allows — a
+   pointer to a document, a directive to a tool, a doc block of at most three lines on an export,
+   on a member of an exported type or on the module itself, or a comment another house standard
+   REQUIRES (a test standard's own markers, say) — mine, because a comment that explains *why* is
+   documentation written where no gate will ever find it stale, and the rule sends every "why" to
+   the page that owns it. **Read that skill rather than this paraphrase** when the call is close:
+   it is the rule, and this line is a pointer at it.
 
 **Not mine:**
 
