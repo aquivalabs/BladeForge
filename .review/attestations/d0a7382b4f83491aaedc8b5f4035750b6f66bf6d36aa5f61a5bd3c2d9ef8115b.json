@@ -1,0 +1,207 @@
+{
+  "diffHash": "d0a7382b4f83491aaedc8b5f4035750b6f66bf6d36aa5f61a5bd3c2d9ef8115b",
+  "commitSha": "9fa464fa479dca02832086ffad65a806516744f3",
+  "perAgent": [
+    {
+      "name": "docs",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/cerberus/hooks/on-skill-edit.sh",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/examples/plain-ts/README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/plugin-sync/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "Every changed file's doc/metadata pairing checks out: none of the six touched files matches a configured pairedDocs code path, and the two spots I verified against the actual code (the plugin-sync git-rev-parse claim, the plain-ts README's skill/leak/security-scan-off claim) both hold true against the real skill and config files."
+    },
+    {
+      "name": "skill",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/cerberus/hooks/on-skill-edit.sh",
+          "disposition": "declined",
+          "reason": "A hook script, not a SKILL.md or a skill's declaration sidecar (metadata.yaml/evals) — outside Subject, which judges only what a skill declares about itself."
+        },
+        {
+          "path": "plugins/review/examples/plain-ts/README.md",
+          "disposition": "declined",
+          "reason": "An example repo's own README documenting its review.config.json, not a SKILL.md or sidecar of any skill — outside Subject."
+        },
+        {
+          "path": "plugins/review/skills/setup/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/result.json",
+          "disposition": "declined",
+          "reason": "A cached eval-run log (trigger scores, security-scan record), not the rubric.json that carries the required acceptance declaration (rubric.json itself is unchanged in this diff and its acceptance array is intact) — not one of the declaration artifacts named in Subject."
+        },
+        {
+          "path": "plugins/scout/skills/plugin-sync/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "Both changed skill-declaration files hold up: the setup SKILL.md's new always-row cites a real skill id and its Contract/rubric stay intact, and plugin-sync's metadata.yaml edit matches its body's own git-rev-parse call exactly, with catalog.json regenerated in sync."
+    },
+    {
+      "name": "leak",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/cerberus/hooks/on-skill-edit.sh",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/examples/plain-ts/README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/plugin-sync/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "No real work identifiers, secrets, names, paths, or brand/namespace fingerprints appear anywhere in this diff — all six changes are internal marketplace prose/config edits using only generic or already-public skill names."
+    },
+    {
+      "name": "security-scan",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/cerberus/hooks/on-skill-edit.sh",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/examples/plain-ts/README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/review/skills/setup/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/plugin-sync/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/scout/skills/scout/catalog.json",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "No unsafe payload for an installer: the hook script only widens a path-match and rewords its printf reminder, and every other change is prose/metadata/eval-record text with no new command, fetch, secret, or credential access."
+    }
+  ],
+  "overall": "PASS",
+  "timestamp": "2026-09-26T08:15:18.736Z"
+}
