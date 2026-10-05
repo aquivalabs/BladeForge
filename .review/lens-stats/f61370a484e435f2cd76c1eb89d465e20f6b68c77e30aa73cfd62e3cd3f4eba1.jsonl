@@ -1,0 +1,5 @@
+{"at": "2026-10-05T14:44:43.023110+00:00", "hash": "f61370a484e435f2cd76c1eb89d465e20f6b68c77e30aa73cfd62e3cd3f4eba1", "round": 1, "lens": "docs", "verdict": "PASS", "score": 10, "findings": 1, "unique": 1, "refuted": 1}
+{"at": "2026-10-05T14:44:43.023110+00:00", "hash": "f61370a484e435f2cd76c1eb89d465e20f6b68c77e30aa73cfd62e3cd3f4eba1", "round": 1, "lens": "skill", "verdict": "PASS", "score": 10, "findings": 0, "unique": 0, "refuted": 0}
+{"at": "2026-10-05T14:44:43.023110+00:00", "hash": "f61370a484e435f2cd76c1eb89d465e20f6b68c77e30aa73cfd62e3cd3f4eba1", "round": 1, "lens": "leak", "verdict": "FAIL", "score": -10, "findings": 1, "unique": 1, "refuted": 0}
+{"at": "2026-10-05T14:44:43.023110+00:00", "hash": "f61370a484e435f2cd76c1eb89d465e20f6b68c77e30aa73cfd62e3cd3f4eba1", "round": 1, "lens": "security-scan", "verdict": "PASS", "score": 10, "findings": 0, "unique": 0, "refuted": 0}
+{"at": "2026-10-05T14:44:43.023110+00:00", "hash": "f61370a484e435f2cd76c1eb89d465e20f6b68c77e30aa73cfd62e3cd3f4eba1", "round": 2, "lens": "leak", "verdict": "PASS", "score": 10, "findings": 0, "unique": 0, "refuted": 0}

@@ -1,0 +1,38 @@
+{
+  "trigger": [
+    {
+      "query": "run the review gate on this branch before I push",
+      "should_trigger": true
+    },
+    {
+      "query": "the gate came back red, re-review after the fixes",
+      "should_trigger": true
+    },
+    {
+      "query": "review this branch and attest it if it is green",
+      "should_trigger": true
+    },
+    {
+      "query": "set up the review framework in this repo, there is no config yet",
+      "should_trigger": false
+    },
+    {
+      "query": "take a look at this diff and tell me what you think",
+      "should_trigger": false
+    },
+    {
+      "query": "write a unit test for the parser",
+      "should_trigger": false
+    },
+    {
+      "query": "the gate is green, write the attestation and tell me I can push",
+      "should_trigger": true
+    }
+  ],
+  "acceptance": [
+    "the run was driven from commands/review.md, not from a skill body or a hand-rolled dispatch",
+    "a .review/lens-stats/<diffHash>.jsonl file exists for the hash that was judged",
+    "the result carries a per-lens score against each lens's own threshold and an attest flag",
+    "no step of the command was restated or duplicated inside the skill body"
+  ]
+}
