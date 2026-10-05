@@ -554,7 +554,7 @@
     {
       "name": "review:review",
       "plugin": "review",
-      "plugin-version": "2.11.0",
+      "plugin-version": "2.11.1",
       "activates-when": "Use when an ALREADY-CONFIGURED pre-push gate is about to be run against a branch, or its result attested \u2014 \"run the review\", \"review before I push\", \"run the gate\", \"re-review after the fixes\", \"review this branch and attest it\", \"the gate is green, write the attestation\", or any attempt to reach that gate through the Skill tool. The gate is a slash COMMAND, not a skill, and reaching for it as a skill silently runs a different reviewer that scores against no threshold and can attest nothing. Do NOT use for an ad-hoc read of a diff where no gate or attestation is wanted (that is the built-in `/code-review`), nor to create a gate that does not exist yet (`review:setup`).",
       "category": "quality",
       "purpose": "Routes an agent reaching for the review gate to the /review COMMAND, because reaching for it as a skill silently runs a different reviewer that cannot attest.",
@@ -573,7 +573,7 @@
     {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "2.11.0",
+      "plugin-version": "2.11.1",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the /review system in a new project.",
       "category": "quality",
       "purpose": "Install and tailor the pre-push review framework (eight reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.",
