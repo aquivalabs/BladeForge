@@ -1,11 +1,11 @@
 {
   "trigger": {
     "skill": "review",
-    "measured_at": "2026-10-05T14:11:07",
+    "measured_at": "2026-10-05T17:04:07",
     "model": "sonnet",
-    "runs_per_query": 3,
-    "best_score": "6/7",
-    "accuracy": 0.857,
+    "runs_per_query": 7,
+    "best_score": "7/7",
+    "accuracy": 1.0,
     "baseline_accuracy": null,
     "description_hash": "4e8180ae9ba1b66533327efeccf32e5baf2dbd450cc787dc64d0b0e4a361a2c3",
     "queryset_hash": "ed1a7eb6aaebdb197b2794fff5c5f49d7e32ef427df29260fa2a8077cea4aad6",
@@ -15,40 +15,40 @@
       {
         "query": "run the review gate on this branch before I push",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
+        "triggers": 6,
+        "runs": 7,
+        "trigger_rate": 0.8571428571428571,
         "pass": true
       },
       {
         "query": "the gate came back red, re-review after the fixes",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
+        "triggers": 7,
+        "runs": 7,
         "trigger_rate": 1.0,
         "pass": true
       },
       {
         "query": "review this branch and attest it if it is green",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
+        "triggers": 6,
+        "runs": 7,
+        "trigger_rate": 0.8571428571428571,
         "pass": true
       },
       {
         "query": "set up the review framework in this repo, there is no config yet",
         "should_trigger": false,
-        "triggers": 2,
-        "runs": 3,
-        "trigger_rate": 0.6666666666666666,
-        "pass": false
+        "triggers": 1,
+        "runs": 7,
+        "trigger_rate": 0.14285714285714285,
+        "pass": true
       },
       {
         "query": "take a look at this diff and tell me what you think",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 7,
         "trigger_rate": 0.0,
         "pass": true
       },
@@ -56,15 +56,15 @@
         "query": "write a unit test for the parser",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
+        "runs": 7,
         "trigger_rate": 0.0,
         "pass": true
       },
       {
         "query": "the gate is green, write the attestation and tell me I can push",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
+        "triggers": 7,
+        "runs": 7,
         "trigger_rate": 1.0,
         "pass": true
       }
