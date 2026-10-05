@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-09-26",
+  "generated": "2026-10-05",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -552,9 +552,28 @@
       "hooks": []
     },
     {
+      "name": "review:review",
+      "plugin": "review",
+      "plugin-version": "2.11.0",
+      "activates-when": "Use when an ALREADY-CONFIGURED pre-push gate is about to be run against a branch, or its result attested \u2014 \"run the review\", \"review before I push\", \"run the gate\", \"re-review after the fixes\", \"review this branch and attest it\", \"the gate is green, write the attestation\", or any attempt to reach that gate through the Skill tool. The gate is a slash COMMAND, not a skill, and reaching for it as a skill silently runs a different reviewer that scores against no threshold and can attest nothing. Do NOT use for an ad-hoc read of a diff where no gate or attestation is wanted (that is the built-in `/code-review`), nor to create a gate that does not exist yet (`review:setup`).",
+      "category": "quality",
+      "purpose": "Routes an agent reaching for the review gate to the /review COMMAND, because reaching for it as a skill silently runs a different reviewer that cannot attest.",
+      "best-for": "Any repo that runs the pre-push review gate and is worked by agents that may reach for it through the Skill tool.",
+      "needs": [],
+      "changes": {
+        "tags": [
+          "files",
+          "network",
+          "git"
+        ],
+        "notes": "The page itself only routes, but routing is its whole job and the destination mutates. Following it to completion runs commands/review.md, which writes the diff to a file and calls the network (npx bladeforge-review-harness) on EVERY invocation, and on an all-pass commits the attestation store with `git add -A .review/ && git commit`. Tagged for what it leads to when used fully, not for the page's own inertness \u2014 under-tagging a mutation reached through one hop of indirection is exactly the disclosure a reader acts on."
+      },
+      "hooks": []
+    },
+    {
       "name": "review:setup",
       "plugin": "review",
-      "plugin-version": "2.10.3",
+      "plugin-version": "2.11.0",
       "activates-when": "Install and target the pre-push review framework in a repo. Use when a repo has the review plugin but no .claude/review.config.json, when the user asks to set up the review gate / pre-push review / secret-scan CI, or when adopting the /review system in a new project.",
       "category": "quality",
       "purpose": "Install and tailor the pre-push review framework (eight reviewer agents, five enabled by default, /review, secret-scan + attestation gate) into a target repo.",

@@ -1,0 +1,14 @@
+schema-version: 1
+category: quality
+purpose: Routes an agent reaching for the review gate to the /review COMMAND, because reaching for it as a skill silently runs a different reviewer that cannot attest.
+best-for: Any repo that runs the pre-push review gate and is worked by agents that may reach for it through the Skill tool.
+needs: []
+changes:
+  tags: [files, network, git]
+  notes: >-
+    The page itself only routes, but routing is its whole job and the destination mutates. Following
+    it to completion runs commands/review.md, which writes the diff to a file and calls the network
+    (npx bladeforge-review-harness) on EVERY invocation, and on an all-pass commits the attestation
+    store with `git add -A .review/ && git commit`. Tagged for what it leads to when used fully,
+    not for the page's own inertness — under-tagging a mutation reached through one hop of
+    indirection is exactly the disclosure a reader acts on.
