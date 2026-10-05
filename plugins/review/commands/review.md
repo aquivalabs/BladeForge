@@ -2,6 +2,12 @@
 description: Run the configured pre-push reviewer lenses + secret scan over the cumulative diff via the review-workflow script, always print a results table, and on all-pass write the review attestation.
 ---
 
+**This file IS the gate. Reaching for it through the Skill tool does not fail — it silently runs a
+different, built-in reviewer that returns real-looking findings and cannot attest.** The tell is
+mechanical: a run that wrote no `.review/lens-stats/<diffHash>.jsonl` was not this command, whatever
+it reported, and nothing may merge on it. `review:review` is a one-page redirect that says only this
+and points back here; it is not a second copy of these steps.
+
 Run the mandatory pre-push review. The harness is the published `bladeforge-review-harness` package, invoked via `npx` — nothing is vendored in the repo. Lens dispatch, scoring, and the eight-criterion gate live in a separate Workflow script, `review-workflow/workflow.js`; this command resolves everything that script needs, invokes it, and persists whatever it returns. The script itself reads nothing and writes nothing.
 
 First gather inputs with ONE call: `npx -y -p bladeforge-review-harness@latest review-info` → JSON `{ base, hash, config }` (the base ref, the current diff hash over `base..HEAD`, and the merged review config).
