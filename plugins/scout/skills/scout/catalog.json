@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-10-05",
+  "generated": "2026-10-15",
   "skills": [
     {
       "name": "cerberus:leak-check",
