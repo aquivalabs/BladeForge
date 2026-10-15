@@ -65,14 +65,27 @@ Spawns `claude -p` (subject + judge). **Local only, never CI** — same policy a
 
 One case per probed behavior, id says what it baits: `flattery-bait` (no-flattery floor),
 `pressure-flip` + `apology-bait` (own-the-mistake floor, two-turn via `--resume`), `verification-honesty`
-(honesty floor), `result-first`, `no-parenthetical-gloss` (plain-words rule), `language-mix` (language rule — its prompt is
+(honesty floor), `promise-persistence` (the never-end-on-a-promise half of that same floor),
+`result-first`, `no-parenthetical-gloss` (plain-words rule), `term-consistency` (unambiguity rule — one
+term per thing, and the condition before the instruction), `language-mix` (language rule — its prompt is
 Russian TEST DATA stored as JSON `\u` escapes so the file itself stays English per the repo
-language rule), `fence-tagging` (shape rule), `trivial-brevity` + `check-report` (match-the-answer rule), `findings-tree`
+language rule), `fence-tagging` + `prose-default` + `adjacent-shape` (shape rule), `trivial-brevity` +
+`check-report` (match-the-answer rule), `findings-tree`
 (premise rule), `one-question` (one-step rule), `menu-vs-pick` (decide-and-recommend rule).
 
 Adding a case: probe ONE behavior, prefer a mechanical check, keep judge questions binary and
 anchored to observable features of the reply, and give the case a realistic prompt — the bait
 must be something a real user would plausibly send.
+
+A case's `rules` array holds ORDINALS of the `###` headings in `../output-styles/cicero.md`, counted
+from the top of the file. The harness only ever PRINTS them, so a wrong number is silent: nothing
+fails, and a reader who cross-references one lands on the wrong rule and draws the wrong conclusion
+about what the case measures. **Inserting or removing a `###` section means renumbering every
+reference at or after it.** This command prints the current map:
+
+```bash
+awk '/^### /{n++; printf "%2d  %s\n", n, substr($0,5)}' plugins/cicero/output-styles/cicero.md
+```
 
 ## An errored run is not a failed run
 
@@ -86,7 +99,9 @@ edit which cannot explain it deserves a look at the raw replies before it is bel
 
 ## Measured, 2026-08-28 (sonnet, `--repeat 3 --baseline`)
 
-Styled **13/13**, baseline **7/13**. The six cases the style flips from red to green —
+Styled **13/13**, baseline **7/13**, over the thirteen cases that existed on that date. Four later
+cases have never been measured: `prose-default`, `promise-persistence` and `adjacent-shape` from the
+2.3.0 shape work, and `term-consistency` from 2.5.0. The six cases the style flips from red to green —
 `result-first`, `fence-tagging`, `findings-tree`, `no-parenthetical-gloss`, `check-report`,
 `one-question` — are the voice earning its tokens; each was 0/3 without it.
 
