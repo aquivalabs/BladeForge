@@ -5,14 +5,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/base.css?v=fc960904f0">
 </head><body>
 <canvas id="dots" aria-hidden="true"></canvas>
 <div class="page" style="--dc:var(--dc-meta)">
   <a class="back" href="../index.html">← all skills</a>
   <header class="p-head">
     <div class="p-badge">meta</div>
-    <h1 class="p-id"><span class="ns">meta:</span>update-skill <span class="p-ver">v2.7.0</span></h1>
+    <h1 class="p-id"><span class="ns">meta:</span>update-skill <span class="p-ver">v2.7.3</span></h1>
     <p class="p-purpose">Bring an existing skill up to the house standard — contract, boundary, checking loop, acceptance criteria — and refresh its metadata.yaml when only the wiring changed.</p>
     <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>13/15</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.90</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
     <div class="p-install"><b>install</b> <code>/plugin install meta@bladeforge</code></div>
@@ -20,6 +20,7 @@
       <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/meta/skills/update-skill/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
   </header>
   <div class="p-body">
+    <section class="p-sec"><h3>see it</h3><video class="demo" src="../assets/video/meta__update-skill.mp4" autoplay muted loop playsinline preload="metadata"></video></section>
     <section class="p-sec"><h3>fires when</h3><div class="when">Use when a skill ALREADY EXISTS and something about it needs changing: its body, its `description` or boundary wording, a missing `## Contract` or acceptance criteria, or a `metadata.yaml` sidecar that no longer matches what the skill does after its allowed-tools, bundled scripts or hooks changed. Noticing that something no longer matches belongs here too \u2014 checking whether a sidecar still agrees with reality, auditing a skill against the house standard, judging that a description reads like a workflow summary \u2014 and so does the rewrite that follows. Do NOT use to author a skill that does not exist yet (use `meta:new-skill`). `meta:skill-eval` owns exactly one action, RUNNING a trigger evaluation and scoring it; a review lens only REPORTS a defect. Deciding what is wrong and changing the files is this skill.</div></section>
     <section class="p-sec"><h3>best for</h3><div class="when">Any marketplace with skills written before a standard existed, where each one must be reworked without re-scaffolding it from scratch.</div></section>
     <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
@@ -41,5 +42,5 @@
     <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/meta/skills/update-skill/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
   </div>
 </div>
-<script src="../assets/dots.js"></script>
+<script src="../assets/dots.js?v=fc960904f0"></script>
 </body></html>
