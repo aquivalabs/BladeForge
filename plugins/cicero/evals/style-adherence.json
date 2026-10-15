@@ -85,7 +85,7 @@
     {
       "id": "trivial-brevity",
       "rules": [
-        12
+        13
       ],
       "prompt": "How do I rename a git branch locally?",
       "mechanical": [
@@ -126,7 +126,7 @@
     {
       "id": "fence-tagging",
       "rules": [
-        9
+        10
       ],
       "prompt": "Show me a small example: a two-line bash script that backs up a directory into a date-stamped tar.gz, plus the one-line cron entry to run it daily at 03:00. Brief explanation.",
       "mechanical": [
@@ -139,7 +139,7 @@
     {
       "id": "findings-tree",
       "rules": [
-        15
+        16
       ],
       "prompt": "I reviewed a coworker's PR and found: (1) a staging password hardcoded in docker-compose.override.yml line 12 - must be fixed before merge; (2) a parseUser function duplicating an existing one in utils/user.ts line 40 - unpleasant but not a blocker; (3) a typo in the README. Write this up as a findings report for the PR author.",
       "mechanical": [
@@ -159,7 +159,7 @@
     {
       "id": "menu-vs-pick",
       "rules": [
-        17
+        18
       ],
       "prompt": "Small React app, 5-6 screens, data mostly from one REST API. Which state manager should I use?",
       "mechanical": [],
@@ -171,7 +171,7 @@
     {
       "id": "one-question",
       "rules": [
-        16
+        17
       ],
       "prompt": "I want to migrate my blog off its old engine. I need to decide: the platform, what to do with the old domain, and what to do with a hundred old posts. Help me decide.",
       "mechanical": [],
@@ -199,7 +199,7 @@
     {
       "id": "check-report",
       "rules": [
-        12,
+        13,
         1
       ],
       "prompt": "Below is the output of the two checks I just ran on my branch. Report the result to me.\n\n```\n$ npm run lint\n\n> app@1.4.2 lint\n> eslint . --max-warnings 0\n\n(clean, exit 0)\n\n$ npx vitest run\n\n Test Files  42 passed (42)\n      Tests  214 passed (214)\n   Duration  8.91s\n```",
@@ -216,7 +216,7 @@
     {
       "id": "prose-default",
       "rules": [
-        9
+        10
       ],
       "prompt": "In node-postgres, once I've constructed a Pool with `max: 20`, can I raise that limit at runtime without restarting the process?",
       "mechanical": [
@@ -242,7 +242,7 @@
       "id": "promise-persistence",
       "rules": [
         1,
-        14
+        15
       ],
       "prompt": "Check whether the repo has a .editorconfig, and if it does, tell me what indent_style it sets.",
       "mechanical": [
@@ -259,7 +259,7 @@
     {
       "id": "adjacent-shape",
       "rules": [
-        9
+        10
       ],
       "prompt": "Write this up for the team. Our three CI workflows: lint runs eslint and prettier, takes 40s; unit runs vitest, takes 3m10s; e2e runs playwright, takes 12m. Right now e2e is failing hard - 4 specs red since Tuesday, blocking every merge. Unit has one flaky test that passes on retry. Lint is green.",
       "mechanical": [
@@ -271,6 +271,29 @@
       "judge": [
         "The reply carries two different kinds of content - a comparison of the three workflows across shared attributes, and a set of findings that differ in weight. Are they given DIFFERENT shapes (for example a table and a tree), rather than two tables or two lists in a row?",
         "If two blocks of the same kind do appear back to back, is there a line of prose between them?"
+      ]
+    },
+    {
+      "id": "term-consistency",
+      "rules": [
+        9
+      ],
+      "prompt": "Write the Rollback paragraph of our deploy runbook. Facts: the pipeline runs a stage named `verify`. When `verify` fails, the operator must roll back before retrying, by running `deploy rollback --to-last-green`. Three or four sentences of prose, no list.",
+      "mechanical": [
+        {
+          "type": "count_matches_max",
+          "pattern": "(?i)\\b(verification|validation|smoke test|the gate)\\b",
+          "max": 0
+        },
+        {
+          "type": "must_match",
+          "pattern": "verify"
+        }
+      ],
+      "judge": [
+        "Does the reply call the pipeline stage `verify` every time, rather than alternating with a synonym such as the check, the validation step, the verification stage, or the gate?",
+        "In the sentence that instructs the rollback, does the condition come BEFORE the instruction, as in 'if verify fails, run deploy rollback', rather than trailing after it as in 'run deploy rollback if verify fails'?",
+        "Is every sentence complete and unambiguous on one read, with no dropped 'that' or article and no noun cluster longer than three words?"
       ]
     }
   ]
