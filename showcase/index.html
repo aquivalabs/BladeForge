@@ -78,8 +78,10 @@ function placePop(el){const r=el.getBoundingClientRect(),m=12,vw=innerWidth,vh=i
   const below=vh-r.bottom,above=r.top;
   const top=below>=h+m||below>=above?Math.min(r.bottom+m,vh-h-m):Math.max(m,r.top-h-m);
   Object.assign(pop.style,{left:left+'px',top:top+'px',width:w+'px',height:h+'px'});}
-function showPop(el){if(calm.matches)return;popFor=el;
-  const src='assets/video/'+el.dataset.demo+'.mp4';
+function showPop(el){if(calm.matches)return;
+  // the slug comes from the DOM: accept only a plain file stem, and encode it into the URL
+  const slug=el.dataset.demo||'';if(!/^[A-Za-z0-9_-]+$/.test(slug))return;popFor=el;
+  const src='assets/video/'+encodeURIComponent(slug)+'.mp4';
   if(!pv.src.endsWith(src))pv.src=src;
   placePop(el);pv.currentTime=0;pv.play().catch(()=>{});pop.hidden=false;
   requestAnimationFrame(()=>pop.classList.add('on'));}
