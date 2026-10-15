@@ -16,11 +16,12 @@ the file bundle (names only), and the measured trigger/effect/security metrics f
 evals/result.json. The SKILL.md BODY is NOT embedded: bodies can carry real identifiers,
 and this page is public, so each page links to the body on GitHub instead of copying it.
 """
-import json, os, math, html as _html
+import json, os, math, hashlib, html as _html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CATALOG = os.path.join(ROOT, "plugins/scout/skills/scout/catalog.json")
 OUTDIR = os.path.join(ROOT, "showcase")
+ASSET_V = "dev"  # set by build() from the asset contents
 
 # --- repo identity (transformed per mirror) ---
 REPO = "https://github.com/aquivalabs/BladeForge"
@@ -163,11 +164,11 @@ def head(title, rel=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="{rel}assets/base.css">
+<link rel="stylesheet" href="{rel}assets/base.css?v={ASSET_V}">
 </head><body>
 <canvas id="dots" aria-hidden="true"></canvas>"""
 
-FOOT = f"""<script src="__REL__assets/dots.js"></script>"""
+FOOT = """<script src="__REL__assets/dots.js?v=__V__"></script>"""
 
 # ---------- featured cards (server-rendered) ----------
 def hero_card(s):
@@ -288,7 +289,7 @@ def skill_page(s):
     <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="{md}" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · {len(s['tree'])} files in the bundle.</div></section>
   </div>
 </div>
-{FOOT.replace('__REL__','../')}
+{FOOT.replace('__REL__','../').replace('__V__',ASSET_V)}
 </body></html>"""
     return body
 
@@ -315,7 +316,7 @@ def cicero_page():
     <section class="p-sec"><h3>ships as</h3><div class="kv"><span class="lab">kind</span><code>output-style + hooks</code></div></section>
   </div>
 </div>
-{FOOT.replace('__REL__','../')}
+{FOOT.replace('__REL__','../').replace('__V__',ASSET_V)}
 </body></html>"""
     return body
 
@@ -368,7 +369,7 @@ def index_page(skills, doms, pal):
 """
     h+='<script id="data" type="application/json">'+payload+'</script>\n'
     h+="<script>\n"+INDEX_JS+"\n</script>\n"
-    h+=FOOT.replace('__REL__','')+"\n</body></html>"
+    h+=FOOT.replace('__REL__','').replace('__V__',ASSET_V)+"\n</body></html>"
     return h
 
 INDEX_JS = r"""
@@ -376,14 +377,29 @@ const D=JSON.parse(document.getElementById('data').textContent);
 const PAL=D.palette, SK=D.skills, DOMS=D.domains, CATS=D.categories, CATLAB=D.catLabels;
 const esc=s=>(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const st={q:'',cat:null};
-// Hover a card that has a film: play it over the card, muted, from the start; leave: stop.
+// Hover a card that has a film: one shared popover plays it large beside the card; leave: hide.
 const calm=matchMedia('(prefers-reduced-motion: reduce)');
-function wireDemo(el){let v=null;
-  el.addEventListener('pointerenter',()=>{if(calm.matches)return;
-    if(!v){v=document.createElement('video');v.className='hover-demo';v.src='assets/video/'+el.dataset.demo+'.mp4';
-      v.muted=true;v.loop=true;v.playsInline=true;v.preload='auto';el.appendChild(v);}
-    v.currentTime=0;v.play().catch(()=>{});el.classList.add('playing');});
-  el.addEventListener('pointerleave',()=>{el.classList.remove('playing');if(v)v.pause();});}
+const pop=document.createElement('div');pop.className='demo-pop';pop.hidden=true;
+const pv=document.createElement('video');pv.muted=true;pv.loop=true;pv.playsInline=true;pv.preload='auto';
+pop.appendChild(pv);document.body.appendChild(pop);
+let popFor=null,popTimer=0;
+function placePop(el){const r=el.getBoundingClientRect(),m=12,vw=innerWidth,vh=innerHeight;
+  const w=Math.min(560,vw-2*m),h=w*9/16;
+  const left=Math.max(m,Math.min(r.left+r.width/2-w/2,vw-w-m));
+  const below=vh-r.bottom,above=r.top;
+  const top=below>=h+m||below>=above?Math.min(r.bottom+m,vh-h-m):Math.max(m,r.top-h-m);
+  Object.assign(pop.style,{left:left+'px',top:top+'px',width:w+'px',height:h+'px'});}
+function showPop(el){if(calm.matches)return;popFor=el;
+  const src='assets/video/'+el.dataset.demo+'.mp4';
+  if(!pv.src.endsWith(src))pv.src=src;
+  placePop(el);pv.currentTime=0;pv.play().catch(()=>{});pop.hidden=false;
+  requestAnimationFrame(()=>pop.classList.add('on'));}
+function hidePop(){clearTimeout(popTimer);popFor=null;pop.classList.remove('on');pop.hidden=true;pv.pause();}
+addEventListener('scroll',()=>{if(popFor)hidePop();},{passive:true});
+function wireDemo(el){
+  // a short hover intent, so sweeping the pointer across the grid does not flash films
+  el.addEventListener('pointerenter',()=>{clearTimeout(popTimer);popTimer=setTimeout(()=>showPop(el),300);});
+  el.addEventListener('pointerleave',()=>{clearTimeout(popTimer);if(popFor===el)hidePop();});}
 document.querySelectorAll('.hero-card[data-demo],.flag-card[data-demo]').forEach(wireDemo);
 document.getElementById('doms').textContent=DOMS.length;
 const df=document.getElementById('df');
@@ -423,6 +439,10 @@ def build():
     os.makedirs(os.path.join(OUTDIR,"assets"), exist_ok=True)
     # domain palette as CSS vars for server-rendered cards
     dcvars="".join(f"--dc-{d}:{pal[d]};" for d in doms)
+    # A content hash on the asset links: a cached old base.css must never style a new page.
+    global ASSET_V
+    css=BASE_CSS.replace("__DCVARS__",dcvars)
+    ASSET_V=hashlib.sha1((css+DOTS_JS).encode()).hexdigest()[:10]
     open(os.path.join(OUTDIR,"assets","base.css"),"w").write(BASE_CSS.replace("__DCVARS__",dcvars))
     open(os.path.join(OUTDIR,"assets","dots.js"),"w").write(DOTS_JS)
     open(os.path.join(OUTDIR,"index.html"),"w").write(index_page(skills,doms,pal))
@@ -497,9 +517,11 @@ h1{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:800;margin:0;letter-spacing:-.
 .card{background:var(--panel);border:1px solid var(--line-2);border-radius:.75rem;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;color:inherit}
 .card:hover{box-shadow:0 2px 5px rgba(20,28,45,.08),0 12px 30px rgba(20,28,45,.14);transform:translateY(-2px)}
 .card{transition:transform .16s,box-shadow .16s}
-.card,.flag-card,.hero-card{position:relative}
-.hover-demo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#101217;opacity:0;transition:opacity .18s;pointer-events:none;z-index:3;border-radius:inherit}
-[data-demo].playing .hover-demo{opacity:1}
+.demo-pop{position:fixed;z-index:50;border-radius:14px;overflow:hidden;background:#101217;pointer-events:none;
+  box-shadow:0 10px 30px rgba(0,0,0,.35),0 30px 80px rgba(0,0,0,.35);border:1px solid rgba(189,151,232,.35);
+  opacity:0;transform:scale(.97);transition:opacity .16s,transform .16s}
+.demo-pop.on{opacity:1;transform:none}
+.demo-pop video{display:block;width:100%;height:100%;object-fit:cover}
 .head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.6rem .95rem;background:var(--dc,var(--accent))}
 .id{font-family:"JetBrains Mono",monospace;font-size:.92rem;font-weight:600;color:#fff;word-break:break-word}.id .ns{color:rgba(255,255,255,.72)}
 .ver{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:rgba(255,255,255,.72);white-space:nowrap;font-weight:500}

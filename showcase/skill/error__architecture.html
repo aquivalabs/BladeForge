@@ -5,14 +5,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/base.css?v=fc960904f0">
 </head><body>
 <canvas id="dots" aria-hidden="true"></canvas>
 <div class="page" style="--dc:var(--dc-error)">
   <a class="back" href="../index.html">← all skills</a>
   <header class="p-head">
     <div class="p-badge">error</div>
-    <h1 class="p-id"><span class="ns">error:</span>architecture <span class="p-ver">v2.0.2</span></h1>
+    <h1 class="p-id"><span class="ns">error:</span>architecture <span class="p-ver">v2.0.3</span></h1>
     <p class="p-purpose">Codifies a single client/UI error-handling architecture — one code→UX policy table classifies every error, and role-named consumers (dispatcher, shared tile renderer, boundary tiers, outer floor) surface it consistently across any framework.</p>
     <div class="metrics"><span class="mchip c-good"><span class="ic">🎯</span><span class="lab">trig</span>14/16</span><span class="mchip c-good"><span class="ic">⚡</span><span class="lab">effect</span>+0.60</span><span class="mchip c-good"><span class="ic">🛡</span><span class="lab">scan</span>8/8</span></div>
     <div class="p-install"><b>install</b> <code>/plugin install error@bladeforge</code></div>
@@ -20,6 +20,7 @@
       <a class="srclink ghost" href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/error/skills/architecture/SKILL.md" target="_blank" rel="noopener">SKILL.md</a></div>
   </header>
   <div class="p-body">
+    <section class="p-sec"><h3>see it</h3><video class="demo" src="../assets/video/error__architecture.mp4" autoplay muted loop playsinline preload="metadata"></video></section>
     <section class="p-sec"><h3>fires when</h3><div class="when">Use when defining, adopting, or reviewing a client/UI app&#x27;s WHOLE error-handling architecture — where every failure surfaces and how adherence is checked — across any framework (React, Vue, Angular, Svelte). Triggers on \&quot;design our app-wide error handling\&quot;, \&quot;is our error handling consistent / does this codebase follow one pattern\&quot;, \&quot;audit how errors are shown\&quot;, \&quot;we map error codes to UX in a dozen places\&quot;, \&quot;one place to decide retry vs redirect vs toast\&quot;, or reviewing a diff for error-surfacing consistency. Foreground: the single code→UX policy table that classifies every error once. NOT for wrapping one component in a boundary or styling one error tile (that is your framework&#x27;s component/primitive skill), and NOT for the wire envelope or reason-code vocabulary (that is error:format).</div></section>
     <section class="p-sec"><h3>best for</h3><div class="when">Any app team wanting one place to decide error copy/retry/redirect and a checkable adherence bar — especially codebases where each component reinvents its own error branch.</div></section>
     <section class="p-sec"><h3>measured · trigger</h3><div class="measure">
@@ -41,5 +42,5 @@
     <section class="p-sec"><h3>SKILL.md</h3><div class="when">Full instructions live in the repo — <a href="https://github.com/aquivalabs/BladeForge/blob/main/plugins/error/skills/architecture/SKILL.md" target="_blank" rel="noopener">read SKILL.md on GitHub ↗</a> · 4 files in the bundle.</div></section>
   </div>
 </div>
-<script src="../assets/dots.js"></script>
+<script src="../assets/dots.js?v=fc960904f0"></script>
 </body></html>
