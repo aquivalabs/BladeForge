@@ -64,7 +64,8 @@
 
 const D=JSON.parse(document.getElementById('data').textContent);
 const PAL=D.palette, SK=D.skills, DOMS=D.domains, CATS=D.categories, CATLAB=D.catLabels;
-const esc=s=>(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+// every value from the data block goes through esc before it reaches innerHTML or an attribute
+const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 const st={q:'',cat:null};
 // Hover a card that has a film: one shared popover plays it large beside the card; leave: hide.
 const calm=matchMedia('(prefers-reduced-motion: reduce)');
@@ -95,26 +96,26 @@ document.querySelectorAll('.hero-card[data-demo],.flag-card[data-demo]').forEach
 document.getElementById('doms').textContent=DOMS.length;
 const df=document.getElementById('df');
 CATS.forEach(c=>{const n=SK.filter(s=>s.category===c).length;const b=document.createElement('button');
-  b.className='chip';b.setAttribute('aria-pressed','false');b.dataset.cat=c;b.innerHTML=`${CATLAB[c]||c} <span class="n">${n}</span>`;
+  b.className='chip';b.setAttribute('aria-pressed','false');b.dataset.cat=c;b.innerHTML=`${esc(CATLAB[c]||c)} <span class="n">${n}</span>`;
   b.onclick=()=>{st.cat=st.cat===c?null:c;sync();render();};df.appendChild(b);});
 function sync(){df.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.cat===st.cat));}
 document.getElementById('q').addEventListener('input',e=>{st.q=e.target.value.toLowerCase().trim();render();});
-function tagB(t){return t.length?t.map(x=>`<span class="badge b-${x}">${x}</span>`).join(''):'<span class="badge b-ro">read-only</span>';}
+function tagB(t){return t.length?t.map(x=>`<span class="badge b-${esc(x)}">${esc(x)}</span>`).join(''):'<span class="badge b-ro">read-only</span>';}
 function trigCls(a){return a==null?'c-none':(a>=0.7?'c-good':'c-warn');}
 function effCls(q){return q==null?'c-none':(q>=0.5?'c-good':'c-warn');}
 function chips(s){const c=[];
   if(s.trig!=null)c.push(`<span class="mchip ${trigCls(s.trigAcc)}"><span class="ic">\u{1F3AF}</span><span class="lab">trig</span>${esc(s.trig)}</span>`);
   if(s.effect!=null)c.push(`<span class="mchip ${effCls(s.effect)}"><span class="ic">⚡</span><span class="lab">effect</span>${(s.effect>=0?'+':'')+s.effect.toFixed(2)}</span>`);
-  if(s.sec)c.push(`<span class="mchip ${s.sec[0]===s.sec[1]?'c-good':'c-warn'}"><span class="ic">\u{1F6E1}</span><span class="lab">scan</span>${s.sec[0]}/${s.sec[1]}</span>`);
+  if(s.sec)c.push(`<span class="mchip ${s.sec[0]===s.sec[1]?'c-good':'c-warn'}"><span class="ic">\u{1F6E1}</span><span class="lab">scan</span>${esc(s.sec[0])}/${esc(s.sec[1])}</span>`);
   return c.length?`<div class="metrics">${c.join('')}</div>`:'';}
 function match(s){if(st.cat&&s.category!==st.cat)return false;
   if(st.q){const h=(s.id+' '+s.purpose+' '+s.activates+' '+s.best).toLowerCase();if(!h.includes(st.q))return false;}return true;}
-function card(s){const[ns,nm]=s.id.split(':');const a=document.createElement('a');a.className='card';a.href='skill/'+s.slug+'.html';
-  a.style.setProperty('--dc',PAL[s.plugin]);
+function card(s){const[ns,nm]=s.id.split(':');const a=document.createElement('a');a.className='card';a.href='skill/'+encodeURIComponent(s.slug)+'.html';
+  a.style.setProperty('--dc',String(PAL[s.plugin]||''));
   if(s.demo){a.dataset.demo=s.slug;wireDemo(a);}
-  a.innerHTML=`<div class="head"><span class="id"><span class="ns">${ns}:</span>${nm||''}</span><span class="ver">v${s.version}</span></div>
+  a.innerHTML=`<div class="head"><span class="id"><span class="ns">${esc(ns)}:</span>${esc(nm)}</span><span class="ver">v${esc(s.version)}</span></div>
     <div class="body"><div class="purpose">${esc(s.purpose)}</div>${chips(s)}
-    <div class="meta">${tagB(s.tags)}<span class="sep"></span>${s.needs.length?`<span class="needs"><b>needs</b> ${s.needs.length}</span>`:''}</div></div>`;
+    <div class="meta">${tagB(s.tags)}<span class="sep"></span>${s.needs.length?`<span class="needs"><b>needs</b> ${esc(s.needs.length)}</span>`:''}</div></div>`;
   return a;}
 function render(){const sh=SK.filter(match);const g=document.getElementById('grid');g.innerHTML='';sh.forEach(s=>g.appendChild(card(s)));
   document.getElementById('empty').hidden=sh.length>0;}
