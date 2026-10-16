@@ -1,7 +1,7 @@
 # BladeForge
 
 Blade Runner Skills — the aquivalabs Claude Code marketplace. Curated,
-company-approved skills, synced from the shared source and reviewed before release.
+company-approved skills, maintained in this repo and reviewed before release.
 
 ## Install
 
