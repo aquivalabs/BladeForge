@@ -249,14 +249,19 @@ def needs_block(s):
 def has_demo(slug):
     return os.path.exists(os.path.join(OUTDIR,"assets","video",f"{slug}.mp4"))
 
+def demo_version(slug):
+    """A content hash of the film, put on its URL so a browser never replays a cached old cut."""
+    with open(os.path.join(OUTDIR,"assets","video",f"{slug}.mp4"),"rb") as f:
+        return hashlib.sha1(f.read()).hexdigest()[:10]
+
 def demo_attr(slug):
     """data-demo on a card makes the index play the skill's film while the card is hovered."""
-    return f' data-demo="{esc(slug)}"' if has_demo(slug) else ""
+    return f' data-demo="{esc(slug)}" data-demo-v="{demo_version(slug)}"' if has_demo(slug) else ""
 
 def demo_block(slug):
     """A looping, muted demo film when showcase/assets/video/<slug>.mp4 exists; else nothing."""
     if not has_demo(slug): return ""
-    return f"""<section class="p-sec"><h3>see it</h3><video class="demo" src="../assets/video/{esc(slug)}.mp4" autoplay muted loop playsinline preload="metadata"></video></section>"""
+    return f"""<section class="p-sec"><h3>see it</h3><video class="demo" src="../assets/video/{esc(slug)}.mp4?v={demo_version(slug)}" autoplay muted loop playsinline preload="metadata"></video></section>"""
 
 def skill_page(s):
     ns, nm = s["id"].split(":",1)
@@ -333,7 +338,7 @@ def index_page(skills, doms, pal):
     gdata=[{"id":s["id"],"plugin":s["plugin"],"slug":s["slug"],"version":s["version"],
             "purpose":s["purpose"],"activates":s["activates"],"best":s["best"],
             "needs":s["needs"],"tags":s["tags"],
-            "category":s.get("category"),"demo":has_demo(s["slug"]),
+            "category":s.get("category"),"demo":has_demo(s["slug"]),"demoV":demo_version(s["slug"]) if has_demo(s["slug"]) else "",
             "trig":(s["trig"]["score"] if s["trig"] else None),"trigAcc":(s["trig"]["acc"] if s["trig"] else None),
             "effect":(s["effect"]["qi"] if s["effect"] else None),
             "sec":([s["security"]["passed"],s["security"]["total"]] if s["security"] else None)} for s in skills]
@@ -393,7 +398,8 @@ function placePop(el){const r=el.getBoundingClientRect(),m=12,vw=innerWidth,vh=i
 function showPop(el){if(calm.matches)return;
   // the slug comes from the DOM: accept only a plain file stem, and encode it into the URL
   const slug=el.dataset.demo||'';if(!/^[A-Za-z0-9_-]+$/.test(slug))return;popFor=el;
-  const src='assets/video/'+encodeURIComponent(slug)+'.mp4';
+  const v=el.dataset.demoV||'';
+  const src='assets/video/'+encodeURIComponent(slug)+'.mp4'+(/^[0-9a-f]+$/.test(v)?'?v='+v:'');
   if(!pv.src.endsWith(src))pv.src=src;
   placePop(el);pv.currentTime=0;pv.play().catch(()=>{});pop.hidden=false;
   requestAnimationFrame(()=>pop.classList.add('on'));}
@@ -423,7 +429,7 @@ function match(s){if(st.cat&&s.category!==st.cat)return false;
   if(st.q){const h=(s.id+' '+s.purpose+' '+s.activates+' '+s.best).toLowerCase();if(!h.includes(st.q))return false;}return true;}
 function card(s){const[ns,nm]=s.id.split(':');const a=document.createElement('a');a.className='card';a.href='skill/'+encodeURIComponent(s.slug)+'.html';
   a.style.setProperty('--dc',String(PAL[s.plugin]||''));
-  if(s.demo){a.dataset.demo=s.slug;wireDemo(a);}
+  if(s.demo){a.dataset.demo=s.slug;a.dataset.demoV=s.demoV;wireDemo(a);}
   a.innerHTML=`<div class="head"><span class="id"><span class="ns">${esc(ns)}:</span>${esc(nm)}</span><span class="ver">v${esc(s.version)}</span></div>
     <div class="body"><div class="purpose">${esc(s.purpose)}</div>${chips(s)}
     <div class="meta">${tagB(s.tags)}<span class="sep"></span>${s.needs.length?`<span class="needs"><b>needs</b> ${esc(s.needs.length)}</span>`:''}</div></div>`;
