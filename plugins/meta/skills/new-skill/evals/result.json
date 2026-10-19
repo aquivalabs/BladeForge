@@ -1,160 +1,195 @@
 {
   "trigger": {
     "skill": "new-skill",
-    "measured_at": "2026-09-01T18:29:14",
-    "model": "sonnet",
-    "runs_per_query": 2,
-    "best_score": "18/18",
+    "measured_at": "2026-10-19T10:19:57",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "90/90",
     "accuracy": 1,
     "baseline_accuracy": null,
     "description_hash": "d13d788be453cff44fa109603a58c12d87050f2c7c75abaacf1d9c71c89ce9a9",
     "queryset_hash": "db3400661ad989bf631f32f5b3389d0c67fb382c14ad50135879e13fd3c96d60",
     "eval_type": "description-triggering",
-    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "isolated",
+    "flow_variant": "baseline",
+    "cases": 18,
+    "reps": 5,
+    "train": {
+      "cases": 12,
+      "rows": 60,
+      "mean": 1,
+      "ci_half_width": 0.129
+    },
+    "test": {
+      "cases": 6,
+      "rows": 30,
+      "mean": 1,
+      "ci_half_width": 0.183
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
     "results": [
       {
         "query": "i want to create a skill for how we handle i18n strings in this project",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 2,
+        "triggers": 5,
+        "runs": 5,
         "trigger_rate": 1,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "adding a new skill to the meta plugin — where does the SKILL.md go and what should be in it?",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 2,
+        "triggers": 5,
+        "runs": 5,
         "trigger_rate": 1,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "what's the right folder name and structure for a new salesforce skill about apex batches?",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 2,
+        "triggers": 5,
+        "runs": 5,
         "trigger_rate": 1,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "creating a new domain plugin for database stuff — do i need a plugin.json?",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 2,
+        "triggers": 5,
+        "runs": 5,
         "trigger_rate": 1,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "write a skill that teaches claude to always use the bff proxy for sf calls",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 2,
+        "triggers": 5,
+        "runs": 5,
         "trigger_rate": 1,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "the new frontend-css:rem skill needs a SKILL.md — show me what it should look like",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 2,
+        "triggers": 5,
+        "runs": 5,
         "trigger_rate": 1,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "adding embed-test as a project-local skill — how is that different from a marketplace skill?",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 2,
+        "triggers": 5,
+        "runs": 5,
         "trigger_rate": 1,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "i need a skill that fires before any apex test is authored — help me scaffold it",
         "should_trigger": true,
-        "triggers": 1,
-        "runs": 2,
-        "trigger_rate": 0.5,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "what goes in the description: frontmatter for a new skill?",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 2,
+        "triggers": 5,
+        "runs": 5,
         "trigger_rate": 1,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "improve this skill's description so it triggers more reliably — run evals on it",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 2,
+        "runs": 5,
         "trigger_rate": 0,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "the ockham skill is triggering on the wrong things — optimize it",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 2,
+        "runs": 5,
         "trigger_rate": 0,
-        "pass": true
-      },
-      {
-        "query": "the lean-writing skill needs better examples in references/ — add some",
-        "should_trigger": false,
-        "triggers": 0,
-        "runs": 2,
-        "trigger_rate": 0,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "how do i structure a new React component in this project?",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 2,
+        "runs": 5,
         "trigger_rate": 0,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "the lean-writing skill needs better examples in references/ — add some",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "set up the review gate in <ui-repo>",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 2,
+        "runs": 5,
         "trigger_rate": 0,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "should the WidgetCard use SRP — it's doing fetch and render",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 2,
+        "runs": 5,
         "trigger_rate": 0,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "audit docs/superpowers/specs/widget-engine.md for clarity",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 2,
+        "runs": 5,
         "trigger_rate": 0,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "run the pre-push review before i merge this branch",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 2,
+        "runs": 5,
         "trigger_rate": 0,
-        "pass": true
+        "pass": true,
+        "fired_other": 1
       },
       {
         "query": "what's the naming convention for scss module files in this repo?",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 2,
+        "runs": 5,
         "trigger_rate": 0,
-        "pass": true
+        "pass": true,
+        "fired_other": 0
       }
     ]
   },
@@ -170,15 +205,15 @@
   },
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-10-16T19:30:00",
+    "scanned_at": "2026-10-19T12:30:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "25d8d5d41cf65d143cc5ac43a45bb749ad2aaceffcbfff0d4cc92faa7e341b11",
+    "scanned_hash": "5d22f132647ad98805fcaf6bb77fa11543ab4d00c05009e29678f66898c57471",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "the edited block and the reference line are prose and a shell snippet addressed to the author"
+        "note": "the edited block and the reference line are prose and a shell snippet addressed to the author; the added hillclimb step tells the author to run /claude-api hillclimb and save-result --climb, nothing aimed at the reading agent"
       },
       {
         "n": 2,

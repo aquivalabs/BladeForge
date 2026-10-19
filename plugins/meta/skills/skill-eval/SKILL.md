@@ -7,8 +7,11 @@ description: "Use when you need to know whether a skill's `description` actually
 ## Contract
 
 **In:** an existing skill directory holding `SKILL.md` and `evals/rubric.json` (≥6 cases, at
-least one of each polarity) · a working `claude` binary — this spends tokens, it is not a static
-check.
+least one of each polarity) · a checkout of this repository, because the scripts live in
+`scripts/hillclimb/` at its root, not in the skill · `node` and a working `claude` binary — this
+spends tokens, it is not a static check · a harness approval recorded by the maintainer, which no
+agent may give. If `scripts/hillclimb/` is not reachable, say the repository checkout is required
+and stop; never fall back to skill-creator's `run_eval`.
 
 **Out:** the trigger score over (case, rep) rows, split into train and test with the noise
 interval beside each, plus the exact queries that missed or wrongly fired · `evals/result.json`

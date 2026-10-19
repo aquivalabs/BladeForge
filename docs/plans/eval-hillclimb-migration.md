@@ -1,12 +1,10 @@
 # Plan — move skill measurement onto build-eval and hillclimb
 
-Status: in progress, phase 1 · Owner: the marketplace maintainer · Started: 2026-10-16
+Status: in progress, phase 2 · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: phase 2, PR A, is written on `feat/hillclimb-trigger-runner` and not yet committed. It
-switches the gate to the new runner and deletes `score-description.py`. It waits on one end-to-end
-run, `meta:skill-eval` measured and saved through the new path, which needs the maintainer to
-approve the harness. PR B, steps 6–7 of phase 2, follows: the one entry point and the new gate
-requirements.
+Now: phase 2, part A — the runner and the gate switch, steps 1–5 — is PR #95. Part B is in
+progress: steps 6–7, the one entry point and the new gate requirements, plus remeasuring the
+skills whose records still come from `score-description.py`.
 
 ## Goal
 
@@ -129,8 +127,11 @@ Exit check:
 6. Make the climb the default path for a NEW skill, because a freshly written description almost
    always needs it. One entry point takes a skill dir and does everything: create the flow dir with
    a seeded split (`scripts/hillclimb/new-flow.mjs`), reuse the harness approval when the runner
-   file is byte-identical to an approved one, run the baseline, run the hillclimb workflow, and
-   write `result.json`. `meta:new-skill` ends by calling it. Two limits must be visible to the
+   file is byte-identical to an approved one, run the baseline, run `/claude-api hillclimb` on the
+   flow, and write `result.json` with `save-result.mjs --climb`. The loop is Anthropic's and is never
+   re-implemented here: no BladeForge script picks a winner, splits cases mid-run, or decides
+   keep-or-revert. Our code only fills the runner, keeps the flow layout, and turns the outcome
+   into the gate's record. `meta:new-skill` ends by calling it. Two limits must be visible to the
    author: a pass costs about 8% of a 5-hour window, so baseline plus three rounds is about a third
    of one; and the same author writes the rubric and the description, so the rubric's cases should
    come from real requests wherever they exist.
