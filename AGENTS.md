@@ -64,7 +64,10 @@ Rules in force now:
 - **`--approve-harness` needs a review first.** The runner refuses to start after its own code
   changes until someone approves the new version. An agent may approve it only when every harness
   change is committed and covered by a passing `/review` attestation, since that review already
-  read the code. Any harness change the review has not seen is the maintainer's to approve.
+  read the code. Any harness change the review has not seen is the maintainer's to approve. The
+  runner enforces this itself: `gateApproval` in `scripts/hillclimb/flow-lib.mjs` refuses an
+  approval unless a PASS attestation names a commit whose harness files match HEAD, or a person
+  types `approve` at a terminal.
 - **Price a run before you start it.** Measure one case, then show the cost table from
   `meta:model-routing`. A 90-run trigger pass costs about 8% of a 5-hour window isolated, and about
   10% crowded.

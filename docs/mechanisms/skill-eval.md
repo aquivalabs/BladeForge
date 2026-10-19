@@ -301,7 +301,11 @@ node scripts/hillclimb/save-result.mjs --quality .claude/hillclimb/leak-check-wi
 
 The runner refuses to start until its current code is approved with `--approve-harness`. An agent
 passes that flag only when the harness changes are committed and covered by a passing `/review`
-attestation; otherwise the maintainer does. The nested run is isolated — `--setting-sources project
+attestation; otherwise the maintainer does. Both runners enforce it before the scaffold records
+anything: `gateApproval` in `flow-lib.mjs` approves when every harness file is committed and a PASS
+attestation in `.review/attestations/` names a commit on the branch whose harness files are
+byte-identical to HEAD's. Otherwise it asks for the word `approve` on a terminal, and a shell with
+no terminal, the way an agent runs, is refused. `approval-gate.test.mjs` walks those cases. The nested run is isolated — `--setting-sources project
 --strict-mcp-config` — so no user settings, plugins, hooks or MCP servers reach it, and the score does
 not depend on whose machine took it. `environment: "crowded"` in the flow's `_state.json` installs
 every marketplace skill beside the one under test, and a query a sibling takes shows in

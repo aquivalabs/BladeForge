@@ -57,6 +57,7 @@ plugin version and lags behind.
 3. **Approve the harness only after review.** The runner refuses to start until its hash is
    recorded. Pass `--approve-harness` yourself only when every harness change is committed and
    covered by a passing `/review` attestation; otherwise ask the user to run the first command with it.
+   The runner checks this itself and refuses an approval no attestation covers.
 4. **Run, then save:**
    ```bash
    node scripts/hillclimb/trigger-runner.mjs --flow <flow> --variant baseline \

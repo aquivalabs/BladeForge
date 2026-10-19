@@ -311,7 +311,8 @@ showed the noise needs. Re-run quality skill by skill, starting with the most us
 - **Reviewed approval for the runner.** The scaffold refuses to run after its own code changes until
   someone re-approves it with `--approve-harness`. Decided 2026-10-19: an agent may approve a
   version whose changes are committed and covered by a passing `/review` attestation; anything the
-  review has not seen stays the maintainer's. Never pre-approve it in an allowlist.
+  review has not seen stays the maintainer's. The runners enforce it with `gateApproval`, so the
+  agent's own word is not the check. Never pre-approve it in an allowlist.
 
 ## Phase 1 findings (2026-10-16)
 

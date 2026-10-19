@@ -45,7 +45,7 @@ import { basename } from 'node:path';
 // The one description reader, shared with save-result.mjs and eval-gate. List it
 // in `_state.json.harness_paths` so the harness gate covers it too.
 import { descriptionFrom, hashDescription, rawDescription } from './skill-description.mjs';
-import { skillSlug, triggerCases } from './flow-lib.mjs';
+import { gateApprovalFromArgv, skillSlug, triggerCases } from './flow-lib.mjs';
 import { sandbox, streamClaude } from './sandbox-lib.mjs';
 
 // Every output write refuses symlinks: the flow dir is model-influenced, and a
@@ -151,6 +151,11 @@ function mkdirNoFollow(dir) {
 const REF_EXTS = ['', '.html', '.txt', '.json'];
 
 // --- fill these in ----------------------------------------------------------
+//
+// BladeForge: `--approve-harness` passes a gate first. A harness that a passing /review attestation
+// covers, committed as it is, is approved by whoever runs this; anything else only by a person who
+// types "approve" at a terminal. See gateApproval in flow-lib.mjs.
+gateApprovalFromArgv(fileURLToPath(import.meta.url));
 //
 // BladeForge: description-trigger eval for one skill. The skill under test is
 // `_state.json.skill_path` (repo-relative). Each case is one query from that

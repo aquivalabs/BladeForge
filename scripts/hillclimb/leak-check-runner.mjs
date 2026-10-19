@@ -42,7 +42,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { cpSync } from 'node:fs';
 import { basename, sep } from 'node:path';
-import { readJson, skillHash } from './flow-lib.mjs';
+import { gateApprovalFromArgv, readJson, skillHash } from './flow-lib.mjs';
 import { sandbox, streamClaude } from './sandbox-lib.mjs';
 
 // Every output write refuses symlinks: the flow dir is model-influenced, and a
@@ -148,6 +148,11 @@ function mkdirNoFollow(dir) {
 const REF_EXTS = ['', '.html', '.txt', '.json'];
 
 // --- fill these in ----------------------------------------------------------
+//
+// BladeForge: `--approve-harness` passes a gate first. A harness that a passing /review attestation
+// covers, committed as it is, is approved by whoever runs this; anything else only by a person who
+// types "approve" at a terminal. See gateApproval in flow-lib.mjs.
+gateApprovalFromArgv(fileURLToPath(import.meta.url));
 //
 // BladeForge: quality eval for cerberus:leak-check. Each case is a mini marketplace
 // repository whose demo skill change carries planted fingerprints of a FICTIONAL client.
