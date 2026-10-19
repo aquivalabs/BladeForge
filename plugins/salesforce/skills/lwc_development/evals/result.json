@@ -158,18 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.4,
-    "skillscore": 0.93,
-    "guide_faults": [
-      "The skill inherits the generic frontend-js:conventions rule verbatim, including \"arrow functions,\" without carving out the well-known LWC exception that controller/handler/lifecycle methods are standard ES class methods, not arrow-bound class fields. The with-guide agent had to invent its own rationalization (\"arrow-free class methods... the idiomatic exception this style already carves out\") to reconcile this — a literal reading of the guide's own checklist item 3 could otherwise push an author toward non-idiomatic arrow-function class properties in a bundle."
-    ],
-    "verdict": "Guide's checklist drove concrete, verifiable wins on its own rubric — real CSS-custom-property styling plus an explicit self-check the isolated agent never performed — while isolated skipped the CSS file and left two competing unfinished implementations instead of one coherent bundle."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

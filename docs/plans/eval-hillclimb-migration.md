@@ -1,11 +1,14 @@
 # Plan — move skill measurement onto build-eval and hillclimb
 
-Status: in progress, phase 2 · Owner: the marketplace maintainer · Started: 2026-10-16
+Status: in progress, phases 3 and 4 done, next 2b with 5 · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: all of phase 2 is on `feat/hillclimb-trigger-runner`, PR #95: the runner and the gate switch
-(steps 1–5), harness-approval reuse, the hillclimb record, the new gate requirements (steps 6–7),
-remeasured `new-skill` and `update-skill`, and the shared `flow-lib.mjs`. It waits on review and
-merge.
+Now: phase 2 merged as #95 (2026-10-19). Phases 3 and 4 are done on `feat/quality-stage` (#96).
+Next: phase 2b with phase 5.
+
+Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
+likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
+measures every skill in one pass, so it does phase 5's re-measure far more cheaply than 45
+per-skill runs.
 
 ## Goal
 
@@ -188,8 +191,20 @@ least one boundary pair shows real headroom above noise, which gives hillclimb s
 
 ### Phase 3 — guide-skill pilot
 
-Pick the guide skill when the phase starts. My lean is `git:commit`. It runs every day, so real
-transcripts exist, and build-eval takes cases from transcripts first.
+Decided 2026-10-19: the pilot is `cerberus:leak-check`, not `git:commit`. `git:commit` already
+splits commits well, so its own contract has no headroom, and a skill's eval measures only that
+skill's contract. `leak-check` has a known, critical failure inside its contract: a client name
+reached a commit unflagged. Each case runs twice, with the skill and without it, on a mini
+marketplace whose demo skill change carries planted fingerprints of a fictional client, Halvorsen
+Ledger. Ten cases check files before a commit. Three check commits that already carry the leak in
+the message or the author, behind a pre-push request. Three controls must come through unchanged.
+Grading is programmatic: no planted fingerprint is left in the pushed tree, the messages or the
+authors; the example keeps its teaching value; a control is committed unchanged. An LLM judge for
+the aggregate "domain flavour" waits for a second iteration.
+
+Found while designing it, and fixed outside the eval: `cerberus` runs on file edits only. A commit
+message and its author are written after that check, so nothing ever scanned them. A pre-push
+trigger for `leak-check` over the outgoing commits is a plain hook change, tracked as its own step.
 
 1. Run `/claude-api build-eval` on the chosen skill. Target 15 or more cases.
 2. Pass every case through `cerberus:leak-check` before it lands in git. Raw transcripts come from
@@ -204,6 +219,43 @@ transcripts exist, and build-eval takes cases from transcripts first.
 Exit check: build-eval's checks pass, meaning the grader agrees with itself on a rerun and the
 baseline is below 95%. Hillclimb's report shows a test gain above noise, or states plainly that
 there is none.
+
+Baseline, 2026-10-19: 16 cases × 2 arms × 3 reps on `claude-opus-5-5`, natural prompts, about 9% of
+a window. With the skill 0.83 (test 0.80 ±0.26), without it 0.19 (test 0.20 ±0.26). The skill
+catches every file leak: 30 of 30 runs; the controls pass in both arms. **It reproduces the real
+failure:** on "push this branch" the skill fired in 1 run of 9, and the leak in the commit message
+or author shipped. Its description says "before committing" and never mentions push, messages or
+authors. That is the hillclimb target. The test split holds only one push case, so the best
+possible test gain (0.2) is inside the noise (±0.26). Six more push cases come first.
+
+**Done 2026-10-19:** `leak-check`'s description and body now cover pushing — the outgoing commits'
+messages, authors and branch name. Push cases went from 1/9 to 9/9 with the skill, file and control
+cases held at 13/13, and triggers measured 65/65 including three new push queries. A full hillclimb
+was not needed: the baseline named the cause.
+
+**Built 2026-10-19 — guarding the push itself** (the skill only helps when it fires), commit
+`cec0083`:
+
+- *Layer 2:* `plugins/cerberus/hooks/on-git-push.sh` → `on-git-push.mjs`, a classic `PreToolUse` hook. The shell
+  entry decides "not a push" with builtins alone; range, log format and cache key live once in
+  `push-range.mjs`, which the mod runs too. Before any
+  `git push` an agent runs, it hands the outgoing commits to a nested `claude -p` judge (the prompt in
+  `push-judge-prompt.txt`) and blocks a push that leaks or that it cannot judge. The first version
+  waited for a marker the agent itself wrote, which made it a reminder, not a gate; now the hook
+  runs the judge. A clean verdict is cached under the hash of what was judged, and a tool call aimed
+  at that cache is refused — best effort: a shell can still forge it on purpose, and a push typed
+  by a person in their own terminal is not seen. Closing those needs a git `pre-push` hook. Works on every Claude Code version. Suite: 11/11,
+  in CI; a live judge caught a client name and work email in 5.7 s.
+- *Per-repository switch:* the guard is on everywhere by default. A person turns it off for one
+  repository with `git config cerberus.pushguard off`; an agent setting it is refused.
+- *Layer 3:* `plugins/cerberus/hooks/push-guard.ts`, a function-hooks mod. It judges the same text
+  with the same prompt in-process, denies a push that leaks, and caches a clean verdict under the
+  same key, so layer 2 passes without judging twice.
+  Suite: 4/4 under `claude plugin test`. `check-version.sh` prints a red update notice at session
+  start below 2.1.292, which cannot load the mod.
+- *Not needed:* a new review lens. The `review` plugin's `leak` lens already runs `cerberus`.
+- *Later:* rework `review` as a whole. One decided point: it runs only after a local commit, on
+  committed work.
 
 ### Phase 4 — switch quality, delete skillaxe
 
@@ -220,6 +272,30 @@ there is none.
 
 Exit check: `grep -r skillaxe` finds nothing outside history, and `scout-gate` and `eval-gate` pass.
 
+**Done 2026-10-19,** all five steps:
+
+- `save-result.mjs --quality <with-flow> <variant> <without-flow> [<variant>]` writes the block:
+  both arms' pass rates with their intervals, `effect` (with minus without), `noise`
+  (`sqrt(1/n_with + 1/n_without)`), and a verdict computed from those two: `helps`, `within-noise`
+  or `hurts`. It refuses an incomplete arm, mixed models or reps, and a with arm whose rows
+  installed a skill other than the one on disk. The quality runner now stamps every row with
+  `skill_hash`, the hash of every skill file except `evals/`. Tests: 5 new cases in
+  `save-result.test.mjs`.
+- The skillaxe records were 28, not 45: the other 17 skills already held `null`. All 28 are
+  `null` now, and the showcase shows "Not measured yet" for a skill without a quality record.
+- `plugins/skillcraft/`, its showcase page and film, and its `README.md` and `marketplace.json`
+  entries are deleted. The catalog holds 44 skills.
+- `grep skillaxe` finds it only in this plan and in old review attestations, which are history.
+
+**First quality record, 2026-10-19:** `cerberus:leak-check`, 16 cases at 3 reps on
+`claude-opus-5-5`, flows `v2`. With the skill 0.979 ±0.144, without it 0.188 ±0.144: effect
++0.791 ±0.204, verdict `helps`. The leak cases split 38/39 against 0/39, and the controls passed
+9/9 in both arms. The skill fired in all 48 with-arm runs. The 96 runs cost about $7.5
+API-equivalent.
+
+**Deferred to phase 5:** `eval-gate` does not demand a quality record yet. It would block every
+PR that touches a skill until all 44 have a quality eval, and only one has a runner.
+
 ### Phase 5 — re-measure
 
 Re-run triggers, lowest score first: `meta:triage`, `salesforce:sf-deploy-test`,
@@ -232,8 +308,11 @@ showed the noise needs. Re-run quality skill by skill, starting with the most us
   table, and follow `meta:model-routing`.
 - **Leaks.** Cases, traces and reports pass `cerberus:leak-check` before they are committed. Flow
   dirs with raw traces stay gitignored.
-- **Human approval for the runner.** The scaffold refuses to run after its own code changes until
-  someone re-approves it with `--approve-harness`. Never pre-approve it in an allowlist.
+- **Reviewed approval for the runner.** The scaffold refuses to run after its own code changes until
+  someone re-approves it with `--approve-harness`. Decided 2026-10-19: an agent may approve a
+  version whose changes are committed and covered by a passing `/review` attestation; anything the
+  review has not seen stays the maintainer's. The runners enforce it with `gateApproval`, so the
+  agent's own word is not the check. Never pre-approve it in an allowlist.
 
 ## Phase 1 findings (2026-10-16)
 
@@ -251,8 +330,9 @@ showed the noise needs. Re-run quality skill by skill, starting with the most us
   a fixed directory hit the cache. The cause is not known yet.
 - Answered: hillclimb accepts an existing runner (its Step 0 asks for one), and the served-model
   check passes, because `claude -p` reports `claude-opus-5-5`.
-- `--approve-harness` cannot be delegated: auto mode refuses it from a subagent. The maintainer
-  runs it.
+- `--approve-harness` was refused by auto mode from a subagent, so at first the maintainer ran it.
+  Superseded 2026-10-19: an agent may approve a reviewed, committed harness; see the cross-cutting
+  rules.
 
 - **Crowded screening, `--reps 2`, 2026-10-16:** `triage` 34/36, `sf-deploy-test` 36/36,
   `wittgenstein` 36/36, `commit` 38/38, `architecture` 40/44. All four `architecture` misses are

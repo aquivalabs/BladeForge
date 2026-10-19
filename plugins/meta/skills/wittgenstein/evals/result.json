@@ -158,18 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.3,
-    "skillscore": 0.8,
-    "guide_faults": [
-      "The persona's fixed vocabulary ('Unsinn') is itself undefined jargon left ungloosed in an output whose own acceptance bar (#2) demands a non-technical reader grasp the point on first read — the guide's template isn't self-consistent with its stated criterion."
-    ],
-    "verdict": "Guide output hits the persona format tightly (Struck citations by section, terse verdict with word-count delta, refuses to fabricate the missing cases) while isolated baseline is equally rigorous but more verbose and hedges across three rewrite variants instead of committing — a modest, real edge for the guide, not a decisive one."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

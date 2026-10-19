@@ -1,7 +1,12 @@
 #!/usr/bin/env node
-// Write a trigger-runner variant's measurement into the skill's evals/result.json
-// `trigger` block - the record eval-gate and the showcase read.
+// Write a measurement into the skill's evals/result.json - the record eval-gate and the
+// showcase read.
 //   node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> <variant> [--climb]
+//   node scripts/hillclimb/save-result.mjs --quality <with-flow> <variant> <without-flow> [<variant>]
+//
+// The first form writes the `trigger` block from a trigger-runner variant. --quality writes
+// the `acceptance` block from a quality runner's two arms: the same cases run with the
+// skill installed and without it. See saveQuality below.
 //
 // --climb also records how a `/claude-api hillclimb` run went, as `trigger.hillclimb`:
 // the baseline and final test scores, the rounds run, the noise, and a verdict computed
@@ -17,10 +22,11 @@
 // Refuses, writing nothing, when the variant is incomplete, mixes models, or was
 // measured against a description other than the one SKILL.md holds now.
 import { execFileSync } from 'node:child_process';
-import { readdirSync, renameSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { readFileSync, readdirSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
-import { CLIMB_VERDICTS, RUNNER, readJson, readRows, round, splitScore } from './flow-lib.mjs';
+import { CLIMB_VERDICTS, RUNNER, diffScore, readJson, readRows, round, skillHash, splitScore } from './flow-lib.mjs';
 import { descriptionHash } from './skill-description.mjs';
 
 export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve(import.meta.dirname, '..', '..'), climb = false } = {}) {
@@ -90,9 +96,13 @@ export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve
   };
   if (climb) trigger.hillclimb = climbSummary(flow, variant, st, rows);
 
-  // Every sibling key survives a re-measurement - only `trigger` is replaced.
-  // A writer that carried one sibling forward by name once deleted the cerberus
-  // `security` walk on every re-measure and silently un-shipped the skill.
+  return { dest: writeBlock(skillDir, 'trigger', trigger), trigger };
+}
+
+// Every sibling key survives a re-measurement - only the named block is replaced.
+// A writer that carried one sibling forward by name once deleted the cerberus
+// `security` walk on every re-measure and silently un-shipped the skill.
+function writeBlock(skillDir, key, block) {
   const dest = join(skillDir, 'evals', 'result.json');
   let prev = {};
   try {
@@ -100,9 +110,75 @@ export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve
     if (loaded && typeof loaded === 'object' && !Array.isArray(loaded)) prev = loaded;
   } catch { /* absent or unreadable: nothing to carry */ }
   const tmp = `${dest}.tmp`;
-  writeFileSync(tmp, JSON.stringify({ acceptance: null, ...prev, trigger }, null, 2) + '\n');
+  writeFileSync(tmp, JSON.stringify({ acceptance: null, ...prev, [key]: block }, null, 2) + '\n');
   renameSync(tmp, dest);
-  return { dest, trigger };
+  return dest;
+}
+
+/**
+ * The quality record: the same cases run with the skill and without it. Both arms must
+ * cover every case in the suite at the same reps on one model, and every row of the with
+ * arm must have installed the skill as it is now. The effect, its noise and the verdict come
+ * from diffScore in flow-lib.mjs.
+ */
+export function saveQuality(withFlow, withVariant, withoutFlow, withoutVariant = 'baseline',
+  { now = new Date(), repoRoot = resolve(import.meta.dirname, '..', '..') } = {}) {
+  const stW = readJson(join(withFlow, '_state.json'));
+  const stO = readJson(join(withoutFlow, '_state.json'));
+  if (stW.arm !== 'with' || stO.arm !== 'without')
+    throw new Error(`arms are ${stW.arm} and ${stO.arm}; pass the "with" flow first, then the "without" flow`);
+  for (const k of ['skill_path', 'cases_path'])
+    if (!stW[k] || stW[k] !== stO[k]) throw new Error(`the two flows differ in ${k}: ${stW[k]} vs ${stO[k]}`);
+  const skillDir = resolve(repoRoot, stW.skill_path);
+  const casesFile = resolve(repoRoot, stW.cases_path);
+  const ids = readJson(casesFile).cases.map(c => String(c.id));
+
+  const arm = (flow, variant) => {
+    const rows = readRows(join(flow, variant, 'results.jsonl'));
+    const byId = new Map();
+    for (const r of rows) byId.set(r.prompt_id, (byId.get(r.prompt_id) ?? 0) + 1);
+    const reps = Math.max(0, ...byId.values());
+    const missing = ids.filter(id => byId.get(id) !== reps);
+    if (!rows.length || missing.length || byId.size !== ids.length)
+      throw new Error(`${flow}/${variant}: incomplete - ${byId.size}/${ids.length} cases, `
+        + `${missing.length} without ${reps} reps. Re-run the runner to resume.`);
+    return { rows, reps, all: splitScore(rows, ids) };
+  };
+  const w = arm(withFlow, withVariant);
+  const o = arm(withoutFlow, withoutVariant);
+  if (w.reps !== o.reps) throw new Error(`reps differ: ${w.reps} with the skill, ${o.reps} without`);
+  const models = [...new Set([...w.rows, ...o.rows].map(r => r.model))];
+  if (models.length !== 1) throw new Error(`rows were served by ${models.join(', ')}`);
+
+  const current = skillHash(skillDir);
+  const seen = [...new Set(w.rows.map(r => r.skill_hash))];
+  if (seen.length !== 1 || seen[0] !== current)
+    throw new Error(`${withFlow}/${withVariant}: rows installed skill ${seen.join(', ') || '(none recorded)'}, `
+      + `but ${stW.skill_path} now hashes to ${current}. Re-measure the current skill.`);
+
+  const { effect, noise, verdict } = diffScore(w.all, o.all);
+
+  const acceptance = {
+    measured_at: now.toISOString().slice(0, 19),
+    model: models[0],
+    runner: stW.harness_paths?.[0] ?? null,
+    eval_type: 'quality-with-vs-without',
+    cases: ids.length,
+    reps: w.reps,
+    with_skill: w.all,
+    without_skill: o.all,
+    effect,
+    noise,
+    verdict,
+    test: { with_skill: splitScore(w.rows, stW.test_ids), without_skill: splitScore(o.rows, stO.test_ids) },
+    skill_hash: current,
+    cases_hash: createHash('sha256').update(readFileSync(casesFile)).digest('hex'),
+    flows: { with: withVariant, without: withoutVariant },
+    method: 'The same cases run as nested `claude -p` sessions in a fixture repository, once with the skill '
+      + 'installed and once without; a programmatic grader reads what the agent left. effect is the '
+      + 'difference of the two pass rates over (case, rep) rows; noise is the half-width of that difference.',
+  };
+  return { dest: writeBlock(skillDir, 'acceptance', acceptance), acceptance };
 }
 
 // The verdict follows from the numbers alone, so no one can talk a result up.
@@ -130,13 +206,21 @@ function climbSummary(flow, variant, st, finalRows) {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === import.meta.filename) {
-  const { values, positionals } = parseArgs({ allowPositionals: true, options: { climb: { type: 'boolean', default: false } } });
+  const { values, positionals } = parseArgs({ allowPositionals: true, options: {
+    climb: { type: 'boolean', default: false }, quality: { type: 'boolean', default: false } } });
   const [flow, variant] = positionals;
-  if (!flow || !variant) {
-    console.error('usage: node save-result.mjs <flow-dir> <variant> [--climb]');
+  if (!flow || !variant || (values.quality && !positionals[2])) {
+    console.error('usage: node save-result.mjs <flow-dir> <variant> [--climb]\n'
+      + '       node save-result.mjs --quality <with-flow> <variant> <without-flow> [<variant>]');
     process.exit(2);
   }
   try {
+    if (values.quality) {
+      const { dest, acceptance: a } = saveQuality(flow, variant, positionals[2], positionals[3]);
+      console.log(`saved ${dest}: with ${a.with_skill.mean} ±${a.with_skill.ci_half_width}, `
+        + `without ${a.without_skill.mean} ±${a.without_skill.ci_half_width}, effect ${a.effect} ±${a.noise} (${a.verdict})`);
+      process.exit(0);
+    }
     const { dest, trigger } = saveResult(flow, variant, { climb: values.climb });
     console.log(`saved ${dest}: ${trigger.best_score} (test ${trigger.test.mean} ±${trigger.test.ci_half_width})`
       + (trigger.hillclimb ? `, climb ${trigger.hillclimb.verdict}: ${trigger.hillclimb.baseline_test} -> ${trigger.hillclimb.final_test} in ${trigger.hillclimb.rounds} round(s)` : ''));

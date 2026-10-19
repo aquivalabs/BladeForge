@@ -158,18 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.85,
-    "skillscore": 0.95,
-    "guide_faults": [
-      "The skill's generic text points at a stale sibling the hooks-registry doc while the project's real SSOT is the mechanism doc; the with-guide agent had to catch and route around this itself via CLAUDE.md rather than the guide naming the right path."
-    ],
-    "verdict": "Guide turned a would-be duplicate-hook essay into a grounded reuse verdict: read the real registry, confirmed the hook and its two consumers already exist and are correctly placed/registered, and closed the task with zero new code — exactly the rubric's reuse-first, scope-by-consumer-count, registry-in-sync bar; baseline, lacking repo access, could only gesture at the same rules generically and explicitly flagged its own unverified assumptions."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

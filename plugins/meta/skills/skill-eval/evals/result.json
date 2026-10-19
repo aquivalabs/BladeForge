@@ -141,57 +141,57 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-10-19T12:00:00",
+    "scanned_at": "2026-10-19T22:30:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "91e68777a0c41fee2ae1abb32ef2a4b32eb8b7fd9266b1f9c118296e0cc76194",
+    "scanned_hash": "ba02e35c2d239c89cefa796f54263cb03c420b2e4bb3e4511dcc6f9c3de79572",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "SKILL.md addresses the skill author; the one agent-directed line forbids passing --approve-harness, which narrows what an agent may do; the freeze-rule paragraph is guidance to the author about which rubric cases may change"
+        "note": "SKILL.md addresses the skill author; the one agent-directed line forbids passing --approve-harness, which narrows what an agent may do; the freeze-rule paragraph is guidance to the author about which rubric cases may change; 2026-10-19 edit: the approve step now lets an agent pass --approve-harness only for runner changes already committed and covered by a passing /review attestation; it records a local hash in a gitignored flow dir and grants nothing outside it; a later 2026-10-19 edit adds one sentence: the runner itself refuses an approval no PASS attestation covers, which tightens the approve step"
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "the procedure runs repo scripts that write only under the gitignored .claude/hillclimb/ and the skill's own evals/result.json; nested claude -p calls go to the Anthropic API the user already uses"
+        "note": "the procedure runs repo scripts that write only under the gitignored .claude/hillclimb/ and the skill's own evals/result.json; nested claude -p calls go to the Anthropic API the user already uses; the edit names a local repo script that writes evals/result.json; nothing leaves the machine; 2026-10-19 edit: the approve step now lets an agent pass --approve-harness only for runner changes already committed and covered by a passing /review attestation; it records a local hash in a gitignored flow dir and grants nothing outside it; a later 2026-10-19 edit adds one sentence: the runner itself refuses an approval no PASS attestation covers, which tightens the approve step"
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "no embedded key, token or credential"
+        "note": "no embedded key, token or credential; the edit adds no key, token or credential; 2026-10-19 edit: the approve step now lets an agent pass --approve-harness only for runner changes already committed and covered by a passing /review attestation; it records a local hash in a gitignored flow dir and grants nothing outside it; a later 2026-10-19 edit adds one sentence: the runner itself refuses an approval no PASS attestation covers, which tightens the approve step"
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "the skill bundles no script any more; the repo scripts it names delete only their own sandbox dirs under the temp dir and that sandbox's auto-memory dir under ~/.claude/projects/<sandbox-slug>/, both derived from a fixed path, never a user path"
+        "note": "the skill bundles no script any more; the repo scripts it names delete only their own sandbox dirs under the temp dir and that sandbox's auto-memory dir under ~/.claude/projects/<sandbox-slug>/, both derived from a fixed path, never a user path; the edit adds no shell command beyond a mention of a local script that writes one JSON file; 2026-10-19 edit: the approve step now lets an agent pass --approve-harness only for runner changes already committed and covered by a passing /review attestation; it records a local hash in a gitignored flow dir and grants nothing outside it; a later 2026-10-19 edit adds one sentence: the runner itself refuses an approval no PASS attestation covers, which tightens the approve step"
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "plain prose and plain shell commands"
+        "note": "plain prose and plain shell commands; plain prose; 2026-10-19 edit: the approve step now lets an agent pass --approve-harness only for runner changes already committed and covered by a passing /review attestation; it records a local hash in a gitignored flow dir and grants nothing outside it; a later 2026-10-19 edit adds one sentence: the runner itself refuses an approval no PASS attestation covers, which tightens the approve step"
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "no undocumented host; the only network use is the nested claude -p calling the Anthropic API, stated in the skill"
+        "note": "no undocumented host; the only network use is the nested claude -p calling the Anthropic API, stated in the skill; the edit contacts no host; 2026-10-19 edit: the approve step now lets an agent pass --approve-harness only for runner changes already committed and covered by a passing /review attestation; it records a local hash in a gitignored flow dir and grants nothing outside it; a later 2026-10-19 edit adds one sentence: the runner itself refuses an approval no PASS attestation covers, which tightens the approve step"
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "no read of ~/.ssh, ~/.aws, .env, a keychain or a cookie store; nested runs use the user's existing claude login without reading it"
+        "note": "no read of ~/.ssh, ~/.aws, .env, a keychain or a cookie store; nested runs use the user's existing claude login without reading it; the edit reads no credential store; 2026-10-19 edit: the approve step now lets an agent pass --approve-harness only for runner changes already committed and covered by a passing /review attestation; it records a local hash in a gitignored flow dir and grants nothing outside it; a later 2026-10-19 edit adds one sentence: the runner itself refuses an approval no PASS attestation covers, which tightens the approve step"
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "no sudo, setuid, cron, shell profile or launch agent"
+        "note": "no sudo, setuid, cron, shell profile or launch agent; the edit adds no sudo, cron, profile or launch agent; 2026-10-19 edit: the approve step loosens a dev-process gate, not a system privilege: --approve-harness writes a hash into a local, gitignored _state.json, and only for code a passing /review already read; no sudo, cron, profile or launch agent; a later 2026-10-19 edit adds one sentence: the runner itself refuses an approval no PASS attestation covers, which tightens the approve step"
       }
     ]
   }

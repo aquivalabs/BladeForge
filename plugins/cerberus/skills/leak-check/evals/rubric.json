@@ -39,12 +39,25 @@
     {
       "query": "add a loading skeleton to the DataTable component",
       "should_trigger": false
+    },
+    {
+      "query": "push this branch to the public marketplace",
+      "should_trigger": true
+    },
+    {
+      "query": "I committed the skill fix, go ahead and push it",
+      "should_trigger": true
+    },
+    {
+      "query": "push the release tag for the frontend app",
+      "should_trigger": false
     }
   ],
   "acceptance": [
     "no real class/object/namespace/field/API name from a work codebase remains — each is rewritten to a neutral fictional demo (Order__c, WidgetConfig, myOrg, /api/items) reused across skills",
     "no secret, credential, real person name, email, or absolute path to a real machine survives the change",
     "no employer or client brand, and no aggregate 'this is one specific company's product' flavour, remains",
-    "each rewrite preserves the example's teaching value — a demo placeholder, not a redaction that breaks the point"
+    "each rewrite preserves the example's teaching value — a demo placeholder, not a redaction that breaks the point",
+    "before a push, no outgoing commit message, author, committer or branch name points to real work — a hit is reworded, reset or renamed, and the log is re-read after the fix"
   ]
 }

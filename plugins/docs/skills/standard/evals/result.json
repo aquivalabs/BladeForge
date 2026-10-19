@@ -174,19 +174,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.5,
-    "skillscore": 0.9,
-    "guide_faults": [
-      "The skill teaches placement/shape/index discipline thoroughly but never instructs the writer to verify a mechanism doc's technical claims against the actual shipped code first; for a layer whose whole premise is 'must change with the code it describes,' that's a load-bearing gap. It shows: the with-guide doc confidently describes a token-bucket algorithm split across three files (a project a file, a file) and an external-store option and a Retry-After header — none of which exist in the real a server file (fixed-window counter, single file, IP-only key via x-forwarded-for, X-RateLimit-* headers, no Retry-After, in-process Map only, no external store). Faithfully following the guide's shape produced a doc that is fluent and wrong.",
-      "The seeded worked example (templates/live-doc-example.md) is a bare four-section skeleton for a trivial one-function mechanism; this project's own existing mechanism docs (e.g. the mechanism doc) have already evolved past it — tables, cross-links to specs and BACKLOG gap files, inline caveats about known hardening gaps. The guide gives no signal for when a mechanism has outgrown the toy shape, so literal imitation (which the guide explicitly prescribes via its own 'delete the seeded example once a real mechanism exists' step) yields a page thinner than the house norm it's supposed to match."
-    ],
-    "verdict": "Guide won cleanly on structure — correct mechanism-vs-ADR-vs-skill placement, exact seeded shape, correct no-duplicate-index restraint, checkable update-trigger — versus a padded, generically-shaped isolated baseline; but neither agent grounded the doc in the real code, and the with-guide output stated specific wrong implementation details (token-bucket, files that don't exist) with more unearned confidence than the baseline's honest hedging."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-24T15:01:27",

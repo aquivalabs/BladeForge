@@ -166,16 +166,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.55,
-    "skillscore": 0.92,
-    "guide_faults": [],
-    "verdict": "Guide-driven output nails the skill's distinguishing Step 0 doc/skill-sync check (correctly scoping it to only the feature's owned mechanism doc) and mirrors the skill's exact execute-steps and finish-checklist verbatim, while the isolated baseline never performs any doc/skill ownership check and stays a generic templated plan rather than concrete ordered git commands — both split concerns atomically and order foundational-before-consumer reasonably, but only the guided run satisfies acceptance criterion 4."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

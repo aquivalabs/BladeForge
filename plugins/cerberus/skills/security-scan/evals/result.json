@@ -97,57 +97,57 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-08T16:50:42",
+    "scanned_at": "2026-10-19T19:30:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "e6f0bf62bf4de57679e15c999cf4e57da0a880f9215df58788330c624c4edc8c",
+    "scanned_hash": "11658a9077f2ca72952a92476dfed123f61243464f951cdb24a983bb26aabcd2",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "body addresses the human author; no directive aimed at a reading agent"
+        "note": "body addresses the human author; no directive aimed at a reading agent; the 2026-10-19 edit only renames the quality tool in prose; no new instruction to the agent beyond pointing at save-result.mjs --quality"
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "no code that sends repo/user/context data anywhere"
+        "note": "no code that sends repo/user/context data anywhere; the edit names a local repo script that writes evals/result.json; nothing leaves the machine"
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "no key, token, or credential embedded"
+        "note": "no key, token, or credential embedded; the edit adds no key, token or credential"
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "destructive strings appear only as prose examples of what to look for; none executed"
+        "note": "destructive strings appear only as prose examples of what to look for; none executed; the edit adds no shell command beyond a mention of a local script that writes one JSON file"
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "plain markdown throughout; nothing encoded or unreadable-on-purpose"
+        "note": "plain markdown throughout; nothing encoded or unreadable-on-purpose; plain prose"
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "no download-and-run or reach to an external host"
+        "note": "no download-and-run or reach to an external host; the edit contacts no host"
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "no read of ~/.ssh, ~/.aws, .env, keychain, cookies, or a token store"
+        "note": "no read of ~/.ssh, ~/.aws, .env, keychain, cookies, or a token store; the edit reads no credential store"
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "no sudo/setuid/persistence; no write outside the working tree"
+        "note": "no sudo/setuid/persistence; no write outside the working tree; the edit adds no sudo, cron, profile or launch agent"
       }
     ]
   }

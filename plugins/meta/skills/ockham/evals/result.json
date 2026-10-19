@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.75,
-    "skillscore": 0.92,
-    "guide_faults": [],
-    "verdict": "Guide-driven output explicitly ran all three gates, named concrete triggers per entity, reused the existing Badge primitive and TanStack Query (avoiding the baseline's rule-violating speculative Zustand store), and shipped 9 justified entities vs. the isolated baseline's ~15 ungated ones with no reuse check."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

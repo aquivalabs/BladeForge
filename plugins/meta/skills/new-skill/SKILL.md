@@ -168,7 +168,7 @@ expectations is not repeated there; it lives once, in `evals/rubric.json`.
    | `salesforce` | the Salesforce platform — Apex, LWC, org tooling |
    | `quality` | review, critique, security, tests, error handling |
    | `docs` | docs, writing, diagrams, voice |
-   | `authoring` | building skills themselves — scout, meta, skillaxe |
+   | `authoring` | building skills themselves — scout, meta |
    | `workflow` | process — commits, planning, routing, triage |
 
    `changes.tags` glossary (present these plain-language meanings when asking):
@@ -316,9 +316,10 @@ should-NOT-trigger query that fires is a real defect, not a rounding error.
 **A guide skill also needs its EFFECT measured, not just its trigger.** `meta:skill-eval` scores
 whether the description fires; it says nothing about whether the guidance improves the output once it
 does. If this skill's job is to shape what an agent produces — an authoring guide, a review lens, a
-house-convention skill — also invoke **`skillcraft:skillaxe`**: a with/without run that scores the
-guide's real effect and attributes each shortfall to the guide or the agent. Skip it only for a skill
-that produces nothing to shape.
+house-convention skill — it should also get the quality stage once it has a quality runner: 15 or
+more tasks built with `/claude-api build-eval`, each run with the skill and without it, saved with
+`save-result.mjs --quality`. `eval-gate` does not demand that record yet. `docs/mechanisms/skill-eval.md` describes the run. Skip it only for a
+skill that produces nothing to shape.
 
 **Run the scripts from the repository, not from the installed plugin cache.** The cache is keyed
 by version and lags behind. `meta:skill-eval` holds the full procedure; in short:
@@ -326,7 +327,7 @@ by version and lags behind. `meta:skill-eval` holds the full procedure; in short
 ```bash
 node scripts/hillclimb/new-flow.mjs <skill-dir>          # once per skill
 node scripts/hillclimb/trigger-runner.mjs --flow <flow> --variant baseline \
-  --model claude-opus-5-5 --reps 5 --concurrency 8      # the maintainer approves the harness first
+  --model claude-opus-5-5 --reps 5 --concurrency 8      # approve the harness first: meta:skill-eval step 3
 node scripts/hillclimb/save-result.mjs <flow> baseline
 ```
 

@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.2,
-    "skillscore": 1,
-    "guide_faults": [],
-    "verdict": "Both agents converted all four values correctly to rem (this task has no px-allowed edge cases to distinguish them); the guide added a bit more rigor — an explicit rule citation and a verification grep — while the isolated agent padded the answer with an unrequested, hedged guess at token variable names, so the guide's version is marginally cleaner but not meaningfully more correct."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

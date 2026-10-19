@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.3,
-    "skillscore": 0.92,
-    "guide_faults": [],
-    "verdict": "Guide-following output nails the rubric's specific asks (explicit twice-over abuse check, section-numbered N/A triage for secrets/token-boundary/injection) that the isolated baseline never performs explicitly, but both correctly caught the two load-bearing defects (missing WITH USER_MODE, missing with sharing) and the baseline was actually more exhaustive in raw finding count, so the net quality lift is real but modest."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

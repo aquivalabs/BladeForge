@@ -110,18 +110,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.55,
-    "skillscore": 0.95,
-    "guide_faults": [
-      "The guide's output format leans into a rule-by-rule audit narration (\"Rule 1... Rule 2...\") rather than producing an integrated design doc; this satisfies the rubric's checklist but yields less concrete, directly-usable output (no actual CSS/grid mechanics, no a11y/responsive treatment) than a plain competent design would naturally include."
-    ],
-    "verdict": "With-guide explicitly satisfies all six rubric criteria (chrome-vs-feature placement + folder path, primitives sourcing, routing-config discipline for nav, i18n, story convention) that the isolated baseline never addresses at all, though baseline compensates with richer concrete CSS/a11y/responsive detail the guide doesn't push for."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

@@ -41,6 +41,8 @@ client-specific onto one neutral fictional demo before it ships.
 The same hook runs a second head inward: **[`security-scan`](#security-scan)** walks an eight-point
 consumer-safety checklist so a skill you publish can never do something unsafe to whoever installs it.
 
+**A push is a gate too.** A commit carries a message, an author and a branch name, and none of them is a file, so the edit-time check never reads them — that is how a client name once escaped. A `PreToolUse` hook hands the outgoing commits to a nested `claude` judge before any `git push` an agent runs, and blocks a push that leaks or that it cannot judge. The agent cannot skip the judge by writing a marker; it could still forge the verdict cache from a shell on purpose, so this stops a forgotten check, not a determined one, and a push typed by a person in their own terminal is not seen at all. On Claude Code 2.1.292 or newer a push-guard mod judges them in-process first; an older Claude Code gets a red notice at session start to update.
+
 It ships in this marketplace and is enabled by default (`cerberus@bladeforge` in `.claude/settings.json`).
 
 ## Plugins
@@ -50,7 +52,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | Plugin | What it does | Skills |
 |---|---|---|
 | scout | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data. A SessionStart hook also warns when this project enables a plugin the machine never installed for it — the silent reason a skill goes missing. | [scout](#scout) · [plugin-sync](#plugin-sync) |
-| cerberus | Two-headed guard at the gate — a PostToolUse hook reminds on any skill/eval edit to run both agent passes: `leak-check` (outward — rewrites work/client fingerprints to a fictional demo before they ship) and `security-scan` (inward — an eight-point consumer-safety checklist so nothing unsafe reaches whoever installs the skill). No denylist by design. | [leak-check](#leak-check), [security-scan](#security-scan) |
+| cerberus | Two-headed guard at the gate — a PostToolUse hook reminds on any skill/eval edit to run both agent passes, and a push guard judges the outgoing commits before any `git push`: `leak-check` (outward — rewrites work/client fingerprints to a fictional demo before they ship) and `security-scan` (inward — an eight-point consumer-safety checklist so nothing unsafe reaches whoever installs the skill). No denylist by design. | [leak-check](#leak-check), [security-scan](#security-scan) |
 | cicero | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | critique | Adversarial critique — the house method for red-teaming a design, spec, or plan: diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize. Consumed by pipelines (speccy, a critic role) rather than reinvented. | [critique](#critique) |
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable React Flow + ELK page (classes+methods, objects, permission sets, relations); a diagram-model JSON hardened by parallel Sextant reviewers. | [diagram](#diagram) |
@@ -69,7 +71,6 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [review](#review) · [setup](#setup) |
 | review-workflow | Workflow script that dispatches the review plugin's lenses in parallel (five on by default, plus skill, leak and security-scan where enabled), reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | salesforce | Salesforce — LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
-| skillcraft | Skill quality & improvement — measure whether a guide skill helps, diagnose where it falls short, improve it without regressions. | [skillaxe](#skillaxe) |
 | tests | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories, matchers and fakes, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
 
 ## Skills
@@ -192,13 +193,6 @@ Plus the `/review` orchestrator, the reviewer agents, and the secret-scan + atte
 
 See [CLAUDE.example.md](CLAUDE.example.md) for a reference `CLAUDE.md` — how to
 wire these plugins into a repo and keep the config thin (rules live in skills).
-
-### skillcraft &nbsp;·&nbsp; [↑ Plugins](#plugins)
-- <a id="skillaxe"></a>**skillaxe** — Measure whether a guide skill actually improves the output it is
-  meant to help with, and improve it without regressions. Generates the same task with and without the
-  guide, judges the quality delta and per-rule instruction compliance, attributes each weak spot to the
-  guide or the agent, and — behind a mandatory anti-regression anchor — re-judges any fix. An
-  embedding-optional adaptation of SkillAxe (arXiv 2606.10546).
 
 ### tests &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="architecture"></a>**architecture** — The standard itself: which execution tier a test file belongs to and how its filename declares it, the numbered rules a test must satisfy, the fixed axis list a case space is derived from, one factory per entity, assertions that state the rule rather than its encoding, a JSON failure envelope every custom matcher fills in, and the coverage ratchet plus the mutation bar that keeps a coverage floor from being decoration. Carries a transition section, so a repository adopting it knows what is in force before every mechanism exists.

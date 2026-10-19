@@ -7,19 +7,22 @@
       "name": "cerberus:leak-check",
       "plugin": "cerberus",
       "plugin-version": "2.1.4",
-      "activates-when": "Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace \u2014 review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate \"this is one specific company's product\" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
+      "activates-when": "Use before committing OR PUSHING a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace \u2014 review the change, and before a push also the outgoing commits themselves (messages, author, committer, branch name), for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate \"this is one specific company's product\" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
       "category": "quality",
-      "purpose": "Agent judgment pass that reviews a skill/reference/script/eval change for anything pointing to a real work codebase \u2014 secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate \"one company's product\" flavor \u2014 and rewrites it to a neutral fictional demo.",
-      "best-for": "Any contributor to this public skills marketplace, right before committing a new or edited skill, reference, or eval fixture \u2014 also triggered automatically by the cerberus PostToolUse hook on skill edits.",
+      "purpose": "Agent judgment pass that reviews a skill/reference/script/eval change \u2014 and, before a push, the outgoing commits' messages, authors, committers and branch name \u2014 for anything pointing to a real work codebase (secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate \"one company's product\" flavor) and rewrites it to a neutral fictional demo.",
+      "best-for": "Any contributor to this public skills marketplace, right before committing or pushing a new or edited skill, reference, or eval fixture \u2014 also triggered automatically by the cerberus PostToolUse hook on skill edits, and asked for by the cerberus push guard when it blocks a push.",
       "needs": [],
       "changes": {
         "tags": [
-          "files"
+          "files",
+          "git"
         ],
-        "notes": "An agent judgment pass; rewrites the reviewed skill/reference/eval in place to replace a leaked real identifier with a neutral fictional demo. No network, no org, no money."
+        "notes": "An agent judgment pass; rewrites the reviewed skill/reference/eval in place to replace a leaked real identifier with a neutral fictional demo. Before a push it may also rewrite the user's own unpushed commits \u2014 amend or reword a message, reset a work-account author, rename the branch \u2014 each after saying so. No network, no org, no money."
       },
       "hooks": [
-        "PostToolUse"
+        "PostToolUse",
+        "PreToolUse",
+        "SessionStart"
       ]
     },
     {
@@ -38,7 +41,9 @@
         "notes": "An agent judgment pass; edits the reviewed skill/script to remove or rewrite an unsafe behaviour. No network, no org, no money."
       },
       "hooks": [
-        "PostToolUse"
+        "PostToolUse",
+        "PreToolUse",
+        "SessionStart"
       ]
     },
     {
@@ -713,26 +718,6 @@
         "PostToolUse",
         "UserPromptSubmit"
       ]
-    },
-    {
-      "name": "skillcraft:skillaxe",
-      "plugin": "skillcraft",
-      "plugin-version": "0.1.6",
-      "activates-when": "Use to diagnose, audit, or improve a GUIDE skill \u2014 one that tells an agent how to produce something (an authoring guide, a review lens, a house-convention skill). Fires when you ask: does this skill actually help or is it decorative; diagnose where a guide skill falls short and propose fixes; audit a skill and measure its real effect on the output; the guide skill doesn't seem to change what the agent produces, prove it either way; improve a guide skill without dropping what already worked; run a with-and-without comparison on a skill. It holds the comparison protocol itself \u2014 invoke it whenever someone is about to run such a diagnosis by hand, and whenever a prior edit made a skill worse and you need regression protection. Do NOT use to measure whether a skill's DESCRIPTION triggers (meta:skill-eval scores activation; this scores the produced result); to scaffold a brand-new skill (meta:new-skill); or to refresh a skill's metadata.yaml (meta:update-skill).",
-      "category": "authoring",
-      "purpose": "Measure whether a guide skill helps (with/without run), attribute shortfalls to the guide vs the agent, and improve it without regressions.",
-      "best-for": "Auditing a high-traffic guide skill, or one that seems not to help, before trusting or rewriting it.",
-      "needs": [
-        "meta:model-routing"
-      ],
-      "changes": {
-        "tags": [
-          "files",
-          "network"
-        ],
-        "notes": "During diagnosis it spawns subagents and writes generated skills + judgments to a scratch directory; its fix step edits the LIVE SKILL.md of the guide skill under test, behind the anti-regression anchor. The optional embedding axis fetches a sentence-transformers model from HuggingFace on first use (network), then runs locally \u2014 hence the network tag; the two LLM axes need no embedding model. Reads no secrets; touches no git/org/money."
-      },
-      "hooks": []
     },
     {
       "name": "tests:apex",

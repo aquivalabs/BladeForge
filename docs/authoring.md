@@ -91,15 +91,15 @@ Two properties, and they are measured **separately** because they fail separatel
    yours.
 
 2. **It changes the outcome.** A skill can fire flawlessly and change *nothing* — a costume
-   over the model's own instincts. This is the `acceptance` half, graded by
-   **`skillcraft:skillaxe`** (an embedding-optional adaptation of SkillAxe, arXiv
-   2606.10546). It gives an agent a real task *with* the guide, grades the output against
-   each `acceptance` line (one yes/no per line), then runs the **same task with the skill
-   switched off** and compares the two outputs *blind*. That off-run is what makes it
-   honest — without it you cannot tell *"the skill was read"* from *"the skill helped"*. It
-   reports `quality_impact` (did the guide move the result, −1…1) and `skillscore`
-   (instruction compliance, 0…1). It is run **locally and selectively** — a high-traffic
-   guide, a large rewrite — never in the gate.
+   over the model's own instincts. This is the `acceptance` half, the quality stage. Its eval
+   is 15 or more real tasks built with `/claude-api build-eval`. A quality runner runs each
+   task as an agent in a fixture repository, **once with the skill installed and once
+   without**, several times each, and a grader reads what the agent left. That second arm is
+   what makes it honest — without it you cannot tell *"the skill was read"* from *"the skill
+   helped"*. `scripts/hillclimb/save-result.mjs --quality` writes the record: both pass rates,
+   their difference as the `effect`, its `noise`, and a verdict computed from those two
+   numbers. It is run **locally**, by the author, never in the gate. The first quality runner
+   is `scripts/hillclimb/leak-check-runner.mjs`.
 
 And one gate rides on top: **it is safe to install.** A skill runs on someone else's
 machine, so `cerberus:security-scan` walks eight consumer-safety points (injection,
@@ -108,11 +108,11 @@ access, privilege escalation) before it ships. Consumer safety has **no skip fla
 
 **Why measured this way.** The two questions are kept apart on purpose: a skill that fires
 reliably while changing nothing looks radiant under triggering and hollow under acceptance,
-and merging the scores would let the hollow one borrow the radiant one's number. Acceptance
-uses **one yes/no per criterion** — not a holistic 1–10, which hides *which* part failed —
-and a **paired on/off design** (roughly ten tasks is the floor for a real effect). The
+and merging the scores would let the hollow one borrow the radiant one's number. Quality
+uses a **paired on/off design** over 15 or more tasks, because one task run once cannot tell a
+real effect from zero, and its grader checks concrete outcomes rather than a holistic 1–10. The
 blocking gate stays **deterministic and agent-free**: no LLM runs in CI, because a merge
-must not wait on a non-deterministic jury; `skillaxe` and the trigger runner are run by
+must not wait on a non-deterministic jury; the quality and trigger runners are run by
 the author, locally, on demand.
 
 The full mechanism — the record shapes, the freshness hashes, the exact gate rules — is

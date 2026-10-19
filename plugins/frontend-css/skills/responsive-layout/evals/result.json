@@ -174,18 +174,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.55,
-    "skillscore": 0.85,
-    "guide_faults": [
-      "The guide's rubric includes 'no content trapped behind sticky/fixed/overlay elements at any width', but the with-guide rationale table silently omits this axis entirely — no sticky header/footer/overlay is considered or ruled out as inapplicable, leaving it unclear whether it was checked or simply missed."
-    ],
-    "verdict": "Guide-assisted output hits ~10/11 rubric axes (respond-to() tokens, reflow-not-shrink, touch targets, chrome restraint, full-area states) versus the isolated baseline's ~8/11 — the baseline's biggest miss is exactly what the guide targets: hardcoded 768/1024/1440px breakpoints instead of project tokens."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

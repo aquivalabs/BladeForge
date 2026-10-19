@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.4,
-    "skillscore": 0.95,
-    "guide_faults": [],
-    "verdict": "Guide-following output hits all 5 rubric points explicitly (mechanism detection, key-reuse/no-duplication, identifiers-vs-prose split, namespace registration+build verification); the isolated baseline — though competent thanks to repo context already in CLAUDE.md — never mentions checking for an existing key to reuse or excluding identifiers/enums from translation, and spends effort on speculative multi-locale mirroring not evidenced in this repo."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

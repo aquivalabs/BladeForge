@@ -40,14 +40,13 @@ import { createHash } from 'node:crypto';
 import { closeSync, constants as FS, existsSync, fstatSync, ftruncateSync, lstatSync, mkdirSync, openSync, readFileSync, realpathSync, writeFileSync, writeSync } from 'node:fs';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { spawn } from 'node:child_process';
-import { readdirSync, rmSync } from 'node:fs';
+import { readdirSync } from 'node:fs';
 import { basename } from 'node:path';
-import { homedir, tmpdir } from 'node:os';
 // The one description reader, shared with save-result.mjs and eval-gate. List it
 // in `_state.json.harness_paths` so the harness gate covers it too.
 import { descriptionFrom, hashDescription, rawDescription } from './skill-description.mjs';
-import { skillSlug, triggerCases } from './flow-lib.mjs';
+import { gateApprovalFromArgv, skillSlug, triggerCases } from './flow-lib.mjs';
+import { sandbox, streamClaude } from './sandbox-lib.mjs';
 
 // Every output write refuses symlinks: the flow dir is model-influenced, and a
 // prompt-injected round can plant `results.jsonl -> ~/.bashrc` where the next
@@ -153,6 +152,11 @@ const REF_EXTS = ['', '.html', '.txt', '.json'];
 
 // --- fill these in ----------------------------------------------------------
 //
+// BladeForge: `--approve-harness` passes a gate first. A harness that a passing /review attestation
+// covers, committed as it is, is approved by whoever runs this; anything else only by a person who
+// types "approve" at a terminal. See gateApproval in flow-lib.mjs.
+gateApprovalFromArgv(fileURLToPath(import.meta.url));
+//
 // BladeForge: description-trigger eval for one skill. The skill under test is
 // `_state.json.skill_path` (repo-relative). Each case is one query from that
 // skill's `evals/rubric.json` `trigger` half. The current description is read
@@ -219,21 +223,27 @@ function probes(state) {
 /** Run one query in a sandbox project that holds the probe skill, alone or among its siblings. */
 async function runCase(input, ctx) {
   const { probe, files, descriptionHash } = probes(ctx.state);
-  const slot = acquireSlot();
-  const project = join(tmpdir(), `bf-trigger-${probe}-slot${slot}`);
+  const box = sandbox(`bf-trigger-${probe}`);
   try {
-    resetProject(project);
     for (const [name, content] of files) {
-      const sd = join(project, '.claude', 'skills', name);
+      const sd = join(box.dir, '.claude', 'skills', name);
       mkdirSync(sd, { recursive: true });
       writeFileSync(join(sd, 'SKILL.md'), content);
     }
-    const run = await probeRun(project, probe, input.prompt, ctx.model);
-    run.description_hash = descriptionHash;
-    return run;
+    let fired = false, firedOther = null;
+    const run = await streamClaude({
+      cwd: box.dir, prompt: input.prompt, model: ctx.model,
+      timeoutS: TRIGGER_TIMEOUT_S, timeoutReason: 'trigger_timeout',
+      onBlock: (block, stop) => {
+        if (block.type !== 'tool_use' || block.name !== 'Skill') return;
+        const called = String(block.input?.skill ?? block.input?.command ?? '');
+        if (called === probe || called.endsWith(`:${probe}`)) { fired = true; stop('skill_fired'); }
+        else firedOther ??= called;
+      },
+    });
+    return { ...run, output: fired ? 'fired' : 'not fired', fired, fired_other: firedOther, description_hash: descriptionHash };
   } finally {
-    rmSync(project, { recursive: true, force: true });
-    slots[slot] = false;
+    box.release();
   }
 }
 
@@ -246,90 +256,6 @@ function marketplaceSkills() {
     for (const s of readdirSync(sk)) if (existsSync(join(sk, s, 'SKILL.md'))) out.push(resolve(sk, s));
   }
   return out.sort();
-}
-
-// Each concurrent run gets a sandbox at a FIXED path, one per slot. The cwd
-// lands in the nested claude's system prompt, so a fresh mkdtemp path per case
-// missed the prompt cache on every run; a stable path lets runs after the first
-// read it. The dir is emptied before every run, so no case sees another's files.
-const slots = [];
-function acquireSlot() {
-  let k = slots.indexOf(false);
-  if (k < 0) k = slots.length;
-  slots[k] = true;
-  return k;
-}
-
-// A stable cwd also means a stable per-project state dir under ~/.claude/projects.
-// Auto-memory written there by one run would be read by the next, so it is
-// removed before every run.
-function resetProject(project) {
-  rmSync(project, { recursive: true, force: true });
-  mkdirSync(project, { recursive: true });
-  const slug = realpathSync(project).replace(/[^a-zA-Z0-9]/g, '-');
-  rmSync(join(homedir(), '.claude', 'projects', slug, 'memory'), { recursive: true, force: true });
-}
-
-function probeRun(project, probe, query, model) {
-  // Isolated: no user or local settings (so no user plugins, hooks or CLAUDE.md
-  // imports from settings) and no MCP servers. The probe skill and Claude Code's
-  // built-ins are all the nested run sees, so a score does not depend on whose
-  // machine took it, and the prompt prefix stays stable enough to cache.
-  const args = ['-p', query, '--output-format', 'stream-json', '--verbose',
-                '--setting-sources', 'project', '--strict-mcp-config'];
-  if (model) args.push('--model', model);
-  const env = { ...process.env };
-  delete env.CLAUDECODE;
-  return new Promise((resolveRun, rejectRun) => {
-    const child = spawn('claude', args, { cwd: project, env, stdio: ['ignore', 'pipe', 'ignore'] });
-    const transcript = [{ role: 'user', content: query }];
-    const usage = { input_tokens: 0, output_tokens: 0, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 };
-    const seenMsg = new Set();
-    let servedModel = null, firedOurs = false, firedOther = null, stop = 'end_turn', buf = '', settled = false;
-    const finish = (status) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      child.kill();
-      resolveRun({
-        output: firedOurs ? 'fired' : 'not fired',
-        fired: firedOurs, fired_other: firedOther,
-        transcript, model: servedModel, usage,
-        stop_reason: stop, status,
-      });
-    };
-    const timer = setTimeout(() => { stop = 'trigger_timeout'; finish('ok'); }, TRIGGER_TIMEOUT_S * 1000);
-    const onEvent = (ev) => {
-      if (ev.type !== 'assistant' || !ev.message) return;
-      const msg = ev.message;
-      if (msg.model) servedModel = msg.model;
-      if (msg.id && !seenMsg.has(msg.id) && msg.usage) {
-        seenMsg.add(msg.id);
-        for (const k of Object.keys(usage)) usage[k] += msg.usage[k] ?? 0;
-      }
-      for (const block of msg.content ?? []) {
-        if (block.type === 'text' && block.text) transcript.push({ role: 'assistant', content: block.text });
-        if (block.type !== 'tool_use') continue;
-        transcript.push({ role: 'tool_call', name: block.name, content: JSON.stringify(block.input ?? {}) });
-        if (block.name !== 'Skill') continue;
-        const called = String(block.input?.skill ?? block.input?.command ?? '');
-        if (called === probe || called.endsWith(`:${probe}`)) { firedOurs = true; stop = 'skill_fired'; finish('ok'); return; }
-        firedOther ??= called;
-      }
-    };
-    child.stdout.on('data', (chunk) => {
-      buf += chunk;
-      let nl;
-      while ((nl = buf.indexOf('\n')) >= 0) {
-        const line = buf.slice(0, nl); buf = buf.slice(nl + 1);
-        if (!line.trim()) continue;
-        try { onEvent(JSON.parse(line)); } catch { /* a non-JSON line is noise, not a verdict */ }
-        if (settled) return;
-      }
-    });
-    child.on('error', (e) => { if (!settled) { settled = true; clearTimeout(timer); rejectRun(e); } });
-    child.on('close', () => finish('ok'));
-  });
 }
 
 /** pass = the probe fired exactly when the rubric says it should. */

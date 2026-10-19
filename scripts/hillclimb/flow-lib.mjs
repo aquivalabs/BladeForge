@@ -3,16 +3,18 @@
 // gate-trusted trigger record must say about its origin. The runner imports this
 // module, so it is listed in `_state.json.harness_paths` and the harness gate
 // covers it.
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { existsSync, readdirSync, readFileSync, readSync, statSync } from 'node:fs';
+import { join, relative, resolve, sep } from 'node:path';
 
 /** The record contract: the writer stamps these, the gate checks them. */
 export const RUNNER = 'scripts/hillclimb/trigger-runner.mjs';
 export const MODEL = 'claude-opus-5-5';
 export const ENVIRONMENTS = ['isolated', 'crowded'];
 export const CLIMB_VERDICTS = ['improved', 'within-noise', 'regressed', 'no-headroom'];
-export const HARNESS_PATHS = [RUNNER, 'scripts/hillclimb/skill-description.mjs', 'scripts/hillclimb/flow-lib.mjs'];
+export const HARNESS_PATHS = [RUNNER, 'scripts/hillclimb/skill-description.mjs', 'scripts/hillclimb/flow-lib.mjs',
+  'scripts/hillclimb/sandbox-lib.mjs'];
 
 /** A case id: stable across rubric reordering, path-safe. Split ids and result rows both use it. */
 export function caseId(query) {
@@ -29,6 +31,25 @@ export function skillSlug(dir) {
 export function triggerCases(skillDir) {
   const trigger = readJson(join(skillDir, 'evals', 'rubric.json')).trigger;
   return trigger.map(q => ({ ...q, id: caseId(q.query) }));
+}
+
+/**
+ * The hash of what a quality run installs: every file of the skill except `evals/`, by
+ * relative path and content. A record keyed by it goes stale when the body or a reference
+ * changes.
+ */
+export function skillHash(skillDir) {
+  const root = resolve(skillDir);
+  const files = readdirSync(root, { recursive: true }).map(f => String(f).split(sep).join('/'))
+    .filter(f => !isEvalsPath(f) && statSync(join(root, f)).isFile()).sort();
+  const h = createHash('sha256');
+  for (const f of files) h.update(`${f}\0`).update(readFileSync(join(root, f))).update('\0');
+  return h.digest('hex');
+}
+
+/** A skill-relative path inside the skill's own `evals/`: never installed, never hashed. */
+export function isEvalsPath(rel) {
+  return rel === 'evals' || rel.startsWith('evals/');
 }
 
 export function readJson(file) {
@@ -58,4 +79,68 @@ export function splitScore(rows, ids) {
     mean: n ? round(mine.reduce((s, r) => s + Number(r.grade?.pass ?? 0), 0) / n) : null,
     ci_half_width: n ? round(1 / Math.sqrt(n)) : null,
   };
+}
+
+/**
+ * Two arms' pass rates compared: the effect is a minus b, the noise is the half-width of that
+ * difference, sqrt(1/n_a + 1/n_b) over rows, and the verdict follows from those two alone.
+ */
+export function diffScore(a, b) {
+  const effect = round(a.mean - b.mean);
+  const noise = round(Math.sqrt(1 / a.rows + 1 / b.rows));
+  return { effect, noise, verdict: effect > noise ? 'helps' : effect < -noise ? 'hurts' : 'within-noise' };
+}
+
+/**
+ * The gate in front of `--approve-harness`. An approval goes through when the harness as it is now
+ * was read by a passing `/review`: every harness file is committed, and some PASS attestation in
+ * `.review/attestations/` names a commit on this branch whose harness files are byte-identical to
+ * HEAD's. Anything else needs a person: the run asks for the word `approve` on a terminal, and
+ * without a terminal - an agent's shell - it refuses. Returns how the approval was granted, or
+ * null when it is refused.
+ */
+export function gateApproval(harnessFiles, { cwd = process.cwd(), ask = askOnTerminal } = {}) {
+  const git = (...a) => execFileSync('git', a, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  const ok = (...a) => { try { execFileSync('git', a, { cwd, stdio: 'ignore' }); return true; } catch { return false; } };
+  const files = [...new Set(harnessFiles.map(f => relative(resolve(cwd), resolve(cwd, f)).split(sep).join('/')))].sort();
+  const dirty = git('status', '--porcelain', '--', ...files);
+  let reason = `uncommitted harness changes:\n${dirty}`;
+  if (!dirty) {
+    const dir = join(cwd, '.review', 'attestations');
+    const shas = existsSync(dir) ? readdirSync(dir).filter(f => f.endsWith('.json')).flatMap(f => {
+      try { const a = readJson(join(dir, f)); return a.overall === 'PASS' && a.commitSha ? [a.commitSha] : []; } catch { return []; }
+    }) : [];
+    const covering = shas.find(sha => ok('merge-base', '--is-ancestor', sha, 'HEAD') && ok('diff', '--quiet', sha, 'HEAD', '--', ...files));
+    if (covering) return { by: 'review', commit: covering };
+    reason = 'no PASS review attestation covers the harness as committed at HEAD';
+  }
+  console.error(`approval needs a person: ${reason}`);
+  return ask() ? { by: 'person' } : null;
+}
+
+/**
+ * What a runner's fill-in calls at load: when the command line carries `--approve-harness`, the
+ * runner's own file and its flow's `_state.json.harness_paths` go through gateApproval before the
+ * scaffold below records the new sha. A refusal ends the process.
+ */
+export function gateApprovalFromArgv(runnerFile, argv = process.argv) {
+  if (!argv.includes('--approve-harness')) return null;
+  const flow = argv[argv.indexOf('--flow') + 1];
+  const st = flow && existsSync(join(flow, '_state.json')) ? readJson(join(flow, '_state.json')) : {};
+  const g = gateApproval([runnerFile, ...(Array.isArray(st.harness_paths) ? st.harness_paths : [])]);
+  if (!g) {
+    console.error('refused: run --approve-harness from your own terminal and type "approve", or commit the change and pass /review first.');
+    process.exit(2);
+  }
+  console.error(`approval granted by ${g.by === 'review' ? `review, attested at ${g.commit.slice(0, 12)}` : 'a person at the terminal'}`);
+  return g;
+}
+
+// A person types the word; a shell with no terminal attached, the way an agent runs, gets false.
+function askOnTerminal() {
+  if (!process.stdin.isTTY) return false;
+  process.stderr.write('Type "approve" to record this harness without a review: ');
+  const buf = Buffer.alloc(64);
+  const n = readSync(0, buf, 0, buf.length, null);
+  return buf.toString('utf8', 0, n).trim() === 'approve';
 }

@@ -158,18 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.85,
-    "skillscore": 0.95,
-    "guide_faults": [
-      "The error-boundary section's QueryState note ('use it instead of — not in addition to — a manual re-throw') is worded ambiguously enough that a stricter reading could wrongly suggest dropping the outer ErrorBoundary entirely once QueryState is used; the with-guide output happened to resolve it correctly (kept both), but the guide could state explicitly that QueryState only replaces the re-throw idiom, not the boundary wrap itself."
-    ],
-    "verdict": "The guide drove near-total compliance with all six rubric criteria (BEM/kebab-case/PascalCase, tokens+rem+breakpoints, i18n with correct namespace, ErrorBoundary/QueryState isolation, one controllable Storybook story) that the isolated baseline had no way to know and largely missed (CSS Modules instead of BEM/.scss, no i18n, no ErrorBoundary, one story per state instead of a controlled single story) — a substantial, clearly guide-attributable improvement."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

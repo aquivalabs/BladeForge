@@ -19,7 +19,8 @@ written beside the skill, carrying both hashes so the gate can tell a fresh meas
 one.
 
 **Not in scope:** whether the skill does its job WELL once it fires. That is the second metric — it
-reads `evals/rubric.json` and is run by `skillcraft:skillaxe`, not by this skill. A trigger score
+is the quality stage, run with the skill and without it and saved with
+`save-result.mjs --quality`, not by this skill. A trigger score
 of 10 says the model reached for the skill, nothing more.
 
 ---
@@ -53,8 +54,10 @@ plugin version and lags behind.
    ```
 2. **Price it before running.** Measure one case first and show the `meta:model-routing` cost table.
    A full pass at `--reps 5` is about 8% of a 5-hour window isolated, about 10% crowded.
-3. **The maintainer approves the harness.** The runner refuses to start until a human records its
-   hash. An agent must never pass `--approve-harness` — ask the user to run the first command with it.
+3. **Approve the harness only after review.** The runner refuses to start until its hash is
+   recorded. Pass `--approve-harness` yourself only when every harness change is committed and
+   covered by a passing `/review` attestation; otherwise ask the user to run the first command with it.
+   The runner checks this itself and refuses an approval no attestation covers.
 4. **Run, then save:**
    ```bash
    node scripts/hillclimb/trigger-runner.mjs --flow <flow> --variant baseline \

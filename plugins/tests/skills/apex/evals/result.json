@@ -190,16 +190,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.7,
-    "skillscore": 0.95,
-    "guide_faults": [],
-    "verdict": "Guided output hits all 11 rubric acceptance items (Assert.* messages, no hardcoded Ids, runAs positive+negative pair, the managed-package namespace namespace, three-terminal factories, re-SELECT-not-static-Id discipline); the isolated baseline fails message-bearing asserts, omits the negative-permission runAs case, under-specifies factory terminals, and drops the the managed-package namespace namespace entirely."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

@@ -199,9 +199,10 @@ including a shared block copied verbatim into every lens.
   scaffold; this skill re-asks only what an update reopens.
 - **`meta:skill-eval`** — whether the description still fires. Orthogonal to whether the body and the
   sidecar are honest, so a change set usually needs both. How to run it → the next section.
-- **`skillcraft:skillaxe`** — whether the guidance, once it fires, actually improves the output.
-  Orthogonal to both trigger and honesty; run it after reworking a skill whose job is to shape a
-  result, to confirm the rewrite helped and dropped nothing that worked.
+- **The quality stage** — whether the guidance, once it fires, actually improves the output: the
+  same tasks run with the skill and without it, saved with `save-result.mjs --quality`. Orthogonal
+  to both trigger and honesty; run it after reworking a skill whose job is to shape a result, to
+  confirm the rewrite helped and dropped nothing that worked.
 
 ---
 
@@ -219,7 +220,7 @@ by version and lags behind. `meta:skill-eval` holds the full procedure; in short
 ```bash
 node scripts/hillclimb/new-flow.mjs <skill-dir>          # once per skill
 node scripts/hillclimb/trigger-runner.mjs --flow <flow> --variant baseline \
-  --model claude-opus-5-5 --reps 5 --concurrency 8      # the maintainer approves the harness first
+  --model claude-opus-5-5 --reps 5 --concurrency 8      # approve the harness first: meta:skill-eval step 3
 node scripts/hillclimb/save-result.mjs <flow> baseline
 ```
 

@@ -110,18 +110,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.7,
-    "skillscore": 0.9,
-    "guide_faults": [
-      "Step 1.2 says \"search the catalog (Storybook)\" but gives no fallback method when no live Storybook/MCP search tool is available in-session — the with-guide agent hit exactly this gap and had to substitute a path-grep, leaving the catalog-search leg of Step 1 only partially satisfied."
-    ],
-    "verdict": "Guide-grounded output actually greps the real repo, finds real files (a file, a project a file), routes to the correct project-local skill, and gives a concrete conventions-matched folder structure; baseline invents plausible-but-wrong sibling component names (TextInput/NumberInput) with no repo verification — guide made this substantially more correct and actionable."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",
