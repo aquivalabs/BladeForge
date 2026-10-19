@@ -2,8 +2,8 @@
 
 Status: in progress, phases 3 and 4 done, 2b built · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: phases 3 and 4 merged as #96 (2026-10-19). Phase 2b is on `feat/routing-set`: the set and its
-runner are built; the first priced pass is next.
+Now: phases 3 and 4 merged as #96 (2026-10-19). Phase 2b is on `feat/routing-set`: the set, its
+runner and a first pass over the test split are done; the first climb target is `salesforce:dx_mcp`.
 
 Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
 likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
@@ -199,8 +199,23 @@ One rule changed from step 3 while building it. A `none` case came from one skil
 and often belongs to a sibling, so "nothing fired" would count correct routing as a miss. It now
 passes when the skill named in its `not` field was not called; the confusion lines show who took it.
 
-Next: price 20 cases and show the cost table. At an estimated 0.1% of a window per crowded run, one
-rep over 701 cases is most of a window, so the first full pass is likely the test split alone.
+**First pass, test split, 2026-10-19:** 219 cases, 1 rep, `claude-opus-5-5`, about 29% of a 5-hour
+window (0.13% per run, split across two windows so that no run fell into paid overage).
+
+- `none` cases: 99/100. The one miss is `salesforce:dx_mcp` firing on "what fields does
+  Pkg__Data_View__c have", a query from its own should-not list.
+- Owned cases: 91/119. Of the 28 misses, 21 reached no skill at all - the agent answered unaided -
+  and 7 reached the wrong one.
+- Pairs: `salesforce:sf-deploy-test` -> `salesforce:dx_mcp` 3 runs; `meta:model-routing` -> the
+  built-in `workflow-authoring` skill 2; `frontend-css:responsive-layout` ->
+  `frontend-react:component-placement` 1; `meta:ockham` -> `frontend-react:hooks-registry` 1.
+- With about 5 test cases per skill, a per-skill score carries ±0.45 or more; the pair counts and
+  the "no skill fired" counts are the usable signal so far.
+
+Reading: `dx_mcp` is too broad - it takes `sf-deploy-test`'s queries and one it should refuse - so
+its description is the first climb target. The larger finding is under-firing: `scout:scout`,
+`scout:plugin-sync`, `frontend-css:responsive-layout`, `tests:apex` and `i18n:ui-strings` each lost
+both or half of their test cases to "nothing fired".
 
 ### Phase 3 — guide-skill pilot
 
