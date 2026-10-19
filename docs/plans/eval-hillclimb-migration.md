@@ -1,11 +1,14 @@
 # Plan — move skill measurement onto build-eval and hillclimb
 
-Status: in progress, phase 2 · Owner: the marketplace maintainer · Started: 2026-10-16
+Status: in progress, phase 3 · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: all of phase 2 is on `feat/hillclimb-trigger-runner`, PR #95: the runner and the gate switch
-(steps 1–5), harness-approval reuse, the hillclimb record, the new gate requirements (steps 6–7),
-remeasured `new-skill` and `update-skill`, and the shared `flow-lib.mjs`. It waits on review and
-merge.
+Now: phase 2 merged as #95 (2026-10-19). Phase 3, the quality stage, is next on
+`feat/quality-stage`.
+
+Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
+likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
+measures every skill in one pass, so it does phase 5's re-measure far more cheaply than 45
+per-skill runs.
 
 ## Goal
 
