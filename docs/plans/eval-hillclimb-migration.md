@@ -3,7 +3,8 @@
 Status: in progress, phases 3 and 4 done, 2b built · Owner: the marketplace maintainer · Started: 2026-10-16
 
 Now: phases 3 and 4 merged as #96 (2026-10-19). Phase 2b is on `feat/routing-set`: the set, its
-runner and a first pass over the test split are done; the first climb target is `scout:plugin-sync`.
+runner and a first pass over the test split are done. Next: one shared fix for skills that do not
+fire, measured with the routing set.
 
 Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
 likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
@@ -219,7 +220,16 @@ the source-tracking error case stays `sf-deploy-test`'s alone. The report regrad
 the same `routingPass` rule the runner uses, so the correction applies to this pass too. The
 `scout:scout` misses are partly the crowded sandbox itself: with all 44 skills installed the agent
 answers "what skills exist" from its own skill list. `scout:plugin-sync` missed queries nearly
-verbatim from its description, so it is the first climb target. The larger finding is under-firing: `scout:scout`,
+verbatim from its description.
+
+**`plugin-sync` crowded baseline, 2026-10-19:** 12 cases at 5 reps. Test 0.85 ±0.22 on 4 cases,
+train 0.77; "a skill that should be available is missing from my session" fired 0/5. The headroom
+on test (0.15) is below the noise, so hillclimb would stop at its own Step 0.5. Parked: the
+maintainer does not use the skill, and per-skill climbs on 4-case test splits cannot show a gain.
+
+**Decided 2026-10-19: fix under-firing across all skills, not one at a time.** 21 of the 28 owned
+misses reached no skill. The next step reads those 21 descriptions for a shared cause, changes the
+house rule for writing descriptions once, and re-measures with the routing set. The larger finding is under-firing: `scout:scout`,
 `scout:plugin-sync`, `frontend-css:responsive-layout`, `tests:apex` and `i18n:ui-strings` each lost
 both or half of their test cases to "nothing fired".
 
