@@ -22,3 +22,6 @@ sync-local.sh
 
 # user-language docs (Russian reference copies, never published — repo is English-only)
 users-files/
+
+# hillclimb flow dirs: raw traces from local eval runs, never committed
+.claude/hillclimb/
