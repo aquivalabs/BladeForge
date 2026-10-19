@@ -191,11 +191,20 @@ least one boundary pair shows real headroom above noise, which gives hillclimb s
 
 ### Phase 3 — guide-skill pilot
 
-Decided 2026-10-19: the pilot is `git:commit`. Each case runs the same dirty repository twice,
-with the skill and without it. Cases are synthesized on a fictional demo product around 3–5 real
-situations the maintainer describes, so no client data reaches the repo. Grading is programmatic
-on the resulting commits: no commit mixes concerns, every commit has a conventional prefix,
-foundations land before their consumers, and every commit builds. There is no LLM judge.
+Decided 2026-10-19: the pilot is `cerberus:leak-check`, not `git:commit`. `git:commit` already
+splits commits well, so its own contract has no headroom, and a skill's eval measures only that
+skill's contract. `leak-check` has a known, critical failure inside its contract: a client name
+reached a commit unflagged. Each case runs twice, with the skill and without it, on a mini
+marketplace whose demo skill change carries planted fingerprints of a fictional client, Halvorsen
+Ledger. Ten cases check files before a commit. Three check commits that already carry the leak in
+the message or the author, behind a pre-push request. Three controls must come through unchanged.
+Grading is programmatic: no planted fingerprint is left in the pushed tree, the messages or the
+authors; the example keeps its teaching value; a control is committed unchanged. An LLM judge for
+the aggregate "domain flavour" waits for a second iteration.
+
+Found while designing it, and fixed outside the eval: `cerberus` runs on file edits only. A commit
+message and its author are written after that check, so nothing ever scanned them. A pre-push
+trigger for `leak-check` over the outgoing commits is a plain hook change, tracked as its own step.
 
 Pick the guide skill when the phase starts. My lean is `git:commit`. It runs every day, so real
 transcripts exist, and build-eval takes cases from transcripts first.
