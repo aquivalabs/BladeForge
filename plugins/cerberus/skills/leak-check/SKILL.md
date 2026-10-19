@@ -1,5 +1,5 @@
 ---
-description: Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace — review the change for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate "this is one specific company's product" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.
+description: Use before committing OR PUSHING a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace — review the change, and before a push also the outgoing commits themselves (messages, author, committer, branch name), for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate "this is one specific company's product" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.
 ---
 
 # cerberus:leak-check — nothing that points to real work leaves the gate
@@ -14,7 +14,7 @@ rewrite every hit.
 ## Contract
 
 **In:** a new or edited skill, its `references/`, its bundled `scripts/`, or its eval fixtures — about to be committed to this
-PUBLIC marketplace.
+PUBLIC marketplace, or the commits about to be pushed with it.
 
 **Out:** nothing in the change points to a real work codebase — every real class/object/namespace/
 field/org/ticket name, secret, real person, email, absolute path, or employer/client brand is rewritten
@@ -42,6 +42,24 @@ breaking the example's teaching value. The checkable expectations are in `evals/
    one specific product. No single word leaks; the cluster does. This is the one a regex
    can never catch — it needs your read of the whole.
 8. **Tickets** — real issue keys (`ABC-1234`).
+
+## Before a push: the commits leave too
+
+A push publishes more than files. Every outgoing commit carries a message, an author, a committer,
+and the branch name rides along — and none of them is a file, so a file-only check never sees
+them. This is where a client name actually escaped once. On "push", "ship it" or any request that
+sends a branch out, read what would leave:
+
+```bash
+git log --format='%h %an <%ae> / %cn <%ce>%n%B%n---' @{upstream}..HEAD   # or origin/main..HEAD
+git branch --show-current
+```
+
+Hunt the same eight fingerprints there. A hit in the latest message → `git commit --amend -m`; in an
+older one → reword it with an interactive-free rebase or tell the user which commit needs it; a
+work-account author → `git commit --amend --reset-author` with a neutral identity, after saying so;
+a branch name → rename it before the push. Then re-read the log — a fix you did not re-check is a
+guess.
 
 ## The rule
 

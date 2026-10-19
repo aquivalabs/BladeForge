@@ -39,6 +39,18 @@
     {
       "query": "add a loading skeleton to the DataTable component",
       "should_trigger": false
+    },
+    {
+      "query": "push this branch to the public marketplace",
+      "should_trigger": true
+    },
+    {
+      "query": "I committed the skill fix, go ahead and push it",
+      "should_trigger": true
+    },
+    {
+      "query": "push the release tag for the frontend app",
+      "should_trigger": false
     }
   ],
   "acceptance": [

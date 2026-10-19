@@ -1,153 +1,206 @@
 {
+  "acceptance": null,
   "trigger": {
     "skill": "leak-check",
-    "measured_at": "2026-09-08T15:33:19",
-    "model": "sonnet",
-    "runs_per_query": 3,
-    "best_score": "9/10",
-    "accuracy": 0.9,
-    "baseline_accuracy": 0.8,
-    "description_hash": "d261df5d2f2e741c6b000a57a06349ee3a5a46b7eae90a2d0f0712003713412e",
-    "queryset_hash": "9920588d945b6f9ad6435c63b5db64fa3f169a5129c399c3cd22610b52bd7bbf",
+    "measured_at": "2026-10-19T12:11:42",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "65/65",
+    "accuracy": 1,
+    "baseline_accuracy": null,
+    "description_hash": "8d7ccb2214a13f912a63ab162260e95e06eb64b0d9440bb3df512b85573032e9",
+    "queryset_hash": "80f79131f2b0ea578042bb18ae9c28b759cf230b6214cce65051f7cf68b473e0",
     "eval_type": "description-triggering",
-    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "isolated",
+    "flow_variant": "baseline",
+    "cases": 13,
+    "train": {
+      "cases": 8,
+      "rows": 40,
+      "mean": 1,
+      "ci_half_width": 0.158
+    },
+    "test": {
+      "cases": 5,
+      "rows": 25,
+      "mean": 1,
+      "ci_half_width": 0.2
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
     "results": [
       {
         "query": "i just wrote a new skill's SKILL.md — check it for leaks before i commit it to the public marketplace",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 3,
-        "trigger_rate": 0.6666666666666666,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "review this eval fixture, does it leak any real class or object names from our codebase before i push?",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 3,
-        "trigger_rate": 0.6666666666666666,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "i renamed some example objects in the salesforce skill references — make sure nothing points to a real work project",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "about to publish this skill — does any example look copied from real work instead of a fictional demo?",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "the cerberus hook flagged my skill edit — run the leak check on it",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "scrub this plugin's examples down to a neutral demo product before it ships publicly",
         "should_trigger": true,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": false
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "fix the failing unit test in the checkout service",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": true
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "rename this local variable across the current file",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": true
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "write a conventional-commit message for these staged changes",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": true
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "add a loading skeleton to the DataTable component",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": true
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "push this branch to the public marketplace",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "I committed the skill fix, go ahead and push it",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "push the release tag for the frontend app",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
       }
     ]
   },
-  "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-08T17:21:22",
+    "scanned_at": "2026-10-19T14:00:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "62928e66fcee6de530fb1c64552e0451e2246832ec1a71d71bd7f0f99e55557a",
+    "scanned_hash": "3746a61411c77d41b2a514c42fd3610bf3081bee3d06c63fbb4be8b00d444cb0",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "instructional prose only, no directives steering the reading model beyond normal skill guidance"
+        "note": "the body addresses the agent running the check; the new pre-push section tells it which git commands to read, nothing hidden"
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "no network calls or data transmission anywhere in the file"
+        "note": "git log and git branch read only local commit metadata; nothing is sent anywhere"
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "only placeholder examples like /Users/<name>/... and ABC-1234, no real embedded credentials"
+        "note": "no key, token or credential; the example secret lives only in the eval fixture, which is not skill material"
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "mentions git filter-repo and force-push only as prose advice for escalation scenarios, not executed by any script"
+        "note": "the only writes it suggests are amend, a non-interactive reword and a branch rename on the user's own unpushed commits, each after saying so"
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "plain readable markdown, no encoded payloads"
+        "note": "plain prose and two read-only shell lines"
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "no fetch/download logic present; skill has no scripts/ directory at all"
+        "note": "no host is contacted"
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "no reading of ~/.ssh, .env, keychain, etc."
+        "note": "it never reads a credential store; it reads commit author fields"
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "no sudo/setuid/persistence mechanisms; skill is documentation-only with no scripts"
+        "note": "no sudo, setuid, cron, shell profile or launch agent"
       }
     ]
   }
