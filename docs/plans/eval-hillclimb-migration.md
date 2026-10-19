@@ -231,6 +231,26 @@ or author shipped. Its description says "before committing" and never mentions p
 authors. That is the hillclimb target. The test split holds only one push case, so the best
 possible test gain (0.2) is inside the noise (±0.26). Six more push cases come first.
 
+**Done 2026-10-19:** `leak-check`'s description and body now cover pushing — the outgoing commits'
+messages, authors and branch name. Push cases went from 1/9 to 9/9 with the skill, file and control
+cases held at 13/13, and triggers measured 65/65 including three new push queries. A full hillclimb
+was not needed: the baseline named the cause.
+
+**Decided, not yet built — guarding the push itself** (the skill only helps when it fires):
+
+- *Layer 2, needed:* a classic `PreToolUse` hook in `cerberus` on `Bash` that stops `git push` until
+  `leak-check` has read the outgoing commits. It works in every Claude Code version and every repo
+  that installs `cerberus`.
+- *Layer 3, needed:* a function-hooks mod — `on('tool.call', { tool: 'Bash' })` — that sees every
+  `git push`, reads the outgoing log, and judges it with `$.model.complete` before the push runs,
+  with a red band above the prompt on a hit. Older versions do not load mods, so a classic
+  `SessionStart` hook in `cerberus` checks `claude --version` and prints a large red notice to
+  update, following `scout`'s start-of-session guard. Pin the minimum to the version it is
+  tested on (2.1.292); the docs name no minimum.
+- *Not needed:* a new review lens. The `review` plugin's `leak` lens already runs `cerberus`.
+- *Later:* rework `review` as a whole. One decided point: it runs only after a local commit, on
+  committed work.
+
 ### Phase 4 — switch quality, delete skillaxe
 
 1. The quality flow writes an `acceptance` block into `result.json` that carries case count, reps
