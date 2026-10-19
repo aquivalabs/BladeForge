@@ -11,7 +11,7 @@ the mistake the design exists to prevent.
 | metric | question | status |
 |---|---|---|
 | triggering | is the skill reached for when it should be? | **built** — `scripts/hillclimb/trigger-runner.mjs` |
-| acceptance | does the result come out as promised? | the structural requirement (file + Contract) is on the gate; the LLM grader is `skillcraft:skillaxe` — see below |
+| acceptance | does the result come out as promised? | the structural requirement (file + Contract) is on the gate; the quality stage is **built for one skill** — `scripts/hillclimb/leak-check-runner.mjs`, see below |
 
 The parts:
 
@@ -50,7 +50,7 @@ evals/
   rubric.json    { "trigger": [ did it FIRE?  labelled queries ],
                    "acceptance": [ did it WORK?  expectations about the result ] }
   result.json    { "trigger": { the recorded trigger run },
-                   "acceptance": { the recorded skillaxe run, or null },
+                   "acceptance": { the recorded quality run, or null },
                    "security": { the recorded eight-point safety walk } }
 ```
 
@@ -96,8 +96,8 @@ Written by `scripts/hillclimb/save-result.mjs` from a runner variant's raw `resu
 refuses a variant that is incomplete, mixes models, or measured a description other than the one
 `SKILL.md` holds now — every row records the description hash it measured. `trigger` carries the
 queryset hash, the score over (case, rep) rows, the model and reps used, the environment, the train
-and test scores each with its noise interval, the date, the method, and the per-query rows; `acceptance` carries the skillaxe run, or `null` until one
-has been taken; `security` carries the eight-point walk, written by a different mechanism entirely.
+and test scores each with its noise interval, the date, the method, and the per-query rows; `acceptance` carries the quality run, written by
+`save-result.mjs --quality`, or `null` until one has been taken; `security` carries the eight-point walk, written by a different mechanism entirely.
 
 **A run replaces `trigger` and carries every other key forward untouched.** It used to carry only
 `acceptance`, by name — so re-scoring a description silently deleted the `security` walk beside it
@@ -140,21 +140,39 @@ measured, so editing either marks the record stale. Dropping `description_hash` 
 description keep an old score — and the description is precisely what this eval measures. That
 docstring rationale comes from the original implementation and is the reason the field exists.
 
-The `acceptance` half stays `null` until `skillcraft:skillaxe` runs; a run fills it with the
-diagnostic score:
+The `acceptance` half stays `null` until a quality run is saved with
+`save-result.mjs --quality <with-flow> <variant> <without-flow> [<variant>]`. It refuses unless both
+arms cover every case in the suite at the same reps on one model, and unless every row of the with
+arm installed the skill as it is now — each row records the `skill_hash` of what it installed. A
+saved record:
 
 ```json
 {
-  "runner": "skillcraft:skillaxe",
-  "measured_at": "2026-09-07",
-  "model": "sonnet",
-  "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-  "quality_impact": 0.75,
-  "skillscore": 0.92,
-  "guide_faults": ["a fixable weak spot the guide itself owns, or none"],
-  "verdict": "one-line summary of whether the guide earned its keep"
+  "measured_at": "2026-10-19T18:00:00",
+  "model": "claude-opus-5-5",
+  "runner": "scripts/hillclimb/leak-check-runner.mjs",
+  "eval_type": "quality-with-vs-without",
+  "cases": 16,
+  "reps": 3,
+  "with_skill": { "cases": 16, "rows": 48, "mean": 0.833, "ci_half_width": 0.144 },
+  "without_skill": { "cases": 16, "rows": 48, "mean": 0.188, "ci_half_width": 0.144 },
+  "effect": 0.646,
+  "noise": 0.204,
+  "verdict": "helps",
+  "test": { "with_skill": { "...": "..." }, "without_skill": { "...": "..." } },
+  "skill_hash": "every skill file except evals/, by path and content",
+  "cases_hash": "the cases file",
+  "flows": { "with": "v1", "without": "baseline" },
+  "method": "..."
 }
 ```
+
+`effect` is the with-arm pass rate minus the without-arm pass rate. `noise` is the half-width of that
+difference, `sqrt(1/n_with + 1/n_without)` over rows. The verdict follows from those two numbers
+alone: `helps` when the effect is above the noise, `hurts` when it is below minus the noise, and
+`within-noise` otherwise. The 28 records the earlier single-task grader wrote were removed in phase 4
+of the migration plan: one task run once cannot tell a real effect from zero, so a skill without a
+quality record reads as not measured.
 
 `hillclimb` appears only after a climb. Its verdict is computed from the numbers alone —
 `improved`, `within-noise`, `regressed` or `no-headroom`, with the baseline test interval as the
@@ -230,50 +248,36 @@ written walk stale, on that skill only, with no way to reproduce it locally.
 run locally by the author, on demand. The gate checks that the `acceptance` half of `rubric.json` and a `## Contract` heading are PRESENT on a touched skill (deterministic, step 5); it does not GRADE the result against them on a PR — that
 needs an agent to perform the task and a grader to judge the output.
 
-## The acceptance metric — built as `skillcraft:skillaxe`
+## The quality stage
 
-The LLM grader that reads the `acceptance` half of `rubric.json` and judges whether the guidance actually improved the
-result is `skillcraft:skillaxe` — an embedding-optional adaptation of SkillAxe (arXiv 2606.10546). It
-generates with and without the guide (isolated baseline), scores Quality Impact and Instruction
-Compliance against the skill's `rubric.json` acceptance, and attributes each weak spot to the guide or the
-agent. It is run locally and selectively (a high-traffic guide, a large rewrite), never on a PR — the
-design below records why the trigger scorer could not be extended to cover it.
+The quality stage answers the second question: once the skill fired, does the agent do the job better
+than without it? A quality eval is 15 or more real tasks, built with `/claude-api build-eval`, with a
+programmatic grader where the outcome can be read off the result.
 
 **Why the trigger runner cannot be extended to cover it.** `trigger-runner.mjs` sends a query and
 watches whether the Skill tool fires. It never performs the task, so there is no result for it to
 judge. Triggering and acceptance need different runs, not different flags.
 
-**The shape of the run:**
+**The shape of the run**, as `scripts/hillclimb/leak-check-runner.mjs` does it for
+`cerberus:leak-check`:
 
 ```text
-1  give an agent a real task, of the kind the skill exists for
-2  it works, with the skill available
-3  a grader checks the result against each acceptance line of rubric.json — one yes/no per line
-4  the SAME task runs again with the skill disabled
-5  the grader compares the two outputs BLIND, not told which had the skill
+1  build a fixture repository for the case — the task's starting state
+2  run the agent there on the case's plain request, as a nested claude -p
+3  the "with" arm installs the skill first; the "without" arm does not
+4  a grader reads what the agent left — files, commits, authors — against the case's ground truth
+5  save-result.mjs --quality compares the two arms over the same cases and reps
 ```
 
-Step 4 is what makes it honest. Without it, a passing result cannot be separated from a model that
-would have done the same thing unaided — the difference between "the skill was read" and "the skill
-changed something".
+Step 3 is what makes it honest. Without the second arm, a passing result cannot be separated from a
+model that would have done the same thing unaided. The requests stay plain — "commit this", "push
+this branch" — because a prompt that names the check hands the without arm the answer.
 
-**Constraints that shape it**, from the research behind this programme:
+**What stays on the gate.** `scripts/validate_acceptance.py` and gate step 5 still require the
+`acceptance` list in `rubric.json` and a `## Contract` heading on a touched skill. The list stays the
+input a quality grader reads; the gate checks only that it is present, never grades against it.
 
-- **One yes/no per criterion, never one holistic score.** Decomposed checks are measurably more
-  reliable than a 1–10 judgment, and a single number hides which part failed.
-- **The grader gets a rubric and reasons before scoring.** A bare score correlates poorly with human
-  judgment; a chain-of-thought walk over stated criteria correlates far better.
-- **Judge bias is real and has known mitigations**: swap the order of the two outputs and require
-  agreement, watch for length being rewarded on its own, and avoid a judge from the same family as
-  the actor where possible.
-- **Sample size is the honest limit.** A paired design — same task, skill on and off — is the right
-  one, and roughly ten paired tasks is the floor for a large effect. A difference visible only across
-  hundreds of runs is a difference not worth the document.
-- **Never in CI.** It spawns agents; the gate stays deterministic.
-
-**When to reach for it:** now that the skills carry a `rubric.json`, the criteria have settled
-into a shape worth grading against. Run it locally and selectively — a high-traffic guide, a large
-rewrite — never on a PR.
+**Never in CI.** It spawns agents; the gate stays deterministic.
 
 ## Running one
 
@@ -282,6 +286,17 @@ node scripts/hillclimb/new-flow.mjs plugins/<domain>/skills/<name>   # once; add
 node scripts/hillclimb/trigger-runner.mjs --flow .claude/hillclimb/<flow> --variant baseline \
     --model claude-opus-5-5 --reps 5 --concurrency 8
 node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> baseline
+```
+
+A quality run uses two flows over one cases file, one per arm, and the runner written for that skill:
+
+```bash
+node scripts/hillclimb/leak-check-runner.mjs --flow .claude/hillclimb/leak-check-with --variant v2 \
+    --model claude-opus-5-5 --reps 3 --concurrency 4
+node scripts/hillclimb/leak-check-runner.mjs --flow .claude/hillclimb/leak-check-without --variant v2 \
+    --model claude-opus-5-5 --reps 3 --concurrency 4
+node scripts/hillclimb/save-result.mjs --quality .claude/hillclimb/leak-check-with v2 \
+    .claude/hillclimb/leak-check-without v2
 ```
 
 The runner refuses to start until a human has approved its current code with `--approve-harness`;

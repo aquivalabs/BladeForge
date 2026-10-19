@@ -52,7 +52,7 @@ ALLOWED_CATEGORIES = {
     "salesforce",  # the Salesforce platform — Apex, LWC, org tooling
     "quality",     # review, critique, security, tests, error handling
     "docs",        # docs, writing, diagrams, voice
-    "authoring",   # building skills themselves — scout, meta, skillaxe
+    "authoring",   # building skills themselves — scout, meta
     "workflow",    # process — commits, planning, routing, triage
 }
 

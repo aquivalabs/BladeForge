@@ -74,19 +74,21 @@ THIS ONE, OR THE NEIGHBOUR
    some fired. some, mercifully, did not.  ~ ~</div>
 
     <div class="j-entry"><span>Day the Third</span><span class="n">— the helping, and the honest trick</span></div>
-    <p>The second question needs a different run entirely — you cannot learn whether guidance <em>helped</em> by watching whether a tool fired. So acceptance is graded by a separate rite, built as <code>skillcraft:skillaxe</code>, an embedding-optional adaptation of SkillAxe (arXiv 2606.10546). It gives an agent a real task, lets it work <em>with</em> the skill, and grades the output against the <code>acceptance</code> half of the rubric — one yes/no per line, never one holistic 1–10 number, because a decomposed check is measurably more reliable and a single score hides which part failed.</p>
-    <p>Then comes the step that makes the whole thing honest. <strong>It runs the same task again with the skill switched off</strong>, and the grader compares the two outputs <em>blind</em> — not told which had the skill. Without that fourth step you cannot separate <em>"the skill was read"</em> from <em>"the skill changed something"</em>, and the difference between those two is the entire reason the document exists.</p>
+    <p>The second question needs a different run entirely — you cannot learn whether guidance <em>helped</em> by watching whether a tool fired. The first rite for it took one task per skill, run once with the guide and once without, judged by a model. It produced a tidy number for every skill, and every one of those numbers rested on a single task run once. One task cannot tell a real effect from zero. The numbers were struck from the record, and each skill now reads <em>not measured</em> until it is measured properly.</p>
+    <p>The rite that replaced it keeps the honest step and drops the single task. A quality eval is <strong>fifteen or more real tasks</strong>, built with Claude Code's <code>/claude-api build-eval</code>. Each task runs as an agent in a small fixture repository, <strong>once with the skill installed and once without</strong>, several times each, and a grader reads what the agent actually left behind. Without the second arm you cannot separate <em>"the skill was read"</em> from <em>"the skill changed something"</em>, and the difference between those two is the entire reason the document exists.</p>
     <div class="fragment">
-      <div class="cap">recovered fragment — result.json, the acceptance half, once skillaxe has run</div>
+      <div class="cap">recovered fragment — result.json, the acceptance half, from the leak-check pilot</div>
       <pre><code>"acceptance": {
-  "runner": "skillcraft:skillaxe",
-  "method": "generate with-guide vs isolated baseline, LLM judge vs rubric acceptance",
-  "quality_impact": 0.75,   // d·m, in [-1, 1] — did the guide move the result
-  "skillscore": 0.92,       // instruction compliance, 0..1
-  "guide_faults": ["a weak spot the guide itself owns, or none"]
+  "eval_type": "quality-with-vs-without",
+  "cases": 16, "reps": 3,
+  "with_skill":    { "mean": 0.83, "ci_half_width": 0.14 },
+  "without_skill": { "mean": 0.19, "ci_half_width": 0.14 },
+  "effect": 0.65,   // with minus without
+  "noise": 0.2,     // half-width of that difference
+  "verdict": "helps"
 }</code></pre>
     </div>
-    <p>It is deliberately not run in the gate. It spawns agents; agents are expensive and non-deterministic; a merge must not wait on a jury. So skillaxe is run <em>locally and selectively</em> — a high-traffic guide, a large rewrite — and roughly ten paired tasks is the floor. A difference visible only across hundreds of runs is a difference not worth the ink.</p>
+    <p>The verdict is computed from two numbers and nothing else: an effect larger than its noise <em>helps</em>, one smaller than minus the noise <em>hurts</em>, and everything between is <em>within noise</em>. Nobody gets to talk a result up. It is deliberately not run in the gate. It spawns agents; agents are expensive and non-deterministic; a merge must not wait on a jury. The gate only reads the record the run left.</p>
 
     <div class="j-entry"><span>Day the Fourth</span><span class="n">— the third thing, that harms the reader</span></div>
     <p>A skill runs on someone else's machine. So a third confirmation rides in the same per-skill file, written not by the scorer but by <code>cerberus:security-scan</code>: an eight-point consumer-safety walk — prompt-injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation — one verdict per point, and the whole passes only when none is flagged.</p>
@@ -96,7 +98,7 @@ THIS ONE, OR THE NEIGHBOUR
       <span class="lab">Editor's note — for those untouched by these arts</span>
       <dl>
         <dt>rubric.json</dt><dd>what a skill is measured <em>against</em>: the trigger queries and the acceptance claims.</dd>
-        <dt>result.json</dt><dd>what the last run <em>measured</em>: the trigger score, the skillaxe run (or null), the safety walk.</dd>
+        <dt>result.json</dt><dd>what the last run <em>measured</em>: the trigger score, the quality record (or null), the safety walk.</dd>
         <dt>eval-gate</dt><dd>the deterministic check that blocks a touched skill whose measurement is missing or stale.</dd>
         <dt>material hash</dt><dd>a fingerprint of everything a consumer actually runs; when it changes, the safety scan is stale.</dd>
       </dl>
@@ -118,11 +120,11 @@ THIS ONE, OR THE NEIGHBOUR
     <p class="sub">What must never be done again — stated plainly, so a reader who skips the rest still leaves with every lesson.</p>
     <ol>
       <li><b>Measure two questions, never one.</b> Firing and helping are separate metrics with separate runs. A skill that fires while changing nothing must not be able to borrow the trigger score — keep the halves in one file, scored apart.</li>
-      <li><b>Grade acceptance against a baseline with the skill OFF.</b> Blind, paired, same task both ways. Otherwise a green result cannot be told from a model that needed no help.</li>
+      <li><b>Grade quality against a baseline with the skill OFF.</b> The same tasks both ways, many of them, several runs each. Otherwise a green result cannot be told from a model that needed no help.</li>
       <li><b>One yes/no per criterion.</b> Not a holistic 1–10. Decomposed checks are more reliable and they tell you <em>which</em> part failed.</li>
       <li><b>Fear the false positive.</b> A negative case that fires is a real failure whatever the skill's type — a too-broad description fires forever on work that was never yours.</li>
       <li><b>Hash what you measure.</b> Key each score to the exact description and queryset; key the safety scan to the installer-facing material. A rewritten thing must never keep an old number.</li>
-      <li><b>No LLM in the gate.</b> The blocking check is deterministic and agent-free; the jury (skillaxe) runs locally and selectively. A merge must not wait on a non-deterministic verdict.</li>
+      <li><b>No LLM in the gate.</b> The blocking check is deterministic and agent-free; the quality eval runs locally and leaves a record the gate reads. A merge must not wait on a non-deterministic verdict.</li>
       <li><b>Never let breakage speak as a warning.</b> A signal that fires on everything is silence. When a measurement is a live lie — the author is editing the very skill — make it a blocker, not a whisper.</li>
     </ol>
   </section>

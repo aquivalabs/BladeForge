@@ -199,9 +199,10 @@ including a shared block copied verbatim into every lens.
   scaffold; this skill re-asks only what an update reopens.
 - **`meta:skill-eval`** — whether the description still fires. Orthogonal to whether the body and the
   sidecar are honest, so a change set usually needs both. How to run it → the next section.
-- **`skillcraft:skillaxe`** — whether the guidance, once it fires, actually improves the output.
-  Orthogonal to both trigger and honesty; run it after reworking a skill whose job is to shape a
-  result, to confirm the rewrite helped and dropped nothing that worked.
+- **The quality stage** — whether the guidance, once it fires, actually improves the output: the
+  same tasks run with the skill and without it, saved with `save-result.mjs --quality`. Orthogonal
+  to both trigger and honesty; run it after reworking a skill whose job is to shape a result, to
+  confirm the rewrite helped and dropped nothing that worked.
 
 ---
 

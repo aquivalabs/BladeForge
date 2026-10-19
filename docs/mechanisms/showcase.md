@@ -25,8 +25,9 @@ source of truth, no hand-maintained list, no server.
 
 Shows only curated, public-safe data: id, version, purpose, when-it-fires, best-for,
 side-effect tags, dependencies, the file bundle (names + sizes only), and the measured
-trigger, effect (skillaxe) and security-scan metrics — each rendered only when stored in
-that skill's `result.json`. The featured skills (`HERO_IDS` / `FLAGSHIP_IDS` in the
+trigger, quality and security-scan metrics — each rendered only when stored in that
+skill's `result.json`. The quality section reads only a record from
+`save-result.mjs --quality`; a skill without one shows "Not measured yet". The featured skills (`HERO_IDS` / `FLAGSHIP_IDS` in the
 generator) carry a short curated tagline; a skill with no measured metric simply omits
 that chip.
 

@@ -10,9 +10,9 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
-import { saveResult } from './save-result.mjs';
+import { saveQuality, saveResult } from './save-result.mjs';
 import { descriptionHash } from './skill-description.mjs';
-import { MODEL, caseId as idOf } from './flow-lib.mjs';
+import { MODEL, caseId as idOf, skillHash } from './flow-lib.mjs';
 
 const REPO = resolve(import.meta.dirname, '..', '..');
 const QUERIES = ['a', 'b', 'c', 'd', 'e', 'f'].map((q, i) => ({ query: q, should_trigger: i < 3 }));
@@ -121,4 +121,75 @@ test('climb: refuses a variant hillclimb did not pick, and a flow it never ran',
   const st = JSON.parse(readFileSync(join(f.flow, '_state.json'), 'utf8'));
   writeFileSync(join(f.flow, '_state.json'), JSON.stringify({ ...st, best: { round: 2 } }));
   assert.throws(() => saveResult(f.flow, 'baseline', { repoRoot: f.root, climb: true }), /recorded v2/);
+});
+
+// --- the quality record: two arms, one suite ---------------------------------
+
+const CASES = ['c1', 'c2', 'c3', 'c4'];
+
+function qualityFixture({ withPass = [1, 1, 1, 0], withoutPass = [0, 0, 1, 0], reps = 2, prev } = {}) {
+  const root = mkdtempSync(join(tmpdir(), 'bf-quality-'));
+  const skill = join(root, 'plugins', 'p', 'skills', 's');
+  mkdirSync(join(skill, 'evals', 'quality'), { recursive: true });
+  writeFileSync(join(skill, 'SKILL.md'), '---\ndescription: "Use when testing."\n---\n# s\n');
+  writeFileSync(join(skill, 'evals', 'quality', 'cases.json'), JSON.stringify({ cases: CASES.map(id => ({ id })) }));
+  if (prev !== undefined) writeFileSync(join(skill, 'evals', 'result.json'), JSON.stringify(prev));
+  const sh = skillHash(skill);
+  const flows = {};
+  for (const [arm, pass] of [['with', withPass], ['without', withoutPass]]) {
+    const flow = join(root, arm);
+    mkdirSync(join(flow, 'baseline'), { recursive: true });
+    writeFileSync(join(flow, '_state.json'), JSON.stringify({
+      skill_path: 'plugins/p/skills/s', cases_path: 'plugins/p/skills/s/evals/quality/cases.json', arm,
+      harness_paths: ['scripts/hillclimb/leak-check-runner.mjs'], train_ids: CASES.slice(0, 2), test_ids: CASES.slice(2),
+    }));
+    const rows = [];
+    CASES.forEach((id, i) => { for (let rep = 0; rep < reps; rep++)
+      rows.push({ prompt_id: id, rep, model: MODEL, grade: { pass: pass[i] }, skill_hash: arm === 'with' ? sh : null }); });
+    writeFileSync(join(flow, 'baseline', 'results.jsonl'), rows.map(r => JSON.stringify(r)).join('\n') + '\n');
+    flows[arm] = flow;
+  }
+  return { root, skill, ...flows };
+}
+
+test('quality: writes the acceptance block with both arms, the effect and its noise', () => {
+  const f = qualityFixture({ prev: { trigger: { best_score: '1/1' }, security: { verdict: 'pass' } } });
+  saveQuality(f.with, 'baseline', f.without, 'baseline', { repoRoot: f.root });
+  const r = resultOf(f.skill);
+  assert.equal(r.acceptance.cases, 4);
+  assert.equal(r.acceptance.reps, 2);
+  assert.equal(r.acceptance.with_skill.mean, 0.75);
+  assert.equal(r.acceptance.without_skill.mean, 0.25);
+  assert.equal(r.acceptance.effect, 0.5);
+  assert.equal(r.acceptance.noise, 0.5);
+  assert.equal(r.acceptance.verdict, 'within-noise');
+  assert.equal(r.acceptance.runner, 'scripts/hillclimb/leak-check-runner.mjs');
+  assert.deepEqual(r.trigger, { best_score: '1/1' });
+  assert.deepEqual(r.security, { verdict: 'pass' });
+});
+
+test('quality: a gain larger than the noise reads as helps', () => {
+  const f = qualityFixture({ withPass: [1, 1, 1, 1], withoutPass: [0, 0, 0, 0], reps: 4 });
+  const { acceptance } = saveQuality(f.with, 'baseline', f.without, 'baseline', { repoRoot: f.root });
+  assert.equal(acceptance.verdict, 'helps');
+});
+
+test('quality: the arms passed in the wrong order write nothing', () => {
+  const f = qualityFixture();
+  assert.throws(() => saveQuality(f.without, 'baseline', f.with, 'baseline', { repoRoot: f.root }), /pass the "with" flow first/);
+  assert.equal(existsSync(join(f.skill, 'evals', 'result.json')), false);
+});
+
+test('quality: a skill changed since the run writes nothing', () => {
+  const f = qualityFixture();
+  writeFileSync(join(f.skill, 'SKILL.md'), '---\ndescription: "Use when testing."\n---\n# s, edited\n');
+  assert.throws(() => saveQuality(f.with, 'baseline', f.without, 'baseline', { repoRoot: f.root }), /Re-measure the current skill/);
+  assert.equal(existsSync(join(f.skill, 'evals', 'result.json')), false);
+});
+
+test('quality: an arm missing a case writes nothing', () => {
+  const f = qualityFixture();
+  const p = join(f.without, 'baseline', 'results.jsonl');
+  writeFileSync(p, readFileSync(p, 'utf8').split('\n').filter(l => !l.includes('"c4"')).join('\n'));
+  assert.throws(() => saveQuality(f.with, 'baseline', f.without, 'baseline', { repoRoot: f.root }), /incomplete - 3\/4 cases/);
 });

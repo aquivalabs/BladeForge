@@ -192,16 +192,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.55,
-    "skillscore": 0.65,
-    "guide_faults": [],
-    "verdict": "Guide-following output hits the structural must-haves the rubric actually checks for (nine-question dialogue before the body, metadata.yaml + evals/rubric.json scaffold, explicit Contract In/Out, honest flagging of the plugin.json/README/skill-eval steps left undone) while the isolated baseline — despite a competently written procedural body — never produces metadata.yaml, never touches evals/, and shows no sign of the nine-question groundwork at all."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-10-19T12:30:00",

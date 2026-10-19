@@ -110,16 +110,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.85,
-    "skillscore": 0.95,
-    "guide_faults": [],
-    "verdict": "Guide-driven agent grepped the actual primitives folder and named the exact reuse target (a project artifact) with props and story-check; the isolated baseline only reasoned abstractly about headless-UI best practice and would have proposed building a wrapper that already exists."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

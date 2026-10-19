@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.55,
-    "skillscore": 0.95,
-    "guide_faults": [],
-    "verdict": "Guide-following output hits all 5 rubric points explicitly (barrel export, and the stacked-no-separate-story Storybook rule); the isolated baseline never mentions the barrel export and skips Storybook entirely, despite otherwise strong design detail."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

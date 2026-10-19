@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.5,
-    "skillscore": 0.95,
-    "guide_faults": [],
-    "verdict": "Guide-following output nails all six acceptance rules explicitly (tokenized shadows/duration, strict 2-level BEM, rem exceptions called out, absolute correctly unused); the isolated baseline is competent but leaks two magic numbers (150ms transition, -2px translateY) and over-nests BEM a level deeper than the house pattern."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

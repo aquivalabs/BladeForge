@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.8,
-    "skillscore": 0.9,
-    "guide_faults": [],
-    "verdict": "Guide-following output hits every mechanical acceptance item (colocated stories/ folder, separate *.a file with neutral fixtures, one controls-driven Playground story instead of per-state exports, explicit ErrorBoundary reasoning, preview URL surfaced) while the isolated baseline places a flat .a file with no mock-file separation and sprawls into a dozen per-variant named exports — exactly the anti-pattern the guide exists to prevent."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

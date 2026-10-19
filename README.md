@@ -71,7 +71,6 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [review](#review) · [setup](#setup) |
 | review-workflow | Workflow script that dispatches the review plugin's lenses in parallel (five on by default, plus skill, leak and security-scan where enabled), reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | salesforce | Salesforce — LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
-| skillcraft | Skill quality & improvement — measure whether a guide skill helps, diagnose where it falls short, improve it without regressions. | [skillaxe](#skillaxe) |
 | tests | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories, matchers and fakes, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
 
 ## Skills
@@ -194,13 +193,6 @@ Plus the `/review` orchestrator, the reviewer agents, and the secret-scan + atte
 
 See [CLAUDE.example.md](CLAUDE.example.md) for a reference `CLAUDE.md` — how to
 wire these plugins into a repo and keep the config thin (rules live in skills).
-
-### skillcraft &nbsp;·&nbsp; [↑ Plugins](#plugins)
-- <a id="skillaxe"></a>**skillaxe** — Measure whether a guide skill actually improves the output it is
-  meant to help with, and improve it without regressions. Generates the same task with and without the
-  guide, judges the quality delta and per-rule instruction compliance, attributes each weak spot to the
-  guide or the agent, and — behind a mandatory anti-regression anchor — re-judges any fix. An
-  embedding-optional adaptation of SkillAxe (arXiv 2606.10546).
 
 ### tests &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="architecture"></a>**architecture** — The standard itself: which execution tier a test file belongs to and how its filename declares it, the numbered rules a test must satisfy, the fixed axis list a case space is derived from, one factory per entity, assertions that state the rule rather than its encoding, a JSON failure envelope every custom matcher fills in, and the coverage ratchet plus the mutation bar that keeps a coverage floor from being decoration. Carries a transition section, so a repository adopting it knows what is in force before every mechanism exists.

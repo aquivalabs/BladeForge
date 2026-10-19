@@ -253,7 +253,7 @@ halves, `result.json` records what was measured.
 evals/
   rubric.json   { "trigger": [ did it fire?  queries, positive and negative ],
                   "acceptance": [ did it work?  expectations about the result ] }
-  result.json   { "trigger": { the recorded run }, "acceptance": { skillaxe, or null } }
+  result.json   { "trigger": { the recorded run }, "acceptance": { the quality run, or null } }
 ```
 
 `result.json` is what keeps a measurement from evaporating. Runs used to go into `*-workspace/`

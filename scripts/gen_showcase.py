@@ -107,10 +107,13 @@ def load():
                           "baseline":r.get("baseline_accuracy"),"model":r.get("model"),
                           "runs":r.get("runs_per_query"),"at":r.get("measured_at"),
                           "type":r.get("eval_type")}
+                # The quality record from save-result.mjs --quality: the same cases run with the
+                # skill and without it. Anything else in `acceptance` is not a measurement.
                 a=res.get("acceptance") or {}
-                if a.get("runner") and a.get("quality_impact") is not None:
-                    effect={"qi":a.get("quality_impact"),"skillscore":a.get("skillscore"),
-                            "verdict":a.get("verdict",""),"faults":a.get("guide_faults") or [],
+                if a.get("eval_type")=="quality-with-vs-without" and a.get("effect") is not None:
+                    effect={"delta":a["effect"],"noise":a.get("noise"),"verdict":a.get("verdict"),
+                            "with":a["with_skill"]["mean"],"without":a["without_skill"]["mean"],
+                            "cases":a.get("cases"),"reps":a.get("reps"),
                             "at":a.get("measured_at"),"model":a.get("model")}
                 sec=res.get("security") or {}
                 if sec.get("checklist"):
@@ -140,14 +143,15 @@ def tag_badges(tags):
     return "".join(f'<span class="badge b-{esc(t)}">{esc(t)}</span>' for t in tags)
 
 def trig_cls(a): return "c-none" if a is None else ("c-good" if a>=0.7 else "c-warn")
-def eff_cls(q):  return "c-none" if q is None else ("c-good" if q>=0.5 else "c-warn")
+def eff_cls(v):  return {"helps":"c-good","hurts":"c-warn"}.get(v,"c-none")
+def signed(x): return ("+" if x>=0 else "")+format(x,".2f")
 
 def metric_chips(s):
     chips=[]
     if s.get("trig"):
         chips.append(f'<span class="mchip {trig_cls(s["trig"].get("acc"))}"><span class="ic">\U0001F3AF</span><span class="lab">trig</span>{esc(s["trig"]["score"])}</span>')
     if s.get("effect"):
-        qi=s["effect"]["qi"]; chips.append(f'<span class="mchip {eff_cls(qi)}"><span class="ic">⚡</span><span class="lab">effect</span>{("+" if qi>=0 else "")+format(qi,".2f")}</span>')
+        e=s["effect"]; chips.append(f'<span class="mchip {eff_cls(e["verdict"])}"><span class="ic">⚡</span><span class="lab">effect</span>{signed(e["delta"])}</span>')
     if s.get("security"):
         sec=s["security"]; cls="c-good" if sec["passed"]==sec["total"] else "c-warn"
         chips.append(f'<span class="mchip {cls}"><span class="ic">\U0001F6E1</span><span class="lab">scan</span>{sec["passed"]}/{sec["total"]}</span>')
@@ -208,15 +212,16 @@ def measure_block(s):
   </div><div class="bmeta">measured {esc((t.get('at') or '')[:10])}</div></section>"""
 
 def effect_block(s):
-    if not s.get("effect"): return ""
-    e=s["effect"]; qi=e["qi"]
-    ss=f"{e['skillscore']:.2f}" if e.get("skillscore") is not None else "—"
-    verdict=f'<div class="when" style="margin-top:.6rem">{esc(e["verdict"])}</div>' if e.get("verdict") else ""
-    return f"""<section class="p-sec"><h3>measured · effect (skillaxe)</h3><div class="measure">
-    <div class="mcell"><div class="k">quality impact</div><div class="v {eff_cls(qi)}">{('+' if qi>=0 else '')+format(qi,'.2f')}</div><small>d·m, −1…1</small></div>
-    <div class="mcell"><div class="k">skillscore</div><div class="v">{ss}</div><small>rubric adherence 0–1</small></div>
-    <div class="mcell"><div class="k">guide faults</div><div class="v {'c-good' if not e['faults'] else ''}">{len(e['faults']) or '0'}</div><small>fixable in the guide</small></div>
-  </div>{verdict}<div class="bmeta">measured {esc((e.get('at') or '')[:10])} · model {esc(e.get('model') or '—')}</div></section>"""
+    e=s.get("effect")
+    if not e:
+        return """<section class="p-sec"><h3>measured · quality</h3>
+    <div class="when">Not measured yet. A quality number needs its own eval: 15 or more tasks, each run with the skill and without it.</div></section>"""
+    pct=lambda x: f"{round(x*100)}%"
+    return f"""<section class="p-sec"><h3>measured · quality</h3><div class="measure">
+    <div class="mcell"><div class="k">effect</div><div class="v {eff_cls(e['verdict'])}">{signed(e['delta'])}</div><small>±{e['noise']:.2f} · {esc(e['verdict'])}</small></div>
+    <div class="mcell"><div class="k">with the skill</div><div class="v">{pct(e['with'])}</div><small>tasks passed</small></div>
+    <div class="mcell"><div class="k">without it</div><div class="v">{pct(e['without'])}</div><small>tasks passed</small></div>
+  </div><div class="bmeta">{esc(e.get('cases'))} tasks × {esc(e.get('reps'))} runs · measured {esc((e.get('at') or '')[:10])} · model {esc(e.get('model') or '—')}</div></section>"""
 
 def scan_block(s):
     if not s.get("security"): return ""
@@ -340,7 +345,7 @@ def index_page(skills, doms, pal):
             "needs":s["needs"],"tags":s["tags"],
             "category":s.get("category"),"demo":has_demo(s["slug"]),"demoV":demo_version(s["slug"]) if has_demo(s["slug"]) else "",
             "trig":(s["trig"]["score"] if s["trig"] else None),"trigAcc":(s["trig"]["acc"] if s["trig"] else None),
-            "effect":(s["effect"]["qi"] if s["effect"] else None),
+            "effect":(s["effect"]["delta"] if s["effect"] else None),"effectV":(s["effect"]["verdict"] if s["effect"] else None),
             "sec":([s["security"]["passed"],s["security"]["total"]] if s["security"] else None)} for s in skills]
     cats=[c for c in CATEGORY_ORDER if any(s.get("category")==c for s in skills)]
     payload=json.dumps({"skills":gdata,"palette":pal,"domains":doms,"categories":cats,"catLabels":CATEGORY_LABELS}, ensure_ascii=False).replace("</script>","<\\/script>")
@@ -419,10 +424,10 @@ function sync(){df.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pre
 document.getElementById('q').addEventListener('input',e=>{st.q=e.target.value.toLowerCase().trim();render();});
 function tagB(t){return t.length?t.map(x=>`<span class="badge b-${esc(x)}">${esc(x)}</span>`).join(''):'<span class="badge b-ro">read-only</span>';}
 function trigCls(a){return a==null?'c-none':(a>=0.7?'c-good':'c-warn');}
-function effCls(q){return q==null?'c-none':(q>=0.5?'c-good':'c-warn');}
+function effCls(v){return v==='helps'?'c-good':(v==='hurts'?'c-warn':'c-none');}
 function chips(s){const c=[];
   if(s.trig!=null)c.push(`<span class="mchip ${trigCls(s.trigAcc)}"><span class="ic">\u{1F3AF}</span><span class="lab">trig</span>${esc(s.trig)}</span>`);
-  if(s.effect!=null)c.push(`<span class="mchip ${effCls(s.effect)}"><span class="ic">⚡</span><span class="lab">effect</span>${(s.effect>=0?'+':'')+s.effect.toFixed(2)}</span>`);
+  if(s.effect!=null)c.push(`<span class="mchip ${effCls(s.effectV)}"><span class="ic">⚡</span><span class="lab">effect</span>${(s.effect>=0?'+':'')+s.effect.toFixed(2)}</span>`);
   if(s.sec)c.push(`<span class="mchip ${s.sec[0]===s.sec[1]?'c-good':'c-warn'}"><span class="ic">\u{1F6E1}</span><span class="lab">scan</span>${esc(s.sec[0])}/${esc(s.sec[1])}</span>`);
   return c.length?`<div class="metrics">${c.join('')}</div>`:'';}
 function match(s){if(st.cat&&s.category!==st.cat)return false;

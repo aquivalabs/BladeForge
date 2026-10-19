@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.55,
-    "skillscore": 0.93,
-    "guide_faults": [],
-    "verdict": "Guide output nails all five lean-writing criteria (leads with the verdict, table/bullet-only, zero filler, exact field names, nothing cuttable); baseline is a solid, more exhaustive spec but opens with problem-statement prose, argues its choices in paragraph form, and carries justificatory/hedging phrasing the rubric explicitly penalizes."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

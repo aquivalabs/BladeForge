@@ -158,18 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": -0.1,
-    "skillscore": 0.8,
-    "guide_faults": [
-      "The guide's 'one function = one responsibility, extract helpers' rule carries no judgment caveat against extracting a trivial one-line regex match into a separate function — that literal-minded extraction is what produced the with-guide output's actual defect: a confusingly near-duplicate name (`withoutSeparators` local var vs `withoutSeparors` function) with a typo, self-flagged but left unfixed in the delivered file."
-    ],
-    "verdict": "Both outputs already hit single quotes/braces/full-names/small-functions on their own; the guide's only clear, demonstrable win was forcing the @shared alias import, while its literal 'extract everything' pressure produced a self-admitted typo'd helper (and a `function` keyword the guide itself bans) that the cleaner, more feature-complete isolated baseline never had — net effect roughly a wash, tilted slightly negative."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

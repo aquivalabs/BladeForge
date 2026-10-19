@@ -190,16 +190,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.6,
-    "skillscore": 0.9,
-    "guide_faults": [],
-    "verdict": "Guide-driven output hits every rubric point (tier marker, fixed-axis walk with explicit n/a/deferred axes, factory/constant/error-shape rules named and traced, open-book test bodies) while the isolated baseline invents its own ad-hoc axis taxonomy and never writes an actual test body — a clear, non-decorative win for the guide."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

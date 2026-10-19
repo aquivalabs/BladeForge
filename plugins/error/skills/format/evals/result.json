@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.85,
-    "skillscore": 0.95,
-    "guide_faults": [],
-    "verdict": "With-guide hits all 8 rubric criteria and even matches this repo's real conventions (code=HTTP int, ErrorInfo/DebugInfo split, registry+dictionary, reused the actual existing INSUFFICIENT_ACCESS reason); isolated baseline invents a generic google.rpc.Status pattern that gets the house convention backwards (code=rpc-numeric instead of HTTP int), skips the central registry, hardcodes messages at throw sites, and omits ErrorInfo.reason from 3 of 4 envelopes — a guide-driven, substantial quality win."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

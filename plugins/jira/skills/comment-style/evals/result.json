@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.75,
-    "skillscore": 0.95,
-    "guide_faults": [],
-    "verdict": "With-guide comment nails the rubric — leads with \"Done\", three single-line concrete bullets, no filler; the isolated baseline opens with a marketing-style background paragraph and sprawls into a dozen padded bullets plus a redundant closing line, violating the lead-with-bottom-line and brevity criteria."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

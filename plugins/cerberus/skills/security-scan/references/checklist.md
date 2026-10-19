@@ -32,7 +32,7 @@ Dynamic Agent Skills (2607.10113), SkillBrew (2605.29440), and Skill Evaluation 
 from industry blogs, not a peer-reviewed paper — treat the eight as a useful REQUIREMENTS STRUCTURE
 rather than a citation. The cross-sourced, more trustworthy figures (SkillsBench: mean 6.2/12 across
 47,150 public skills; curation +16.2 pp agent pass-rate) belong to the QUALITY axis
-(`meta:skill-eval` + `skillcraft:skillaxe`), not this security one.
+(`meta:skill-eval` and the quality stage), not this security one.
 
 ## Where we stand today (2026-09-08)
 

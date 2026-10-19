@@ -165,16 +165,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.9,
-    "skillscore": 0.95,
-    "guide_faults": [],
-    "verdict": "Guide-following output hits all 8 rubric acceptance points (probe-first path decision, Contract+delete-When-to-Activate, looping Before-you-finish, rubric.json with escape hatch, conv1-read-back/conv2-reask, sidecar+plugin.json+README, mandatory meta:skill-eval); isolated baseline misses nearly every one — it even explicitly keeps '## When to Activate' (contradicting the standard), invents a differently-named/located acceptance file, and skips the probe, the conversation-reopening rule, the sidecar/version bump, and any measurement step."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-10-16T19:30:00",

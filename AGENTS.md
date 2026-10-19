@@ -56,8 +56,9 @@ Rules in force now:
 - **Do not read scores saved by the deleted `score-description.py` as skill quality.** It re-emitted
   descriptions unquoted, which broke the probe's YAML for 12 skills, and it counted any `Skill` call
   as a hit. Remeasured with the new runner, the lowest saved scores came out at 94–100%.
-- **Do not read `skillcraft:skillaxe` results as evidence either.** Each one rests on a single task
-  run once, and that cannot tell a real effect from zero.
+- **A quality number comes only from `save-result.mjs --quality`.** It compares the same 15+ tasks
+  run with the skill and without it. The records of the deleted single-task grader
+  were removed, because one task run once cannot tell a real effect from zero.
 - **Never measure with skill-creator's `run_eval` or `run_loop`.** They register the skill as a slash
   command, which does not auto-trigger, so a good skill scores near zero.
 - **`--approve-harness` is the maintainer's to run, never an agent's.** The runner refuses to start

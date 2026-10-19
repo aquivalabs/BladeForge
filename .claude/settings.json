@@ -21,5 +21,13 @@
     "review@bladeforge": true,
     "salesforce@bladeforge": true,
     "cerberus@bladeforge": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(claude plugin validate *)",
+      "Bash(cmux list-pane-surfaces)",
+      "Bash(cmux list-panels)",
+      "Bash(shasum *)"
+    ]
   }
 }

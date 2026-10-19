@@ -42,7 +42,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { cpSync } from 'node:fs';
 import { basename, sep } from 'node:path';
-import { readJson } from './flow-lib.mjs';
+import { readJson, skillHash } from './flow-lib.mjs';
 import { sandbox, streamClaude } from './sandbox-lib.mjs';
 
 // Every output write refuses symlinks: the flow dir is model-influenced, and a
@@ -176,7 +176,10 @@ function suite(st) {
   for (const k of ['cases_path', 'skill_path', 'arm'])
     if (!st?.[k]) throw new Error(`_state.json.${k} is not set`);
   if (!['with', 'without'].includes(st.arm)) throw new Error('_state.json.arm must be "with" or "without"');
-  suiteMemo = { ...readJson(resolve(st.cases_path)), arm: st.arm, skillPath: st.skill_path, skillName: basename(st.skill_path) };
+  // The with arm stamps every row with the hash of the skill it installed, so a record
+  // saved from these rows can tell when the skill has changed since.
+  suiteMemo = { ...readJson(resolve(st.cases_path)), arm: st.arm, skillPath: st.skill_path, skillName: basename(st.skill_path),
+    skillHash: st.arm === 'with' ? skillHash(st.skill_path) : null };
   return suiteMemo;
 }
 
@@ -240,7 +243,7 @@ async function runCase(input, ctx) {
       },
     });
     const outcome = inspect(box.dir, skill);
-    return { ...run, fired, outcome, output: JSON.stringify(outcome) };
+    return { ...run, fired, outcome, skillHash: suite(ctx.state).skillHash, output: JSON.stringify(outcome) };
   } finally {
     box.release();
   }
@@ -285,7 +288,7 @@ async function gradeCase(input, run, ref, ctx) {
   };
 }
 
-function perfFrom(run) { return { commits: run.outcome?.commits ?? 0 }; }
+function perfFrom(run) { return { commits: run.outcome?.commits ?? 0, skill_hash: run.skillHash ?? null }; }
 
 // --- harness (you usually won't need to touch below this line) --------------
 

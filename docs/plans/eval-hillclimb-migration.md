@@ -1,9 +1,9 @@
 # Plan — move skill measurement onto build-eval and hillclimb
 
-Status: in progress, phase 3 · Owner: the marketplace maintainer · Started: 2026-10-16
+Status: in progress, phase 4 · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: phase 2 merged as #95 (2026-10-19). Phase 3, the quality stage, is next on
-`feat/quality-stage`.
+Now: phase 2 merged as #95 (2026-10-19). Phases 3 and 4 are on `feat/quality-stage` (#96). Phase 4
+waits on one measurement: the first quality record, for `cerberus:leak-check`.
 
 Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
 likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
@@ -244,7 +244,7 @@ was not needed: the baseline named the cause.
   waited for a marker the agent itself wrote, which made it a reminder, not a gate; now the hook
   runs the judge. A clean verdict is cached under the hash of what was judged, and a tool call aimed
   at that cache is refused — best effort: a shell can still forge it on purpose, and a push typed
-  by a person in their own terminal is not seen. Closing those needs a git `pre-push` hook. Works on every Claude Code version. Suite: 10/10,
+  by a person in their own terminal is not seen. Closing those needs a git `pre-push` hook. Works on every Claude Code version. Suite: 11/11,
   in CI; a live judge caught a client name and work email in 5.7 s.
 - *Per-repository switch:* the guard is on everywhere by default. A person turns it off for one
   repository with `git config cerberus.pushguard off`; an agent setting it is refused.
@@ -271,6 +271,29 @@ was not needed: the baseline named the cause.
    carries an `acceptance` list, which stays the judge's input.
 
 Exit check: `grep -r skillaxe` finds nothing outside history, and `scout-gate` and `eval-gate` pass.
+
+**Done 2026-10-19,** all five steps:
+
+- `save-result.mjs --quality <with-flow> <variant> <without-flow> [<variant>]` writes the block:
+  both arms' pass rates with their intervals, `effect` (with minus without), `noise`
+  (`sqrt(1/n_with + 1/n_without)`), and a verdict computed from those two: `helps`, `within-noise`
+  or `hurts`. It refuses an incomplete arm, mixed models or reps, and a with arm whose rows
+  installed a skill other than the one on disk. The quality runner now stamps every row with
+  `skill_hash`, the hash of every skill file except `evals/`. Tests: 5 new cases in
+  `save-result.test.mjs`.
+- The skillaxe records were 28, not 45: the other 17 skills already held `null`. All 28 are
+  `null` now, and the showcase shows "Not measured yet" for a skill without a quality record.
+- `plugins/skillcraft/`, its showcase page and film, and its `README.md` and `marketplace.json`
+  entries are deleted. The catalog holds 44 skills.
+- `grep skillaxe` finds it only in this plan and in old review attestations, which are history.
+
+**Open:** `cerberus:leak-check` has no quality record yet. Its pilot rows predate `skill_hash`, and
+its with arm after the push fix (`v1`) ran 22 rows over a subset, so it cannot be saved. Writing
+the record needs the maintainer to approve the changed runner with `--approve-harness`, then one
+full run of both arms at 3 reps: 96 runs.
+
+**Deferred to phase 5:** `eval-gate` does not demand a quality record yet. It would block every
+PR that touches a skill until all 44 have a quality eval, and only one has a runner.
 
 ### Phase 5 — re-measure
 

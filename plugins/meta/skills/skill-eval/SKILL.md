@@ -19,7 +19,8 @@ written beside the skill, carrying both hashes so the gate can tell a fresh meas
 one.
 
 **Not in scope:** whether the skill does its job WELL once it fires. That is the second metric — it
-reads `evals/rubric.json` and is run by `skillcraft:skillaxe`, not by this skill. A trigger score
+is the quality stage, run with the skill and without it and saved with
+`save-result.mjs --quality`, not by this skill. A trigger score
 of 10 says the model reached for the skill, nothing more.
 
 ---

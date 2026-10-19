@@ -142,16 +142,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.6,
-    "skillscore": 0.93,
-    "guide_faults": [],
-    "verdict": "Guide-following output hits nearly every rubric line verbatim (one policy table with placement/retryable/escalate columns, four consumer roles, tiered boundaries, single renderer owning session-escalation, explicit architecture-test diff touching only table+i18n) and correctly defers the wire envelope to error:format; isolated baseline is also strong (better on Apex bulk-failure/idempotency/correlation-id specifics) but never instantiates a concrete table, never names tiered boundaries or a single escalation owner, and offers no architecture-test proof."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

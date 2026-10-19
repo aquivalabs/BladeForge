@@ -110,16 +110,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.6,
-    "skillscore": 0.95,
-    "guide_faults": [],
-    "verdict": "Guide-following output nails all six acceptance points (explicit domain-gate confirmation, correct nesting under an existing domain, a reuse-primitives table with a fallback rule, layer-agnostic data/i18n phrasing) while the isolated baseline never addresses top-level placement and reinvents its own badge/toolbar/action-bar components instead of composing from existing primitives — a real, guide-attributable quality gain on a task where structure IS the deliverable."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",

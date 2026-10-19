@@ -4,14 +4,16 @@
 // module, so it is listed in `_state.json.harness_paths` and the harness gate
 // covers it.
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join, relative, resolve, sep } from 'node:path';
 
 /** The record contract: the writer stamps these, the gate checks them. */
 export const RUNNER = 'scripts/hillclimb/trigger-runner.mjs';
 export const MODEL = 'claude-opus-5-5';
 export const ENVIRONMENTS = ['isolated', 'crowded'];
 export const CLIMB_VERDICTS = ['improved', 'within-noise', 'regressed', 'no-headroom'];
+/** What a quality record may conclude: the skill's effect against the no-skill arm. */
+export const QUALITY_VERDICTS = ['helps', 'within-noise', 'hurts'];
 export const HARNESS_PATHS = [RUNNER, 'scripts/hillclimb/skill-description.mjs', 'scripts/hillclimb/flow-lib.mjs',
   'scripts/hillclimb/sandbox-lib.mjs'];
 
@@ -30,6 +32,27 @@ export function skillSlug(dir) {
 export function triggerCases(skillDir) {
   const trigger = readJson(join(skillDir, 'evals', 'rubric.json')).trigger;
   return trigger.map(q => ({ ...q, id: caseId(q.query) }));
+}
+
+/**
+ * The hash of what a quality run installs: every file of the skill except `evals/`, by
+ * relative path and content. A record keyed by it goes stale when the body or a reference
+ * changes.
+ */
+export function skillHash(skillDir) {
+  const root = resolve(skillDir);
+  const files = [];
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) { if (p !== join(root, 'evals')) walk(p); }
+      else files.push(relative(root, p).split(sep).join('/'));
+    }
+  };
+  walk(root);
+  const h = createHash('sha256');
+  for (const f of files.sort()) h.update(`${f}\0`).update(readFileSync(join(root, f))).update('\0');
+  return h.digest('hex');
 }
 
 export function readJson(file) {

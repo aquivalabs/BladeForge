@@ -158,16 +158,7 @@
       }
     ]
   },
-  "acceptance": {
-    "runner": "skillcraft:skillaxe",
-    "measured_at": "2026-09-07",
-    "model": "sonnet",
-    "method": "diagnostic (generate with-guide vs isolated baseline, LLM judge vs rubric acceptance)",
-    "quality_impact": 0.3,
-    "skillscore": 0.93,
-    "guide_faults": [],
-    "verdict": "Guide output maps every design choice explicitly onto SRP/OCP/LSP/ISP/DIP and adds a disciplined YAGNI \"what we didn't build\" section matching the rubric almost line-for-line; baseline is competent but sprawls to 16 types with some speculative additions (event publisher, multi-channel delivery) yet also catches a real idempotency/double-charge concern the guided design omits — so the win is real but modest."
-  },
+  "acceptance": null,
   "security": {
     "verdict": "pass",
     "scanned_at": "2026-09-08T17:21:22",
