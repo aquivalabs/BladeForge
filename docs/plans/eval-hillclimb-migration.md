@@ -1,9 +1,9 @@
 # Plan — move skill measurement onto build-eval and hillclimb
 
-Status: in progress, phases 3 and 4 done, next 2b with 5 · Owner: the marketplace maintainer · Started: 2026-10-16
+Status: in progress, phases 3 and 4 done, 2b built · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: phase 2 merged as #95 (2026-10-19). Phases 3 and 4 are done on `feat/quality-stage` (#96).
-Next: phase 2b with phase 5.
+Now: phases 3 and 4 merged as #96 (2026-10-19). Phase 2b is on `feat/routing-set`: the set and its
+runner are built; the first priced pass is next.
 
 Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
 likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
@@ -188,6 +188,19 @@ whole marketplace in one pass.
 
 Exit check: one crowded pass over the pool produces per-skill scores and a confusion table. At
 least one boundary pair shows real headroom above noise, which gives hillclimb something to climb.
+
+**Built 2026-10-19, not yet run:** `evals/routing.json` holds 701 cases seeded from the 44 rubrics,
+482 train and 219 test: 376 owned and 325 `none`, with no query claimed by two rubrics.
+`build-routing.mjs` seeds and grows it, `routing-runner.mjs` runs it crowded and stops at the first
+Skill call, and `routing-report.mjs` prints per-owner scores over cases plus the confusion lines.
+`routing.test.mjs` pins the seeding and the scoring.
+
+One rule changed from step 3 while building it. A `none` case came from one skill's should-not list
+and often belongs to a sibling, so "nothing fired" would count correct routing as a miss. It now
+passes when the skill named in its `not` field was not called; the confusion lines show who took it.
+
+Next: price 20 cases and show the cost table. At an estimated 0.1% of a window per crowded run, one
+rep over 701 cases is most of a window, so the first full pass is likely the test split alone.
 
 ### Phase 3 — guide-skill pilot
 

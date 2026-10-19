@@ -280,6 +280,20 @@ input a quality grader reads; the gate checks only that it is present, never gra
 
 **Never in CI.** It spawns agents; the gate stays deterministic.
 
+## The routing set
+
+`evals/routing.json` measures routing for the whole marketplace at once. Each case is a query with an
+owner: a `<plugin>:<skill>` id, or `none` with `not` naming the skill whose should-not-trigger list
+it came from. `scripts/hillclimb/build-routing.mjs` seeds it from every rubric and adds new rubric
+queries later; it never edits or removes a case, and a case's train or test slot comes from a hash of
+the seed and its id. A query two rubrics both claim is left out and reported.
+
+`scripts/hillclimb/routing-runner.mjs` installs every marketplace skill as a probe, runs the query,
+and stops at the first Skill call, which is the routing decision. An owned case passes when its owner
+was called. A `none` case passes when the skill in `not` was not called; a sibling taking it is not a
+failure, because such a query often belongs to the sibling. `scripts/hillclimb/routing-report.mjs`
+prints a score per owner over cases, and the pairs of skills that take each other's queries.
+
 ## Running one
 
 ```bash

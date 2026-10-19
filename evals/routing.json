@@ -1,0 +1,5238 @@
+{
+  "seed": 20261019,
+  "test_share": 0.3,
+  "cases": [
+    {
+      "id": "q-0eba22f102",
+      "query": "i just wrote a new skill's SKILL.md — check it for leaks before i commit it to the public marketplace",
+      "owner": "cerberus:leak-check",
+      "split": "train",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-5b67a3513a",
+      "query": "review this eval fixture, does it leak any real class or object names from our codebase before i push?",
+      "owner": "cerberus:leak-check",
+      "split": "test",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-37a3575760",
+      "query": "i renamed some example objects in the salesforce skill references — make sure nothing points to a real work project",
+      "owner": "cerberus:leak-check",
+      "split": "test",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-c9734c2d9b",
+      "query": "about to publish this skill — does any example look copied from real work instead of a fictional demo?",
+      "owner": "cerberus:leak-check",
+      "split": "train",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-2055edadba",
+      "query": "the cerberus hook flagged my skill edit — run the leak check on it",
+      "owner": "cerberus:leak-check",
+      "split": "train",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-dab86a2a3b",
+      "query": "scrub this plugin's examples down to a neutral demo product before it ships publicly",
+      "owner": "cerberus:leak-check",
+      "split": "train",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-58a135870e",
+      "query": "push this branch to the public marketplace",
+      "owner": "cerberus:leak-check",
+      "split": "train",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-05f9b2181d",
+      "query": "I committed the skill fix, go ahead and push it",
+      "owner": "cerberus:leak-check",
+      "split": "test",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-b15df453d3",
+      "query": "before i commit this skill, scan its bundled script for anything unsafe to whoever installs it",
+      "owner": "cerberus:security-scan",
+      "split": "test",
+      "source": "rubric:cerberus:security-scan"
+    },
+    {
+      "id": "q-056c6b46dc",
+      "query": "does this skill's reference doc contain prompt-injection text aimed at the reading agent?",
+      "owner": "cerberus:security-scan",
+      "split": "train",
+      "source": "rubric:cerberus:security-scan"
+    },
+    {
+      "id": "q-8c625f77c6",
+      "query": "check this new skill for dangerous commands, external fetches, or credential access before it ships",
+      "owner": "cerberus:security-scan",
+      "split": "train",
+      "source": "rubric:cerberus:security-scan"
+    },
+    {
+      "id": "q-e4928eb79f",
+      "query": "the cerberus hook flagged my skill edit — run the security scan for exfiltration and privilege escalation",
+      "owner": "cerberus:security-scan",
+      "split": "train",
+      "source": "rubric:cerberus:security-scan"
+    },
+    {
+      "id": "q-d7886e4d31",
+      "query": "is there any base64/obfuscated payload or download-and-run in this skill's scripts?",
+      "owner": "cerberus:security-scan",
+      "split": "train",
+      "source": "rubric:cerberus:security-scan"
+    },
+    {
+      "id": "q-7652093407",
+      "query": "review this skill's change for the eight-point security checklist before i publish it",
+      "owner": "cerberus:security-scan",
+      "split": "train",
+      "source": "rubric:cerberus:security-scan"
+    },
+    {
+      "id": "q-0589def2b0",
+      "query": "i've drafted a spec for the new billing pipeline — tear it apart before we build it",
+      "owner": "critique:critique",
+      "split": "train",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-a8dd5fcc1b",
+      "query": "run an adversarial critique of this architecture design and find what breaks",
+      "owner": "critique:critique",
+      "split": "test",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-1f4aa94036",
+      "query": "set up a few critics to review this plan from different angles before I commit to it",
+      "owner": "critique:critique",
+      "split": "train",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-89f18d8da4",
+      "query": "i want independent reviewers to poke holes in my RFC, not just one opinion",
+      "owner": "critique:critique",
+      "split": "train",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-572e70e9c6",
+      "query": "how should I structure a red-team pass over this design doc so it actually catches problems",
+      "owner": "critique:critique",
+      "split": "test",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-c43a9d5152",
+      "query": "critique this migration plan hard — assume it's wrong and show me where",
+      "owner": "critique:critique",
+      "split": "train",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-66c086e267",
+      "query": "the spec passed our critique round but I don't trust the green — how do I make the critique real",
+      "owner": "critique:critique",
+      "split": "train",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-ed87a8fb4a",
+      "query": "i've got a spec for a new handler layer in this apex package (interface, abstract base, factory, concrete impl) — sketch how the classes connect, with their methods, so i can open it in a browser and read it",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-dc9ff540d2",
+      "query": "draw the data flow for the widget-config feature — the queueable that writes, the selector that reads, the DTO facade — i want a readable page, not a wall of text",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-e3337b9ce5",
+      "query": "can you make a diagram of how Widget_Config__c, the handlers and the two permission sets fit together? something i can actually click around and explore",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-172a2601f5",
+      "query": "draw the architecture of feature TICK-000 from the plan — every class with its methods and relations, and make it clean and readable",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-7dfe92eaea",
+      "query": "the record-flow diagram we have is hard to read, nodes overlap and the text is tiny — fix the layout and make it nicer",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-5b04ead77f",
+      "query": "i want a picture of how the data-sync layer enters the controller and goes down to the store, with the methods on each block, as its own page",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-39ff5b0f9b",
+      "query": "sketch the relationships between these ~12 apex classes so a new dev can understand the whole feature at a glance",
+      "owner": "diagram:diagram",
+      "split": "test",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-03e77931b3",
+      "query": "make a how-it-works schematic of the data refresh pipeline that i can share as a standalone html file",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-39edfc000f",
+      "query": "visualize the object model — the object, its fields, and which permset grants what — as its own readable page",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-1fefe0913b",
+      "query": "i need a flow diagram: where the brief is read from, where it's written, and what that DTO facade between them is",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-077c0f9bd8",
+      "query": "no spec for this, just the code — draw how these three files interact: RangeHandler.cls, RangeFieldHandler.cls, RangeHandlerFactory.cls",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-7283b4fd9d",
+      "query": "i inherited this module and there's zero documentation — read the classes in force-app/main/default/classes and draw me a readable how-it-works picture so i can get oriented",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-800cf838ff",
+      "query": "there's no design doc, just make a schema of everything in the brief flow by reading the source, as an html page i can browse",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-0c35075bcc",
+      "query": "draw a diagram spanning our react app AND the apex backend AND a couple of lambdas — the node kinds are all different and i want them visually distinct",
+      "owner": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-e1364e0526",
+      "query": "where should a decision like 'we're moving the retry queue off cron and onto a webhook' live — a doc, an ADR, or what?",
+      "owner": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-01666a017a",
+      "query": "our specs and plans folder is 20k lines long and there's no live description of how the system actually works anywhere",
+      "owner": "docs:standard",
+      "split": "test",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-8f548899fa",
+      "query": "we just wrote a mechanism doc for the pagination cursor helper — does it belong in docs/mechanisms or somewhere else?",
+      "owner": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-c05e706417",
+      "query": "AGENTS.md has ballooned to 400 lines with a full architecture diagram pasted in, is that even the right file for this?",
+      "owner": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-3ff829d3dc",
+      "query": "i want to adopt a documentation standard for this repo so decisions, mechanisms and specs stop getting mixed together",
+      "owner": "docs:standard",
+      "split": "test",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-d3be7ae509",
+      "query": "can we set up a pre-push gate that blocks a PR when someone changes the retry-backoff code but doesn't touch its doc?",
+      "owner": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-f2e3fe5b01",
+      "query": "the onboarding doc says one thing about the checkout flow and the code does something completely different now",
+      "owner": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-d9f4a119c1",
+      "query": "should this design decision go into a numbered ADR file or just get written up as a regular markdown page?",
+      "owner": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-31fcc5fc1d",
+      "query": "how do we derive a first list of mechanisms worth documenting when the project has never tracked any of this before?",
+      "owner": "docs:standard",
+      "split": "test",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-5467e242c5",
+      "query": "install the docs standard plugin in this repo and wire up the check",
+      "owner": "docs:standard",
+      "split": "test",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-e9c6d61a01",
+      "query": "our root README, the runbook, and the glossary don't fit any doc category we have — where do those even go?",
+      "owner": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-e36b7aaa5c",
+      "query": "is a project backlog file supposed to be documentation, or does it live somewhere else entirely?",
+      "owner": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-90402053dd",
+      "query": "we map error codes to messages in like a dozen components — how do i get one place that decides copy and retry?",
+      "owner": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-cc930cc48a",
+      "query": "design the app-wide error handling architecture for our Vue dashboard",
+      "owner": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-f63662b9a0",
+      "query": "review this diff for error-surfacing consistency — is every failure shown the same way?",
+      "owner": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-4d63faa5f5",
+      "query": "does this codebase follow one error-handling pattern or does each view roll its own?",
+      "owner": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-da0ac788d2",
+      "query": "i want a single classifier table that decides toast vs block vs redirect per error code",
+      "owner": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-6e746e6b17",
+      "query": "audit how errors are displayed across the whole Angular app and tell me where it drifts",
+      "owner": "error:architecture",
+      "split": "test",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-b6b6d13447",
+      "query": "where should the session-expiry redirect fire — every catch site calls it right now and it feels wrong",
+      "owner": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-8c3e47f995",
+      "query": "adding a new error reason PAYMENT_REQUIRED — how much of the UI do i have to touch?",
+      "owner": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-fd1f58d10f",
+      "query": "our Svelte app blanks the whole page when one widget throws — how do we tier boundaries so siblings survive?",
+      "owner": "error:architecture",
+      "split": "test",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-fdd85b4022",
+      "query": "In the /api/orders POST route, throw a proper typed error when the SF create call comes back rejected instead of just letting it 500",
+      "owner": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-d50ae8ac20",
+      "query": "The Anthropic proxy sometimes returns a 502 and the UI just shows a blank screen — handle it properly so the user sees something",
+      "owner": "error:format",
+      "split": "test",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-b50f06e8cd",
+      "query": "Add a NOT_FOUND error code for when a entity record id doesn't resolve, and use it in the controller",
+      "owner": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-c239ed9bc5",
+      "query": "Map the CONSTRAINT_VIOLATION fault we get from the upstream API into whatever envelope our client expects",
+      "owner": "error:format",
+      "split": "test",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-08aae06749",
+      "query": "On the records page the fetch hook resolves with an error payload — how should the component read the code and message out of it?",
+      "owner": "error:format",
+      "split": "test",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-d4498448c7",
+      "query": "My REST controller catches a persistence exception but I'm not sure what shape to return to the client — walk me through throwing it the right way",
+      "owner": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-0e56863cb9",
+      "query": "When the metric endpoint rejects, we need a google.rpc.Status with a proper status field so the frontend can branch on it",
+      "owner": "error:format",
+      "split": "test",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-0c0ec28ff4",
+      "query": "Wrap the upstream a payment provider transport failures so a downstream 429 surfaces as a retryable error the client can recognize",
+      "owner": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-74b8645b7e",
+      "query": "Right now every layer invents its own error JSON shape — I want one envelope from the backend through to the frontend toast",
+      "owner": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-f47084a191",
+      "query": "i just finished editing this React component, can you typecheck and run its tests?",
+      "owner": "frontend:fe-check",
+      "split": "test",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-fc6f7ecff9",
+      "query": "run tsc and vitest on src/lib/order-summary.ts and give me a quick pass/fail",
+      "owner": "frontend:fe-check",
+      "split": "train",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-825866077c",
+      "query": "check that my TypeScript changes didn't break the build before i open a PR",
+      "owner": "frontend:fe-check",
+      "split": "test",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-d8e3d18546",
+      "query": "quickly confirm types are clean and the widget-catalog tests still pass after my edit",
+      "owner": "frontend:fe-check",
+      "split": "train",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-929725c097",
+      "query": "run the targeted unit tests for cart-utils.test.ts plus a typecheck, terse summary please",
+      "owner": "frontend:fe-check",
+      "split": "train",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-bcc1855a9b",
+      "query": "did i break anything? typecheck the frontend repo and run the relevant test file",
+      "owner": "frontend:fe-check",
+      "split": "test",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-0663cbacdc",
+      "query": "the SidebarNav.tsx padding is 14px hardcoded, make it consistent with our spacing scale",
+      "owner": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-6d888404c5",
+      "query": "add margin-top: 24px to the card header in card-header.scss",
+      "owner": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-7d32233a10",
+      "query": "I see font-size: 16px in DashboardPanel.scss, should that be in rem?",
+      "owner": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-72cd8593d1",
+      "query": "convert all the px values in modal.scss to the right units for accessibility",
+      "owner": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-a7231df02c",
+      "query": "the gap between widget cards is gap: 12px — change it to scale with browser zoom",
+      "owner": "frontend-css:rem",
+      "split": "test",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-677b8b144f",
+      "query": "tailwind class p-[10px] on Button.tsx — is that correct or should it be something else?",
+      "owner": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-3c4903a8ef",
+      "query": "our h2 font-size is hardcoded to 20px in typography.scss, fix that",
+      "owner": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-b8cf00a078",
+      "query": "review the spacing in data-table.scss for any absolute pixel values that break zoom accessibility",
+      "owner": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-efb7a8c3c1",
+      "query": "width: 320px on the sidebar feels wrong — what unit should we use so it respects the root font size?",
+      "owner": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-1d0ca1417e",
+      "query": "set letter-spacing: 0.5px on the badge text — is that acceptable?",
+      "owner": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-b740d877ba",
+      "query": "im building a new PricingCard component in React with three tiers side by side, can you scaffold it with the price, feature list and a CTA button",
+      "owner": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-08ee24d7dc",
+      "query": "add a sidebar filter panel to the products page — checkboxes for category and a price range slider on the left, results grid on the right",
+      "owner": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-00620b49c2",
+      "query": "this InvoiceTable looks cramped on my laptop, the last two columns get cut off. can you fix the layout",
+      "owner": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-5fe9633c8e",
+      "query": "make the dashboard header responsive — logo left, nav center, user menu right, should collapse to a hamburger on mobile",
+      "owner": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-df350117af",
+      "query": "i wrote a hero section with a big heading, subtext and an image on the right but on my phone the image is tiny and the text overflows",
+      "owner": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-e032768f9e",
+      "query": "we dont have any breakpoints defined in this project yet, i want to start making the marketing page adapt to mobile and tablet",
+      "owner": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-c048f40bf6",
+      "query": "restyle the settings form so the labels and inputs sit in two columns on desktop but stack on small screens",
+      "owner": "frontend-css:responsive-layout",
+      "split": "test",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-31b2e5d4fa",
+      "query": "creating a KpiTile that shows a number, a delta arrow and a sparkline — make sure it doesnt break on narrow widths",
+      "owner": "frontend-css:responsive-layout",
+      "split": "test",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-e768dfc2c0",
+      "query": "the modal footer buttons wrap weirdly and overlap on a 320px screen, and the border eats half the dialog",
+      "owner": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-6c1d136b9d",
+      "query": "build a photo gallery grid, 4 across on desktop, 2 on tablet, 1 on phone",
+      "owner": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-cc9bafeb95",
+      "query": "add styles for the new AccountsTable component — should I use a .css or .scss file?",
+      "owner": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-c0b8462abe",
+      "query": "the button color is hardcoded to #003458 in button.scss, how do we fix that?",
+      "owner": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-866ac71c77",
+      "query": "create the SCSS for DataCard following BEM — block, elements, modifiers",
+      "owner": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-a067c34824",
+      "query": "refactor EntryForm.css to use our variable system and convert to SCSS",
+      "owner": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-0f6d872b73",
+      "query": "what's the right file structure for a new component's styles in this project?",
+      "owner": "frontend-css:scss-modules",
+      "split": "test",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-c1059e3e56",
+      "query": "padding: 12px is scattered everywhere in sidebar.scss — consolidate to the spacing scale",
+      "owner": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-cbe29e5082",
+      "query": "colors are hardcoded in three different component scss files, how do I centralize them?",
+      "owner": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-a3d39cce67",
+      "query": "add a --highlighted modifier to .widget-card in widget-card.scss with a primary border",
+      "owner": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-8bfb639b03",
+      "query": "we don't have a global variables file yet — how do I set up the SCSS token system?",
+      "owner": "frontend-css:scss-modules",
+      "split": "test",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-3d5cd5ff68",
+      "query": "create a new React component folder for UserBadge with its tsx, index.ts, and styles",
+      "owner": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-2bf134b30a",
+      "query": "I have function getAcct(r) { return r.id } — should it be an arrow function?",
+      "owner": "frontend-js:conventions",
+      "split": "test",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-b0dfb4154d",
+      "query": "the file uses double quotes everywhere, our house style is single quotes right?",
+      "owner": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-da58d9416c",
+      "query": "rename variable sel to selectedRecord throughout useAccountsFilter.ts",
+      "owner": "frontend-js:conventions",
+      "split": "test",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-9412ae18f2",
+      "query": "this if statement has no braces: if (isLoading) return null — is that ok?",
+      "owner": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-9c427c04e4",
+      "query": "the fetchItems function is 80 lines long, help me break it into smaller pieces",
+      "owner": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-f4e98ec8b9",
+      "query": "import from ../../../lib/salesforce/client — should I use an alias instead?",
+      "owner": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-26637e3dec",
+      "query": "review ItemList.tsx for code style issues before i push",
+      "owner": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-7dae700ad8",
+      "query": "add a @shared alias to vite config and tsconfig so I can import shared types cleanly",
+      "owner": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-aefbd12ad9",
+      "query": "the handler is named fn and the arg is e — is that naming acceptable in our codebase?",
+      "owner": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-06d0010305",
+      "query": "I need to add a new card component to show order summaries — where should it live?",
+      "owner": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-ccfbad9922",
+      "query": "can you scaffold a new React component for a notification badge?",
+      "owner": "frontend-react:component-placement",
+      "split": "test",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-416bfea57c",
+      "query": "we need a settings panel widget, help me build it from scratch",
+      "owner": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-3957a2686d",
+      "query": "I'm about to hand-roll a modal dialog component, what should I check first?",
+      "owner": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-29ef186261",
+      "query": "add a new control for filtering the results table — should this be its own component?",
+      "owner": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-651176c983",
+      "query": "before I create this dashboard section component, is there something like it already?",
+      "owner": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-aba12f0880",
+      "query": "create a new WidgetCard component — what folder structure and files do I need?",
+      "owner": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-51c1354e40",
+      "query": "adding a sub-component SidebarNavItem inside the sidebar folder — where exactly does it go?",
+      "owner": "frontend-react:component-structure",
+      "split": "test",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-e7ffc41e73",
+      "query": "the DataRow.tsx file is sitting flat next to DataTable.tsx instead of in its own folder — fix the layout",
+      "owner": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-a37060ad8d",
+      "query": "review the structure of the new EntryForm component before I commit",
+      "owner": "frontend-react:component-structure",
+      "split": "test",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-0b847e5624",
+      "query": "what files should a new SummaryPanel component have — tsx, scss, index?",
+      "owner": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-445d5664e9",
+      "query": "the button uses onMouseEnter to toggle a highlight class — rewrite that as CSS hover",
+      "owner": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-0eccfbc2b5",
+      "query": "the 'Submit' label in EntryForm.tsx is hardcoded — route it through i18n",
+      "owner": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-4541c4daea",
+      "query": "add barrel exports for the new FilterPanel sub-components in index.ts",
+      "owner": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-d59a99a33f",
+      "query": "i'm building a DateRangePicker, how should I name the BEM classes for its input elements?",
+      "owner": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-12da449bac",
+      "query": "i need to build an OrderHistoryPanel that fetches a customer's past orders and lets support reps issue refunds — where does this go and how should it be structured?",
+      "owner": "frontend-react:feature-components",
+      "split": "train",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-a17deb5657",
+      "query": "add a new InvoiceTable feature that joins line items with customer data and computes totals with our business rules",
+      "owner": "frontend-react:feature-components",
+      "split": "test",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-f299be6a5a",
+      "query": "we're adding a whole new domain area for subscription management — plans, billing cycles, upgrade/downgrade logic — how should i lay out the feature components?",
+      "owner": "frontend-react:feature-components",
+      "split": "train",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-528f6eb407",
+      "query": "editing the ShipmentTracker block: it needs to call the data layer for live status and hold the retry/escalation logic itself",
+      "owner": "frontend-react:feature-components",
+      "split": "test",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-b8b1d18772",
+      "query": "this ProductCatalogEditor component mixes business rules for pricing tiers with UI — is that logic supposed to live here or somewhere else?",
+      "owner": "frontend-react:feature-components",
+      "split": "train",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-2669aaa12e",
+      "query": "building a CustomerProfileCard that renders real account data and needs to compose existing buttons/inputs instead of hand-rolling new controls",
+      "owner": "frontend-react:feature-components",
+      "split": "train",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-f860cab7d1",
+      "query": "I need to add a useDebounce hook under src/hooks for the search input",
+      "owner": "frontend-react:hooks-registry",
+      "split": "test",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-9308bf346b",
+      "query": "can you create a custom hook to fetch and cache the current Period across components?",
+      "owner": "frontend-react:hooks-registry",
+      "split": "test",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-bf1578b5c9",
+      "query": "lets extract this polling logic into a reusable useInterval hook",
+      "owner": "frontend-react:hooks-registry",
+      "split": "test",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-af5a08cebb",
+      "query": "rename useFetchUser to useCurrentUser everywhere",
+      "owner": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-2e3824f7fd",
+      "query": "i need some reusable logic to fetch and cache the current user across components",
+      "owner": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-f96929c66a",
+      "query": "move useLocalStorage from src/components/utils into src/hooks",
+      "owner": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-37e441d3c2",
+      "query": "delete the old useLegacyGrid hook, nothing uses it anymore",
+      "owner": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-ac77c34e1d",
+      "query": "write a useRange hook that wraps the range query",
+      "owner": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-3cb3bb1554",
+      "query": "add a hook for tracking window resize so multiple charts can subscribe",
+      "owner": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-21beda8ec5",
+      "query": "add a collapsible section to the sidebar nav for the new admin area",
+      "owner": "frontend-react:layout-components",
+      "split": "test",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-1a9bc08a56",
+      "query": "the top bar needs a global search / command palette trigger button, where should that live?",
+      "owner": "frontend-react:layout-components",
+      "split": "train",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-169a1e9eed",
+      "query": "we need a global overlay that shows a maintenance banner across every page — how should I structure it?",
+      "owner": "frontend-react:layout-components",
+      "split": "train",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-a9f20728c7",
+      "query": "refactor the app shell so the sidebar can collapse to icons only",
+      "owner": "frontend-react:layout-components",
+      "split": "train",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-66979d4a12",
+      "query": "add a new nav item and route guard for the reports section in the app chrome",
+      "owner": "frontend-react:layout-components",
+      "split": "test",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-21f6fe8d0e",
+      "query": "build a command palette (cmd+k) component that overlays the whole app",
+      "owner": "frontend-react:layout-components",
+      "split": "train",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-512c9380f0",
+      "query": "the DataGrid shows a blank white area while the query is loading — add a skeleton",
+      "owner": "frontend-react:skeleton-components",
+      "split": "test",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-51aeac8500",
+      "query": "DataTable has isLoading from TanStack Query and just renders nothing — what's the right loading UI?",
+      "owner": "frontend-react:skeleton-components",
+      "split": "test",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-ca983c10be",
+      "query": "add a loading state to SummaryPanel — it fetches its own data from the BFF",
+      "owner": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-1571cc6fa2",
+      "query": "should I inline the skeleton markup in RecordList.tsx or create a separate component?",
+      "owner": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-c9129d1de0",
+      "query": "the dashboard widget cards show a blank gap for ~500ms before data arrives — fix that",
+      "owner": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-b896dcd4dd",
+      "query": "do I need to add a skeleton to FilterPanel? it receives data via props from the parent",
+      "owner": "frontend-react:skeleton-components",
+      "split": "test",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-f625dab866",
+      "query": "create a ItemListSkeleton next to ItemList.tsx using the shared Skeleton primitive",
+      "owner": "frontend-react:skeleton-components",
+      "split": "test",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-d76d76508e",
+      "query": "add a react-loading-skeleton library so we can use it across all async components",
+      "owner": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-c6a0979fff",
+      "query": "the parent already shows a full-page skeleton while the dashboard loads — do child components need their own skeletons?",
+      "owner": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-0e59a0cdd8",
+      "query": "I just finished building the WidgetCard component — do I need to write a story for it?",
+      "owner": "frontend-react:storybook-stories",
+      "split": "test",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-c933ab11cd",
+      "query": "add a storybook story for the new DataSummary component",
+      "owner": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-e3273ab409",
+      "query": "what states should the ItemList story cover — default, empty, error?",
+      "owner": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-d29776b96a",
+      "query": "created FilterPanel.tsx — should a stories/ folder go inside the component folder?",
+      "owner": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-c8b3599a1e",
+      "query": "how do I show the WidgetCardSkeleton alongside the real WidgetCard in the story?",
+      "owner": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-67ead874c1",
+      "query": "the AccountBadge story is using live domain mock data from our test factories — is that ok?",
+      "owner": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-00ed910012",
+      "query": "where do I put mock data for a storybook story — inline in the file or separate?",
+      "owner": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-8a4e7dd932",
+      "query": "does this project want me to write stories for every component, or just some?",
+      "owner": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-8041c6af76",
+      "query": "write a story for the DateRangePicker covering its default, open, and disabled states",
+      "owner": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-5b679de7a5",
+      "query": "I need a checkbox component for this settings form — should I just write a new one?",
+      "owner": "frontend-react:ui-primitive-reuse",
+      "split": "train",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-ad6a75e8d3",
+      "query": "there's no dropdown/select in this project yet, I'm about to hand-roll one from scratch",
+      "owner": "frontend-react:ui-primitive-reuse",
+      "split": "test",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-ed089b0fb7",
+      "query": "before I build a shared tooltip component, is there already one in the primitives folder?",
+      "owner": "frontend-react:ui-primitive-reuse",
+      "split": "test",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-3046cc0148",
+      "query": "I want to add a reusable badge control other screens can use — where do I start?",
+      "owner": "frontend-react:ui-primitive-reuse",
+      "split": "train",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-bb24637a3c",
+      "query": "we need a modal/dialog primitive for confirmations across the app, should I create a new one?",
+      "owner": "frontend-react:ui-primitive-reuse",
+      "split": "train",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-5239ac909b",
+      "query": "about to hand-roll a raw <input> with custom styling for a form that other pages will reuse",
+      "owner": "frontend-react:ui-primitive-reuse",
+      "split": "train",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-cb1850c4ff",
+      "query": "commit this",
+      "owner": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-494bc18d4c",
+      "query": "ok let's commit",
+      "owner": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-bd8a7a94df",
+      "query": "can you make a commit for these changes",
+      "owner": "git:commit",
+      "split": "test",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-5713b6ea72",
+      "query": "commmit my chnages plz",
+      "owner": "git:commit",
+      "split": "test",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-870d373459",
+      "query": "i'm done with the widget card feature, save it to git",
+      "owner": "git:commit",
+      "split": "test",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-aa0a40e541",
+      "query": "commit and push the sidebar nav refactor",
+      "owner": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-586d2ca1de",
+      "query": "wrap this up and get it into version control",
+      "owner": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-b4dd9acece",
+      "query": "go ahead and commit the changes to ApiClient.ts and the new hook",
+      "owner": "git:commit",
+      "split": "test",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-42af48b3ab",
+      "query": "alright ship these edits into the repo history",
+      "owner": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-1d72924098",
+      "query": "add a 'Save changes' button label to the widget config panel in React",
+      "owner": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-3b86906413",
+      "query": "the empty state on the dashboard says 'No data found' — that string is hardcoded, need to move it to i18n",
+      "owner": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-428a344bea",
+      "query": "add a toast that says 'Record saved successfully' after the user submits the form",
+      "owner": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-6e8fd23ae9",
+      "query": "placeholder text for the account search input is hardcoded in english, fix it",
+      "owner": "i18n:ui-strings",
+      "split": "test",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-71486981fa",
+      "query": "TICK-000 — the widget card settings modal needs a heading 'Configure Widget Card' wired through react-i18next",
+      "owner": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-9e0775ff4d",
+      "query": "write the validation message for a required field in the record entry form",
+      "owner": "i18n:ui-strings",
+      "split": "test",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-9d4d2beba6",
+      "query": "need a tooltip label on the usage metric card that says 'Rolling 30-day active users'",
+      "owner": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-f1182a2310",
+      "query": "add error message copy for when the BFF returns a 403 on the dashboard load",
+      "owner": "i18n:ui-strings",
+      "split": "test",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-76c7b7c7d8",
+      "query": "the sidebar nav item for 'Entries' needs a localization key, add it to the translation catalog",
+      "owner": "i18n:ui-strings",
+      "split": "test",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-30485b1a2f",
+      "query": "post a status update on TICK-000 saying the widget config read path is done",
+      "owner": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-8d06f13287",
+      "query": "write a comment on TICK-000 — the daily report batch is ready for QA",
+      "owner": "jira:comment-style",
+      "split": "test",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-30810c678e",
+      "query": "add a jira comment on TICK-000 explaining the Metric card formula deviation",
+      "owner": "jira:comment-style",
+      "split": "test",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-80ececf05d",
+      "query": "i need to comment on the ticket that we're blocked on the Pkg__Config_Item__c FLS issue",
+      "owner": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-274da0b38f",
+      "query": "drop a note on TICK-000 saying the AI brief is deferred to next sprint",
+      "owner": "jira:comment-style",
+      "split": "test",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-71975e87ef",
+      "query": "use addCommentToJiraIssue to post the handoff note on TICK-000",
+      "owner": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-124f111afc",
+      "query": "write a 'whats done / whats left' update for the jira ticket TICK-000",
+      "owner": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-bb18295000",
+      "query": "update TICK-000 jira with a decision note: config stays under Settings tab for now",
+      "owner": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-50ac06aae8",
+      "query": "post a comment on the ticket that 40/40 apex tests are passing and the branch is ready for review",
+      "owner": "jira:comment-style",
+      "split": "test",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-1d4dbbea85",
+      "query": "write up the design spec for the new metric engine",
+      "owner": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-be2b198e7b",
+      "query": "i need to present the brainstorming results for the list/grid layout feature",
+      "owner": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-3a72120d8a",
+      "query": "write a design doc for how we'll store per-user UI config in Widget_Config__c",
+      "owner": "meta:lean-writing",
+      "split": "test",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-f77b3d2185",
+      "query": "summarize the exploration we did on the error-handling approach — put it in docs/superpowers/specs/",
+      "owner": "meta:lean-writing",
+      "split": "test",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-04a8c47d7a",
+      "query": "draft the spec for TICK-000 daily report batch — should go under docs/superpowers/plans/",
+      "owner": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-a0a9b3dcfe",
+      "query": "write the brainstorm summary for the transport-layer refactor, keep it concise",
+      "owner": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-b5910581fe",
+      "query": "update the design doc for the widget card config — it's gotten too wordy",
+      "owner": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-0cf65ef537",
+      "query": "putting together the spec for the new apex-test factory pattern, needs to be tight and skimmable",
+      "owner": "meta:lean-writing",
+      "split": "test",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-9b8e0e65e9",
+      "query": "write up the options we considered for model routing before we decided — going into the decision log",
+      "owner": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-7bfbc0530d",
+      "query": "write a workflow that fans out 10 reviewer agents over the cumulative diff and adversarially verifies each finding",
+      "owner": "meta:model-routing",
+      "split": "test",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-b70604d607",
+      "query": "kick off a couple of subagents to comb the repo for duplicated code in parallel",
+      "owner": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-381c3003bc",
+      "query": "spawn a bunch of agents to audit every route file under src/config in parallel and report violations",
+      "owner": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-7ee0132dc2",
+      "query": "can you parallelize this alias migration with subagents? there are like 40 files to touch",
+      "owner": "meta:model-routing",
+      "split": "test",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-eb6a4d5a29",
+      "query": "add a verify stage to my workflow script where 3 skeptics try to refute each bug before it lands in the report",
+      "owner": "meta:model-routing",
+      "split": "test",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-bbba860a36",
+      "query": "create a hunt-tests agent in .claude/agents that digs through CI logs for flaky tests",
+      "owner": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-aaf1f5f356",
+      "query": "use a workflow to sweep src and server for dead code and unused exports",
+      "owner": "meta:model-routing",
+      "split": "test",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-215ce1100b",
+      "query": "dispatch an Explore agent to find where getApiClient is initialized",
+      "owner": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-525077659e",
+      "query": "write a workflow script: loop until we collect 10 confirmed bugs, two verifiers per bug",
+      "owner": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-37c9b69219",
+      "query": "i want to create a skill for how we handle i18n strings in this project",
+      "owner": "meta:new-skill",
+      "split": "test",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-218f7154a3",
+      "query": "adding a new skill to the meta plugin — where does the SKILL.md go and what should be in it?",
+      "owner": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-60931492b1",
+      "query": "what's the right folder name and structure for a new salesforce skill about apex batches?",
+      "owner": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-a8b61d45cd",
+      "query": "creating a new domain plugin for database stuff — do i need a plugin.json?",
+      "owner": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-93fc6a7a69",
+      "query": "write a skill that teaches claude to always use the bff proxy for sf calls",
+      "owner": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-54f2e77476",
+      "query": "the new frontend-css:rem skill needs a SKILL.md — show me what it should look like",
+      "owner": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-8768af3182",
+      "query": "adding embed-test as a project-local skill — how is that different from a marketplace skill?",
+      "owner": "meta:new-skill",
+      "split": "test",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-3f7d41d69c",
+      "query": "i need a skill that fires before any apex test is authored — help me scaffold it",
+      "owner": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-cfbbe81cce",
+      "query": "what goes in the description: frontmatter for a new skill?",
+      "owner": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-dc72849150",
+      "query": "i'm about to add a new utils2.ts file for some date helpers",
+      "owner": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-b950e21c92",
+      "query": "thinking of creating a new ErrorMapper class to sit between the BFF and the client",
+      "owner": "meta:ockham",
+      "split": "test",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-ebf8391251",
+      "query": "let me add a new top-level /helpers folder for shared stuff",
+      "owner": "meta:ockham",
+      "split": "test",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-6e021107dc",
+      "query": "going to create a new useWidgetCardData hook — we already have useWidgetMetrics but it's a bit different",
+      "owner": "meta:ockham",
+      "split": "test",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-694562755d",
+      "query": "adding a new AbstractBaseTransport wrapper around HttpClient — just in case we need it later",
+      "owner": "meta:ockham",
+      "split": "test",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-1fce5f261c",
+      "query": "i want to create a new DateFormatterService class, it will just call toLocaleDateString",
+      "owner": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-c042a0658d",
+      "query": "spinning up a new config key for list vs grid mode — might be useful in the future",
+      "owner": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-3ae91e7283",
+      "query": "creating a new EmbedErrorHandler.ts because the BFF one doesn't handle embed errors — well actually the BFF one does",
+      "owner": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-71598b5d88",
+      "query": "adding a new prop variant=\"compact\" to the WidgetCard component for a future dashboard view",
+      "owner": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-ed659ae04e",
+      "query": "i just finished writing a new skill's description and i want to know if it actually triggers before i publish it — how do i measure that",
+      "owner": "meta:skill-eval",
+      "split": "train",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-4e3594d850",
+      "query": "my skill scores 0 recall in the eval, it never seems to fire even though the description looks right. what's going on and how do i get honest numbers",
+      "owner": "meta:skill-eval",
+      "split": "train",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-696a07341c",
+      "query": "run the trigger eval on plugins/frontend-css/skills/responsive-layout and tell me the pass rate",
+      "owner": "meta:skill-eval",
+      "split": "test",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-e3234d1a62",
+      "query": "is this skill good enough to ship, or is its description too narrow to trigger on real queries",
+      "owner": "meta:skill-eval",
+      "split": "test",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-79e1848298",
+      "query": "i edited the description of an existing skill — measure whether it still triggers on the should-fire cases without firing on the near-misses",
+      "owner": "meta:skill-eval",
+      "split": "test",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-9ed0cf6285",
+      "query": "which eval harness should i use to test skill triggering — skill-creator's run_eval keeps giving me zeros",
+      "owner": "meta:skill-eval",
+      "split": "test",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-710d1f17a8",
+      "query": "one of my eval cases fired on 1 of 2 runs — what does that mean and what do i do about it?",
+      "owner": "meta:skill-eval",
+      "split": "train",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-2b0ce58ac0",
+      "query": "a should-not-trigger query fired in my results — is that a real problem or noise?",
+      "owner": "meta:skill-eval",
+      "split": "train",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-131f9289b7",
+      "query": "designing the MetricBuilder class — should it handle both fetching and computing the metric values?",
+      "owner": "meta:solid",
+      "split": "test",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-65be9631bb",
+      "query": "this BFF route handler fetches data, formats it, and sends the email — is that a problem?",
+      "owner": "meta:solid",
+      "split": "test",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-2b58ca2777",
+      "query": "i keep adding cases to the switch in ApiClient.dispatch — how should i structure new transport methods?",
+      "owner": "meta:solid",
+      "split": "test",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-bcfe9a4c19",
+      "query": "the PlatformClient hook does 6 things, reviewing it before i add more",
+      "owner": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-f671301f2f",
+      "query": "structuring the error envelope layer — should the BFF import the Apex error codes directly?",
+      "owner": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-7ad6bb8088",
+      "query": "about to write the RangeResolver — thinking through how it should depend on RangeHandler",
+      "owner": "meta:solid",
+      "split": "test",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-c2f50f8538",
+      "query": "reviewing this apex class before committing — it handles auth, validation, and db writes in one method",
+      "owner": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-6bfe86b3f7",
+      "query": "the useWidgetConfig hook is doing fetching, caching, and transform — should i split it up?",
+      "owner": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-2b93baafa4",
+      "query": "designing a plugin interface for custom metric providers so we can add more without changing the compiler",
+      "owner": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-3c09e55589",
+      "query": "review this 60-file diff before we merge — how should I approach it",
+      "owner": "meta:triage",
+      "split": "test",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-9925eca527",
+      "query": "audit all 40 skills in the marketplace for stale descriptions",
+      "owner": "meta:triage",
+      "split": "test",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-a42f7c9f0d",
+      "query": "before I run the workflow that evals 20+ skills, how do I avoid deep-processing every one",
+      "owner": "meta:triage",
+      "split": "test",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-18bd7d1d27",
+      "query": "migrate all 130 call sites from the old client API to the new one",
+      "owner": "meta:triage",
+      "split": "test",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-3cad84caa1",
+      "query": "sweep the whole repo for dead code and unused exports",
+      "owner": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-6d087ca879",
+      "query": "we have 200 failing tests to get through — where do I start",
+      "owner": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-b60ae7fb2f",
+      "query": "read through every doc in docs/ and tell me which are stale",
+      "owner": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-077e6373a6",
+      "query": "check all 50 Apex classes against the security review bar",
+      "owner": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-55adc11097",
+      "query": "classify every TODO in the codebase and decide what's worth fixing",
+      "owner": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-e43d23e86d",
+      "query": "i just changed the body of the widget-catalog skill — can you refresh its metadata.yaml?",
+      "owner": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-57c925eb0a",
+      "query": "i added a new bundled script to this skill and swapped its allowed-tools — update the metadata sidecar",
+      "owner": "meta:update-skill",
+      "split": "test",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-a07f44fa1f",
+      "query": "the scout hook nudged me after editing this SKILL.md, walk me through updating metadata.yaml before i commit",
+      "owner": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-cdb558c9a0",
+      "query": "i rewrote the hooks.json for this skill — does its changes.tags still match reality?",
+      "owner": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-04069f8c12",
+      "query": "this skill's purpose and needs fields are stale after my edits, re-run the metadata interview",
+      "owner": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-bf9adbe423",
+      "query": "i changed what the order-sync skill actually does — its metadata.yaml purpose no longer matches, fix it",
+      "owner": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-68b5a9ff63",
+      "query": "this skill has no Contract section and still carries a When to Activate — bring it up to the standard",
+      "owner": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-885994048d",
+      "query": "audit the order-sync skill against the house standard and rework whatever fails",
+      "owner": "meta:update-skill",
+      "split": "test",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-e90771e0e1",
+      "query": "add acceptance criteria to this existing skill — it has no evals/rubric.json acceptance half",
+      "owner": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-ba18255508",
+      "query": "its description summarises the workflow instead of saying when to use it — rewrite the frontmatter and fix the boundary",
+      "owner": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-f3d76a6139",
+      "query": "review docs/superpowers/specs/widget-engine.md — is it clear enough for a non-technical manager?",
+      "owner": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-0b7603c5a3",
+      "query": "audit this implementation plan under docs/superpowers/plans/layout-modes.md for bloat and clarity",
+      "owner": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-af39b97a7b",
+      "query": "the design doc for TICK-000 has gotten long — run the clarity check on it",
+      "owner": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-0abee21c06",
+      "query": "just finished writing the RFC for the error envelope format, check if a manager could follow it",
+      "owner": "meta:wittgenstein",
+      "split": "test",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-b0e88fec9c",
+      "query": "this spec has a 40-line wall of prose in section 3, fix it",
+      "owner": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-a0ff1f3d0d",
+      "query": "the plan doc buries the decision at the end — flip it so the bottom line is first",
+      "owner": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-ff7575d880",
+      "query": "review the metric engine spec for undefined jargon and unclear sections",
+      "owner": "meta:wittgenstein",
+      "split": "test",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-d8d1cdc04e",
+      "query": "docs/superpowers/plans/transport-refactor.md feels padded — audit it and trim",
+      "owner": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-6fb427fa4d",
+      "query": "i wrote a design note explaining the data-sync layer — check if a non-technical reader could understand it",
+      "owner": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-afbe119a20",
+      "query": "Add a comment above resolveLedgerRevision explaining why we match on externalRef instead of the row id — it bit us once.",
+      "owner": "no-code-prose:policy",
+      "split": "train",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-85f9f7b876",
+      "query": "Write a JSDoc block for the exported parseInvoiceTotals function in src/lib/invoices/parse.ts.",
+      "owner": "no-code-prose:policy",
+      "split": "test",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-161f77f7c3",
+      "query": "Review this diff for me: the new service class has a 40-line header comment describing the retry strategy and how the queue used to work.",
+      "owner": "no-code-prose:policy",
+      "split": "test",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-7dc21ccf81",
+      "query": "I'm writing an Apex trigger handler — should I document the ordering assumption in a comment at the top of the class?",
+      "owner": "no-code-prose:policy",
+      "split": "train",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-47eab31f67",
+      "query": "Add a docstring to the Python migration script so the next person knows why the batch size is 500.",
+      "owner": "no-code-prose:policy",
+      "split": "train",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-f28723f7fc",
+      "query": "This test file has a ten-line comment before each case saying what it pins and why the case exists. Clean it up.",
+      "owner": "no-code-prose:policy",
+      "split": "train",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-79111602fc",
+      "query": "Leave a note in the code that this endpoint is deprecated and point people at the replacement.",
+      "owner": "no-code-prose:policy",
+      "split": "train",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-0b464d644e",
+      "query": "run the review gate on this branch before I push",
+      "owner": "review:review",
+      "split": "train",
+      "source": "rubric:review:review"
+    },
+    {
+      "id": "q-747c2cac82",
+      "query": "the gate came back red, re-review after the fixes",
+      "owner": "review:review",
+      "split": "test",
+      "source": "rubric:review:review"
+    },
+    {
+      "id": "q-793a599df1",
+      "query": "review this branch and attest it if it is green",
+      "owner": "review:review",
+      "split": "test",
+      "source": "rubric:review:review"
+    },
+    {
+      "id": "q-acdd8d766d",
+      "query": "the gate is green, write the attestation and tell me I can push",
+      "owner": "review:review",
+      "split": "train",
+      "source": "rubric:review:review"
+    },
+    {
+      "id": "q-62a1011b6c",
+      "query": "this repo has no .claude/review.config.json yet — can you install the pre-push review gate?",
+      "owner": "review:setup",
+      "split": "test",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-511af99029",
+      "query": "we want to adopt the 5-agent review system in this new project, set it up for us",
+      "owner": "review:setup",
+      "split": "train",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-b530b45141",
+      "query": "set up the secret-scan CI and husky pre-push hook for this repo",
+      "owner": "review:setup",
+      "split": "train",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-c57de8d43c",
+      "query": "how do I target the review framework to this codebase and pick which skills each reviewer agent loads?",
+      "owner": "review:setup",
+      "split": "train",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-fda8f23be5",
+      "query": "onboard this repo onto the org's pre-push review gate — it's greenfield, nothing configured yet",
+      "owner": "review:setup",
+      "split": "train",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-c565ab5010",
+      "query": "tailor review.config.json for a React + Node repo, wiring in the right conventions and security skills",
+      "owner": "review:setup",
+      "split": "train",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-a3498c252a",
+      "query": "run the apex tests for MetricBuilderTest on myOrg",
+      "owner": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-e0b450c7d5",
+      "query": "deploy WidgetConfigResource.cls and WidgetConfigResourceTest.cls to the org",
+      "owner": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-c16992cc2b",
+      "query": "query the org: SELECT Id, Name FROM Pkg__Widget_Config__c LIMIT 20",
+      "owner": "salesforce:dx_mcp",
+      "split": "test",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-9ef3653b40",
+      "query": "retrieve the ApexClass:MetricBuilder metadata from myOrg",
+      "owner": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-7649456e91",
+      "query": "which org alias should I use for this project?",
+      "owner": "salesforce:dx_mcp",
+      "split": "test",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-f2d592f513",
+      "query": "the deploy job is still running, resume it with the test run id",
+      "owner": "salesforce:dx_mcp",
+      "split": "test",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-6a57333cf4",
+      "query": "list all my connected orgs and their aliases",
+      "owner": "salesforce:dx_mcp",
+      "split": "test",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-bc081f4a4d",
+      "query": "run a tooling API query to check code coverage for MetricBuilder",
+      "owner": "salesforce:dx_mcp",
+      "split": "test",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-9cfd006887",
+      "query": "push the widgetSettings metadata to the myOrg scratch org",
+      "owner": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-91c6f625c8",
+      "query": "create an lwc component that displays Pkg__Widget_Card__c data",
+      "owner": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-dec27fd770",
+      "query": "my lwc is querying document.querySelectorAll('.card') — is that ok",
+      "owner": "salesforce:lwc_development",
+      "split": "test",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-a62e9de483",
+      "query": "add a CSS custom property for the card background color in the widget-card lwc",
+      "owner": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-49b773eb2e",
+      "query": "wire up a new @wire call to the WidgetConfigResource apex class in the dashboard lwc",
+      "owner": "salesforce:lwc_development",
+      "split": "test",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-92d5e57855",
+      "query": "I'm editing the .html template for the itemList component — add a conditional render",
+      "owner": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-3d5788f8df",
+      "query": "write the js-meta.xml for a new widgetDashboard lwc with isExposed true",
+      "owner": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-730f3a87fc",
+      "query": "the metricBanner component uses scss — should I convert it to plain css",
+      "owner": "salesforce:lwc_development",
+      "split": "test",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-d58c7c47a8",
+      "query": "update the RangePicker lwc to emit a custom event when the range changes",
+      "owner": "salesforce:lwc_development",
+      "split": "test",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-d1309d2ad2",
+      "query": "add a public @api property to the itemCard component for the record id",
+      "owner": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-47b7c856c8",
+      "query": "review this diff for security issues before I push",
+      "owner": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-79e8068adb",
+      "query": "my new BFF route /api/widget-config doesn't have auth middleware — is that a problem",
+      "owner": "salesforce:security_review-rules",
+      "split": "test",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-3692a578c7",
+      "query": "check this apex class for SOQL injection — it builds a query with user input",
+      "owner": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-6247ffdf5b",
+      "query": "I'm writing a REST resource that returns Pkg__Widget_Config__c — do I need stripInaccessible",
+      "owner": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-e9836eb832",
+      "query": "does this server route leak the salesforce access token to the client",
+      "owner": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-050d408569",
+      "query": "audit the pre-push diff for hardcoded secrets or api keys",
+      "owner": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-ca7f89481b",
+      "query": "we're logging the sf session token in the BFF error handler — is that safe",
+      "owner": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-5e70055ad3",
+      "query": "does the new order endpoint enforce WITH USER_MODE",
+      "owner": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-43878824e4",
+      "query": "check if this Aura controller is vulnerable to stored XSS via unescaped output",
+      "owner": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-b4a96e849e",
+      "query": "deploy WidgetConfigResource.cls and WidgetConfigResourceTest.cls then run the tests",
+      "owner": "salesforce:sf-deploy-test",
+      "split": "test",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-abf1f7f2f9",
+      "query": "push the widgetSettings apex classes to myOrg and run MetricBuilderTest",
+      "owner": "salesforce:sf-deploy-test",
+      "split": "train",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-734d2832ae",
+      "query": "deploy the whole widgetSettings package to the org and check test results",
+      "owner": "salesforce:sf-deploy-test",
+      "split": "train",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-a5bdb617b1",
+      "query": "I updated RangeResolver — deploy it and verify the tests still pass",
+      "owner": "salesforce:sf-deploy-test",
+      "split": "test",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-c7a75de6e2",
+      "query": "deploy metadata ApexClass:MetricBuilder and run MetricBuilderTest,RangeResolverTest",
+      "owner": "salesforce:sf-deploy-test",
+      "split": "train",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-65c7fc0c3b",
+      "query": "the deploy failed with a source-tracking unsafe path error — how do I fix it",
+      "owner": "salesforce:sf-deploy-test",
+      "split": "test",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-052b0d7c7b",
+      "query": "deploy all classes under force-app/widgetSettings/default/classes/ to myOrg",
+      "owner": "salesforce:sf-deploy-test",
+      "split": "test",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-defc2dcf9e",
+      "query": "run the apex tests for WidgetConfigResourceTest after deploying the latest changes",
+      "owner": "salesforce:sf-deploy-test",
+      "split": "test",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-bb03b3cd08",
+      "query": "quick deploy-and-test cycle for OrderHandlerTest on the scratch org",
+      "owner": "salesforce:sf-deploy-test",
+      "split": "train",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-abbe3b86e5",
+      "query": "run anonymous apex: System.debug(UserInfo.getOrganizationId());",
+      "owner": "salesforce:sf-run",
+      "split": "test",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-18efad1538",
+      "query": "quick soql check — how many Pkg__Widget_Config__c records exist for the current user",
+      "owner": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-a1bbd47686",
+      "query": "execute anon apex on myOrg to reset the widget config for my test user",
+      "owner": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-55a04bcdf5",
+      "query": "I want to reproduce the org-side null pointer in MetricBuilder — run it anon",
+      "owner": "salesforce:sf-run",
+      "split": "test",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-6120beb473",
+      "query": "soql: SELECT Id, Pkg__Config_Kind__c FROM Pkg__Widget_Config__c LIMIT 5",
+      "owner": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-1b1af6e13a",
+      "query": "run this apex snippet on the org without deploying a class",
+      "owner": "salesforce:sf-run",
+      "split": "test",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-b32c4aa9cc",
+      "query": "check if Pkg__Widget_Card__c has any rows where Item_Key__c is null — quick soql",
+      "owner": "salesforce:sf-run",
+      "split": "test",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-abf342be57",
+      "query": "execute apex on the scratch org to see the debug output from RangeResolver",
+      "owner": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-ef2c83fa9b",
+      "query": "run a soql query against myOrg tooling API to check code coverage",
+      "owner": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-ddf7cd353e",
+      "query": "the plugin is enabled in .claude/settings.json but none of its skills show up in this session",
+      "owner": "scout:plugin-sync",
+      "split": "train",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-cc465489da",
+      "query": "/plugin says foo@acme-tools is enabled yet nothing from it appears — what's wrong?",
+      "owner": "scout:plugin-sync",
+      "split": "train",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-0553a6a32f",
+      "query": "I added a plugin to settings.json on this branch and the skill still isn't recognised",
+      "owner": "scout:plugin-sync",
+      "split": "test",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-309d9be043",
+      "query": "a skill that should be available is missing from my session, how do I find out why?",
+      "owner": "scout:plugin-sync",
+      "split": "test",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-c7accb3e69",
+      "query": "why would a plugin load in one of my repos but not in another one on the same machine?",
+      "owner": "scout:plugin-sync",
+      "split": "train",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-0051f4d0f8",
+      "query": "the marketplace lists this skill but the Skill tool says the name is unknown",
+      "owner": "scout:plugin-sync",
+      "split": "train",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-1277146858",
+      "query": "what skills are available in this marketplace for writing unit tests?",
+      "owner": "scout:scout",
+      "split": "test",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-90f3f65d33",
+      "query": "recommend a skill for reviewing my SCSS before I push",
+      "owner": "scout:scout",
+      "split": "test",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-ae24fb3835",
+      "query": "install the skill that formats commit messages for me",
+      "owner": "scout:scout",
+      "split": "train",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-bb2f9643fa",
+      "query": "browse the catalog and show me everything grouped by plugin",
+      "owner": "scout:scout",
+      "split": "train",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-98d9366b09",
+      "query": "is there a skill here that helps with i18n string extraction? what would installing it also bring in?",
+      "owner": "scout:scout",
+      "split": "train",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-735e864a2c",
+      "query": "what does the widget-sync skill do and is it safe to install?",
+      "owner": "scout:scout",
+      "split": "train",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-8087be7578",
+      "query": "write a test class for MetricBuilder",
+      "owner": "tests:apex",
+      "split": "test",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-acbdaeaea4",
+      "query": "I just created WidgetConfigResource.cls — add the matching test file",
+      "owner": "tests:apex",
+      "split": "test",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-a00bf976a8",
+      "query": "our apex tests for Pkg__Widget_Config__c are still using System.assertEquals, fix them to use Assert.*",
+      "owner": "tests:apex",
+      "split": "test",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-481d64ead0",
+      "query": "add @TestSetup data factory for Pkg__Order__c in OrderHandlerTest",
+      "owner": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-3ada6ab939",
+      "query": "cover the negative path in RangeHandlerTest — what happens when the range is null",
+      "owner": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-978ea0ccd1",
+      "query": "MetricBuilderTest only has 40% coverage, write adversarial tests for the bad-input paths",
+      "owner": "tests:apex",
+      "split": "test",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-ed44dde8d2",
+      "query": "i need a test for the REST resource WidgetCardConfigResource — mock the RestRequest",
+      "owner": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-343d5a0c9e",
+      "query": "update RecordHandlerTest after I added the new validateItems method",
+      "owner": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-0c2463fa69",
+      "query": "our test inserts a hardcoded id '001000000000001AAA', fix that",
+      "owner": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-bc88aa941b",
+      "query": "review this Apex test class somebody else wrote and tell me what it is missing",
+      "owner": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-831bf160a9",
+      "query": "cover the WITH USER_MODE path in WidgetConfigResourceTest with a runAs case",
+      "owner": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-2386ce2c2b",
+      "query": "write a unit test for the discount calculator",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-65bd19ab16",
+      "query": "this test file is slow, can we speed it up",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-b6d3cb82a5",
+      "query": "the suite is green but the bug shipped anyway — what did the tests miss",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-90bf686e44",
+      "query": "does this test file belong in the node project or the jsdom one",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-823d9d2779",
+      "query": "what should I name a test that needs a DOM but has no JSX",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-dba10afbc0",
+      "query": "review this test — is it actually asserting anything",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-cf134f8193",
+      "query": "set a coverage threshold for this repo",
+      "owner": "tests:architecture",
+      "split": "test",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-ac4cc6320e",
+      "query": "what should the mutation score bar be",
+      "owner": "tests:architecture",
+      "split": "test",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-54f0905371",
+      "query": "this test passes on a rerun and fails on CI, what do I do with it",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-3f684ad370",
+      "query": "which cases should I write for a function that takes an optional amount",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-407b52d8b7",
+      "query": "move these test files into the right tier",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-867c3da3a6",
+      "query": "should this component have a test or just a story",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-80da13b289",
+      "query": "add a retry to the flaky test so CI stops failing",
+      "owner": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-4e9b8ef414",
+      "query": "fix the failing unit test in the checkout service",
+      "owner": "none",
+      "not": "cerberus:leak-check",
+      "split": "train",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-55aee7e25a",
+      "query": "rename this local variable across the current file",
+      "owner": "none",
+      "not": "cerberus:leak-check",
+      "split": "train",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-26cc6ee260",
+      "query": "write a conventional-commit message for these staged changes",
+      "owner": "none",
+      "not": "cerberus:leak-check",
+      "split": "train",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-1644f2e209",
+      "query": "add a loading skeleton to the DataTable component",
+      "owner": "none",
+      "not": "cerberus:leak-check",
+      "split": "test",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-f945c3758a",
+      "query": "push the release tag for the frontend app",
+      "owner": "none",
+      "not": "cerberus:leak-check",
+      "split": "train",
+      "source": "rubric:cerberus:leak-check"
+    },
+    {
+      "id": "q-5abc87d857",
+      "query": "does this eval fixture leak a real class or object name from our codebase?",
+      "owner": "none",
+      "not": "cerberus:security-scan",
+      "split": "train",
+      "source": "rubric:cerberus:security-scan"
+    },
+    {
+      "id": "q-6f704a76c6",
+      "query": "clean up the wording in this design doc so a manager can follow it",
+      "owner": "none",
+      "not": "critique:critique",
+      "split": "train",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-61e5f9e688",
+      "query": "review my pull request diff for bugs before I push",
+      "owner": "none",
+      "not": "critique:critique",
+      "split": "train",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-594e9c9900",
+      "query": "run the pre-push review gate on this branch",
+      "owner": "none",
+      "not": "critique:critique",
+      "split": "test",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-8470676fda",
+      "query": "write a new skill for parsing widget import errors",
+      "owner": "none",
+      "not": "critique:critique",
+      "split": "train",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-6f9aa1fc0c",
+      "query": "is creating this new helper file justified or is it over-engineering",
+      "owner": "none",
+      "not": "critique:critique",
+      "split": "train",
+      "source": "rubric:critique:critique"
+    },
+    {
+      "id": "q-c22c33db5f",
+      "query": "plot quarterly sales from this csv in my downloads as a bar chart with axis labels",
+      "owner": "none",
+      "not": "diagram:diagram",
+      "split": "test",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-040b1adc9d",
+      "query": "explain in words how the sealed-base pattern works in RangeHandler — no picture needed, just walk me through it",
+      "owner": "none",
+      "not": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-edbf78e39e",
+      "query": "this svg icon broke, fix the path data so it renders properly again",
+      "owner": "none",
+      "not": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-f091966192",
+      "query": "create an ERD for our salesforce objects in Lucidchart and share the link with the team",
+      "owner": "none",
+      "not": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-a75580f96c",
+      "query": "show me a dashboard of the metrics for the last full week — signups / active / churn",
+      "owner": "none",
+      "not": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-be33cc8a58",
+      "query": "add a mermaid sequence diagram to the PR description showing the login handshake between the SPA and the BFF",
+      "owner": "none",
+      "not": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-20096bb11c",
+      "query": "convert this hand-drawn architecture photo i took of the whiteboard into an editable excalidraw",
+      "owner": "none",
+      "not": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-0dd373bc47",
+      "query": "just render the existing record-flow.html and take a screenshot, don't change anything",
+      "owner": "none",
+      "not": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-04ede55d52",
+      "query": "generate an ascii flowchart of the CI pipeline steps to paste into the README",
+      "owner": "none",
+      "not": "diagram:diagram",
+      "split": "train",
+      "source": "rubric:diagram:diagram"
+    },
+    {
+      "id": "q-1f3b041194",
+      "query": "write the actual prose for the payments-webhook mechanism doc, describing what it does step by step",
+      "owner": "none",
+      "not": "docs:standard",
+      "split": "test",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-408d27bf32",
+      "query": "review this spec for clarity — could a non-technical manager follow the argument, or is it padded and jargon-heavy?",
+      "owner": "none",
+      "not": "docs:standard",
+      "split": "test",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-9bbaf87874",
+      "query": "draw a diagram of how the order-processing queue, the worker, and the retry table connect",
+      "owner": "none",
+      "not": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-13fc52785d",
+      "query": "generate an API reference page from the OpenAPI schema for the billing service",
+      "owner": "none",
+      "not": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-ba0d58c5c4",
+      "query": "fix the typo in the README where it says 'recieve' instead of 'receive'",
+      "owner": "none",
+      "not": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-398c1156bb",
+      "query": "tidy up the wording on this Jira comment before I post it to the ticket",
+      "owner": "none",
+      "not": "docs:standard",
+      "split": "test",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-588c6ba34a",
+      "query": "summarize the options we considered in yesterday's brainstorming session into a short design doc",
+      "owner": "none",
+      "not": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-133f35cc5c",
+      "query": "convert this hand-drawn whiteboard photo of our architecture into an editable diagram file",
+      "owner": "none",
+      "not": "docs:standard",
+      "split": "train",
+      "source": "rubric:docs:standard"
+    },
+    {
+      "id": "q-dddf9dd181",
+      "query": "just wrap this OrderTable component in an error boundary so it doesn't crash the parent",
+      "owner": "none",
+      "not": "error:architecture",
+      "split": "test",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-ee50a29d1a",
+      "query": "style the error tile — the retry button spacing is off and the icon is too big",
+      "owner": "none",
+      "not": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-bb2986616f",
+      "query": "what should the ErrorInfo.reason envelope look like on the wire and which status enum do i use?",
+      "owner": "none",
+      "not": "error:architecture",
+      "split": "test",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-69eb1ea220",
+      "query": "add a new reason code to the backend registry and map it to an http status",
+      "owner": "none",
+      "not": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-1a829c9912",
+      "query": "translate these error strings into French",
+      "owner": "none",
+      "not": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-dcc4ba5f75",
+      "query": "my useOrders hook is fetching twice on mount — debug the query",
+      "owner": "none",
+      "not": "error:architecture",
+      "split": "test",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-50ceaaaf78",
+      "query": "write a storybook story for the EmptyState component",
+      "owner": "none",
+      "not": "error:architecture",
+      "split": "train",
+      "source": "rubric:error:architecture"
+    },
+    {
+      "id": "q-1459e22eb4",
+      "query": "Fix this TypeError: cannot read properties of undefined crashing the DataGrid on first render",
+      "owner": "none",
+      "not": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-d97874caa5",
+      "query": "Why is this try/catch swallowing the stack trace? I can't see where it actually failed",
+      "owner": "none",
+      "not": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-9bc54e2d2f",
+      "query": "Add React error boundaries around the router so a crash in one route doesn't blank the whole app",
+      "owner": "none",
+      "not": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-85f4210042",
+      "query": "Write a vitest test that asserts createOrder throws when the amount is negative",
+      "owner": "none",
+      "not": "error:format",
+      "split": "test",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-a826af1e24",
+      "query": "The linter flags an unused catch binding in this function — how do I silence it cleanly?",
+      "owner": "none",
+      "not": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-bdc3e483e4",
+      "query": "Explain the difference between throwing an Error and rejecting a promise in async JS",
+      "owner": "none",
+      "not": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-195ebfbe83",
+      "query": "Our test coverage dropped — add negative-path assertions so the failing branch is covered",
+      "owner": "none",
+      "not": "error:format",
+      "split": "test",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-1eccea5dc9",
+      "query": "The retry logic in the fetch wrapper loops forever on a network drop; add a max-attempts cap",
+      "owner": "none",
+      "not": "error:format",
+      "split": "train",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-fb31a233c4",
+      "query": "Rename the ApiException class to ServiceException across the codebase without changing behavior",
+      "owner": "none",
+      "not": "error:format",
+      "split": "test",
+      "source": "rubric:error:format"
+    },
+    {
+      "id": "q-6f6ca0f379",
+      "query": "deploy this Apex class and its test class to the sandbox and tell me if tests pass",
+      "owner": "none",
+      "not": "frontend:fe-check",
+      "split": "train",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-024652e1f7",
+      "query": "write a unit test for this new formatCurrency helper function",
+      "owner": "none",
+      "not": "frontend:fe-check",
+      "split": "train",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-e01aaf969c",
+      "query": "review my diff for bugs and simplification opportunities before i push",
+      "owner": "none",
+      "not": "frontend:fe-check",
+      "split": "test",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-441d6227ff",
+      "query": "run anonymous Apex against the dev org to check the trigger fired correctly",
+      "owner": "none",
+      "not": "frontend:fe-check",
+      "split": "train",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-c29f875992",
+      "query": "add a Storybook story covering the loading and error states of this card component",
+      "owner": "none",
+      "not": "frontend:fe-check",
+      "split": "train",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-b38a041e99",
+      "query": "should i convert this hardcoded 16px margin to a rem value?",
+      "owner": "none",
+      "not": "frontend:fe-check",
+      "split": "test",
+      "source": "rubric:frontend:fe-check"
+    },
+    {
+      "id": "q-9264f787b2",
+      "query": "add a 1px border-bottom to the table header row in DataTable.scss",
+      "owner": "none",
+      "not": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-c36876db05",
+      "query": "set box-shadow: 0 2px 8px rgba(0,0,0,0.1) on the dropdown card",
+      "owner": "none",
+      "not": "frontend-css:rem",
+      "split": "test",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-8563242b71",
+      "query": "the svg icon in NavIcon.tsx has width='24' height='24' — fix the svg attributes",
+      "owner": "none",
+      "not": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-6759050bfa",
+      "query": "switch the component stylesheet from .css to .scss and add the variables import",
+      "owner": "none",
+      "not": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-ebad4c67cd",
+      "query": "add $color-primary to the variables file and use it in the button styles",
+      "owner": "none",
+      "not": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-6968477169",
+      "query": "create a new SCSS module for the EntryForm component following BEM",
+      "owner": "none",
+      "not": "frontend-css:rem",
+      "split": "test",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-de6088d546",
+      "query": "the button label says 'Submit' in JSX, route it through useTranslation",
+      "owner": "none",
+      "not": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-c131894f88",
+      "query": "stroke-width on the chart SVG paths should stay in px, right?",
+      "owner": "none",
+      "not": "frontend-css:rem",
+      "split": "train",
+      "source": "rubric:frontend-css:rem"
+    },
+    {
+      "id": "q-df1c8b7be0",
+      "query": "convert all these hardcoded px values in card.scss to rem",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "test",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-57c23e205e",
+      "query": "our BEM naming is inconsistent, can you refactor button.scss to use proper block__element--modifier structure",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "test",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-1ceee57389",
+      "query": "where should i put a new useDebounce hook, is there a registry for custom hooks in this repo",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-f250c3dde2",
+      "query": "this react-query call refetches on every focus, how do i configure staleTime so the KPI cards stop hammering the API",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-90eed5fad4",
+      "query": "the /api/items endpoint returns a 502 sometimes, add proper error handling and a retry",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-718375796a",
+      "query": "translate all the hardcoded english strings in the checkout flow into i18n keys",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-e2e56c75d6",
+      "query": "write jest tests for the formatCurrency util covering negative numbers and zero",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-d44cc8d1b2",
+      "query": "my print stylesheet is wrong — the invoice should fit on one A4 page when printed, page-break after the totals",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-df3bce6f5b",
+      "query": "the chart colors clash with our brand, update the palette tokens in _colors.scss",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "test",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-3f4a6203a4",
+      "query": "set up a Storybook story for the existing Avatar component with size and status variants",
+      "owner": "none",
+      "not": "frontend-css:responsive-layout",
+      "split": "train",
+      "source": "rubric:frontend-css:responsive-layout"
+    },
+    {
+      "id": "q-526e9ada53",
+      "query": "add margin-top: 1.5rem to the card header — is that the right unit?",
+      "owner": "none",
+      "not": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-0455fdcd6c",
+      "query": "the h2 in DashboardPage.tsx uses 20px font-size, convert it to rem",
+      "owner": "none",
+      "not": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-7b6bcd1c30",
+      "query": "should I name the component folder UserBadge or user-badge?",
+      "owner": "none",
+      "not": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-a01b784f87",
+      "query": "what BEM class name goes on the inner icon of the NavItem component?",
+      "owner": "none",
+      "not": "frontend-css:scss-modules",
+      "split": "test",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-f6b53ad024",
+      "query": "add a Storybook story for the WidgetCard component",
+      "owner": "none",
+      "not": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-fe60e6b08d",
+      "query": "import alias for styles — should I use @/styles or ../../../styles?",
+      "owner": "none",
+      "not": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-d1565f1b8b",
+      "query": "add skeleton loading state to the SummaryPanel component",
+      "owner": "none",
+      "not": "frontend-css:scss-modules",
+      "split": "train",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-e328e0aabc",
+      "query": "the LWC component aura:style isn't picking up my CSS custom properties",
+      "owner": "none",
+      "not": "frontend-css:scss-modules",
+      "split": "test",
+      "source": "rubric:frontend-css:scss-modules"
+    },
+    {
+      "id": "q-a40e79e890",
+      "query": "add margin-top: 1.5rem to the card header scss",
+      "owner": "none",
+      "not": "frontend-js:conventions",
+      "split": "test",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-4628229370",
+      "query": "create a new SCSS variables file for spacing tokens",
+      "owner": "none",
+      "not": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-2ba0514ff9",
+      "query": "should I use rem or px for the sidebar width in tailwind?",
+      "owner": "none",
+      "not": "frontend-js:conventions",
+      "split": "test",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-f1602f4062",
+      "query": "scaffold a new React component folder for ItemFilters with BEM scss",
+      "owner": "none",
+      "not": "frontend-js:conventions",
+      "split": "test",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-4d13670e77",
+      "query": "add a Storybook story for the MetricCard component",
+      "owner": "none",
+      "not": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-b0766fafee",
+      "query": "add skeleton loading to the RecordList component",
+      "owner": "none",
+      "not": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-fd73958891",
+      "query": "write an Apex test for AccountRangeResolver with @TestSetup",
+      "owner": "none",
+      "not": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-d89bab9425",
+      "query": "route the 'No results found' label in DataTable.tsx through useTranslation",
+      "owner": "none",
+      "not": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-fb50a599b0",
+      "query": "the BFF route /api/items is missing auth — fix the middleware",
+      "owner": "none",
+      "not": "frontend-js:conventions",
+      "split": "train",
+      "source": "rubric:frontend-js:conventions"
+    },
+    {
+      "id": "q-574461048d",
+      "query": "should this reusable button primitive live in the shared UI library or get built one-off?",
+      "owner": "none",
+      "not": "frontend-react:component-placement",
+      "split": "test",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-256e15a203",
+      "query": "review this diff for SCSS BEM naming and folder structure issues",
+      "owner": "none",
+      "not": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-b12c29b276",
+      "query": "write a Storybook story for the Card component I just finished",
+      "owner": "none",
+      "not": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-0226e63ff8",
+      "query": "our top nav bar needs a new dropdown item — how should the layout shell code be organized?",
+      "owner": "none",
+      "not": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-fb33fefec2",
+      "query": "rename this custom hook and move it to the shared hooks folder",
+      "owner": "none",
+      "not": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-7261e907a6",
+      "query": "convert these hardcoded pixel margins in the panel's stylesheet to rem units",
+      "owner": "none",
+      "not": "frontend-react:component-placement",
+      "split": "train",
+      "source": "rubric:frontend-react:component-placement"
+    },
+    {
+      "id": "q-c1f1610cd3",
+      "query": "add margin-top: 24px to .widget-card in widget-card.scss",
+      "owner": "none",
+      "not": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-32b180bc7d",
+      "query": "convert all the px values in sidebar.scss to rem",
+      "owner": "none",
+      "not": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-e33cbee54c",
+      "query": "add the $color-danger variable to variables/_colors.scss",
+      "owner": "none",
+      "not": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-9e23b34dca",
+      "query": "check hooks-registry.md before writing a new useSelectedAccount hook",
+      "owner": "none",
+      "not": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-eb91b649cb",
+      "query": "does a Skeleton component exist for SummaryPanel, or do I need to create one?",
+      "owner": "none",
+      "not": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-8876ce2169",
+      "query": "add a Storybook story for the WidgetCard component I just created",
+      "owner": "none",
+      "not": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-b931c8fbc8",
+      "query": "the import path is ../../../components/primitives/Button — add an alias for that",
+      "owner": "none",
+      "not": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-48ab846dad",
+      "query": "write an Apex REST controller for the new /api/metrics endpoint",
+      "owner": "none",
+      "not": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-3b6239f83c",
+      "query": "add a loading skeleton to the RecordList component",
+      "owner": "none",
+      "not": "frontend-react:component-structure",
+      "split": "train",
+      "source": "rubric:frontend-react:component-structure"
+    },
+    {
+      "id": "q-d2f971ef36",
+      "query": "i need a generic reusable Tooltip component for the whole app — nothing domain-specific, just a UI primitive",
+      "owner": "none",
+      "not": "frontend-react:feature-components",
+      "split": "test",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-85fbadea71",
+      "query": "this component file is in the wrong folder — help me restructure it into its own directory with proper BEM class names",
+      "owner": "none",
+      "not": "frontend-react:feature-components",
+      "split": "train",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-2836bb00b8",
+      "query": "add a loading skeleton for the OrderHistoryPanel while its data fetches",
+      "owner": "none",
+      "not": "frontend-react:feature-components",
+      "split": "train",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-6d2fe24f8c",
+      "query": "write a Storybook story covering the default, empty, and error states of the InvoiceTable component",
+      "owner": "none",
+      "not": "frontend-react:feature-components",
+      "split": "train",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-fe6c77c4a8",
+      "query": "set up the top navigation bar and sidebar shell for the app",
+      "owner": "none",
+      "not": "frontend-react:feature-components",
+      "split": "train",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-7781a4d07a",
+      "query": "convert this component's hardcoded pixel padding values to rem units",
+      "owner": "none",
+      "not": "frontend-react:feature-components",
+      "split": "train",
+      "source": "rubric:frontend-react:feature-components"
+    },
+    {
+      "id": "q-2f9f23337e",
+      "query": "explain how useEffect dependency arrays work",
+      "owner": "none",
+      "not": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-5397a12448",
+      "query": "why does my useState update trigger two re-renders in strict mode?",
+      "owner": "none",
+      "not": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-13353f285a",
+      "query": "convert this class component to use hooks",
+      "owner": "none",
+      "not": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-063589d6ef",
+      "query": "add a git pre-commit hook to run eslint",
+      "owner": "none",
+      "not": "frontend-react:hooks-registry",
+      "split": "test",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-a815c54461",
+      "query": "write a webhook handler in the server for Stripe events",
+      "owner": "none",
+      "not": "frontend-react:hooks-registry",
+      "split": "test",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-4831fc707f",
+      "query": "useMemo vs useCallback for this expensive calc, which is faster?",
+      "owner": "none",
+      "not": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-4dad17201e",
+      "query": "my useEffect keeps firing in an infinite loop, help me debug it",
+      "owner": "none",
+      "not": "frontend-react:hooks-registry",
+      "split": "train",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-83279985e9",
+      "query": "set up a husky pre-push hook that runs the tests",
+      "owner": "none",
+      "not": "frontend-react:hooks-registry",
+      "split": "test",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-70fb183339",
+      "query": "should I call useContext here or pass the value down as props?",
+      "owner": "none",
+      "not": "frontend-react:hooks-registry",
+      "split": "test",
+      "source": "rubric:frontend-react:hooks-registry"
+    },
+    {
+      "id": "q-8bd9c79947",
+      "query": "build a CustomerOrdersTable component that fetches and renders order line items",
+      "owner": "none",
+      "not": "frontend-react:layout-components",
+      "split": "train",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-0b9f1b657c",
+      "query": "do we already have a reusable dropdown primitive before I build a new one?",
+      "owner": "none",
+      "not": "frontend-react:layout-components",
+      "split": "test",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-670b7bb784",
+      "query": "how should I organize this component's folder — tsx, scss, and index files?",
+      "owner": "none",
+      "not": "frontend-react:layout-components",
+      "split": "test",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-757cf57b5a",
+      "query": "add a loading skeleton for the async-loaded dashboard widget",
+      "owner": "none",
+      "not": "frontend-react:layout-components",
+      "split": "test",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-ca156de246",
+      "query": "write a Storybook story covering the empty and error states for this card",
+      "owner": "none",
+      "not": "frontend-react:layout-components",
+      "split": "train",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-ddd7f81a50",
+      "query": "route this button's label text through the project's i18n setup",
+      "owner": "none",
+      "not": "frontend-react:layout-components",
+      "split": "test",
+      "source": "rubric:frontend-react:layout-components"
+    },
+    {
+      "id": "q-51409fdddb",
+      "query": "create a new WidgetCard component with its folder, tsx, scss, and index.ts",
+      "owner": "none",
+      "not": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-bb867307da",
+      "query": "add a Storybook story for the SummaryPanel component",
+      "owner": "none",
+      "not": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-7ad1ef579c",
+      "query": "the SidebarNavItem should render inside a sidebar/ subfolder — fix the folder layout",
+      "owner": "none",
+      "not": "frontend-react:skeleton-components",
+      "split": "test",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-8709956911",
+      "query": "add padding: 1rem to the skeleton container in widget-card-skeleton.scss",
+      "owner": "none",
+      "not": "frontend-react:skeleton-components",
+      "split": "test",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-bec60d25df",
+      "query": "write a new useWidgetMetrics hook — check the hooks-registry first",
+      "owner": "none",
+      "not": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-eee90636c2",
+      "query": "convert the hardcoded 'Loading…' text in DataTable to useTranslation",
+      "owner": "none",
+      "not": "frontend-react:skeleton-components",
+      "split": "test",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-5b6944045e",
+      "query": "the card hover effect is done with onMouseEnter — rewrite as CSS :hover",
+      "owner": "none",
+      "not": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-1d53c5ff70",
+      "query": "add a $space-8 variable to _spacing.scss",
+      "owner": "none",
+      "not": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-f28ee3a87d",
+      "query": "review the BFF /api/records route for auth middleware",
+      "owner": "none",
+      "not": "frontend-react:skeleton-components",
+      "split": "train",
+      "source": "rubric:frontend-react:skeleton-components"
+    },
+    {
+      "id": "q-667426cd53",
+      "query": "create a WidgetCardSkeleton.tsx next to WidgetCard.tsx using the Skeleton primitive",
+      "owner": "none",
+      "not": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-644bdf9127",
+      "query": "the component folder for DataRow is a bare .tsx file, move it into its own subfolder",
+      "owner": "none",
+      "not": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-a246e914e3",
+      "query": "add rem-based spacing to the story container div",
+      "owner": "none",
+      "not": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-868d624ec0",
+      "query": "the 'No orders' empty state is hardcoded — route through useTranslation",
+      "owner": "none",
+      "not": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-f0a3f27731",
+      "query": "check hooks-registry.md before writing a useItemFilters hook",
+      "owner": "none",
+      "not": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-a0a0f3887a",
+      "query": "add SCSS variables for the card's shadow and border-radius tokens",
+      "owner": "none",
+      "not": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-e3b6990ffe",
+      "query": "review the DataTable component for code style — arrow functions, braces, naming",
+      "owner": "none",
+      "not": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-bac77074f0",
+      "query": "add a loading skeleton to the RecordList since it fetches its own data",
+      "owner": "none",
+      "not": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-76fb68beb3",
+      "query": "set up the review gate in this repo using the bootstrap script",
+      "owner": "none",
+      "not": "frontend-react:storybook-stories",
+      "split": "train",
+      "source": "rubric:frontend-react:storybook-stories"
+    },
+    {
+      "id": "q-e9e5d8ac56",
+      "query": "how should I structure the folder and files for this new OrderSummary feature component?",
+      "owner": "none",
+      "not": "frontend-react:ui-primitive-reuse",
+      "split": "train",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-e8ec9d6d73",
+      "query": "should this new component get a loading skeleton, and where should it live?",
+      "owner": "none",
+      "not": "frontend-react:ui-primitive-reuse",
+      "split": "test",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-0b2c6eddd3",
+      "query": "write a Storybook story for the Button component covering default, disabled, and loading states",
+      "owner": "none",
+      "not": "frontend-react:ui-primitive-reuse",
+      "split": "train",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-153fe16e37",
+      "query": "convert the hardcoded 16px padding in this card's SCSS to rem units",
+      "owner": "none",
+      "not": "frontend-react:ui-primitive-reuse",
+      "split": "train",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-4552b7b3a7",
+      "query": "this error message is hardcoded English text — route it through the i18n system",
+      "owner": "none",
+      "not": "frontend-react:ui-primitive-reuse",
+      "split": "train",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-62086895b2",
+      "query": "add a new custom useDebouncedValue hook and figure out where it should be registered",
+      "owner": "none",
+      "not": "frontend-react:ui-primitive-reuse",
+      "split": "train",
+      "source": "rubric:frontend-react:ui-primitive-reuse"
+    },
+    {
+      "id": "q-aaa283044a",
+      "query": "explain what git rebase does",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-782e500ad0",
+      "query": "why did my last commit fail CI",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-9b5bec4fe9",
+      "query": "revert the last commit, it broke the build",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "test",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-e578f33fba",
+      "query": "what's in my git stash right now",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-c7405b7c77",
+      "query": "write me a commit-message linter script",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-37fba01dde",
+      "query": "set up a pre-commit hook that runs eslint",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-afe5c50b68",
+      "query": "show me the git log for the last week",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-b7563562e7",
+      "query": "help me resolve this merge conflict in package.json",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "test",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-404ddb6e64",
+      "query": "configure my git user.email for this repo",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-26125ddcef",
+      "query": "how do I squash my last three commits into one",
+      "owner": "none",
+      "not": "git:commit",
+      "split": "train",
+      "source": "rubric:git:commit"
+    },
+    {
+      "id": "q-31ccc88354",
+      "query": "log an error to the console when the Salesforce token refresh fails",
+      "owner": "none",
+      "not": "i18n:ui-strings",
+      "split": "test",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-5c41b8e321",
+      "query": "add an error code for the missing Pkg__Config_Item__c field and register it in ERROR_CODES.md",
+      "owner": "none",
+      "not": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-c92a2f77ee",
+      "query": "set the enum key for the metric type to ACTIVE in the TypeScript union",
+      "owner": "none",
+      "not": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-e8fe995337",
+      "query": "write a test fixture with a hardcoded account name 'Acme Corp' for the records unit test",
+      "owner": "none",
+      "not": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-97a755e084",
+      "query": "the backend route logs 'request received' on every BFF call, is that fine?",
+      "owner": "none",
+      "not": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-72a4406acb",
+      "query": "add a config key 'widget.refreshIntervalMs' to the app settings object",
+      "owner": "none",
+      "not": "i18n:ui-strings",
+      "split": "test",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-f7de94fab4",
+      "query": "how should i handle the google.rpc.Status error envelope when the Apex service throws?",
+      "owner": "none",
+      "not": "i18n:ui-strings",
+      "split": "train",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-38a46e645c",
+      "query": "rename the internal enum value OLD_ENTRY to NEW_ENTRY across the codebase",
+      "owner": "none",
+      "not": "i18n:ui-strings",
+      "split": "test",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-7e97650888",
+      "query": "add a server-side log line that prints the Salesforce org id on startup",
+      "owner": "none",
+      "not": "i18n:ui-strings",
+      "split": "test",
+      "source": "rubric:i18n:ui-strings"
+    },
+    {
+      "id": "q-04c1fc1a36",
+      "query": "add an inline code comment explaining why we strip the Pkg__ namespace prefix here",
+      "owner": "none",
+      "not": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-817ec47420",
+      "query": "write a git commit message for the metric engine changes",
+      "owner": "none",
+      "not": "jira:comment-style",
+      "split": "test",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-85120e59e7",
+      "query": "write a PR description for the TICK-000 config branch",
+      "owner": "none",
+      "not": "jira:comment-style",
+      "split": "test",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-59121cbb14",
+      "query": "add a JSDoc comment to the MetricBuilder class",
+      "owner": "none",
+      "not": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-068e70ae86",
+      "query": "write a TODO comment in the dashboard component about the missing chart integration",
+      "owner": "none",
+      "not": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-95a83417cd",
+      "query": "add a comment to the Apex test class explaining the @TestSetup data setup",
+      "owner": "none",
+      "not": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-f41b4f4cea",
+      "query": "post a slack message to the engineering channel that the deploy is done",
+      "owner": "none",
+      "not": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-771c7d5e16",
+      "query": "write a changelog entry for the v1.2 release notes",
+      "owner": "none",
+      "not": "jira:comment-style",
+      "split": "test",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-ab3ff8c72e",
+      "query": "add an HTML comment in the LWC template marking the conditional block",
+      "owner": "none",
+      "not": "jira:comment-style",
+      "split": "train",
+      "source": "rubric:jira:comment-style"
+    },
+    {
+      "id": "q-baefb2131e",
+      "query": "hey what does the Pkg__Widget_Config__c object look like",
+      "owner": "none",
+      "not": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-5ab04b942d",
+      "query": "review this spec under docs/superpowers/specs/widget-engine.md for clarity and bloat — cut what's not earning its place",
+      "owner": "none",
+      "not": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-e4d954771b",
+      "query": "this design doc is a wall of text, audit it and fix it",
+      "owner": "none",
+      "not": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-fc546884c2",
+      "query": "check my commit message, is it clear enough",
+      "owner": "none",
+      "not": "meta:lean-writing",
+      "split": "test",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-7f18b7167f",
+      "query": "I'm about to add a new helper util for date formatting — should I create a new file?",
+      "owner": "none",
+      "not": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-275f0ecdd4",
+      "query": "what's the SOLID principle for this service class that does both fetching and parsing?",
+      "owner": "none",
+      "not": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-42f839ace2",
+      "query": "write a jira comment summarizing the deploy status",
+      "owner": "none",
+      "not": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-a0e729abb3",
+      "query": "add a ui-strings entry for the new toast message",
+      "owner": "none",
+      "not": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-618dc1231d",
+      "query": "explain how the data-sync message flow works",
+      "owner": "none",
+      "not": "meta:lean-writing",
+      "split": "train",
+      "source": "rubric:meta:lean-writing"
+    },
+    {
+      "id": "q-deab2aa133",
+      "query": "which claude model is cheapest for my API integration right now, haiku or sonnet?",
+      "owner": "none",
+      "not": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-1bbc8c5a75",
+      "query": "switch my default session model to sonnet, tired of burning tokens on chat",
+      "owner": "none",
+      "not": "meta:model-routing",
+      "split": "test",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-9df61a7bd7",
+      "query": "add a route guard to src/config/guards so the admin pages need the permission check",
+      "owner": "none",
+      "not": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-d224214439",
+      "query": "write the data model for the widget card config object, fields and types",
+      "owner": "none",
+      "not": "meta:model-routing",
+      "split": "test",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-a84ec497f6",
+      "query": "my elevenlabs voice agent sounds off, tweak its prompt for me",
+      "owner": "none",
+      "not": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-2c5ba723c8",
+      "query": "explain how the agent toolset works in the managed agents API, do I need a beta header?",
+      "owner": "none",
+      "not": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-847d59e49f",
+      "query": "fix the workflow yaml for the github actions deploy, it fails on the cache step",
+      "owner": "none",
+      "not": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-e61f117065",
+      "query": "how do I register a new MCP server in settings.json for this project?",
+      "owner": "none",
+      "not": "meta:model-routing",
+      "split": "train",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-a02e05c552",
+      "query": "refactor the routeRequest function in RequestRouter, it has grown to 80 lines",
+      "owner": "none",
+      "not": "meta:model-routing",
+      "split": "test",
+      "source": "rubric:meta:model-routing"
+    },
+    {
+      "id": "q-43147db2e7",
+      "query": "improve this skill's description so it triggers more reliably — run evals on it",
+      "owner": "none",
+      "not": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-9670146790",
+      "query": "the ockham skill is triggering on the wrong things — optimize it",
+      "owner": "none",
+      "not": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-b37666342a",
+      "query": "the lean-writing skill needs better examples in references/ — add some",
+      "owner": "none",
+      "not": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-0cebe81795",
+      "query": "how do i structure a new React component in this project?",
+      "owner": "none",
+      "not": "meta:new-skill",
+      "split": "test",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-7ea2880426",
+      "query": "set up the review gate in <ui-repo>",
+      "owner": "none",
+      "not": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-32a94771b0",
+      "query": "should the WidgetCard use SRP — it's doing fetch and render",
+      "owner": "none",
+      "not": "meta:new-skill",
+      "split": "test",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-5412a67caa",
+      "query": "audit docs/superpowers/specs/widget-engine.md for clarity",
+      "owner": "none",
+      "not": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-a71a17e957",
+      "query": "run the pre-push review before i merge this branch",
+      "owner": "none",
+      "not": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-0a5c7e508c",
+      "query": "what's the naming convention for scss module files in this repo?",
+      "owner": "none",
+      "not": "meta:new-skill",
+      "split": "train",
+      "source": "rubric:meta:new-skill"
+    },
+    {
+      "id": "q-35f4834c5b",
+      "query": "this function does two things — split it per SRP or is that overkill?",
+      "owner": "none",
+      "not": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-9d95805af3",
+      "query": "the widget-engine spec is bloated, audit it for clarity",
+      "owner": "none",
+      "not": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-a69d087945",
+      "query": "how should i name a new skill i'm adding to the meta plugin",
+      "owner": "none",
+      "not": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-eeacf626f8",
+      "query": "write the brainstorm summary for the transport refactor",
+      "owner": "none",
+      "not": "meta:ockham",
+      "split": "test",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-c9de596bf9",
+      "query": "review this diff for security issues",
+      "owner": "none",
+      "not": "meta:ockham",
+      "split": "test",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-8fc7cbaa04",
+      "query": "i have 3 call sites all doing the same date formatting — should i hoist that into a shared util?",
+      "owner": "none",
+      "not": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-69f7788480",
+      "query": "what's the right model to use when spawning a fan-out agent?",
+      "owner": "none",
+      "not": "meta:ockham",
+      "split": "train",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-a4ba1d8e79",
+      "query": "add a storybook story for the new DashboardCard component",
+      "owner": "none",
+      "not": "meta:ockham",
+      "split": "test",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-e1aa816e82",
+      "query": "my existing useApiClient hook is getting large — refactor it or leave it?",
+      "owner": "none",
+      "not": "meta:ockham",
+      "split": "test",
+      "source": "rubric:meta:ockham"
+    },
+    {
+      "id": "q-ff4ac5a5ce",
+      "query": "scaffold a brand new skill for parsing CSV files — where does the SKILL.md go and what's the folder naming",
+      "owner": "none",
+      "not": "meta:skill-eval",
+      "split": "train",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-35b311cb9f",
+      "query": "refresh the metadata.yaml sidecar for this skill, i changed its bundled script and hooks",
+      "owner": "none",
+      "not": "meta:skill-eval",
+      "split": "test",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-067a153b0f",
+      "query": "the pre-push gate is blocking my push saying the trigger eval is missing — what file do i add",
+      "owner": "none",
+      "not": "meta:skill-eval",
+      "split": "train",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-79ebae9854",
+      "query": "write me a python script that measures cyclomatic complexity of a codebase",
+      "owner": "none",
+      "not": "meta:skill-eval",
+      "split": "train",
+      "source": "rubric:meta:skill-eval"
+    },
+    {
+      "id": "q-955df222b3",
+      "query": "i'm about to add a new apexErrorCodes.ts file — do we need it?",
+      "owner": "none",
+      "not": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-30a5fa9ff6",
+      "query": "this spec for the metric engine is too long, tighten it up",
+      "owner": "none",
+      "not": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-8bf38c732f",
+      "query": "how do i add a new skill to the meta plugin?",
+      "owner": "none",
+      "not": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-b89b4786eb",
+      "query": "this plan doc is unclear — a manager wouldn't follow section 3",
+      "owner": "none",
+      "not": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-d37eb42c35",
+      "query": "what model tier should i use for a mechanical search subagent?",
+      "owner": "none",
+      "not": "meta:solid",
+      "split": "test",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-802d92b3e6",
+      "query": "adding a new scss module for the dashboard card — what are the naming conventions?",
+      "owner": "none",
+      "not": "meta:solid",
+      "split": "test",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-d338e155d8",
+      "query": "should i create a new DateUtils module or just inline the logic?",
+      "owner": "none",
+      "not": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-e39fda7c0f",
+      "query": "write a jira comment about the deploy blocker",
+      "owner": "none",
+      "not": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-294a03bc70",
+      "query": "run the apex tests for MetricBuilderTest",
+      "owner": "none",
+      "not": "meta:solid",
+      "split": "train",
+      "source": "rubric:meta:solid"
+    },
+    {
+      "id": "q-b7ca44f180",
+      "query": "fix the bug in this one function",
+      "owner": "none",
+      "not": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-3843f656b2",
+      "query": "what model tier should I use for a mechanical search agent?",
+      "owner": "none",
+      "not": "meta:triage",
+      "split": "test",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-9f2d87b521",
+      "query": "review this one file I just changed",
+      "owner": "none",
+      "not": "meta:triage",
+      "split": "test",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-a597d74ec4",
+      "query": "spawn 5 agents to each write a different feature",
+      "owner": "none",
+      "not": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-54713b2354",
+      "query": "run the full test suite now",
+      "owner": "none",
+      "not": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-9b86259b3c",
+      "query": "rename this variable everywhere in this file",
+      "owner": "none",
+      "not": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-65ffedab72",
+      "query": "write the spec for the new metric feature",
+      "owner": "none",
+      "not": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-ad7522f24d",
+      "query": "which of these two designs is better?",
+      "owner": "none",
+      "not": "meta:triage",
+      "split": "test",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-bb06573baf",
+      "query": "deploy the widgetSettings package to the org",
+      "owner": "none",
+      "not": "meta:triage",
+      "split": "train",
+      "source": "rubric:meta:triage"
+    },
+    {
+      "id": "q-3031d2615e",
+      "query": "i want to create a brand-new skill for handling widget import errors — where does the SKILL.md go?",
+      "owner": "none",
+      "not": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-5b4e32f4f2",
+      "query": "improve this skill's description so it triggers more reliably — run evals and score it",
+      "owner": "none",
+      "not": "meta:update-skill",
+      "split": "train",
+      "source": "rubric:meta:update-skill"
+    },
+    {
+      "id": "q-1ec3213b2f",
+      "query": "write the design spec for the custom metric feature",
+      "owner": "none",
+      "not": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-d049be9690",
+      "query": "i'm about to create a new RangeResolverFactory — do we need it?",
+      "owner": "none",
+      "not": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-a4dc935380",
+      "query": "this apex class has too many responsibilities, refactor it",
+      "owner": "none",
+      "not": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-7cbbc3fed6",
+      "query": "write the brainstorm summary for the transport layer options — keep it terse",
+      "owner": "none",
+      "not": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-a8a9a9b291",
+      "query": "check my commit message for clarity",
+      "owner": "none",
+      "not": "meta:wittgenstein",
+      "split": "test",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-a6482a7d28",
+      "query": "is the jira comment i wrote clear and short?",
+      "owner": "none",
+      "not": "meta:wittgenstein",
+      "split": "test",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-9376614cd1",
+      "query": "this code comment in the BFF route is confusing — rewrite it",
+      "owner": "none",
+      "not": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-7f8a8ba849",
+      "query": "update the README for the docs repo",
+      "owner": "none",
+      "not": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-5ffd7da6aa",
+      "query": "review this diff for security vulnerabilities",
+      "owner": "none",
+      "not": "meta:wittgenstein",
+      "split": "train",
+      "source": "rubric:meta:wittgenstein"
+    },
+    {
+      "id": "q-b2a48f580d",
+      "query": "Write the ADR for our decision to match ledger entries by external reference instead of row id.",
+      "owner": "none",
+      "not": "no-code-prose:policy",
+      "split": "train",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-d3fe900ee3",
+      "query": "Draft the PR description for the invoice-parsing change — summarise what changed and why.",
+      "owner": "none",
+      "not": "no-code-prose:policy",
+      "split": "test",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-10fc5910e8",
+      "query": "Update docs/mechanisms/ledger-lookup.md to describe the new revision-matching behaviour.",
+      "owner": "none",
+      "not": "no-code-prose:policy",
+      "split": "train",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-4355f46f9d",
+      "query": "Write a commit message for these three files.",
+      "owner": "none",
+      "not": "no-code-prose:policy",
+      "split": "test",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-39049daf33",
+      "query": "Review this diff for duplicated logic — I think the two editors share the same validate() body.",
+      "owner": "none",
+      "not": "no-code-prose:policy",
+      "split": "test",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-480f2a5a6c",
+      "query": "Rename errMsg to errorMessage across the module and add braces to the one-line ifs.",
+      "owner": "none",
+      "not": "no-code-prose:policy",
+      "split": "test",
+      "source": "rubric:no-code-prose:policy"
+    },
+    {
+      "id": "q-9c90e31d1e",
+      "query": "set up the review framework in this repo, there is no config yet",
+      "owner": "none",
+      "not": "review:review",
+      "split": "train",
+      "source": "rubric:review:review"
+    },
+    {
+      "id": "q-64cf9fda27",
+      "query": "take a look at this diff and tell me what you think",
+      "owner": "none",
+      "not": "review:review",
+      "split": "test",
+      "source": "rubric:review:review"
+    },
+    {
+      "id": "q-df4aff3d70",
+      "query": "write a unit test for the parser",
+      "owner": "none",
+      "not": "review:review",
+      "split": "test",
+      "source": "rubric:review:review"
+    },
+    {
+      "id": "q-1f7b972480",
+      "query": "run the pre-push review on my current branch before I merge",
+      "owner": "none",
+      "not": "review:setup",
+      "split": "test",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-363b11e0f3",
+      "query": "the review gate flagged issues in my diff — walk me through fixing them",
+      "owner": "none",
+      "not": "review:setup",
+      "split": "test",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-3dc9f97eb4",
+      "query": "write a brand-new skill for parsing widget import errors, where should the SKILL.md live?",
+      "owner": "none",
+      "not": "review:setup",
+      "split": "test",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-759ee4ad96",
+      "query": "sweep the app for dead code and unused exports",
+      "owner": "none",
+      "not": "review:setup",
+      "split": "test",
+      "source": "rubric:review:setup"
+    },
+    {
+      "id": "q-b8abcb67f0",
+      "query": "what fields does Pkg__Data_View__c have",
+      "owner": "none",
+      "not": "salesforce:dx_mcp",
+      "split": "test",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-dce6769aa2",
+      "query": "how does Pkg__RangeHandler work under the hood",
+      "owner": "none",
+      "not": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-b7e8d5ca7b",
+      "query": "run anonymous apex: System.debug('hello');",
+      "owner": "none",
+      "not": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-5c8c8ff58b",
+      "query": "run a quick soql check — how many order records are synced",
+      "owner": "none",
+      "not": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-56cbe2550f",
+      "query": "write test class for WidgetConfigResource",
+      "owner": "none",
+      "not": "salesforce:dx_mcp",
+      "split": "test",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-a69148b512",
+      "query": "build a new lwc that shows widget cards",
+      "owner": "none",
+      "not": "salesforce:dx_mcp",
+      "split": "test",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-197c59858b",
+      "query": "check this diff for soql injection vulnerabilities",
+      "owner": "none",
+      "not": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-ba7d726ad2",
+      "query": "deploy these classes and run the tests — use sf-deploy-test",
+      "owner": "none",
+      "not": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-7fcc1910d3",
+      "query": "describe Pkg__Widget_Card__c object fields and relationships",
+      "owner": "none",
+      "not": "salesforce:dx_mcp",
+      "split": "train",
+      "source": "rubric:salesforce:dx_mcp"
+    },
+    {
+      "id": "q-24355e770c",
+      "query": "write apex tests for WidgetConfigResource.cls",
+      "owner": "none",
+      "not": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-50d92975a2",
+      "query": "deploy the widgetDashboard lwc to myOrg org",
+      "owner": "none",
+      "not": "salesforce:lwc_development",
+      "split": "test",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-2ad752d6cb",
+      "query": "run SOQL to find all active Pkg__Widget_Config__c records",
+      "owner": "none",
+      "not": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-c12d4008d7",
+      "query": "add a new React component for the widget card in <ui-repo>",
+      "owner": "none",
+      "not": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-881484c039",
+      "query": "check this apex REST endpoint for SOQL injection",
+      "owner": "none",
+      "not": "salesforce:lwc_development",
+      "split": "test",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-1e3cb16b6c",
+      "query": "how does Pkg manage the order sync flow at the apex level",
+      "owner": "none",
+      "not": "salesforce:lwc_development",
+      "split": "test",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-01390fc243",
+      "query": "add a new BFF route for /api/lwc-config",
+      "owner": "none",
+      "not": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-de4abffef0",
+      "query": "what fields does Pkg__Order__c have",
+      "owner": "none",
+      "not": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-8c99061148",
+      "query": "update the ui config per-user dashboard settings in SharedPkg",
+      "owner": "none",
+      "not": "salesforce:lwc_development",
+      "split": "train",
+      "source": "rubric:salesforce:lwc_development"
+    },
+    {
+      "id": "q-ffce73d2b2",
+      "query": "write apex tests for the WidgetConfigResource REST class",
+      "owner": "none",
+      "not": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-31ed0157e2",
+      "query": "deploy WidgetConfigResource.cls to myOrg org",
+      "owner": "none",
+      "not": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-e42a8283a6",
+      "query": "query Pkg__Widget_Config__c records for the current user",
+      "owner": "none",
+      "not": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-38de440eab",
+      "query": "build an lwc for displaying order records",
+      "owner": "none",
+      "not": "salesforce:security_review-rules",
+      "split": "test",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-fd4e38a591",
+      "query": "how does Pkg__RangeHandler work",
+      "owner": "none",
+      "not": "salesforce:security_review-rules",
+      "split": "test",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-7e17261eef",
+      "query": "add a new React component for the metrics dashboard",
+      "owner": "none",
+      "not": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-8a3a0c42f5",
+      "query": "update the per-user UI config save logic in SharedPkg",
+      "owner": "none",
+      "not": "salesforce:security_review-rules",
+      "split": "train",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-f1e4c6def9",
+      "query": "run anonymous apex to check the current user's permissions",
+      "owner": "none",
+      "not": "salesforce:security_review-rules",
+      "split": "test",
+      "source": "rubric:salesforce:security_review-rules"
+    },
+    {
+      "id": "q-60940e4389",
+      "query": "run anonymous apex on the org: System.debug(UserInfo.getUserId());",
+      "owner": "none",
+      "not": "salesforce:sf-deploy-test",
+      "split": "test",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-77d8a31b0d",
+      "query": "quick soql: SELECT Id FROM Pkg__Widget_Config__c LIMIT 10",
+      "owner": "none",
+      "not": "salesforce:sf-deploy-test",
+      "split": "train",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-317892caa8",
+      "query": "write the test class for WidgetConfigResource",
+      "owner": "none",
+      "not": "salesforce:sf-deploy-test",
+      "split": "test",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-c886f58995",
+      "query": "build an lwc dashboard component",
+      "owner": "none",
+      "not": "salesforce:sf-deploy-test",
+      "split": "train",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-d82a305f2b",
+      "query": "retrieve the WidgetConfigResource metadata from myOrg",
+      "owner": "none",
+      "not": "salesforce:sf-deploy-test",
+      "split": "train",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-ae145ba7be",
+      "query": "check this diff for security issues",
+      "owner": "none",
+      "not": "salesforce:sf-deploy-test",
+      "split": "train",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-cb0c87981f",
+      "query": "run a tooling query to check code coverage for MetricBuilder",
+      "owner": "none",
+      "not": "salesforce:sf-deploy-test",
+      "split": "train",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-26855295e9",
+      "query": "list all connected orgs and their aliases",
+      "owner": "none",
+      "not": "salesforce:sf-deploy-test",
+      "split": "test",
+      "source": "rubric:salesforce:sf-deploy-test"
+    },
+    {
+      "id": "q-12bad7f7fd",
+      "query": "deploy WidgetConfigResource.cls and run WidgetConfigResourceTest",
+      "owner": "none",
+      "not": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-63c445cf81",
+      "query": "push the widgetSettings metadata package to myOrg",
+      "owner": "none",
+      "not": "salesforce:sf-run",
+      "split": "test",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-620331364a",
+      "query": "run the full apex test suite for the widgetSettings package",
+      "owner": "none",
+      "not": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-69850271db",
+      "query": "build an lwc that displays widget cards",
+      "owner": "none",
+      "not": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-1e97c9fc84",
+      "query": "retrieve ApexClass:MetricBuilder from the org",
+      "owner": "none",
+      "not": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-a8f8b0a7ec",
+      "query": "check this apex REST endpoint for SOQL injection vulnerabilities",
+      "owner": "none",
+      "not": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-c8ed4cbd9b",
+      "query": "update the per-user dashboard config in SharedPkg and deploy",
+      "owner": "none",
+      "not": "salesforce:sf-run",
+      "split": "train",
+      "source": "rubric:salesforce:sf-run"
+    },
+    {
+      "id": "q-bf832eb7aa",
+      "query": "what skills are available in this marketplace for writing tests?",
+      "owner": "none",
+      "not": "scout:plugin-sync",
+      "split": "train",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-e2e9e45ed5",
+      "query": "recommend a plugin that would help me review SCSS, and install it",
+      "owner": "none",
+      "not": "scout:plugin-sync",
+      "split": "test",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-8e3a032dc5",
+      "query": "create a brand-new skill for validating invoice totals",
+      "owner": "none",
+      "not": "scout:plugin-sync",
+      "split": "test",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-e0a16815ee",
+      "query": "the skill loaded fine but its advice was wrong — rewrite its body",
+      "owner": "none",
+      "not": "scout:plugin-sync",
+      "split": "test",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-e1304df0fe",
+      "query": "fix the off-by-one bug in this pagination function",
+      "owner": "none",
+      "not": "scout:plugin-sync",
+      "split": "train",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-61c352a60c",
+      "query": "add a PostToolUse hook to my plugin that formats files after an edit",
+      "owner": "none",
+      "not": "scout:plugin-sync",
+      "split": "train",
+      "source": "rubric:scout:plugin-sync"
+    },
+    {
+      "id": "q-8e14ca2685",
+      "query": "I edited the widget-catalog skill's body — refresh its metadata.yaml",
+      "owner": "none",
+      "not": "scout:scout",
+      "split": "train",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-0f137dc967",
+      "query": "write a unit test for the new discount calculator",
+      "owner": "none",
+      "not": "scout:scout",
+      "split": "test",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-3938e05754",
+      "query": "rebind ctrl+s to save without formatting",
+      "owner": "none",
+      "not": "scout:scout",
+      "split": "train",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-7e843481ab",
+      "query": "run the pre-push review on my current branch",
+      "owner": "none",
+      "not": "scout:scout",
+      "split": "test",
+      "source": "rubric:scout:scout"
+    },
+    {
+      "id": "q-7b0ec138f8",
+      "query": "deploy WidgetConfigResource.cls to the myOrg org",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-f878d7088b",
+      "query": "run the apex tests for MetricBuilderTest on the org",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "test",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-44a3260fa2",
+      "query": "write a new LWC component that calls the WidgetConfigResource apex class",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-1afe267ddf",
+      "query": "run a SOQL query to check which Pkg__Widget_Config__c records exist for this user",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "test",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-f9f7b8e2a3",
+      "query": "add a BFF route for /api/widget-config",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-d69278ba52",
+      "query": "check the security of the WidgetConfigResource REST endpoint for SOQL injection",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-330dde4f43",
+      "query": "retrieve the ApexClass metadata for MetricBuilder from the org",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-8e4741b433",
+      "query": "document the data model for Widget_Config__c and Widget_Card__c",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-1ef409c030",
+      "query": "write a vitest test for the WidgetCard React component",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "test",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-8bb24bd0cf",
+      "query": "what coverage threshold does our test standard set, and where is the ratchet configured",
+      "owner": "none",
+      "not": "tests:apex",
+      "split": "train",
+      "source": "rubric:tests:apex"
+    },
+    {
+      "id": "q-67a3203718",
+      "query": "write the discount calculator itself",
+      "owner": "none",
+      "not": "tests:architecture",
+      "split": "test",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-e798c1d695",
+      "query": "why is the production build 40 seconds slower than last week",
+      "owner": "none",
+      "not": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-05597e251d",
+      "query": "rename this component and update its imports",
+      "owner": "none",
+      "not": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-f9a8f35b26",
+      "query": "set up a GitHub Actions workflow to deploy on tag",
+      "owner": "none",
+      "not": "tests:architecture",
+      "split": "test",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-78ca407602",
+      "query": "the eslint config has a duplicate rule, clean it up",
+      "owner": "none",
+      "not": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-e6c2f36678",
+      "query": "document the data model for the order and its line items",
+      "owner": "none",
+      "not": "tests:architecture",
+      "split": "test",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-da0401e38b",
+      "query": "our Apex tests still use System.assertEquals, switch them to Assert.*",
+      "owner": "none",
+      "not": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-f7cf331bdc",
+      "query": "add a Storybook story showing the empty state",
+      "owner": "none",
+      "not": "tests:architecture",
+      "split": "train",
+      "source": "rubric:tests:architecture"
+    },
+    {
+      "id": "q-19772dd8e7",
+      "query": "why does this SQL query take 8 seconds",
+      "owner": "none",
+      "not": "tests:architecture",
+      "split": "test",
+      "source": "rubric:tests:architecture"
+    }
+  ]
+}
