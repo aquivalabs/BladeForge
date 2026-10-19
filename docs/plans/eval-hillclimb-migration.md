@@ -236,17 +236,16 @@ messages, authors and branch name. Push cases went from 1/9 to 9/9 with the skil
 cases held at 13/13, and triggers measured 65/65 including three new push queries. A full hillclimb
 was not needed: the baseline named the cause.
 
-**Decided, not yet built — guarding the push itself** (the skill only helps when it fires):
+**Built 2026-10-19 — guarding the push itself** (the skill only helps when it fires), commit
+`cec0083`:
 
-- *Layer 2, needed:* a classic `PreToolUse` hook in `cerberus` on `Bash` that stops `git push` until
-  `leak-check` has read the outgoing commits. It works in every Claude Code version and every repo
-  that installs `cerberus`.
-- *Layer 3, needed:* a function-hooks mod — `on('tool.call', { tool: 'Bash' })` — that sees every
-  `git push`, reads the outgoing log, and judges it with `$.model.complete` before the push runs,
-  with a red band above the prompt on a hit. Older versions do not load mods, so a classic
-  `SessionStart` hook in `cerberus` checks `claude --version` and prints a large red notice to
-  update, following `scout`'s start-of-session guard. Pin the minimum to the version it is
-  tested on (2.1.292); the docs name no minimum.
+- *Layer 2:* `plugins/cerberus/hooks/on-git-push.sh`, a classic `PreToolUse` hook on `Bash`. It stops
+  `git push` until `leak-check` has read the outgoing commits and written the HEAD it checked to
+  `.git/cerberus-leak-checked`. Works on every Claude Code version. Suite: 6/6, in CI.
+- *Layer 3:* `plugins/cerberus/hooks/push-guard.ts`, a function-hooks mod. It reads the outgoing
+  log, has `sonnet` judge it, denies a push that leaks and marks a clean one, so layer 2 passes.
+  Suite: 4/4 under `claude plugin test`. `check-version.sh` prints a red update notice at session
+  start below 2.1.292, which cannot load the mod.
 - *Not needed:* a new review lens. The `review` plugin's `leak` lens already runs `cerberus`.
 - *Later:* rework `review` as a whole. One decided point: it runs only after a local commit, on
   committed work.
