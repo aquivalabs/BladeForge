@@ -191,6 +191,12 @@ least one boundary pair shows real headroom above noise, which gives hillclimb s
 
 ### Phase 3 — guide-skill pilot
 
+Decided 2026-10-19: the pilot is `git:commit`. Each case runs the same dirty repository twice,
+with the skill and without it. Cases are synthesized on a fictional demo product around 3–5 real
+situations the maintainer describes, so no client data reaches the repo. Grading is programmatic
+on the resulting commits: no commit mixes concerns, every commit has a conventional prefix,
+foundations land before their consumers, and every commit builds. There is no LLM judge.
+
 Pick the guide skill when the phase starts. My lean is `git:commit`. It runs every day, so real
 transcripts exist, and build-eval takes cases from transcripts first.
 
