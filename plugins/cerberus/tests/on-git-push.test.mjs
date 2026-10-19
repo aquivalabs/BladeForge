@@ -72,7 +72,7 @@ test('a new commit after a clean verdict is judged afresh', () => {
   assert.equal(decide(dir, push(), JUDGE.leak).decision, 'deny');
 });
 
-test('a judge that cannot answer blocks the push: the check is mandatory', () => {
+test('a judge that cannot answer blocks the push: the guard fails closed', () => {
   const { dir } = repo();
   assert.equal(decide(dir, push(), JUDGE.nonsense).decision, 'deny');
   assert.equal(decide(dir, push(), JUDGE.never).decision, 'deny');

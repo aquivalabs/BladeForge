@@ -41,7 +41,7 @@ client-specific onto one neutral fictional demo before it ships.
 The same hook runs a second head inward: **[`security-scan`](#security-scan)** walks an eight-point
 consumer-safety checklist so a skill you publish can never do something unsafe to whoever installs it.
 
-**A push is a gate too.** A commit carries a message, an author and a branch name, and none of them is a file, so the edit-time check never reads them — that is how a client name once escaped. A `PreToolUse` hook hands the outgoing commits to a nested `claude` judge before any `git push` an agent runs, and blocks a push that leaks or that it cannot judge — nothing in the check is the agent's to supply. On Claude Code 2.1.292 or newer a push-guard mod judges them in-process first; an older Claude Code gets a red notice at session start to update.
+**A push is a gate too.** A commit carries a message, an author and a branch name, and none of them is a file, so the edit-time check never reads them — that is how a client name once escaped. A `PreToolUse` hook hands the outgoing commits to a nested `claude` judge before any `git push` an agent runs, and blocks a push that leaks or that it cannot judge. The agent cannot skip the judge by writing a marker; it could still forge the verdict cache from a shell on purpose, so this stops a forgotten check, not a determined one, and a push typed by a person in their own terminal is not seen at all. On Claude Code 2.1.292 or newer a push-guard mod judges them in-process first; an older Claude Code gets a red notice at session start to update.
 
 It ships in this marketplace and is enabled by default (`cerberus@bladeforge` in `.claude/settings.json`).
 

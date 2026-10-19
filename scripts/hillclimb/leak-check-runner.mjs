@@ -159,7 +159,8 @@ const REF_EXTS = ['', '.html', '.txt', '.json'];
 
 const RUN_TIMEOUT_S = 300;
 const ALLOWED_TOOLS = ['Read', 'Edit', 'Write', 'Glob', 'Grep', 'Skill',
-  ...['git', 'grep', 'cat', 'ls', 'head', 'tail', 'wc', 'xargs', 'echo', 'find', 'sed'].map(c => `Bash(${c}:*)`)];
+  // read-only text tools only: nothing here can run another command, delete or edit in place
+  ...['git', 'grep', 'cat', 'ls', 'head', 'tail', 'wc', 'echo'].map(c => `Bash(${c}:*)`)];
 const DEFAULT_AUTHOR = ['Demo Author', 'author@example.com'];
 
 function stateOf(st) {

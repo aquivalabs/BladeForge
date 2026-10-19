@@ -206,9 +206,6 @@ Found while designing it, and fixed outside the eval: `cerberus` runs on file ed
 message and its author are written after that check, so nothing ever scanned them. A pre-push
 trigger for `leak-check` over the outgoing commits is a plain hook change, tracked as its own step.
 
-Pick the guide skill when the phase starts. My lean is `git:commit`. It runs every day, so real
-transcripts exist, and build-eval takes cases from transcripts first.
-
 1. Run `/claude-api build-eval` on the chosen skill. Target 15 or more cases.
 2. Pass every case through `cerberus:leak-check` before it lands in git. Raw transcripts come from
    client work and never get committed.
@@ -242,9 +239,10 @@ was not needed: the baseline named the cause.
 - *Layer 2:* `plugins/cerberus/hooks/on-git-push.sh`, a classic `PreToolUse` hook. Before any
   `git push` an agent runs, it hands the outgoing commits to a nested `claude -p` judge (the prompt in
   `push-judge-prompt.txt`) and blocks a push that leaks or that it cannot judge. The first version
-  waited for a marker the agent itself wrote, which made it a reminder, not a gate; nothing in the
-  check is the agent's to supply now. A clean verdict is cached under the hash of what was judged,
-  and a tool call aimed at that cache is refused. Works on every Claude Code version. Suite: 10/10,
+  waited for a marker the agent itself wrote, which made it a reminder, not a gate; now the hook
+  runs the judge. A clean verdict is cached under the hash of what was judged, and a tool call aimed
+  at that cache is refused — best effort: a shell can still forge it on purpose, and a push typed
+  by a person in their own terminal is not seen. Closing those needs a git `pre-push` hook. Works on every Claude Code version. Suite: 10/10,
   in CI; a live judge caught a client name and work email in 5.7 s.
 - *Layer 3:* `plugins/cerberus/hooks/push-guard.ts`, a function-hooks mod. It judges the same text
   with the same prompt in-process, denies a push that leaks, and caches a clean verdict under the

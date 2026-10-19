@@ -19,7 +19,9 @@ PUBLIC marketplace, or the commits about to be pushed with it.
 **Out:** nothing in the change points to a real work codebase — every real class/object/namespace/
 field/org/ticket name, secret, real person, email, absolute path, or employer/client brand is rewritten
 to a neutral fictional demo, and the aggregate "this is one company's product" flavour is gone, without
-breaking the example's teaching value. The checkable expectations are in `evals/rubric.json`.
+breaking the example's teaching value — and, before a push, no outgoing commit message, author,
+committer or branch name points to real work either. The checkable expectations are in
+`evals/rubric.json`.
 
 ---
 

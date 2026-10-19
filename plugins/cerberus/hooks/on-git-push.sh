@@ -4,7 +4,8 @@
 # commits ITSELF before an agent's push runs: it hands them to a nested `claude -p` with the prompt
 # in push-judge-prompt.txt and denies the push when the judge names a leak.
 #
-# The check is mandatory because nothing in it is the agent's to supply. The verdict is cached by
+# The judge is not the agent's to skip: the hook runs it, not a marker the agent writes. Its one
+# weak point is the verdict cache below, which a shell can still forge on purpose. The verdict is cached by
 # the hash of what is judged (the outgoing log plus the branch name), so a reworded commit, a new
 # commit or a renamed branch is judged afresh, and an unchanged push is not judged twice. The
 # cerberus push-guard mod, where the engine loads mods, judges first and fills the same cache.
