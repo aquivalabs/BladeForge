@@ -320,13 +320,14 @@ house-convention skill — also invoke **`skillcraft:skillaxe`**: a with/without
 guide's real effect and attributes each shortfall to the guide or the agent. Skip it only for a skill
 that produces nothing to shape.
 
-**Run its script from the repository, not from the installed plugin cache.** The cache is keyed by
-version and lags behind: a cached copy predating the `result.json` repair prints a score and saves
-nothing, which is the exact regression this marketplace already suffered once.
+**Run the scripts from the repository, not from the installed plugin cache.** The cache is keyed
+by version and lags behind. `meta:skill-eval` holds the full procedure; in short:
 
 ```bash
-python3 plugins/meta/skills/skill-eval/scripts/score-description.py \
-  --skill-path <skill-dir> --type self-contained
+node scripts/hillclimb/new-flow.mjs <skill-dir>          # once per skill
+node scripts/hillclimb/trigger-runner.mjs --flow <flow> --variant baseline \
+  --model claude-opus-5-5 --reps 5 --concurrency 8      # the maintainer approves the harness first
+node scripts/hillclimb/save-result.mjs <flow> baseline
 ```
 
 **If `meta:skill-eval` is not installed at all**, say it is required, ask for the `meta` plugin to be

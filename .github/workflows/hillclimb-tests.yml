@@ -1,0 +1,30 @@
+name: hillclimb-tests
+# save-result.mjs writes the record eval-gate reads, and eval-gate hashes descriptions with the
+# same reader the trigger runner measures with. A defect in either un-ships a skill without
+# touching the skill, so both suites run whenever the measurement scripts or the gate change.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/hillclimb/**"
+      - "scripts/eval-gate.sh"
+      - "scripts/eval-gate.test.sh"
+      - "scripts/validate_eval.py"
+      - "scripts/validate_acceptance.py"
+      - "scripts/validate_security.py"
+
+permissions:
+  contents: read
+
+jobs:
+  hillclimb-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run the save-result suite
+        run: node --test scripts/hillclimb/save-result.test.mjs
+      - name: Run the eval-gate fixture scenarios
+        run: bash scripts/eval-gate.test.sh

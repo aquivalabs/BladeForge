@@ -13,19 +13,19 @@
     "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
     "results": [
       {
-        "query": "i just changed the body of the widget-catalog skill \u2014 can you refresh its metadata.yaml?",
+        "query": "i just changed the body of the widget-catalog skill — can you refresh its metadata.yaml?",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "i added a new bundled script to this skill and swapped its allowed-tools \u2014 update the metadata sidecar",
+        "query": "i added a new bundled script to this skill and swapped its allowed-tools — update the metadata sidecar",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
@@ -33,15 +33,15 @@
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "i rewrote the hooks.json for this skill \u2014 does its changes.tags still match reality?",
+        "query": "i rewrote the hooks.json for this skill — does its changes.tags still match reality?",
         "should_trigger": true,
         "triggers": 0,
         "runs": 3,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": false
       },
       {
@@ -49,19 +49,19 @@
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "i changed what the order-sync skill actually does \u2014 its metadata.yaml purpose no longer matches, fix it",
+        "query": "i changed what the order-sync skill actually does — its metadata.yaml purpose no longer matches, fix it",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "this skill has no Contract section and still carries a When to Activate \u2014 bring it up to the standard",
+        "query": "this skill has no Contract section and still carries a When to Activate — bring it up to the standard",
         "should_trigger": true,
         "triggers": 2,
         "runs": 3,
@@ -77,15 +77,15 @@
         "pass": true
       },
       {
-        "query": "add acceptance criteria to this existing skill \u2014 it has no evals/rubric.json acceptance half",
+        "query": "add acceptance criteria to this existing skill — it has no evals/rubric.json acceptance half",
         "should_trigger": true,
         "triggers": 3,
         "runs": 3,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "its description summarises the workflow instead of saying when to use it \u2014 rewrite the frontmatter and fix the boundary",
+        "query": "its description summarises the workflow instead of saying when to use it — rewrite the frontmatter and fix the boundary",
         "should_trigger": true,
         "triggers": 1,
         "runs": 3,
@@ -93,19 +93,19 @@
         "pass": false
       },
       {
-        "query": "i want to create a brand-new skill for handling widget import errors \u2014 where does the SKILL.md go?",
+        "query": "i want to create a brand-new skill for handling widget import errors — where does the SKILL.md go?",
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
-        "query": "improve this skill's description so it triggers more reliably \u2014 run evals and score it",
+        "query": "improve this skill's description so it triggers more reliably — run evals and score it",
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
@@ -113,7 +113,7 @@
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
@@ -121,7 +121,7 @@
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
@@ -129,7 +129,7 @@
         "should_trigger": false,
         "triggers": 0,
         "runs": 3,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       }
     ]
@@ -142,61 +142,61 @@
     "quality_impact": 0.9,
     "skillscore": 0.95,
     "guide_faults": [],
-    "verdict": "Guide-following output hits all 8 rubric acceptance points (probe-first path decision, Contract+delete-When-to-Activate, looping Before-you-finish, rubric.json with escape hatch, conv1-read-back/conv2-reask, sidecar+plugin.json+README, mandatory meta:skill-eval); isolated baseline misses nearly every one \u2014 it even explicitly keeps '## When to Activate' (contradicting the standard), invents a differently-named/located acceptance file, and skips the probe, the conversation-reopening rule, the sidecar/version bump, and any measurement step."
+    "verdict": "Guide-following output hits all 8 rubric acceptance points (probe-first path decision, Contract+delete-When-to-Activate, looping Before-you-finish, rubric.json with escape hatch, conv1-read-back/conv2-reask, sidecar+plugin.json+README, mandatory meta:skill-eval); isolated baseline misses nearly every one — it even explicitly keeps '## When to Activate' (contradicting the standard), invents a differently-named/located acceptance file, and skips the probe, the conversation-reopening rule, the sidecar/version bump, and any measurement step."
   },
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-10T19:39:30",
+    "scanned_at": "2026-10-16T19:30:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "4c6699d7b6949ccb275e4ec095bacabe234778c8867e850c29af3f99bb133164",
+    "scanned_hash": "2f0d7282003733fddce3c90abe91047ae65a415e92f549a58bd0f6aa258156e0",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "body addresses the human author; no directive aimed at a reading agent"
+        "note": "the edited block is a shell snippet and prose addressed to the author"
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "no code that sends repo/user/context data anywhere"
+        "note": "the named scripts write only under .claude/hillclimb/ and the skill's evals/result.json"
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "no key, token, or credential embedded"
+        "note": "no embedded key, token or credential"
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "destructive strings appear only as prose examples of what to look for; none executed"
+        "note": "the snippet runs repo scripts whose only deletes are their own temp sandboxes and that sandbox's auto-memory dir; no destructive command in the skill"
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "plain markdown throughout; nothing encoded or unreadable-on-purpose"
+        "note": "plain prose and commands"
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "no download-and-run or reach to an external host"
+        "note": "no external host beyond the nested claude -p the skill already documented"
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "no read of ~/.ssh, ~/.aws, .env, keychain, cookies, or a token store"
+        "note": "no credential-store read"
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "no sudo/setuid/persistence; no write outside the working tree"
+        "note": "no sudo, setuid, cron, shell profile or launch agent"
       }
     ]
   }

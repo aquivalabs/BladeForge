@@ -21,7 +21,7 @@ set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 VALIDATE="$ROOT/scripts/validate_eval.py"
-SCORER="$ROOT/plugins/meta/skills/skill-eval/scripts/score-description.py"
+DESC_HASH="$ROOT/scripts/hillclimb/description-hash.mjs"
 VALIDATE_ACC="$ROOT/scripts/validate_acceptance.py"
 VALIDATE_SEC="$ROOT/scripts/validate_security.py"
 ZERO="0000000000000000000000000000000000000000"
@@ -137,8 +137,9 @@ while IFS= read -r sd; do
   else
     # The description is the thing the eval actually scores, so a rewritten one
     # invalidates the result even when every query stayed put. The hash comes from
-    # the scorer itself — one frontmatter parser, not two that can disagree.
-    dnow="$(python3 "$SCORER" --skill-path "$sd" --print-description-hash 2>/dev/null)"
+    # skill-description.mjs, the reader the trigger runner measures with — one
+    # frontmatter parser, not two that can disagree.
+    dnow="$(node "$DESC_HASH" "$sd" 2>/dev/null)"
     dwas="$(json_field "$resfile" trigger.description_hash)"
     if [ -n "$dnow" ] && [ -n "$dwas" ] && [ "$dnow" != "$dwas" ]; then
       problem="stale: the description was rewritten since it was measured"
@@ -194,7 +195,7 @@ if [ -n "$warns" ]; then
   echo ""
   echo "  ⚠  deprecated/unmeasured evals (push allowed — refresh when you can):"
   printf '%s\n' "$warns"
-  echo "     → run:  python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path <dir> --suggest"
+  echo "     → measure with the meta:skill-eval skill (scripts/hillclimb/trigger-runner.mjs, then save-result.mjs)"
 fi
 if [ -n "$blocks" ]; then
   echo ""
@@ -209,11 +210,11 @@ if [ -n "$blocks" ]; then
   echo "    — a JSON array of >= 6 cases: {\"query\": \"...\", \"should_trigger\": true|false}"
   echo "    — at least 1 positive (true) and 1 negative (false)."
   echo ""
-  echo "  HOW TO FIX — never measured / stale: invoke the meta:skill-eval SKILL and follow it,"
-  echo "    then run its script FROM THIS REPO (the installed plugin cache lags and a stale"
-  echo "    copy saves no result at all):"
-  echo "      python3 plugins/meta/skills/skill-eval/scripts/score-description.py \\"
-  echo "        --skill-path <skill-dir> --type self-contained"
+  echo "  HOW TO FIX — never measured / stale: invoke the meta:skill-eval SKILL and follow it."
+  echo "    It runs the trigger runner FROM THIS REPO and saves the record:"
+  echo "      node scripts/hillclimb/trigger-runner.mjs --flow .claude/hillclimb/<flow> \\"
+  echo "        --variant baseline --model claude-opus-5-5 --reps 5"
+  echo "      node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> baseline"
   echo ""
   echo "  No live clone to measure from? The skill is not shippable yet — measurement"
   echo "    is mandatory and has no skip flag. Get a working clone and measure."

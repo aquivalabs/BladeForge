@@ -6,7 +6,7 @@ GATE="$HERE/eval-gate.sh"
 VALIDATE="$HERE/validate_eval.py"
 VALIDATE_ACC="$HERE/validate_acceptance.py"
 VALIDATE_SEC="$HERE/validate_security.py"
-SCORER_SRC="$(cd "$HERE/.." && pwd)/plugins/meta/skills/skill-eval/scripts/score-description.py"
+HILLCLIMB_SRC="$HERE/hillclimb"
 pass=0; fail=0
 check() { if [ "$2" = "$3" ]; then echo "  ok: $1"; pass=$((pass+1));
   else echo "  FAIL: $1 (want exit $2, got $3)"; fail=$((fail+1)); fi }
@@ -18,9 +18,10 @@ setup_repo() {
   local r; r="$(mktemp -d)"
   git -C "$r" init -q
   git -C "$r" config user.email t@t; git -C "$r" config user.name t
-  mkdir -p "$r/scripts" "$r/plugins/meta/skills/skill-eval/scripts"
+  mkdir -p "$r/scripts/hillclimb"
   cp "$GATE" "$r/scripts/eval-gate.sh"; cp "$VALIDATE" "$r/scripts/validate_eval.py"
-  cp "$VALIDATE_ACC" "$r/scripts/validate_acceptance.py"; cp "$SCORER_SRC" "$r/plugins/meta/skills/skill-eval/scripts/score-description.py"
+  cp "$VALIDATE_ACC" "$r/scripts/validate_acceptance.py"
+  cp "$HILLCLIMB_SRC/description-hash.mjs" "$HILLCLIMB_SRC/skill-description.mjs" "$r/scripts/hillclimb/"
   cp "$VALIDATE_SEC" "$r/scripts/validate_security.py"
   echo "$r"
 }
@@ -63,7 +64,7 @@ check "touched skill, valid rubric, no result blocks" 1 "$(stdin_all "$r" | run_
 # C: valid rubric + FRESH nested result (trigger + security) -> PASS
 r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/ok" "$RUBRIC"
 h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/ok/evals/rubric.json)"
-d="$(cd "$r" && python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path plugins/p/skills/ok --print-description-hash)"
+d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/ok)"
 result_json "$r" plugins/p/skills/ok "$h" "$d" > "$r/plugins/p/skills/ok/evals/result.json"
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
 check "valid rubric + fresh result passes" 0 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
@@ -78,7 +79,7 @@ check "touched skill, stale result blocks" 1 "$(stdin_all "$r" | run_gate "$r" >
 r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/legacy"
 add_skill "$r" "plugins/p/skills/touched" "$RUBRIC"
 h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/touched/evals/rubric.json)"
-d="$(cd "$r" && python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path plugins/p/skills/touched --print-description-hash)"
+d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/touched)"
 printf '{"trigger":{"queryset_hash":"%s","description_hash":"%s","best_score":"5/6"},"acceptance":null}' "$h" "$d" > "$r/plugins/p/skills/touched/evals/result.json"
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm base
 base="$(git -C "$r" rev-parse HEAD)"
@@ -99,7 +100,7 @@ check "touched existing eval-less skill blocks" 1 "$(cd "$r" && echo "refs/heads
 # G: touched skill, fresh trigger result but NO security section -> BLOCK
 r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/nosec" "$RUBRIC"
 h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/nosec/evals/rubric.json)"
-d="$(cd "$r" && python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path plugins/p/skills/nosec --print-description-hash)"
+d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/nosec)"
 printf '{"trigger":{"queryset_hash":"%s","description_hash":"%s","best_score":"5/6"},"acceptance":null}' "$h" "$d" > "$r/plugins/p/skills/nosec/evals/result.json"
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
 check "touched skill without security section blocks" 1 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
@@ -108,7 +109,7 @@ check "touched skill without security section blocks" 1 "$(stdin_all "$r" | run_
 r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/sec" "$RUBRIC"
 mkdir -p "$r/plugins/p/skills/sec/scripts"; echo 'echo hello' > "$r/plugins/p/skills/sec/scripts/run.sh"
 h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/sec/evals/rubric.json)"
-d="$(cd "$r" && python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path plugins/p/skills/sec --print-description-hash)"
+d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/sec)"
 result_json "$r" plugins/p/skills/sec "$h" "$d" > "$r/plugins/p/skills/sec/evals/result.json"
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
 check "fresh trigger + fresh security passes" 0 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
@@ -117,7 +118,7 @@ check "fresh trigger + fresh security passes" 0 "$(stdin_all "$r" | run_gate "$r
 r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/drift" "$RUBRIC"
 mkdir -p "$r/plugins/p/skills/drift/scripts"; echo 'echo v1' > "$r/plugins/p/skills/drift/scripts/run.sh"
 h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/drift/evals/rubric.json)"
-d="$(cd "$r" && python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path plugins/p/skills/drift --print-description-hash)"
+d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/drift)"
 result_json "$r" plugins/p/skills/drift "$h" "$d" > "$r/plugins/p/skills/drift/evals/result.json"
 echo 'echo v2' > "$r/plugins/p/skills/drift/scripts/run.sh"   # material changes AFTER the scan hash was taken
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
@@ -126,7 +127,7 @@ check "material changed after scan -> stale security blocks" 1 "$(stdin_all "$r"
 # J: only metadata.yaml changed (non-material) -> security not owed -> PASS
 r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/meta" "$RUBRIC"
 h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/meta/evals/rubric.json)"
-d="$(cd "$r" && python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path plugins/p/skills/meta --print-description-hash)"
+d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/meta)"
 # fresh trigger, but deliberately NO security section — proving a metadata-only edit never asks for one
 printf '{"trigger":{"queryset_hash":"%s","description_hash":"%s","best_score":"5/6"},"acceptance":null}' "$h" "$d" > "$r/plugins/p/skills/meta/evals/result.json"
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm base

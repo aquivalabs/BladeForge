@@ -10,9 +10,10 @@ description: "Use when you need to know whether a skill's `description` actually
 least one of each polarity) · a working `claude` binary — this spends tokens, it is not a static
 check.
 
-**Out:** a 0–10 score with a plain-language verdict, current-vs-baseline with a no-regression gate,
-the exact queries that missed or wrongly fired · `evals/result.json` written beside the skill,
-carrying both hashes so the gate can tell a fresh measurement from a stale one.
+**Out:** the trigger score over (case, rep) rows, split into train and test with the noise
+interval beside each, plus the exact queries that missed or wrongly fired · `evals/result.json`
+written beside the skill, carrying both hashes so the gate can tell a fresh measurement from a stale
+one.
 
 **Not in scope:** whether the skill does its job WELL once it fires. That is the second metric — it
 reads `evals/rubric.json` and is run by `skillcraft:skillaxe`, not by this skill. A trigger score
@@ -22,65 +23,64 @@ of 10 says the model reached for the skill, nothing more.
 
 ## The one rule that matters most
 
-**Measure with `score-description.py` (bundled here) — NOT skill-creator's `run_eval`/`run_loop`.**
+**Measure with `scripts/hillclimb/trigger-runner.mjs` — NOT skill-creator's `run_eval`/`run_loop`.**
 
 skill-creator registers the tested skill as a transient **slash-command**
 (`.claude/commands/<name>-skill-<hash>`) and counts a trigger only if `Skill`/`Read` is the model's
 **first** tool call. Real tasks open with `Bash`/`Write`/`TodoWrite`, so it reports **systematic
-false-negatives** — a good skill scores ~0. `score-description.py` instead installs the skill as a
-**real** `.claude/skills/<name>/` (how it reaches Claude in production) and scores by whether the
-`Skill` tool actually fires across real `claude -p` runs.
+false-negatives** — a good skill scores ~0. The trigger runner instead installs the skill as a
+**real** `.claude/skills/<name>/`, with its `description:` line copied verbatim, and counts a hit only
+when the `Skill` tool fires for that skill in a real `claude -p` run.
 
-## If this skill (or its script) is missing — STOP and get it
+Its predecessor, `score-description.py`, was deleted for two measurement defects: it re-emitted the
+description unquoted, which broke the probe's YAML for any description holding `: `, and it counted
+any `Skill` call as a hit. Scores it saved are not evidence; remeasure before reading one.
 
-If `score-description.py` is not present, do NOT fall back to skill-creator: say that
-`meta:skill-eval` is required, ask for the `meta` plugin to be enabled, and stop. Measuring with the
-wrong tool is what produces the false zeros this skill exists to prevent, and a false zero is worse
-than no number.
-
-**Run the script from the repository, not from the installed plugin cache.** The cache is keyed by
-plugin version and lags behind; a cached copy predating the `result.json` repair prints a score and
-saves nothing at all.
+**Run everything from the repository, not from the installed plugin cache.** The cache is keyed by
+plugin version and lags behind.
 
 ---
 
 ## Run it
 
-```bash
-python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path <skill-dir> \
-  [--runs 5] [--model sonnet] [--bar 7] [--type self-contained|context-dependent] [--suggest]
-```
+1. **Create the flow dir once per skill.** It fixes a seeded train/test split and never re-draws it:
+   ```bash
+   node scripts/hillclimb/new-flow.mjs <skill-dir>            # isolated: the skill alone
+   node scripts/hillclimb/new-flow.mjs <skill-dir> --crowded  # beside every marketplace skill
+   ```
+2. **Price it before running.** Measure one case first and show the `meta:model-routing` cost table.
+   A full pass at `--reps 5` is about 8% of a 5-hour window isolated, about 10% crowded.
+3. **The maintainer approves the harness.** The runner refuses to start until a human records its
+   hash. An agent must never pass `--approve-harness` — ask the user to run the first command with it.
+4. **Run, then save:**
+   ```bash
+   node scripts/hillclimb/trigger-runner.mjs --flow <flow> --variant baseline \
+     --model claude-opus-5-5 --reps 5 --concurrency 8
+   node scripts/hillclimb/save-result.mjs <flow> baseline
+   ```
+   The runner resumes: re-running the same command finishes any missing rows. `save-result.mjs`
+   refuses to write a variant that is incomplete, mixes models, or measured a description other
+   than the one `SKILL.md` holds now.
+5. **Read the numbers from raw rows:** `node scripts/hillclimb/split-scores.mjs <flow> baseline`.
 
-- Reads `<skill-path>/evals/rubric.json` (≥6 cases `{"query","should_trigger"}`, ≥1 positive +
-  ≥1 negative; realistic queries, genuine near-miss negatives).
-- Prints the score, a one-glance verdict, current-vs-baseline (git HEAD) with a **no-regression
-  gate**, plain-language WHY, and the exact MISSED / wrongly-fired queries.
-- `--suggest` adds ONE `claude -p` call proposing a rewritten description.
-- `--from-result <json>` re-renders a saved result with zero new eval spend.
-- `--print-description-hash` prints the hash and exits, no LLM call — this is what `eval-gate.sh`
-  calls, so the frontmatter parser lives in one place instead of two that drift.
+The nested run is isolated: no user settings, plugins, hooks or MCP servers, so the score does not
+depend on whose machine took it. **This spawns `claude -p` agents. Run it LOCALLY, on demand —
+NEVER in CI.** CI runs only the deterministic `scripts/eval-gate.sh`, which needs no agent.
 
-**This spawns `claude -p` (an LLM agent). Run it LOCALLY, on demand — NEVER in CI.** CI runs only the
-deterministic `scripts/eval-gate.sh`, which needs no agent.
+To improve a description against these cases, run `/claude-api hillclimb` on the same flow. It
+keeps the split, reads only train transcripts, and reverts a change that does not lift test.
 
 ---
 
-## Reading the result — the score is advisory, judged by skill type
+## Reading the result
 
-- **`--type self-contained`** (the description alone should pull Claude to the skill): apply the
-  absolute bar (`>= 7/10`) AND no-regression.
-- **`--type context-dependent`** (only fires with the real repo / a file it reads / routing in a
-  project's own instructions): the absolute score is **informational, NOT a fail** — judge by
-  no-regression only. A ~0 here is expected.
-  - **Confirm a low context-dependent score before trusting it** — a separate step, not an aside: open
-    one real transcript of a should-fire case and check whether the skill actually shaped the output.
-    A low number here often means the harness could not observe the firing, not that the skill failed.
-
-A should-NOT-trigger query that fires **is** a real failure: the description is too broad, narrow it.
-
-**Read the per-query rows, not just the headline.** A case that fired 1 of 2 runs is counted as a
-pass, so a skill can score 9/10 while more than half its positives are coin flips. The rows are in
-`evals/result.json`.
+- **The headline is the test split, with its interval.** With 6–7 test cases at 5 reps the noise is
+  about ±18 points; a difference inside it is not a difference.
+- **A should-NOT-trigger query that fires is a real failure:** the description is too broad, narrow it.
+- **In crowded mode, read `fired_other` on the rows.** A should-trigger miss where a sibling fired
+  is a boundary problem between two skills, not a weak description.
+- **Read the per-query rows in `evals/result.json`, not just the headline.** A case that fired 1 of 2
+  runs counts as a pass, so a skill can score high while half its positives are coin flips.
 
 ---
 
@@ -101,15 +101,18 @@ it appears only inside a `Do NOT use for …` clause, the boundary claimed more 
 to — it should hand a neighbour one narrow ACTION, never a whole subject. Narrow the clause.
 
 **Is the query one nobody would type?** Almost never the answer, and here is the rule that keeps it
-honest: **the queryset freezes at the first measurement.** Before it, write and rewrite the cases
-freely — they are the specification of what the skill must catch. After it, they are the instrument,
-and an instrument bent to the reading measures nothing. Every later miss is fixed in the DESCRIPTION,
-including one you privately think is an unfair query. Only a change in what the skill DOES reopens
-the set: a new capability earns a case, a dropped one loses its case. Editing the queryset in the
-same change as a score is the signature of a bent instrument — `queryset_hash` moves and the diff
-shows it, so justify it in the change description or do not make it.
+honest: **after the first measurement, existing cases are frozen and the set only grows.** Before
+it, write and rewrite the cases freely — they are the specification of what the skill must catch.
+After it, they are the instrument, and an instrument bent to the reading measures nothing. Every
+later miss is fixed in the DESCRIPTION, including one you privately think is an unfair query. An
+existing case is never edited or deleted; it is retired only when what the skill DOES drops it.
+Adding cases is allowed and wanted, because most rubrics saturate on the current model. Add HARD
+ones: queries on the boundary with a sibling skill, from real requests where they exist. A new case
+gets its train or test slot at random when it is added, never by where it would help. Editing an
+existing case in the same change as a score is the signature of a bent instrument — `queryset_hash`
+moves and the diff shows it, so justify any queryset change in the change description.
 
-**Before diagnosing a case that fires "half the time", re-measure with more runs.** At `--runs 2` a
+**Before diagnosing a case that fires "half the time", re-measure with more runs.** At `--reps 2` a
 1-of-2 is not a measurement — telling 50 % from 90 % apart takes roughly 17 runs per arm. A coin flip
 and a real weakness look identical until then.
 
@@ -119,15 +122,16 @@ and a real weakness look identical until then.
 
 1. `evals/rubric.json` exists: ≥6 cases, ≥1 positive, ≥1 negative, realistic queries and
    genuine near-miss negatives.
-2. The script was run from the repository → `evals/result.json` exists and its `description_hash`
-   matches the description you are shipping.
+2. The runner and `save-result.mjs` were run from the repository → `evals/result.json` exists and
+   its `description_hash` matches the description you are shipping.
 3. No should-NOT-trigger query fired. One that did is a real defect — narrow the description and
    return to 1.
 4. Every positive case was read individually, not just the headline score. For each miss, the WHY was
    answered from the three questions above and the fix addresses that cause — not the wording of the
    failed query.
-5. `git diff` touches no `trigger` half of `rubric.json` unless what the skill DOES changed in the
-   same change. A queryset edited alongside a score is an instrument bent to its reading. (Editing the
+5. `git diff` edits or deletes no existing case in the `trigger` half of `rubric.json` unless what
+   the skill DOES changed in the same change. Added cases are fine; an existing case edited alongside
+   a score is an instrument bent to its reading. (Editing the
    `acceptance` half is fine — it does not move the trigger hash.)
 6. `bash scripts/eval-gate.sh` → green for this skill.
 7. Any line failing? Fix it and start again from 1.

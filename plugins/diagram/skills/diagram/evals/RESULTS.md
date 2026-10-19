@@ -25,7 +25,7 @@ follow-up, tracked separately — it is not a ship blocker.
   charts, dashboards, prose explanations, ASCII, Lucid/Excalidraw, tool-choice Qs stay quiet; "draw me
   a readable diagram of how X works" — spec-based, raw-code, and heterogeneous — should fire).
 
-- **To measure:** run the description-triggering harness (`score-description.py`, nested `claude -p`
+- **To measure:** run the description-triggering harness (`scripts/hillclimb/trigger-runner.mjs`, nested `claude -p`
   per query) with the skill installed as a real `.claude/skills/diagram/`. This is a fan-out
   (23 queries × N runs of nested sessions) — cost it with `meta:model-routing` and get a go-ahead
   before launching; it is not something to run silently.

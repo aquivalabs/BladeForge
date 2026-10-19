@@ -5,7 +5,7 @@
     "model": "sonnet",
     "runs_per_query": 2,
     "best_score": "18/18",
-    "accuracy": 1.0,
+    "accuracy": 1,
     "baseline_accuracy": null,
     "description_hash": "d13d788be453cff44fa109603a58c12d87050f2c7c75abaacf1d9c71c89ce9a9",
     "queryset_hash": "db3400661ad989bf631f32f5b3389d0c67fb382c14ad50135879e13fd3c96d60",
@@ -17,15 +17,15 @@
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "adding a new skill to the meta plugin \u2014 where does the SKILL.md go and what should be in it?",
+        "query": "adding a new skill to the meta plugin — where does the SKILL.md go and what should be in it?",
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
@@ -33,15 +33,15 @@
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "creating a new domain plugin for database stuff \u2014 do i need a plugin.json?",
+        "query": "creating a new domain plugin for database stuff — do i need a plugin.json?",
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
@@ -49,27 +49,27 @@
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "the new frontend-css:rem skill needs a SKILL.md \u2014 show me what it should look like",
+        "query": "the new frontend-css:rem skill needs a SKILL.md — show me what it should look like",
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "adding embed-test as a project-local skill \u2014 how is that different from a marketplace skill?",
+        "query": "adding embed-test as a project-local skill — how is that different from a marketplace skill?",
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "i need a skill that fires before any apex test is authored \u2014 help me scaffold it",
+        "query": "i need a skill that fires before any apex test is authored — help me scaffold it",
         "should_trigger": true,
         "triggers": 1,
         "runs": 2,
@@ -81,31 +81,31 @@
         "should_trigger": true,
         "triggers": 2,
         "runs": 2,
-        "trigger_rate": 1.0,
+        "trigger_rate": 1,
         "pass": true
       },
       {
-        "query": "improve this skill's description so it triggers more reliably \u2014 run evals on it",
+        "query": "improve this skill's description so it triggers more reliably — run evals on it",
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
-        "query": "the ockham skill is triggering on the wrong things \u2014 optimize it",
+        "query": "the ockham skill is triggering on the wrong things — optimize it",
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
-        "query": "the lean-writing skill needs better examples in references/ \u2014 add some",
+        "query": "the lean-writing skill needs better examples in references/ — add some",
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
@@ -113,7 +113,7 @@
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
@@ -121,15 +121,15 @@
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
-        "query": "should the WidgetCard use SRP \u2014 it's doing fetch and render",
+        "query": "should the WidgetCard use SRP — it's doing fetch and render",
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
@@ -137,7 +137,7 @@
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
@@ -145,7 +145,7 @@
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       },
       {
@@ -153,7 +153,7 @@
         "should_trigger": false,
         "triggers": 0,
         "runs": 2,
-        "trigger_rate": 0.0,
+        "trigger_rate": 0,
         "pass": true
       }
     ]
@@ -166,61 +166,61 @@
     "quality_impact": 0.55,
     "skillscore": 0.65,
     "guide_faults": [],
-    "verdict": "Guide-following output hits the structural must-haves the rubric actually checks for (nine-question dialogue before the body, metadata.yaml + evals/rubric.json scaffold, explicit Contract In/Out, honest flagging of the plugin.json/README/skill-eval steps left undone) while the isolated baseline \u2014 despite a competently written procedural body \u2014 never produces metadata.yaml, never touches evals/, and shows no sign of the nine-question groundwork at all."
+    "verdict": "Guide-following output hits the structural must-haves the rubric actually checks for (nine-question dialogue before the body, metadata.yaml + evals/rubric.json scaffold, explicit Contract In/Out, honest flagging of the plugin.json/README/skill-eval steps left undone) while the isolated baseline — despite a competently written procedural body — never produces metadata.yaml, never touches evals/, and shows no sign of the nine-question groundwork at all."
   },
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-10T19:39:30",
+    "scanned_at": "2026-10-16T19:30:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "bd69e4f403ec8949faa7c5e10dcf163288c07b67c3d195a11d53fbdfbe764338",
+    "scanned_hash": "25d8d5d41cf65d143cc5ac43a45bb749ad2aaceffcbfff0d4cc92faa7e341b11",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "body addresses the human author; no directive aimed at a reading agent"
+        "note": "the edited block and the reference line are prose and a shell snippet addressed to the author"
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "no code that sends repo/user/context data anywhere"
+        "note": "the named scripts write only under .claude/hillclimb/ and the skill's evals/result.json"
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "no key, token, or credential embedded"
+        "note": "no embedded key, token or credential"
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "destructive strings appear only as prose examples of what to look for; none executed"
+        "note": "the snippet runs repo scripts whose only deletes are their own temp sandboxes and that sandbox's auto-memory dir; no destructive command in the skill"
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "plain markdown throughout; nothing encoded or unreadable-on-purpose"
+        "note": "plain prose and commands"
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "no download-and-run or reach to an external host"
+        "note": "no external host beyond the nested claude -p the skill already documented"
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "no read of ~/.ssh, ~/.aws, .env, keychain, cookies, or a token store"
+        "note": "no credential-store read"
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "no sudo/setuid/persistence; no write outside the working tree"
+        "note": "no sudo, setuid, cron, shell profile or launch agent"
       }
     ]
   }
