@@ -1,0 +1,24 @@
+name: cerberus-tests
+# The push guard and the version check are fail-open by construction, so a regression in either
+# is silent: the guard would simply stop denying, and a leak would ship. This suite drives both
+# hooks as processes against throwaway repositories. The push-guard mod's own tests need the
+# Claude Code engine (`claude plugin test plugins/cerberus`) and run locally.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "plugins/cerberus/**"
+
+permissions:
+  contents: read
+
+jobs:
+  cerberus-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run the push-guard and version-check hook suite
+        run: node --test plugins/cerberus/tests/on-git-push.test.mjs

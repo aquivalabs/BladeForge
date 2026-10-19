@@ -41,6 +41,8 @@ client-specific onto one neutral fictional demo before it ships.
 The same hook runs a second head inward: **[`security-scan`](#security-scan)** walks an eight-point
 consumer-safety checklist so a skill you publish can never do something unsafe to whoever installs it.
 
+**A push is a gate too.** A commit carries a message, an author and a branch name, and none of them is a file, so the edit-time check never reads them — that is how a client name once escaped. A `PreToolUse` hook stops `git push` until `leak-check` has read the outgoing commits; on Claude Code 2.1.292 or newer a push-guard mod reads and judges them itself before the push runs, and an older Claude Code gets a red notice at session start to update.
+
 It ships in this marketplace and is enabled by default (`cerberus@bladeforge` in `.claude/settings.json`).
 
 ## Plugins
@@ -50,7 +52,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | Plugin | What it does | Skills |
 |---|---|---|
 | scout | **Start here — the plugin that finds all the others.** Reads this marketplace's compiled catalog to discover/recommend/install any skill on demand (even ones you haven't installed), surfacing declared side effects and treating catalog text as untrusted data. A SessionStart hook also warns when this project enables a plugin the machine never installed for it — the silent reason a skill goes missing. | [scout](#scout) · [plugin-sync](#plugin-sync) |
-| cerberus | Two-headed guard at the gate — a PostToolUse hook reminds on any skill/eval edit to run both agent passes: `leak-check` (outward — rewrites work/client fingerprints to a fictional demo before they ship) and `security-scan` (inward — an eight-point consumer-safety checklist so nothing unsafe reaches whoever installs the skill). No denylist by design. | [leak-check](#leak-check), [security-scan](#security-scan) |
+| cerberus | Two-headed guard at the gate — a PostToolUse hook reminds on any skill/eval edit to run both agent passes, and a push guard stops `git push` until the outgoing commits are checked: `leak-check` (outward — rewrites work/client fingerprints to a fictional demo before they ship) and `security-scan` (inward — an eight-point consumer-safety checklist so nothing unsafe reaches whoever installs the skill). No denylist by design. | [leak-check](#leak-check), [security-scan](#security-scan) |
 | cicero | House voice — an always-on output style (result first, plain words, honest) plus hooks for the banner and reply-language. | hook only — [see the difference →](plugins/cicero/examples/before-after.md) |
 | critique | Adversarial critique — the house method for red-teaming a design, spec, or plan: diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize. Consumed by pipelines (speccy, a critic role) rather than reinvented. | [critique](#critique) |
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable React Flow + ELK page (classes+methods, objects, permission sets, relations); a diagram-model JSON hardened by parallel Sextant reviewers. | [diagram](#diagram) |

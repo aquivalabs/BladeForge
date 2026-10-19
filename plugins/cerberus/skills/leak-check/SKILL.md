@@ -61,6 +61,15 @@ work-account author → `git commit --amend --reset-author` with a neutral ident
 a branch name → rename it before the push. Then re-read the log — a fix you did not re-check is a
 guess.
 
+Only when that re-read is clean, record which HEAD you checked, so cerberus's push guard lets this
+exact push through (a later commit changes HEAD and asks again):
+
+```bash
+git rev-parse HEAD > "$(git rev-parse --git-dir)/cerberus-leak-checked"
+```
+
+Never write it to get past the guard without the read: it is the record that the read happened.
+
 ## The rule
 
 Public examples must be **fictional and generic** — invent ONE neutral demo product and
