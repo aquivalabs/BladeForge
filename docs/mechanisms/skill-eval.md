@@ -10,14 +10,25 @@ the mistake the design exists to prevent.
 
 | metric | question | status |
 |---|---|---|
-| triggering | is the skill reached for when it should be? | **built** — `score-description.py` |
+| triggering | is the skill reached for when it should be? | **built** — `scripts/hillclimb/trigger-runner.mjs` |
 | acceptance | does the result come out as promised? | the structural requirement (file + Contract) is on the gate; the LLM grader is `skillcraft:skillaxe` — see below |
 
 The parts:
 
 ```text
 plugins/meta/skills/skill-eval/       the skill: how to run it, how to read a score
-  scripts/score-description.py        the triggering measurer, self-contained
+scripts/hillclimb/
+  trigger-runner.mjs                  the triggering measurer: the claude-api hillclimb scaffold, filled in
+  skill-description.mjs               the one description reader: runner, writer and gate all import it
+  flow-lib.mjs                        the shared facts: case ids, skill slugs, row scoring, the record contract
+  new-flow.mjs                        creates a flow dir with a fixed, seeded train/test split
+  save-result.mjs                     writes result.json `trigger` from a variant's raw rows
+  split-scores.mjs                    recomputes train/test scores from raw rows
+  description-hash.mjs                prints the description hash for the gate
+  validate-trigger-record.mjs         the gate's check that a record came from the runner, with its noise
+  harness-sha.mjs                     the runner's harness digest, so new-flow can reuse an approval;
+                                      harness-sha.test.mjs pins it to the runner
+.claude/hillclimb/<flow>/             raw rows and traces per run, gitignored
 scripts/validate_eval.py              rubric.json trigger shape + its canonical hash
 scripts/validate_acceptance.py        rubric.json acceptance shape (array or {not-applicable})
 scripts/validate_security.py          result.json security-section shape + a skill's material hash
@@ -79,16 +90,18 @@ A skill with nothing to check — one that only explains how a system is built �
 
 ## result.json — what was measured
 
-Written by `plugins/meta/skills/skill-eval/scripts/score-description.py` at the end of a run, unless
-`--no-save` is passed. `trigger` carries the queryset hash, the score, the model and runs used, the
-date, the method, and the per-query rows; `acceptance` carries the skillaxe run, or `null` until one
+Written by `scripts/hillclimb/save-result.mjs` from a runner variant's raw `results.jsonl`. It
+refuses a variant that is incomplete, mixes models, or measured a description other than the one
+`SKILL.md` holds now — every row records the description hash it measured. `trigger` carries the
+queryset hash, the score over (case, rep) rows, the model and reps used, the environment, the train
+and test scores each with its noise interval, the date, the method, and the per-query rows; `acceptance` carries the skillaxe run, or `null` until one
 has been taken; `security` carries the eight-point walk, written by a different mechanism entirely.
 
 **A run replaces `trigger` and carries every other key forward untouched.** It used to carry only
 `acceptance`, by name — so re-scoring a description silently deleted the `security` walk beside it
 and un-shipped the skill, which `eval-gate` then refused with a staleness message naming neither the
-cause nor the re-measurement that caused it. `plugins/meta/tests/save-result.test.py` pins the
-carry-forward, and the CI job `meta-tests` runs it. A record with no `trigger` key is not one of
+cause nor the re-measurement that caused it. `scripts/hillclimb/save-result.test.mjs` pins the
+carry-forward, and the CI job `hillclimb-tests` runs it. A record with no `trigger` key is not one of
 these records, and nothing in it is carried.
 
 The record's shape, and the reason for it:
@@ -96,18 +109,25 @@ The record's shape, and the reason for it:
 ```json
 {
   "trigger": {
-    "skill": "new-skill",
-    "measured_at": "2026-08-31T18:40:12",
-    "model": "sonnet",
-    "runs_per_query": 2,
-    "best_score": "16/18",
-    "accuracy": 0.889,
+    "skill": "triage",
+    "measured_at": "2026-10-16T18:40:12",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "85/90",
+    "accuracy": 0.944,
     "baseline_accuracy": null,
     "description_hash": "…",
     "queryset_hash": "…",
     "eval_type": "description-triggering",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "isolated",
+    "cases": 18,
+    "train": { "cases": 12, "rows": 60, "mean": 0.917, "ci_half_width": 0.129 },
+    "test":  { "cases": 6,  "rows": 30, "mean": 1.0,   "ci_half_width": 0.183 },
     "method": "…how the measurement was taken…",
-    "results": [ … per-query rows … ]
+    "results": [ … per-query rows … ],
+    "hillclimb": { "baseline_test": 1.0, "final_test": 1.0, "final_variant": "baseline",
+                   "rounds": 0, "noise": 0.183, "verdict": "no-headroom" }
   },
   "acceptance": null
 }
@@ -134,9 +154,13 @@ diagnostic score:
 }
 ```
 
-Fields belonging to the optimisation loop the old script ran — `holdout`, `best_train_score`,
-`exit_reason`, `applied` — are not carried. This scorer measures one description; it does not search
-for a better one.
+`hillclimb` appears only after a climb. Its verdict is computed from the numbers alone —
+`improved`, `within-noise`, `regressed` or `no-headroom`, with the baseline test interval as the
+noise — and the winner is the variant hillclimb itself recorded in `_state.json.best`.
+
+The record measures one description; it does not search for a better one. Improving a description
+is `/claude-api hillclimb` run on the same flow dir, which keeps the split and reverts any change that
+does not lift the test score.
 
 **This is a repaired regression, and worth knowing about.** The saving originally lived in
 `scripts/optimize_description.py` — commit `4c183a9`, "optimize_description writes evals/result.json".
@@ -144,6 +168,14 @@ That script was deleted in `7987042` when `meta:skill-eval` replaced the skill-c
 its scoring moved to `score-description.py` while the saving did not. Nothing wrote the file for
 months. Three skills carry a `result.json` from that era, each hand-written in its own shape, which is
 why their fields do not match.
+
+**The second repaired defect: the scorer itself.** `score-description.py` re-emitted the parsed
+description into the probe skill unquoted. For any description holding `: ` that made the probe's
+YAML invalid, which affected 12 skills, and `\u2014` escapes reached the model as literal text. It
+also counted any `Skill` call as a hit, not only a call for the probe. Remeasured on 2026-10-16 with
+the runner, which copies the `description:` line verbatim, the five lowest saved scores, 50–65%,
+came out at 94–100%. Records written by `score-description.py` are not evidence; the script was
+deleted when the runner replaced it.
 
 The measurement matters because runs otherwise land in `*-workspace/` directories that `.gitignore`
 excludes as scratch, and evaporate. Without a saved result there is nothing to compare a later run
@@ -186,11 +218,11 @@ written walk stale, on that skill only, with no way to reproduce it locally.
 |---|---|---|
 | `hooks/pre-push` (every local push) | — | runs `eval-gate.sh`, then the review gate; `core.hooksPath` points at `hooks/`, so this file IS the pre-push hook — there is no `.husky/` here |
 | `scripts/eval-gate.sh` (that hook, and every PR) | `rubric.json` (trigger) | **blocks** a touched skill whose eval is missing or invalid |
-| | `result.json` | **blocks** a skill whose own `SKILL.md` is in the diff when the file is absent or stale — stale meaning either its `queryset_hash` or its `description_hash` no longer matches; **warns** (does not block) when only a bundled script or generated file beside the skill changed. There is no skip flag: a missing or stale measurement on a touched skill always blocks — no live clone to measure from means the skill is not shippable yet |
+| | `result.json` | **blocks** a skill whose own `SKILL.md` is in the diff when the file is absent or stale — stale meaning either its `queryset_hash` or its `description_hash` no longer matches — or when the record did not come from `trigger-runner.mjs` on `claude-opus-5-5`, in the isolated or crowded environment, with its case count, reps and test interval (`validate-trigger-record.mjs`). A skill whose `SKILL.md` the diff ADDS must also carry `trigger.hillclimb`, the outcome of `/claude-api hillclimb` written by `save-result.mjs --climb`; **warns** (does not block) when only a bundled script or generated file beside the skill changed. There is no skip flag: a missing or stale measurement on a touched skill always blocks — no live clone to measure from means the skill is not shippable yet |
 | | `rubric.json` (acceptance) + `## Contract` | **blocks** a skill whose own `SKILL.md` is in the diff when the `acceptance` half of `evals/rubric.json` is missing or invalid (`scripts/validate_acceptance.py`) or the body has no `## Contract` heading — the step-5 structural requirement, switched on once ten skills carried the file. A map declares `{"not-applicable": "<reason>"}` and passes. `SKILL_EVAL_SKIP=1` downgrades it to a warning offline. An untouched skill is not checked |
 | | `result.json` (security) | **blocks** a skill whose installer-facing MATERIAL is in the diff (`SKILL.md`, `references/`, or `scripts/`) when the `security` section is absent, invalid (`scripts/validate_security.py`), stale (its `scanned_hash` no longer matches the skill's material hash), **or its top `verdict` is not `pass`** — a recorded `flag` blocks the push, so an honestly-recorded but unresolved hit cannot ship. Broader trigger than the trigger measurement (any material edit, not only the description) and stronger: consumer safety has **no** skip flag. An untouched skill, or a sidecar/eval-only edit, is not checked |
 | `scripts/scout_validate.py` (every PR) | `metadata.yaml` | blocks on an invalid sidecar or a tool/tag contradiction |
-| `score-description.py` (local only) | `rubric.json` (trigger) | runs each query as a nested `claude -p`, scores triggering, writes `result.json` |
+| `trigger-runner.mjs` + `save-result.mjs` (local only) | `rubric.json` (trigger) | runs each query as an isolated nested `claude -p`, scores triggering, writes `result.json` |
 
 **No LLM runs in CI.** The gate is deterministic and agent-free; anything that spawns `claude -p` is
 run locally by the author, on demand. The gate checks that the `acceptance` half of `rubric.json` and a `## Contract` heading are PRESENT on a touched skill (deterministic, step 5); it does not GRADE the result against them on a PR — that
@@ -205,7 +237,7 @@ Compliance against the skill's `rubric.json` acceptance, and attributes each wea
 agent. It is run locally and selectively (a high-traffic guide, a large rewrite), never on a PR — the
 design below records why the trigger scorer could not be extended to cover it.
 
-**Why the existing runner cannot be extended to cover it.** `score-description.py` sends a query and
+**Why the trigger runner cannot be extended to cover it.** `trigger-runner.mjs` sends a query and
 watches whether the Skill tool fires. It never performs the task, so there is no result for it to
 judge. Triggering and acceptance need different runs, not different flags.
 
@@ -244,21 +276,21 @@ rewrite — never on a PR.
 ## Running one
 
 ```bash
-python3 plugins/meta/skills/skill-eval/scripts/score-description.py \
-    --skill-path plugins/<domain>/skills/<name> \
-    [--runs 2] [--model sonnet] [--type self-contained|context-dependent] [--suggest] [--no-why]
+node scripts/hillclimb/new-flow.mjs plugins/<domain>/skills/<name>   # once; add --crowded for siblings
+node scripts/hillclimb/trigger-runner.mjs --flow .claude/hillclimb/<flow> --variant baseline \
+    --model claude-opus-5-5 --reps 5 --concurrency 8
+node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> baseline
 ```
 
-Read the score by skill type. A self-contained skill is judged against the absolute bar and against
-its own previous score. A context-dependent one — advisory, or only firing with the real repo — is
-judged by no-regression alone; a low absolute number there is expected and is not a failure. A
-negative case that fires IS a real failure whatever the type: the description is too broad.
+The runner refuses to start until a human has approved its current code with `--approve-harness`;
+an agent never passes that flag. The nested run is isolated — `--setting-sources project
+--strict-mcp-config` — so no user settings, plugins, hooks or MCP servers reach it, and the score does
+not depend on whose machine took it. `environment: "crowded"` in the flow's `_state.json` installs
+every marketplace skill beside the one under test, and a query a sibling takes shows in
+`fired_other`.
 
-When a positive case misses, the scorer prints a **WHY IT MISSED** diagnosis by default — one nested
-`claude -p` that names the missing CONDITION — rather than recommending that the failed query's own
-wording be pasted into the description, which patches the test set instead of the skill. `--no-why`
-skips it. `--print-description-hash` prints the hash and exits with no LLM call; the gate uses it so
-the frontmatter is parsed in exactly one place.
+Read the test split with its interval first. With 6–7 test cases at 5 reps the noise is about ±18
+points. A negative case that fires IS a real failure: the description is too broad.
 
 ## The lesson this mechanism taught
 

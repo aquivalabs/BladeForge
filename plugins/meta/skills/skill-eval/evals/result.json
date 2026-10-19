@@ -1,163 +1,191 @@
 {
   "trigger": {
     "skill": "skill-eval",
-    "measured_at": "2026-09-01T18:44:11",
-    "model": "sonnet",
-    "runs_per_query": 3,
-    "best_score": "12/12",
-    "accuracy": 1.0,
-    "baseline_accuracy": 0.75,
+    "measured_at": "2026-10-16T17:03:34",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "55/60",
+    "accuracy": 0.917,
+    "baseline_accuracy": null,
     "description_hash": "ebe558ddffa4a2679f3929f5df943cb6ae4d8739dd0bdbc880c22e7ca9a947aa",
     "queryset_hash": "6cbfba5649fc8b8c1837ed0185eeed160cca7c5a400c86861f92c688c51eba92",
     "eval_type": "description-triggering",
-    "method": "score-description.py: the skill is installed as a real .claude/skills/<name>/ and each query runs as a nested `claude -p`; a query counts as TRIGGERED when the Skill tool fires for it anywhere in the turn.",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "isolated",
+    "flow_variant": "baseline",
+    "cases": 12,
+    "train": {
+      "cases": 8,
+      "rows": 40,
+      "mean": 0.875,
+      "ci_half_width": 0.158
+    },
+    "test": {
+      "cases": 4,
+      "rows": 20,
+      "mean": 1,
+      "ci_half_width": 0.224
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
     "results": [
       {
         "query": "i just finished writing a new skill's description and i want to know if it actually triggers before i publish it — how do i measure that",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "my skill scores 0 recall in the eval, it never seems to fire even though the description looks right. what's going on and how do i get honest numbers",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "run the trigger eval on plugins/frontend-css/skills/responsive-layout and tell me the pass rate",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 3,
-        "trigger_rate": 0.6666666666666666,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "is this skill good enough to ship, or is its description too narrow to trigger on real queries",
         "should_trigger": true,
-        "triggers": 2,
-        "runs": 3,
-        "trigger_rate": 0.6666666666666666,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "i edited the description of an existing skill — measure whether it still triggers on the should-fire cases without firing on the near-misses",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "which eval harness should i use to test skill triggering — skill-creator's run_eval keeps giving me zeros",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "one of my eval cases fired on 1 of 2 runs — what does that mean and what do i do about it?",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "a should-not-trigger query fired in my results — is that a real problem or noise?",
         "should_trigger": true,
-        "triggers": 3,
-        "runs": 3,
-        "trigger_rate": 1.0,
-        "pass": true
-      },
-      {
-        "query": "scaffold a brand new skill for parsing CSV files — where does the SKILL.md go and what's the folder naming",
-        "should_trigger": false,
-        "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": true
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "refresh the metadata.yaml sidecar for this skill, i changed its bundled script and hooks",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": true
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "the pre-push gate is blocking my push saying the trigger eval is missing — what file do i add",
         "should_trigger": false,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": false,
+        "fired_other": 0
+      },
+      {
+        "query": "scaffold a brand new skill for parsing CSV files — where does the SKILL.md go and what's the folder naming",
+        "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": true
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
       },
       {
         "query": "write me a python script that measures cyclomatic complexity of a codebase",
         "should_trigger": false,
         "triggers": 0,
-        "runs": 3,
-        "trigger_rate": 0.0,
-        "pass": true
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
       }
     ]
   },
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-09-26T03:35:00",
+    "scanned_at": "2026-10-19T12:00:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "790fd234b58ee5fadcd58fb2300ed4ec65f050f22fda4bae0380885e864a3524",
+    "scanned_hash": "91e68777a0c41fee2ae1abb32ef2a4b32eb8b7fd9266b1f9c118296e0cc76194",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "SKILL.md and the script address the tool author; keys carried forward from a previous result.json are copied as DATA and never executed or interpreted"
+        "note": "SKILL.md addresses the skill author; the one agent-directed line forbids passing --approve-harness, which narrows what an agent may do; the freeze-rule paragraph is guidance to the author about which rubric cases may change"
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "the change reads only the result.json the script already owned and writes it back in place; no new path, no network"
+        "note": "the procedure runs repo scripts that write only under the gitignored .claude/hillclimb/ and the skill's own evals/result.json; nested claude -p calls go to the Anthropic API the user already uses"
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "no embedded key, token or credential in SKILL.md or the script"
+        "note": "no embedded key, token or credential"
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "no new subprocess; the pre-existing calls are git rev-parse/show and a local claude -p"
+        "note": "the skill bundles no script any more; the repo scripts it names delete only their own sandbox dirs under the temp dir and that sandbox's auto-memory dir under ~/.claude/projects/<sandbox-slug>/, both derived from a fixed path, never a user path"
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "plain readable Python; the added lines are a dict spread and a setdefault"
+        "note": "plain prose and plain shell commands"
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "no urllib, requests, curl or http call anywhere in the script"
+        "note": "no undocumented host; the only network use is the nested claude -p calling the Anthropic API, stated in the skill"
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "no read of ~/.ssh, ~/.aws, .env, a keychain or a cookie store"
+        "note": "no read of ~/.ssh, ~/.aws, .env, a keychain or a cookie store; nested runs use the user's existing claude login without reading it"
       },
       {
         "n": 8,

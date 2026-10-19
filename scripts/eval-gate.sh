@@ -15,13 +15,16 @@
 # change alters what reaches a consumer, and stronger (no skip flag) because it is safety.
 # There is NO skip flag: a touched skill whose measurement is missing or stale always
 # blocks. No live clone to measure from means the skill is not shippable yet — get one.
+# One git diff --name-status per pushed ref yields both the changed paths (the last
+# column, so a rename counts under its new name) and the added ones (status A).
 # Reads pre-push stdin; falls back to origin/main..HEAD when run by hand with no
 # stdin. Bash 3.2 compatible.
 set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 VALIDATE="$ROOT/scripts/validate_eval.py"
-SCORER="$ROOT/plugins/meta/skills/skill-eval/scripts/score-description.py"
+DESC_HASH="$ROOT/scripts/hillclimb/description-hash.mjs"
+VALIDATE_REC="$ROOT/scripts/hillclimb/validate-trigger-record.mjs"
 VALIDATE_ACC="$ROOT/scripts/validate_acceptance.py"
 VALIDATE_SEC="$ROOT/scripts/validate_security.py"
 ZERO="0000000000000000000000000000000000000000"
@@ -29,6 +32,7 @@ EMPTY_TREE="$(git hash-object -t tree /dev/null)"
 
 # --- 1. collect changed files across all pushed refs (newline-joined) --------
 changed=""
+added=""
 have_stdin=0
 if [ ! -t 0 ]; then
   while read -r _localref localsha _remoteref remotesha; do
@@ -40,13 +44,18 @@ if [ ! -t 0 ]; then
     else
       base="$remotesha"
     fi
+    ns="$(git diff --name-status "$base" "$localsha" 2>/dev/null)"
     changed="$changed
-$(git diff --name-only "$base" "$localsha" 2>/dev/null)"
+$(printf '%s\n' "$ns" | awk -F'\t' 'NF {print $NF}')"
+    added="$added
+$(printf '%s\n' "$ns" | awk -F'\t' '$1 == "A" {print $2}')"
   done
 fi
 if [ "$have_stdin" -eq 0 ]; then
   base="$(git merge-base origin/main HEAD 2>/dev/null || echo "$EMPTY_TREE")"
-  changed="$(git diff --name-only "$base" HEAD 2>/dev/null)"
+  ns="$(git diff --name-status "$base" HEAD 2>/dev/null)"
+  changed="$(printf '%s\n' "$ns" | awk -F'\t' 'NF {print $NF}')"
+  added="$(printf '%s\n' "$ns" | awk -F'\t' '$1 == "A" {print $2}')"
 fi
 
 # --- 2. map changed files -> unique skill dirs -------------------------------
@@ -74,6 +83,12 @@ skills="$(printf '%s\n' "$skills" | sed '/^$/d' | sort -u)"
 descskills="$(printf '%s\n' "$changed" | sed -n 's#/SKILL\.md$##p' | sed '/^$/d' | sort -u)"
 owes_measurement() {
   printf '%s\n' "$descskills" | grep -qx "$1"
+}
+
+# Skills whose SKILL.md is ADDED by this push — new skills, which also owe a hillclimb record.
+newskills="$(printf '%s\n' "$added" | sed -n 's#/SKILL\.md$##p' | sort -u)"
+is_new_skill() {
+  printf '%s\n' "$newskills" | grep -qx "$1"
 }
 
 # A skill owes a fresh security scan when its installer-facing MATERIAL changed — its own
@@ -137,11 +152,21 @@ while IFS= read -r sd; do
   else
     # The description is the thing the eval actually scores, so a rewritten one
     # invalidates the result even when every query stayed put. The hash comes from
-    # the scorer itself — one frontmatter parser, not two that can disagree.
-    dnow="$(python3 "$SCORER" --skill-path "$sd" --print-description-hash 2>/dev/null)"
+    # skill-description.mjs, the reader the trigger runner measures with — one
+    # frontmatter parser, not two that can disagree.
+    dnow="$(node "$DESC_HASH" "$sd" 2>/dev/null)"
     dwas="$(json_field "$resfile" trigger.description_hash)"
     if [ -n "$dnow" ] && [ -n "$dwas" ] && [ "$dnow" != "$dwas" ]; then
       problem="stale: the description was rewritten since it was measured"
+    fi
+  fi
+  # A fresh record must also come from the trigger runner and carry its noise; a new skill
+  # must also carry the outcome of its hillclimb. Only a skill whose SKILL.md is in the diff
+  # owes this — an untouched skill keeps whatever record it has until someone edits it.
+  if [ -z "$problem" ] && owes_measurement "$sd"; then
+    newflag=""; is_new_skill "$sd" && newflag="--new"
+    if ! recproblem="$(node "$VALIDATE_REC" "$resfile" $newflag 2>&1)"; then
+      problem="$recproblem"
     fi
   fi
   if [ -n "$problem" ]; then
@@ -194,7 +219,7 @@ if [ -n "$warns" ]; then
   echo ""
   echo "  ⚠  deprecated/unmeasured evals (push allowed — refresh when you can):"
   printf '%s\n' "$warns"
-  echo "     → run:  python3 plugins/meta/skills/skill-eval/scripts/score-description.py --skill-path <dir> --suggest"
+  echo "     → measure with the meta:skill-eval skill (scripts/hillclimb/trigger-runner.mjs, then save-result.mjs)"
 fi
 if [ -n "$blocks" ]; then
   echo ""
@@ -209,11 +234,13 @@ if [ -n "$blocks" ]; then
   echo "    — a JSON array of >= 6 cases: {\"query\": \"...\", \"should_trigger\": true|false}"
   echo "    — at least 1 positive (true) and 1 negative (false)."
   echo ""
-  echo "  HOW TO FIX — never measured / stale: invoke the meta:skill-eval SKILL and follow it,"
-  echo "    then run its script FROM THIS REPO (the installed plugin cache lags and a stale"
-  echo "    copy saves no result at all):"
-  echo "      python3 plugins/meta/skills/skill-eval/scripts/score-description.py \\"
-  echo "        --skill-path <skill-dir> --type self-contained"
+  echo "  HOW TO FIX — never measured / stale: invoke the meta:skill-eval SKILL and follow it."
+  echo "    It runs the trigger runner FROM THIS REPO and saves the record:"
+  echo "      node scripts/hillclimb/trigger-runner.mjs --flow .claude/hillclimb/<flow> \\"
+  echo "        --variant baseline --model claude-opus-5-5 --reps 5"
+  echo "      node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> baseline"
+  echo "    A NEW skill also runs /claude-api hillclimb on the flow, then"
+  echo "      node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> <best-variant> --climb"
   echo ""
   echo "  No live clone to measure from? The skill is not shippable yet — measurement"
   echo "    is mandatory and has no skip flag. Get a working clone and measure."

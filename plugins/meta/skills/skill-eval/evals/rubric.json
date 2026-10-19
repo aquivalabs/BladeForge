@@ -50,7 +50,7 @@
     }
   ],
   "acceptance": [
-    "the score was produced by score-description.py run from the repository, never by skill-creator's run_eval or run_loop",
+    "the score was produced by scripts/hillclimb/trigger-runner.mjs and saved by save-result.mjs, run from the repository, never by skill-creator's run_eval or run_loop",
     "evals/result.json exists beside the skill and its description_hash matches the description being shipped",
     "no should-NOT-trigger query fired; one that did was treated as a real defect and the description narrowed",
     "every positive case was read individually rather than only the headline score, so cases passing on half their runs were noticed",

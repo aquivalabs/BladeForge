@@ -1,8 +1,8 @@
 schema-version: 1
 category: authoring
-purpose: Faithful trigger scoring for an existing skill — the bundled score-description.py installs it as a real .claude/skills/ in a sandbox, runs real `claude -p` probes, scores 0-10 with current-vs-baseline no-regression, and says how to diagnose a miss rather than patch it. The canonical measurer; replaces skill-creator's false-negative-prone run_eval.
+purpose: Faithful trigger scoring for an existing skill — scripts/hillclimb/trigger-runner.mjs installs it as a real .claude/skills/ in an isolated sandbox, runs real `claude -p` probes over a fixed train/test split, reports the test score with its noise, and says how to diagnose a miss rather than patch it. The canonical measurer; replaces skill-creator's false-negative-prone run_eval.
 best-for: Any marketplace maintainer deciding whether a skill's description actually triggers and whether it is fit to ship, who wants honest numbers instead of the stub-harness ~0 false-negatives.
-needs: []
+needs: [meta:model-routing]
 changes:
   tags: [network, files]
-  notes: Spawns `claude -p` subprocesses (which call the Anthropic API) in throwaway temp sandboxes to probe triggering, and writes evals/result.json beside the measured skill unless --no-save is passed. Run locally on demand, never in CI.
+  notes: Spawns `claude -p` subprocesses (which call the Anthropic API) in throwaway temp sandboxes to probe triggering, keeps raw rows under the gitignored .claude/hillclimb/, and writes evals/result.json beside the measured skill when save-result.mjs runs. Run locally on demand, never in CI.
