@@ -2,9 +2,10 @@
 
 Status: in progress, phase 2 · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: phase 2, part A — the runner and the gate switch, steps 1–5 — is PR #95. Part B is in
-progress: steps 6–7, the one entry point and the new gate requirements, plus remeasuring the
-skills whose records still come from `score-description.py`.
+Now: phase 2, part A, is PR #95. Part B is committed on `feat/skill-pipeline-gate`, stacked on
+part A: harness-approval reuse, the hillclimb record, the new gate requirements, and remeasured
+`new-skill` and `update-skill`. It is reviewed and pushed after #95 merges, so one review covers
+it.
 
 ## Goal
 
@@ -287,6 +288,10 @@ showed the noise needs. Re-run quality skill by skill, starting with the most us
   `<plugin>-<skill>`, and a query a sibling takes counts in `fired_other`.
 
 ## Open questions
+
+- `meta:update-skill` fires on a should-not-trigger query: "improve this skill's description so it
+  triggers more reliably — run ev…" (2026-10-19, 70/75). Too broad, or a sibling boundary with
+  `meta:skill-eval`. It is the first real trigger defect the runner found.
 
 - Should the gate refuse a skill below a fixed trigger score? Lean: no. With 6–7 test cases the
   noise is about ±18 points, so a fixed bar would mostly catch noise. The gate should fail only a
