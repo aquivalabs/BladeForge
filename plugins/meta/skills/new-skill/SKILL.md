@@ -330,6 +330,18 @@ node scripts/hillclimb/trigger-runner.mjs --flow <flow> --variant baseline \
 node scripts/hillclimb/save-result.mjs <flow> baseline
 ```
 
+**A new skill is also climbed, because a fresh description almost always misses something.** After
+the baseline, run `/claude-api hillclimb` on the same flow and let it change only the
+`description:` line. Then record its outcome — the winner is the variant hillclimb wrote to
+`_state.json.best`:
+
+```bash
+node scripts/hillclimb/save-result.mjs <flow> <best-variant> --climb
+```
+
+`eval-gate` refuses a new skill without that record. "No headroom" and "within noise" are valid
+verdicts; a missing record is not. The loop is Anthropic's — never write a loop of your own.
+
 **If `meta:skill-eval` is not installed at all**, say it is required, ask for the `meta` plugin to be
 enabled, and stop. Do not measure with skill-creator instead — a wrong harness produces the false
 zeros the skill exists to prevent, and a false zero is worse than no number.

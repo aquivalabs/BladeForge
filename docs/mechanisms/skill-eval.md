@@ -24,6 +24,8 @@ scripts/hillclimb/
   save-result.mjs                     writes result.json `trigger` from a variant's raw rows
   split-scores.mjs                    recomputes train/test scores from raw rows
   description-hash.mjs                prints the description hash for the gate
+  validate-trigger-record.mjs         the gate's check that a record came from the runner, with its noise
+  harness-sha.mjs                     the runner's harness digest, so new-flow can reuse an approval
 .claude/hillclimb/<flow>/             raw rows and traces per run, gitignored
 scripts/validate_eval.py              rubric.json trigger shape + its canonical hash
 scripts/validate_acceptance.py        rubric.json acceptance shape (array or {not-applicable})
@@ -121,7 +123,9 @@ The record's shape, and the reason for it:
     "train": { "cases": 12, "rows": 60, "mean": 0.917, "ci_half_width": 0.129 },
     "test":  { "cases": 6,  "rows": 30, "mean": 1.0,   "ci_half_width": 0.183 },
     "method": "…how the measurement was taken…",
-    "results": [ … per-query rows … ]
+    "results": [ … per-query rows … ],
+    "hillclimb": { "baseline_test": 1.0, "final_test": 1.0, "final_variant": "baseline",
+                   "rounds": 0, "noise": 0.183, "verdict": "no-headroom" }
   },
   "acceptance": null
 }
@@ -147,6 +151,10 @@ diagnostic score:
   "verdict": "one-line summary of whether the guide earned its keep"
 }
 ```
+
+`hillclimb` appears only after a climb. Its verdict is computed from the numbers alone —
+`improved`, `within-noise`, `regressed` or `no-headroom`, with the baseline test interval as the
+noise — and the winner is the variant hillclimb itself recorded in `_state.json.best`.
 
 The record measures one description; it does not search for a better one. Improving a description
 is `/claude-api hillclimb` run on the same flow dir, which keeps the split and reverts any change that
@@ -208,7 +216,7 @@ written walk stale, on that skill only, with no way to reproduce it locally.
 |---|---|---|
 | `hooks/pre-push` (every local push) | — | runs `eval-gate.sh`, then the review gate; `core.hooksPath` points at `hooks/`, so this file IS the pre-push hook — there is no `.husky/` here |
 | `scripts/eval-gate.sh` (that hook, and every PR) | `rubric.json` (trigger) | **blocks** a touched skill whose eval is missing or invalid |
-| | `result.json` | **blocks** a skill whose own `SKILL.md` is in the diff when the file is absent or stale — stale meaning either its `queryset_hash` or its `description_hash` no longer matches; **warns** (does not block) when only a bundled script or generated file beside the skill changed. There is no skip flag: a missing or stale measurement on a touched skill always blocks — no live clone to measure from means the skill is not shippable yet |
+| | `result.json` | **blocks** a skill whose own `SKILL.md` is in the diff when the file is absent or stale — stale meaning either its `queryset_hash` or its `description_hash` no longer matches — or when the record did not come from `trigger-runner.mjs` on `claude-opus-5-5`, in the isolated or crowded environment, with its case count, reps and test interval (`validate-trigger-record.mjs`). A skill whose `SKILL.md` the diff ADDS must also carry `trigger.hillclimb`, the outcome of `/claude-api hillclimb` written by `save-result.mjs --climb`; **warns** (does not block) when only a bundled script or generated file beside the skill changed. There is no skip flag: a missing or stale measurement on a touched skill always blocks — no live clone to measure from means the skill is not shippable yet |
 | | `rubric.json` (acceptance) + `## Contract` | **blocks** a skill whose own `SKILL.md` is in the diff when the `acceptance` half of `evals/rubric.json` is missing or invalid (`scripts/validate_acceptance.py`) or the body has no `## Contract` heading — the step-5 structural requirement, switched on once ten skills carried the file. A map declares `{"not-applicable": "<reason>"}` and passes. `SKILL_EVAL_SKIP=1` downgrades it to a warning offline. An untouched skill is not checked |
 | | `result.json` (security) | **blocks** a skill whose installer-facing MATERIAL is in the diff (`SKILL.md`, `references/`, or `scripts/`) when the `security` section is absent, invalid (`scripts/validate_security.py`), stale (its `scanned_hash` no longer matches the skill's material hash), **or its top `verdict` is not `pass`** — a recorded `flag` blocks the push, so an honestly-recorded but unresolved hit cannot ship. Broader trigger than the trigger measurement (any material edit, not only the description) and stronger: consumer safety has **no** skip flag. An untouched skill, or a sidecar/eval-only edit, is not checked |
 | `scripts/scout_validate.py` (every PR) | `metadata.yaml` | blocks on an invalid sidecar or a tool/tag contradiction |

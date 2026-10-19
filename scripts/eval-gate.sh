@@ -22,6 +22,7 @@ ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 VALIDATE="$ROOT/scripts/validate_eval.py"
 DESC_HASH="$ROOT/scripts/hillclimb/description-hash.mjs"
+VALIDATE_REC="$ROOT/scripts/hillclimb/validate-trigger-record.mjs"
 VALIDATE_ACC="$ROOT/scripts/validate_acceptance.py"
 VALIDATE_SEC="$ROOT/scripts/validate_security.py"
 ZERO="0000000000000000000000000000000000000000"
@@ -29,6 +30,7 @@ EMPTY_TREE="$(git hash-object -t tree /dev/null)"
 
 # --- 1. collect changed files across all pushed refs (newline-joined) --------
 changed=""
+added=""
 have_stdin=0
 if [ ! -t 0 ]; then
   while read -r _localref localsha _remoteref remotesha; do
@@ -42,11 +44,14 @@ if [ ! -t 0 ]; then
     fi
     changed="$changed
 $(git diff --name-only "$base" "$localsha" 2>/dev/null)"
+    added="$added
+$(git diff --name-only --diff-filter=A "$base" "$localsha" 2>/dev/null)"
   done
 fi
 if [ "$have_stdin" -eq 0 ]; then
   base="$(git merge-base origin/main HEAD 2>/dev/null || echo "$EMPTY_TREE")"
   changed="$(git diff --name-only "$base" HEAD 2>/dev/null)"
+  added="$(git diff --name-only --diff-filter=A "$base" HEAD 2>/dev/null)"
 fi
 
 # --- 2. map changed files -> unique skill dirs -------------------------------
@@ -74,6 +79,12 @@ skills="$(printf '%s\n' "$skills" | sed '/^$/d' | sort -u)"
 descskills="$(printf '%s\n' "$changed" | sed -n 's#/SKILL\.md$##p' | sed '/^$/d' | sort -u)"
 owes_measurement() {
   printf '%s\n' "$descskills" | grep -qx "$1"
+}
+
+# Skills whose SKILL.md is ADDED by this push — new skills, which also owe a hillclimb record.
+newskills="$(printf '%s\n' "$added" | sed -n 's#/SKILL\.md$##p' | sed '/^$/d' | sort -u)"
+is_new_skill() {
+  printf '%s\n' "$newskills" | grep -qx "$1"
 }
 
 # A skill owes a fresh security scan when its installer-facing MATERIAL changed — its own
@@ -143,6 +154,15 @@ while IFS= read -r sd; do
     dwas="$(json_field "$resfile" trigger.description_hash)"
     if [ -n "$dnow" ] && [ -n "$dwas" ] && [ "$dnow" != "$dwas" ]; then
       problem="stale: the description was rewritten since it was measured"
+    fi
+  fi
+  # A fresh record must also come from the trigger runner and carry its noise; a new skill
+  # must also carry the outcome of its hillclimb. Only a skill whose SKILL.md is in the diff
+  # owes this — an untouched skill keeps whatever record it has until someone edits it.
+  if [ -z "$problem" ] && owes_measurement "$sd"; then
+    newflag=""; is_new_skill "$sd" && newflag="--new"
+    if ! recproblem="$(node "$VALIDATE_REC" "$resfile" $newflag 2>&1)"; then
+      problem="$recproblem"
     fi
   fi
   if [ -n "$problem" ]; then
@@ -215,6 +235,8 @@ if [ -n "$blocks" ]; then
   echo "      node scripts/hillclimb/trigger-runner.mjs --flow .claude/hillclimb/<flow> \\"
   echo "        --variant baseline --model claude-opus-5-5 --reps 5"
   echo "      node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> baseline"
+  echo "    A NEW skill also runs /claude-api hillclimb on the flow, then"
+  echo "      node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> <best-variant> --climb"
   echo ""
   echo "  No live clone to measure from? The skill is not shippable yet — measurement"
   echo "    is mandatory and has no skip flag. Get a working clone and measure."

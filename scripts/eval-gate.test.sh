@@ -21,26 +21,34 @@ setup_repo() {
   mkdir -p "$r/scripts/hillclimb"
   cp "$GATE" "$r/scripts/eval-gate.sh"; cp "$VALIDATE" "$r/scripts/validate_eval.py"
   cp "$VALIDATE_ACC" "$r/scripts/validate_acceptance.py"
-  cp "$HILLCLIMB_SRC/description-hash.mjs" "$HILLCLIMB_SRC/skill-description.mjs" "$r/scripts/hillclimb/"
+  cp "$HILLCLIMB_SRC/description-hash.mjs" "$HILLCLIMB_SRC/skill-description.mjs" "$HILLCLIMB_SRC/validate-trigger-record.mjs" "$r/scripts/hillclimb/"
   cp "$VALIDATE_SEC" "$r/scripts/validate_security.py"
   echo "$r"
 }
 
-# print a result.json with a fresh trigger measurement AND a fresh, passing security section.
-# args: repo skill_rel qhash dhash
+# print a result.json with a fresh trigger-runner measurement AND a fresh, passing security section.
+# args: repo skill_rel qhash dhash [shape] — shape: full (default: runner record + hillclimb block),
+# noclimb (runner record, no hillclimb block), legacy (the old score-description shape), nosec
 result_json() {
   local mh; mh="$(cd "$1" && python3 scripts/validate_security.py --print-material-hash "$2")"
-  python3 - "$3" "$4" "$mh" <<'PY'
+  python3 - "$3" "$4" "$mh" "${5:-full}" <<'PY'
 import json, sys
-qh, dh, mh = sys.argv[1], sys.argv[2], sys.argv[3]
+qh, dh, mh, shape = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 pts = ["prompt-injection","data-exfiltration","secret-detection","dangerous-commands",
        "obfuscation","external-fetches","credential-access","privilege-escalation"]
-print(json.dumps({
-  "trigger": {"queryset_hash": qh, "description_hash": dh, "best_score": "5/6"},
-  "acceptance": None,
-  "security": {"verdict": "pass", "scanned_by": "cerberus:security-scan", "scanned_hash": mh,
-    "checklist": [{"n": i+1, "point": pts[i], "verdict": "pass", "note": "ok"} for i in range(8)]},
-}))
+trigger = {"queryset_hash": qh, "description_hash": dh, "best_score": "5/6"}
+if shape != "legacy":
+    trigger.update({"runner": "scripts/hillclimb/trigger-runner.mjs", "environment": "isolated",
+                    "model": "claude-opus-5-5", "cases": 6, "reps": 1,
+                    "test": {"cases": 2, "rows": 2, "mean": 1.0, "ci_half_width": 0.707}})
+if shape in ("full", "nosec"):
+    trigger["hillclimb"] = {"baseline_test": 1.0, "final_test": 1.0, "final_variant": "baseline",
+                            "rounds": 0, "noise": 0.707, "verdict": "no-headroom"}
+out = {"trigger": trigger, "acceptance": None}
+if shape != "nosec":
+    out["security"] = {"verdict": "pass", "scanned_by": "cerberus:security-scan", "scanned_hash": mh,
+        "checklist": [{"n": i+1, "point": pts[i], "verdict": "pass", "note": "ok"} for i in range(8)]}
+print(json.dumps(out))
 PY
 }
 add_skill() { # repo dir_rel [rubric_json] -> SKILL.md (with ## Contract) + optional rubric
@@ -101,7 +109,7 @@ check "touched existing eval-less skill blocks" 1 "$(cd "$r" && echo "refs/heads
 r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/nosec" "$RUBRIC"
 h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/nosec/evals/rubric.json)"
 d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/nosec)"
-printf '{"trigger":{"queryset_hash":"%s","description_hash":"%s","best_score":"5/6"},"acceptance":null}' "$h" "$d" > "$r/plugins/p/skills/nosec/evals/result.json"
+result_json "$r" plugins/p/skills/nosec "$h" "$d" nosec > "$r/plugins/p/skills/nosec/evals/result.json"
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
 check "touched skill without security section blocks" 1 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
 
@@ -136,6 +144,34 @@ echo "purpose: x" > "$r/plugins/p/skills/meta/metadata.yaml"
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm edit
 head="$(git -C "$r" rev-parse HEAD)"
 check "metadata-only edit never owes a security scan" 0 "$(cd "$r" && echo "refs/heads/main $head refs/heads/main $base" | bash scripts/eval-gate.sh >/dev/null 2>&1; echo $?)"
+
+# K: touched skill whose fresh record came from the deleted score-description.py -> BLOCK
+r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/old" "$RUBRIC"
+h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/old/evals/rubric.json)"
+d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/old)"
+result_json "$r" plugins/p/skills/old "$h" "$d" legacy > "$r/plugins/p/skills/old/evals/result.json"
+git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
+check "record from the old scorer blocks a touched skill" 1 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
+
+# L: NEW skill with a runner record but no hillclimb block -> BLOCK
+r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/fresh" "$RUBRIC"
+h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/fresh/evals/rubric.json)"
+d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/fresh)"
+result_json "$r" plugins/p/skills/fresh "$h" "$d" noclimb > "$r/plugins/p/skills/fresh/evals/result.json"
+git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
+check "new skill without a hillclimb record blocks" 1 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
+
+# M: EXISTING skill whose SKILL.md is edited, runner record without hillclimb -> PASS (only new skills owe a climb)
+r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/edit" "$RUBRIC"
+git -C "$r" add -A >/dev/null; git -C "$r" commit -qm base
+base="$(git -C "$r" rev-parse HEAD)"
+printf -- '---\ndescription: z\n---\n# x\n\n## Contract\n\nIn: a thing. Out: a thing.\n' > "$r/plugins/p/skills/edit/SKILL.md"
+h="$(cd "$r" && python3 scripts/validate_eval.py plugins/p/skills/edit/evals/rubric.json)"
+d="$(cd "$r" && node scripts/hillclimb/description-hash.mjs plugins/p/skills/edit)"
+result_json "$r" plugins/p/skills/edit "$h" "$d" noclimb > "$r/plugins/p/skills/edit/evals/result.json"
+git -C "$r" add -A >/dev/null; git -C "$r" commit -qm edit
+head="$(git -C "$r" rev-parse HEAD)"
+check "edited existing skill needs no hillclimb record" 0 "$(cd "$r" && echo "refs/heads/main $head refs/heads/main $base" | bash scripts/eval-gate.sh >/dev/null 2>&1; echo $?)"
 
 echo "== $pass passed, $fail failed =="
 [ "$fail" -eq 0 ]
