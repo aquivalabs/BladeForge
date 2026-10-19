@@ -223,6 +223,14 @@ Exit check: build-eval's checks pass, meaning the grader agrees with itself on a
 baseline is below 95%. Hillclimb's report shows a test gain above noise, or states plainly that
 there is none.
 
+Baseline, 2026-10-19: 16 cases × 2 arms × 3 reps on `claude-opus-5-5`, natural prompts, about 9% of
+a window. With the skill 0.83 (test 0.80 ±0.26), without it 0.19 (test 0.20 ±0.26). The skill
+catches every file leak: 30 of 30 runs; the controls pass in both arms. **It reproduces the real
+failure:** on "push this branch" the skill fired in 1 run of 9, and the leak in the commit message
+or author shipped. Its description says "before committing" and never mentions push, messages or
+authors. That is the hillclimb target. The test split holds only one push case, so the best
+possible test gain (0.2) is inside the noise (±0.26). Six more push cases come first.
+
 ### Phase 4 — switch quality, delete skillaxe
 
 1. The quality flow writes an `acceptance` block into `result.json` that carries case count, reps
