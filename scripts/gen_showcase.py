@@ -345,7 +345,7 @@ def index_page(skills, doms, pal):
             "needs":s["needs"],"tags":s["tags"],
             "category":s.get("category"),"demo":has_demo(s["slug"]),"demoV":demo_version(s["slug"]) if has_demo(s["slug"]) else "",
             "trig":(s["trig"]["score"] if s["trig"] else None),"trigAcc":(s["trig"]["acc"] if s["trig"] else None),
-            "effect":(s["effect"]["delta"] if s["effect"] else None),"effectV":(s["effect"]["verdict"] if s["effect"] else None),
+            "effect":(signed(s["effect"]["delta"]) if s["effect"] else None),"effectCls":(eff_cls(s["effect"]["verdict"]) if s["effect"] else None),
             "sec":([s["security"]["passed"],s["security"]["total"]] if s["security"] else None)} for s in skills]
     cats=[c for c in CATEGORY_ORDER if any(s.get("category")==c for s in skills)]
     payload=json.dumps({"skills":gdata,"palette":pal,"domains":doms,"categories":cats,"catLabels":CATEGORY_LABELS}, ensure_ascii=False).replace("</script>","<\\/script>")
@@ -424,10 +424,9 @@ function sync(){df.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pre
 document.getElementById('q').addEventListener('input',e=>{st.q=e.target.value.toLowerCase().trim();render();});
 function tagB(t){return t.length?t.map(x=>`<span class="badge b-${esc(x)}">${esc(x)}</span>`).join(''):'<span class="badge b-ro">read-only</span>';}
 function trigCls(a){return a==null?'c-none':(a>=0.7?'c-good':'c-warn');}
-function effCls(v){return v==='helps'?'c-good':(v==='hurts'?'c-warn':'c-none');}
 function chips(s){const c=[];
   if(s.trig!=null)c.push(`<span class="mchip ${trigCls(s.trigAcc)}"><span class="ic">\u{1F3AF}</span><span class="lab">trig</span>${esc(s.trig)}</span>`);
-  if(s.effect!=null)c.push(`<span class="mchip ${effCls(s.effectV)}"><span class="ic">⚡</span><span class="lab">effect</span>${(s.effect>=0?'+':'')+s.effect.toFixed(2)}</span>`);
+  if(s.effect!=null)c.push(`<span class="mchip ${s.effectCls}"><span class="ic">⚡</span><span class="lab">effect</span>${s.effect}</span>`);
   if(s.sec)c.push(`<span class="mchip ${s.sec[0]===s.sec[1]?'c-good':'c-warn'}"><span class="ic">\u{1F6E1}</span><span class="lab">scan</span>${esc(s.sec[0])}/${esc(s.sec[1])}</span>`);
   return c.length?`<div class="metrics">${c.join('')}</div>`:'';}
 function match(s){if(st.cat&&s.category!==st.cat)return false;

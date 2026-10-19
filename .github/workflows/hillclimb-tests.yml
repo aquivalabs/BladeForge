@@ -24,11 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Run the save-result suite
-        run: node --test scripts/hillclimb/save-result.test.mjs
-      - name: Pin the harness digest to the runner
-        run: node --test scripts/hillclimb/harness-sha.test.mjs
-      - name: Run the approval-gate suite
-        run: node --test scripts/hillclimb/approval-gate.test.mjs
+      - name: Run every hillclimb suite
+        run: node --test scripts/hillclimb/*.test.mjs
       - name: Run the eval-gate fixture scenarios
         run: bash scripts/eval-gate.test.sh

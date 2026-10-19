@@ -42,7 +42,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { cpSync } from 'node:fs';
 import { basename, sep } from 'node:path';
-import { gateApprovalFromArgv, readJson, skillHash } from './flow-lib.mjs';
+import { gateApprovalFromArgv, isEvalsPath, readJson, skillHash } from './flow-lib.mjs';
 import { sandbox, streamClaude } from './sandbox-lib.mjs';
 
 // Every output write refuses symlinks: the flow dir is model-influenced, and a
@@ -234,7 +234,7 @@ async function runCase(input, ctx) {
     if (c.committed) commit(c.committed.message, [c.committed.authorName ?? DEFAULT_AUTHOR[0], c.committed.authorEmail ?? DEFAULT_AUTHOR[1]]);
     // The skill under test, installed the way production installs a skill.
     if (arm === 'with') cpSync(resolve(skillPath), join(box.dir, '.claude', 'skills', skillName),
-      { recursive: true, filter: (src) => !src.includes(`${sep}evals`) });
+      { recursive: true, filter: (src) => !isEvalsPath(relative(resolve(skillPath), src).split(sep).join('/')) });
 
     let fired = false;
     const run = await streamClaude({

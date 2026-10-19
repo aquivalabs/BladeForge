@@ -26,7 +26,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
-import { CLIMB_VERDICTS, QUALITY_VERDICTS, RUNNER, readJson, readRows, round, skillHash, splitScore } from './flow-lib.mjs';
+import { CLIMB_VERDICTS, RUNNER, diffScore, readJson, readRows, round, skillHash, splitScore } from './flow-lib.mjs';
 import { descriptionHash } from './skill-description.mjs';
 
 export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve(import.meta.dirname, '..', '..'), climb = false } = {}) {
@@ -118,9 +118,8 @@ function writeBlock(skillDir, key, block) {
 /**
  * The quality record: the same cases run with the skill and without it. Both arms must
  * cover every case in the suite at the same reps on one model, and every row of the with
- * arm must have installed the skill as it is now. The effect is the difference of the two
- * pass rates; its noise is the half-width of that difference, sqrt(hw_with^2 + hw_without^2),
- * and the verdict follows from those two numbers alone.
+ * arm must have installed the skill as it is now. The effect, its noise and the verdict come
+ * from diffScore in flow-lib.mjs.
  */
 export function saveQuality(withFlow, withVariant, withoutFlow, withoutVariant = 'baseline',
   { now = new Date(), repoRoot = resolve(import.meta.dirname, '..', '..') } = {}) {
@@ -157,10 +156,7 @@ export function saveQuality(withFlow, withVariant, withoutFlow, withoutVariant =
     throw new Error(`${withFlow}/${withVariant}: rows installed skill ${seen.join(', ') || '(none recorded)'}, `
       + `but ${stW.skill_path} now hashes to ${current}. Re-measure the current skill.`);
 
-  const effect = round(w.all.mean - o.all.mean);
-  const noise = round(Math.sqrt(1 / w.all.rows + 1 / o.all.rows));
-  const verdict = effect > noise ? 'helps' : effect < -noise ? 'hurts' : 'within-noise';
-  if (!QUALITY_VERDICTS.includes(verdict)) throw new Error(`unknown verdict ${verdict}`);
+  const { effect, noise, verdict } = diffScore(w.all, o.all);
 
   const acceptance = {
     measured_at: now.toISOString().slice(0, 19),
@@ -177,7 +173,7 @@ export function saveQuality(withFlow, withVariant, withoutFlow, withoutVariant =
     test: { with_skill: splitScore(w.rows, stW.test_ids), without_skill: splitScore(o.rows, stO.test_ids) },
     skill_hash: current,
     cases_hash: createHash('sha256').update(readFileSync(casesFile)).digest('hex'),
-    flows: { with: `${withVariant}`, without: `${withoutVariant}` },
+    flows: { with: withVariant, without: withoutVariant },
     method: 'The same cases run as nested `claude -p` sessions in a fixture repository, once with the skill '
       + 'installed and once without; a programmatic grader reads what the agent left. effect is the '
       + 'difference of the two pass rates over (case, rep) rows; noise is the half-width of that difference.',

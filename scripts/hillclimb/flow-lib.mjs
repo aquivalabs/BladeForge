@@ -5,7 +5,7 @@
 // covers it.
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readdirSync, readFileSync, readSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, readSync, statSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 
 /** The record contract: the writer stamps these, the gate checks them. */
@@ -13,8 +13,6 @@ export const RUNNER = 'scripts/hillclimb/trigger-runner.mjs';
 export const MODEL = 'claude-opus-5-5';
 export const ENVIRONMENTS = ['isolated', 'crowded'];
 export const CLIMB_VERDICTS = ['improved', 'within-noise', 'regressed', 'no-headroom'];
-/** What a quality record may conclude: the skill's effect against the no-skill arm. */
-export const QUALITY_VERDICTS = ['helps', 'within-noise', 'hurts'];
 export const HARNESS_PATHS = [RUNNER, 'scripts/hillclimb/skill-description.mjs', 'scripts/hillclimb/flow-lib.mjs',
   'scripts/hillclimb/sandbox-lib.mjs'];
 
@@ -42,18 +40,16 @@ export function triggerCases(skillDir) {
  */
 export function skillHash(skillDir) {
   const root = resolve(skillDir);
-  const files = [];
-  const walk = (dir) => {
-    for (const e of readdirSync(dir, { withFileTypes: true })) {
-      const p = join(dir, e.name);
-      if (e.isDirectory()) { if (p !== join(root, 'evals')) walk(p); }
-      else files.push(relative(root, p).split(sep).join('/'));
-    }
-  };
-  walk(root);
+  const files = readdirSync(root, { recursive: true }).map(f => String(f).split(sep).join('/'))
+    .filter(f => !isEvalsPath(f) && statSync(join(root, f)).isFile()).sort();
   const h = createHash('sha256');
-  for (const f of files.sort()) h.update(`${f}\0`).update(readFileSync(join(root, f))).update('\0');
+  for (const f of files) h.update(`${f}\0`).update(readFileSync(join(root, f))).update('\0');
   return h.digest('hex');
+}
+
+/** A skill-relative path inside the skill's own `evals/`: never installed, never hashed. */
+export function isEvalsPath(rel) {
+  return rel === 'evals' || rel.startsWith('evals/');
 }
 
 export function readJson(file) {
@@ -86,45 +82,56 @@ export function splitScore(rows, ids) {
 }
 
 /**
+ * Two arms' pass rates compared: the effect is a minus b, the noise is the half-width of that
+ * difference, sqrt(1/n_a + 1/n_b) over rows, and the verdict follows from those two alone.
+ */
+export function diffScore(a, b) {
+  const effect = round(a.mean - b.mean);
+  const noise = round(Math.sqrt(1 / a.rows + 1 / b.rows));
+  return { effect, noise, verdict: effect > noise ? 'helps' : effect < -noise ? 'hurts' : 'within-noise' };
+}
+
+/**
  * The gate in front of `--approve-harness`. An approval goes through when the harness as it is now
  * was read by a passing `/review`: every harness file is committed, and some PASS attestation in
  * `.review/attestations/` names a commit on this branch whose harness files are byte-identical to
  * HEAD's. Anything else needs a person: the run asks for the word `approve` on a terminal, and
- * without a terminal - an agent's shell - it refuses. Returns how the approval was granted;
- * exits the process when it is refused.
+ * without a terminal - an agent's shell - it refuses. Returns how the approval was granted, or
+ * null when it is refused.
  */
-export function gateApproval(harnessFiles, { cwd = process.cwd(), ask = askOnTerminal, refuse = () => process.exit(2) } = {}) {
+export function gateApproval(harnessFiles, { cwd = process.cwd(), ask = askOnTerminal } = {}) {
   const git = (...a) => execFileSync('git', a, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
   const ok = (...a) => { try { execFileSync('git', a, { cwd, stdio: 'ignore' }); return true; } catch { return false; } };
   const files = [...new Set(harnessFiles.map(f => relative(resolve(cwd), resolve(cwd, f)).split(sep).join('/')))].sort();
   const dirty = git('status', '--porcelain', '--', ...files);
-  const why = [];
-  if (dirty) why.push(`uncommitted harness changes:\n${dirty}`);
-  else {
+  let reason = `uncommitted harness changes:\n${dirty}`;
+  if (!dirty) {
     const dir = join(cwd, '.review', 'attestations');
     const shas = existsSync(dir) ? readdirSync(dir).filter(f => f.endsWith('.json')).flatMap(f => {
       try { const a = readJson(join(dir, f)); return a.overall === 'PASS' && a.commitSha ? [a.commitSha] : []; } catch { return []; }
     }) : [];
     const covering = shas.find(sha => ok('merge-base', '--is-ancestor', sha, 'HEAD') && ok('diff', '--quiet', sha, 'HEAD', '--', ...files));
     if (covering) return { by: 'review', commit: covering };
-    why.push('no PASS review attestation covers the harness as committed at HEAD');
+    reason = 'no PASS review attestation covers the harness as committed at HEAD';
   }
-  console.error(`approval needs a person: ${why.join('; ')}`);
-  if (ask()) return { by: 'person' };
-  console.error('refused: run --approve-harness from your own terminal and type "approve", or commit the change and pass /review first.');
-  return refuse();
+  console.error(`approval needs a person: ${reason}`);
+  return ask() ? { by: 'person' } : null;
 }
 
 /**
  * What a runner's fill-in calls at load: when the command line carries `--approve-harness`, the
  * runner's own file and its flow's `_state.json.harness_paths` go through gateApproval before the
- * scaffold below records the new sha.
+ * scaffold below records the new sha. A refusal ends the process.
  */
 export function gateApprovalFromArgv(runnerFile, argv = process.argv) {
   if (!argv.includes('--approve-harness')) return null;
   const flow = argv[argv.indexOf('--flow') + 1];
   const st = flow && existsSync(join(flow, '_state.json')) ? readJson(join(flow, '_state.json')) : {};
   const g = gateApproval([runnerFile, ...(Array.isArray(st.harness_paths) ? st.harness_paths : [])]);
+  if (!g) {
+    console.error('refused: run --approve-harness from your own terminal and type "approve", or commit the change and pass /review first.');
+    process.exit(2);
+  }
   console.error(`approval granted by ${g.by === 'review' ? `review, attested at ${g.commit.slice(0, 12)}` : 'a person at the terminal'}`);
   return g;
 }
