@@ -154,21 +154,22 @@ saved record:
   "eval_type": "quality-with-vs-without",
   "cases": 16,
   "reps": 3,
-  "with_skill": { "cases": 16, "rows": 48, "mean": 0.833, "ci_half_width": 0.144 },
+  "with_skill": { "cases": 16, "rows": 48, "mean": 0.979, "ci_half_width": 0.144 },
   "without_skill": { "cases": 16, "rows": 48, "mean": 0.188, "ci_half_width": 0.144 },
-  "effect": 0.646,
-  "noise": 0.204,
+  "effect": 0.791,
+  "noise": 0.354,
   "verdict": "helps",
   "test": { "with_skill": { "...": "..." }, "without_skill": { "...": "..." } },
   "skill_hash": "every skill file except evals/, by path and content",
   "cases_hash": "the cases file",
-  "flows": { "with": "v1", "without": "baseline" },
+  "flows": { "with": "v2", "without": "v2" },
   "method": "..."
 }
 ```
 
 `effect` is the with-arm pass rate minus the without-arm pass rate. `noise` is the half-width of that
-difference, `sqrt(1/n_with + 1/n_without)` over rows. The verdict follows from those two numbers
+difference, `sqrt(1/n_with + 1/n_without)` where n counts cases, not rows: the reps of one case share
+its prompt and fixture, so they are not independent. The verdict follows from those two numbers
 alone: `helps` when the effect is above the noise, `hurts` when it is below minus the noise, and
 `within-noise` otherwise. The 28 records the earlier single-task grader wrote were removed in phase 4
 of the migration plan: one task run once cannot tell a real effect from zero, so a skill without a

@@ -289,7 +289,8 @@ Exit check: `grep -r skillaxe` finds nothing outside history, and `scout-gate` a
 
 **First quality record, 2026-10-19:** `cerberus:leak-check`, 16 cases at 3 reps on
 `claude-opus-5-5`, flows `v2`. With the skill 0.979 ±0.144, without it 0.188 ±0.144: effect
-+0.791 ±0.204, verdict `helps`. The leak cases split 38/39 against 0/39, and the controls passed
++0.791 ±0.354, verdict `helps`. The noise counts the 16 cases, not the 48 rows, because the reps of
+one case are not independent; counted over rows it read ±0.204. The leak cases split 38/39 against 0/39, and the controls passed
 9/9 in both arms. The skill fired in all 48 with-arm runs. The 96 runs cost about $7.5
 API-equivalent.
 

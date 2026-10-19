@@ -1,6 +1,6 @@
 {
   "acceptance": {
-    "measured_at": "2026-10-19T13:30:24",
+    "measured_at": "2026-10-19T14:37:39",
     "model": "claude-opus-5-5",
     "runner": "scripts/hillclimb/leak-check-runner.mjs",
     "eval_type": "quality-with-vs-without",
@@ -19,7 +19,7 @@
       "ci_half_width": 0.144
     },
     "effect": 0.791,
-    "noise": 0.204,
+    "noise": 0.354,
     "verdict": "helps",
     "test": {
       "with_skill": {
