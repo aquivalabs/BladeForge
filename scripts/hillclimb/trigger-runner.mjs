@@ -1,6 +1,14 @@
 #!/usr/bin/env node
-// BladeForge trigger runner - the claude-api build-eval/hillclimb scaffold
-// (Claude Code 2.1.292) with loadCases/runCase/gradeCase filled in below.
+// BladeForge trigger runner.
+//
+// Derived from runner-scaffold.mjs in anthropics/skills
+// (skills/claude-api/shared/evals/report/runner-scaffold.mjs), as bundled with Claude Code
+// 2.1.292. Published by Anthropic under the Apache License 2.0; the full text is in
+// LICENSE-anthropic-skills.txt beside this file.
+//
+// Modified by BladeForge: the fill-in section (loadCases, runCase, gradeCase, perfFrom and
+// their helpers) is new, and imports for it were added at the top. The harness below the fill-in section
+// is unchanged.
 // Runner scaffold for the build-eval / hillclimb loop. Copy this into the
 // user's repo and fill in loadCases / runCase / gradeCase below - the I/O
 // shape, file naming, resume, and CLI surface are already hillclimb-ready
