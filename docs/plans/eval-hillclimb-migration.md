@@ -239,11 +239,16 @@ was not needed: the baseline named the cause.
 **Built 2026-10-19 — guarding the push itself** (the skill only helps when it fires), commit
 `cec0083`:
 
-- *Layer 2:* `plugins/cerberus/hooks/on-git-push.sh`, a classic `PreToolUse` hook on `Bash`. It stops
-  `git push` until `leak-check` has read the outgoing commits and written the HEAD it checked to
-  `.git/cerberus-leak-checked`. Works on every Claude Code version. Suite: 6/6, in CI.
-- *Layer 3:* `plugins/cerberus/hooks/push-guard.ts`, a function-hooks mod. It reads the outgoing
-  log, has `sonnet` judge it, denies a push that leaks and marks a clean one, so layer 2 passes.
+- *Layer 2:* `plugins/cerberus/hooks/on-git-push.sh`, a classic `PreToolUse` hook. Before any
+  `git push` an agent runs, it hands the outgoing commits to a nested `claude -p` judge (the prompt in
+  `push-judge-prompt.txt`) and blocks a push that leaks or that it cannot judge. The first version
+  waited for a marker the agent itself wrote, which made it a reminder, not a gate; nothing in the
+  check is the agent's to supply now. A clean verdict is cached under the hash of what was judged,
+  and a tool call aimed at that cache is refused. Works on every Claude Code version. Suite: 10/10,
+  in CI; a live judge caught a client name and work email in 5.7 s.
+- *Layer 3:* `plugins/cerberus/hooks/push-guard.ts`, a function-hooks mod. It judges the same text
+  with the same prompt in-process, denies a push that leaks, and caches a clean verdict under the
+  same key, so layer 2 passes without judging twice.
   Suite: 4/4 under `claude plugin test`. `check-version.sh` prints a red update notice at session
   start below 2.1.292, which cannot load the mod.
 - *Not needed:* a new review lens. The `review` plugin's `leak` lens already runs `cerberus`.

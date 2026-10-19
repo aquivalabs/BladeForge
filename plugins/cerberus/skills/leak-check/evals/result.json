@@ -150,9 +150,9 @@
   },
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-10-19T15:30:00",
+    "scanned_at": "2026-10-19T16:30:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "44ef78f5686fd6d3925b5923c0fd28842ad0b43bd6f36becbe900d7c3bf80ca9",
+    "scanned_hash": "270868c99dffc3196e14bf76816fe348139d470f7d97f99c47f8b3e96ad9fb8d",
     "checklist": [
       {
         "n": 1,
@@ -176,7 +176,7 @@
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "the only writes it suggests are amend, a non-interactive reword and a branch rename on the user's own unpushed commits, each after saying so; the new marker step writes one file inside the repository's own .git directory"
+        "note": "the only writes it suggests are amend, a non-interactive reword and a branch rename on the user's own unpushed commits, each after saying so"
       },
       {
         "n": 5,
