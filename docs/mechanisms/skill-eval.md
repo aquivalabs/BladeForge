@@ -21,6 +21,8 @@ scripts/hillclimb/
   trigger-runner.mjs                  the triggering measurer: the claude-api hillclimb scaffold, filled in
   skill-description.mjs               the one description reader: runner, writer and gate all import it
   flow-lib.mjs                        the shared facts: case ids, skill slugs, row scoring, the record contract
+  sandbox-lib.mjs                     the per-slot sandbox and the streamed nested claude run, shared by both runners
+  leak-check-runner.mjs               the quality runner for cerberus:leak-check, the same scaffold filled in for commits
   new-flow.mjs                        creates a flow dir with a fixed, seeded train/test split
   save-result.mjs                     writes result.json `trigger` from a variant's raw rows
   split-scores.mjs                    recomputes train/test scores from raw rows

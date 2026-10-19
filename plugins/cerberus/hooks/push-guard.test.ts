@@ -1,27 +1,27 @@
 // claude plugin test plugins/cerberus
-// The test's own hooks stand for the engine beneath the mod: they answer git, the model and the
-// filesystem, and a `tool.call` hook beneath records whether the push itself would have run.
+// The test's own hooks stand for the engine beneath the mod: they answer push-range.mjs, the model
+// and the filesystem, and a `tool.call` hook beneath records whether the push itself would have run.
 import { expect, test } from 'claude-code/testing'
 
 const KEY = 'k3y0f7h3j0dg3d'
+const out = (stdout: string, exitCode = 0) =>
+  ({ value: { exitCode, stdout, stderr: '', isStdoutTruncated: false, isStderrTruncated: false } })
 
-function engine(on: any, { leaks, cached }: { leaks: unknown[]; cached?: boolean }) {
-  const written: string[] = []
+function engine(on: any, { leaks, range }: { leaks: unknown[]; range?: Record<string, unknown> }) {
+  const recorded: string[][] = []
   let pushed = false
   on('process.run', ($: any, e: any) => {
-    const a = e.argv.slice(1).join(' ')
-    if (a === 'hash-object --stdin') return { value: { exitCode: 0, stdout: `${KEY}\n`, stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
-    if (a === 'rev-parse --absolute-git-dir') return { value: { exitCode: 0, stdout: '/repo/.git\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
-    if (a.startsWith('rev-parse --abbrev-ref')) return { value: { exitCode: 0, stdout: 'origin/main\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
-    if (a.startsWith('log')) return { value: { exitCode: 0, stdout: 'a1b2c3d author: Demo <d@example.com> committer: Demo <d@example.com>\nfix: Halvorsen retry for HLD-4412\n---', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
-    if (a.startsWith('branch')) return { value: { exitCode: 0, stdout: 'main\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
-    return { value: { exitCode: 1, stdout: '', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
+    const [, , cmd, ...rest] = e.argv
+    if (cmd === 'record') { recorded.push(rest); return out('') }
+    return out(JSON.stringify({ off: false, gitDir: '/repo/.git', branch: 'main', key: KEY, cached: false,
+      log: 'a1b2c3d author: Demo <d@example.com> committer: Demo <d@example.com>\nfix: Halvorsen retry for HLD-4412\n---',
+      ...range }))
   })
-  on('fs.read', ($: any, e: any) => String(e.path ?? e).endsWith('push-judge-prompt.txt') ? { value: 'judge prompt' } : cached ? { value: 'clean\n' } : { deny: 'ENOENT' })
-  on('fs.write', ($: any, e: any) => { written.push(e.path); return { value: undefined } })
-  on('model.complete', () => ({ value: { isAnswered: true, text: JSON.stringify({ leaks }), usage: { input_tokens: 1, output_tokens: 1, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 } } }))
+  on('fs.read', () => ({ value: 'judge prompt' }))
+  on('model.complete', () => ({ value: { isAnswered: true, text: JSON.stringify({ leaks }),
+    usage: { input_tokens: 1, output_tokens: 1, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 } } }))
   on('tool.call', { tool: 'Bash' }, () => { pushed = true; return { result: { stdout: 'pushed', stderr: '', interrupted: false } } })
-  return { written, wasPushed: () => pushed }
+  return { recorded, wasPushed: () => pushed }
 }
 
 test('a push whose commits leak is stopped, and nothing is cached', async ($, on) => {
@@ -29,18 +29,18 @@ test('a push whose commits leak is stopped, and nothing is cached', async ($, on
   const r: any = await $.tool.call({ tool: 'Bash', command: 'git push origin main' })
   expect(env.wasPushed()).toBe(false)
   expect(JSON.stringify(r)).toContain('Halvorsen')
-  expect(env.written.length).toBe(0)
+  expect(env.recorded.length).toBe(0)
 })
 
-test('a clean push runs and caches its verdict under the content key', async ($, on) => {
+test('a clean push runs and records its verdict under the content key', async ($, on) => {
   const env = engine(on, { leaks: [] })
   await $.tool.call({ tool: 'Bash', command: 'git push' })
   expect(env.wasPushed()).toBe(true)
-  expect(env.written).toEqual([`/repo/.git/cerberus-verdicts/${KEY}`])
+  expect(env.recorded).toEqual([['/repo/.git', KEY]])
 })
 
-test('a push already judged clean passes without asking the model', async ($, on) => {
-  const env = engine(on, { leaks: [{ where: 'x', what: 'y' }], cached: true })
+test('a push already judged clean, or turned off, passes without asking the model', async ($, on) => {
+  const env = engine(on, { leaks: [{ where: 'x', what: 'y' }], range: { cached: true } })
   await $.tool.call({ tool: 'Bash', command: 'git push' })
   expect(env.wasPushed()).toBe(true)
 })
@@ -49,5 +49,5 @@ test('a command that is not a push is not touched', async ($, on) => {
   const env = engine(on, { leaks: [{ where: 'x', what: 'y' }] })
   await $.tool.call({ tool: 'Bash', command: 'git status' })
   expect(env.wasPushed()).toBe(true)
-  expect(env.written.length).toBe(0)
+  expect(env.recorded.length).toBe(0)
 })

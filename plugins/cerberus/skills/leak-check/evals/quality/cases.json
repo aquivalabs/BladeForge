@@ -190,11 +190,10 @@
         "halvorsen",
         "Invoice_Batch"
       ],
-      "keep": [],
-      "keepFile": "plugins/demo/skills/batch-retry/evals/rubric.json",
-      "keepIn": [
+      "keep": [
         "should_trigger"
-      ]
+      ],
+      "keepFile": "plugins/demo/skills/batch-retry/evals/rubric.json"
     },
     {
       "id": "committed-message",
@@ -303,8 +302,7 @@
       "forbidden": [],
       "keep": [
         "## Contract"
-      ],
-      "unchanged": true
+      ]
     },
     {
       "id": "public-products",
@@ -319,8 +317,7 @@
       "forbidden": [],
       "keep": [
         "## Contract"
-      ],
-      "unchanged": true
+      ]
     },
     {
       "id": "generic-prose",
@@ -335,8 +332,7 @@
       "forbidden": [],
       "keep": [
         "## Contract"
-      ],
-      "unchanged": true
+      ]
     }
   ]
 }

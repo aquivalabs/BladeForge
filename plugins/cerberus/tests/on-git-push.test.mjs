@@ -41,8 +41,8 @@ function decide(dir, toolInput, judge) {
   const input = JSON.stringify({ tool_name: 'Bash', tool_input: toolInput, cwd: dir });
   const run = spawnSync('bash', [HOOK], { input, encoding: 'utf8', env: { ...process.env, PATH: `${judge}:${process.env.PATH}` } });
   assert.equal(run.status, 0, 'the hook always exits 0');
-  const m = /"permissionDecision": "deny", "permissionDecisionReason": "([^"]*)"/.exec(run.stdout);
-  return m ? { decision: 'deny', reason: m[1] } : { decision: 'allow' };
+  const out = run.stdout.trim() ? JSON.parse(run.stdout).hookSpecificOutput : null;
+  return out?.permissionDecision === 'deny' ? { decision: 'deny', reason: out.permissionDecisionReason } : { decision: 'allow' };
 }
 const push = (c = 'git push') => ({ command: c });
 
@@ -73,10 +73,10 @@ test('a new commit after a clean verdict is judged afresh', () => {
 });
 
 test('a judge that cannot answer blocks the push: the guard fails closed', () => {
-  const { dir } = repo();
+  const { dir, git } = repo();
   assert.equal(decide(dir, push(), JUDGE.nonsense).decision, 'deny');
   assert.equal(decide(dir, push(), JUDGE.never).decision, 'deny');
-  const verdicts = join(execFileSync('git', ['rev-parse', '--absolute-git-dir'], { cwd: dir, encoding: 'utf8' }).trim(), 'cerberus-verdicts');
+  const verdicts = join(git('rev-parse', '--absolute-git-dir'), 'cerberus-verdicts');
   assert.ok(!existsSync(verdicts) || readdirSync(verdicts).length === 0, 'nothing is cached without a clean verdict');
 });
 
@@ -119,4 +119,11 @@ test('an engine too old for the push-guard mod gets a red update notice', () => 
 test('a supported engine starts the session silently', () => {
   assert.equal(sessionStartWith('2.1.292'), null);
   assert.equal(sessionStartWith('2.10.0'), null);
+});
+
+test('a person can turn the guard off for one repository; an agent cannot', () => {
+  const { dir, git } = repo();
+  assert.equal(decide(dir, push('git config cerberus.pushguard off'), JUDGE.never).decision, 'deny', 'an agent setting the switch is refused');
+  git('config', 'cerberus.pushguard', 'off');
+  assert.equal(decide(dir, push(), JUDGE.never).decision, 'allow', 'off: no judge, push passes');
 });

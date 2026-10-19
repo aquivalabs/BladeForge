@@ -236,7 +236,9 @@ was not needed: the baseline named the cause.
 **Built 2026-10-19 — guarding the push itself** (the skill only helps when it fires), commit
 `cec0083`:
 
-- *Layer 2:* `plugins/cerberus/hooks/on-git-push.sh`, a classic `PreToolUse` hook. Before any
+- *Layer 2:* `plugins/cerberus/hooks/on-git-push.sh` → `on-git-push.mjs`, a classic `PreToolUse` hook. The shell
+  entry decides "not a push" with builtins alone; range, log format and cache key live once in
+  `push-range.mjs`, which the mod runs too. Before any
   `git push` an agent runs, it hands the outgoing commits to a nested `claude -p` judge (the prompt in
   `push-judge-prompt.txt`) and blocks a push that leaks or that it cannot judge. The first version
   waited for a marker the agent itself wrote, which made it a reminder, not a gate; now the hook
@@ -244,6 +246,8 @@ was not needed: the baseline named the cause.
   at that cache is refused — best effort: a shell can still forge it on purpose, and a push typed
   by a person in their own terminal is not seen. Closing those needs a git `pre-push` hook. Works on every Claude Code version. Suite: 10/10,
   in CI; a live judge caught a client name and work email in 5.7 s.
+- *Per-repository switch:* the guard is on everywhere by default. A person turns it off for one
+  repository with `git config cerberus.pushguard off`; an agent setting it is refused.
 - *Layer 3:* `plugins/cerberus/hooks/push-guard.ts`, a function-hooks mod. It judges the same text
   with the same prompt in-process, denies a push that leaks, and caches a clean verdict under the
   same key, so layer 2 passes without judging twice.

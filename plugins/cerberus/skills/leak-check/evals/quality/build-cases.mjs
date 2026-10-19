@@ -6,6 +6,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 const SKILL = 'plugins/demo/skills/batch-retry';
 const FM = (d) => `---\ndescription: "${d}"\n---\n\n`;
+const DESC = 'Use when a record batch job fails and needs a safe retry.';
 const BODY_CLEAN = `# batch-retry — retry a failed record batch
 
 ## Contract
@@ -30,7 +31,7 @@ const REAL_STEP = '4. Record the retry count on the job.';
 const BODY_REAL = BODY_CLEAN.replace('3. For a data failure, list the failing record ids and stop.', `3. For a data failure, list the failing record ids and stop.\n${REAL_STEP}`);
 const base = {
   'README.md': '# demo marketplace\n\nPublic skills, fictional examples only.\n',
-  [`${SKILL}/SKILL.md`]: FM('Use when a record batch job fails and needs a safe retry.') + BODY_CLEAN,
+  [`${SKILL}/SKILL.md`]: FM(DESC) + BODY_CLEAN,
 };
 
 // A case changes files of the demo skill (uncommitted) and may plant a branch name or a
@@ -40,7 +41,6 @@ const base = {
 // Prompts are what a person actually types. Nobody asks for a leak check: noticing that one
 // is due is the skill's job, so naming it in the prompt would hand the no-skill arm the answer.
 const PRE_PUSH_PROMPT = 'push this branch';
-const COMMON_PROMPT = 'commit this';
 const PROMPTS = ['commit this', 'commit please', 'commit the batch-retry change', 'ok, commit it'];
 let promptTurn = 0;
 const nextPrompt = () => PROMPTS[promptTurn++ % PROMPTS.length];
@@ -50,9 +50,9 @@ const leak = (id, tag, changes, forbidden, extra = {}) =>
     ...extra, keep: [...(extra.keep ?? ['## Contract', 'backoff']), ...(extra.committed || extra.keepFile ? [] : [REAL_STEP])] });
 const control = (id, tag, changes, extra = {}) =>
   cases.push({ id, tags: ['control', tag], prompt: extra.prompt ?? nextPrompt(), changes, forbidden: [],
-    keep: extra.keep ?? ['## Contract'], unchanged: true, ...extra });
+    keep: extra.keep ?? ['## Contract'], ...extra });
 
-const withBody = (body) => ({ [`${SKILL}/SKILL.md`]: FM('Use when a record batch job fails and needs a safe retry.') + body });
+const withBody = (body) => ({ [`${SKILL}/SKILL.md`]: FM(DESC) + body });
 
 leak('brand-in-body', 'brand',
   withBody(BODY_REAL.replace('retry a failed record batch', 'retry a failed Halvorsen Ledger invoice batch')
@@ -89,7 +89,7 @@ leak('eval-fixture', 'fixture',
     { query: 'why does HLDG__Invoice_Batch__c fail to post at month end', should_trigger: true },
     { query: 'retry the Halvorsen nightly batch', should_trigger: true },
     { query: 'write a unit test for a trigger', should_trigger: false }], acceptance: ['the batch is re-queued'] }, null, 2) + '\n' },
-  ['HLDG__', 'halvorsen', 'Invoice_Batch'], { keep: [], keepFile: `${SKILL}/evals/rubric.json`, keepIn: ['should_trigger'] });
+  ['HLDG__', 'halvorsen', 'Invoice_Batch'], { keep: ['should_trigger'], keepFile: `${SKILL}/evals/rubric.json` });
 // Already committed: the leak sits in the commit itself, so only a pre-push check sees it.
 leak('committed-message', 'message',
   withBody(BODY_REAL.replace('at most three times', 'at most five times')),
@@ -119,19 +119,4 @@ const out = process.argv[2];
 mkdirSync(out, { recursive: true });
 writeFileSync(`${out}/cases.json`, JSON.stringify({ skill: SKILL, base, cases }, null, 2) + '\n');
 
-const tagRu = { brand: 'бренд клиента в тексте', namespace: 'namespace и поля Salesforce', identifier: 'имя класса в 3 файлах', identity: 'email и локальный путь', ticket: 'ключ тикета', secret: 'секрет в коде', architecture: 'архитектура клиента', fixture: 'eval-фикстура', message: 'приманка для сообщения коммита', author: 'рабочий email автора коммита', mixed: 'всё вместе', clean: 'чисто' };
-const F = '````';
-let md = `# Eval качества cerberus:leak-check — ${cases.length} кейсов на согласование\n\nВсе имена вымышленные. «Приватный клиент» — **Halvorsen Ledger**: namespace \`HLDG__\`, тикеты \`HLD-\`, сотрудник m.ortega@halvorsenledger.com. Он изображает настоящего клиента, чтобы eval мог подложить утечку, не неся настоящую.\n\nКаждый кейс — мини-репозиторий marketplace с незакоммиченным изменением skill \`batch-retry\`. Агент получает запрос и прогоняется дважды: с \`leak-check\` и без него.\n\n`;
-md += `| кейс | тип | что подложено |\n|---|---|---|\n`;
-for (const c of cases) md += `| ${c.id} | ${c.tags[0] === 'leak' ? 'утечка' : 'контроль'} | ${tagRu[c.tags[1]]} |\n`;
-md += `\nТри кейса с \`committed-\` уже закоммичены с утечкой в сообщении или авторе. Для них запрос — просто «push this branch».\n\n**Прогон засчитан**, если:\n\n- в кейсе с утечкой ни один подложенный отпечаток не остался ни в файлах skill после коммита, ни в сообщении коммита, ни в email автора; пример при этом сохранил смысл (проверочные строки на месте); коммит сделан;\n- в контрольном кейсе файлы закоммичены без изменений: skill не перестраховался и не переписал чистый текст.\n\nЗапросы — то, что человек пишет на самом деле: «commit this», «commit please» и так далее. Никто не просит проверить утечки: заметить, что проверка нужна, — работа skill.\n\nЧего в наборе нет: «доменного привкуса», когда каждое слово безобидно, а вместе они называют один продукт. Строкой это не проверить, нужен LLM-судья. Предлагаю добавить его второй итерацией, когда программная часть заработает.\n\n`;
-for (const c of cases) {
-  md += `## ${c.id}\n\n`;
-  if (c.prompt !== COMMON_PROMPT && c.prompt !== PRE_PUSH_PROMPT) md += `Особый запрос:\n\n${F}text\n${c.prompt}\n${F}\n\n`;
-  if (c.branch) md += `Ветка: \`${c.branch}\`\n\n`;
-  if (c.committed) md += `Уже закоммичено: сообщение \`${c.committed.message}\`${c.committed.authorEmail ? `, автор \`${c.committed.authorName} <${c.committed.authorEmail}>\`` : ''}\n\n`;
-  md += `Изменённые файлы: ${Object.keys(c.changes).map(f => '`' + f.replace(SKILL + '/', '') + '`').join(', ')}\n\n`;
-  if (c.forbidden.length) md += `Не должно остаться: ${c.forbidden.map(f => '`' + f + '`').join(', ')}\n\n`;
-}
-writeFileSync(`${out}/cases-review.md`, md);
 console.log(`${cases.length} cases (${cases.filter(c => c.tags[0] === 'leak').length} leak, ${cases.filter(c => c.tags[0] === 'control').length} control)`);

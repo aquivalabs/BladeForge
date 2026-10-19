@@ -39,10 +39,11 @@ import { createHash } from 'node:crypto';
 import { closeSync, constants as FS, existsSync, fstatSync, ftruncateSync, lstatSync, mkdirSync, openSync, readFileSync, realpathSync, writeFileSync, writeSync } from 'node:fs';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execFileSync, spawn } from 'node:child_process';
-import { cpSync, rmSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { cpSync } from 'node:fs';
 import { basename, sep } from 'node:path';
-import { homedir, tmpdir } from 'node:os';
+import { readJson } from './flow-lib.mjs';
+import { sandbox, streamClaude } from './sandbox-lib.mjs';
 
 // Every output write refuses symlinks: the flow dir is model-influenced, and a
 // prompt-injected round can plant `results.jsonl -> ~/.bashrc` where the next
@@ -158,21 +159,24 @@ const REF_EXTS = ['', '.html', '.txt', '.json'];
 // so the agent never sees what is being checked.
 
 const RUN_TIMEOUT_S = 300;
+// A stuck agent ends at its turn budget instead of burning the whole ceiling.
+const MAX_TURNS = 25;
+// The agent may read and edit files, run git, and use read-only text tools in pipelines;
+// nothing can prompt for approval, because -p has no one to ask, and nothing here can run
+// another command, delete, or edit in place outside the Edit tool.
 const ALLOWED_TOOLS = ['Read', 'Edit', 'Write', 'Glob', 'Grep', 'Skill',
-  // read-only text tools only: nothing here can run another command, delete or edit in place
   ...['git', 'grep', 'cat', 'ls', 'head', 'tail', 'wc', 'echo'].map(c => `Bash(${c}:*)`)];
 const DEFAULT_AUTHOR = ['Demo Author', 'author@example.com'];
+const lines = (s) => s.split('\n').filter(Boolean);
 
-function stateOf(st) {
+// The suite, read and checked once per runner process.
+let suiteMemo = null;
+function suite(st) {
+  if (suiteMemo) return suiteMemo;
   for (const k of ['cases_path', 'skill_path', 'arm'])
     if (!st?.[k]) throw new Error(`_state.json.${k} is not set`);
   if (!['with', 'without'].includes(st.arm)) throw new Error('_state.json.arm must be "with" or "without"');
-  return st;
-}
-
-let suiteMemo = null;
-function suite(st) {
-  suiteMemo ??= JSON.parse(readFileSync(resolve(stateOf(st).cases_path), 'utf8'));
+  suiteMemo = { ...readJson(resolve(st.cases_path)), arm: st.arm, skillPath: st.skill_path, skillName: basename(st.skill_path) };
   return suiteMemo;
 }
 
@@ -182,8 +186,7 @@ async function loadCases() {
   const st = JSON.parse(readIfPresent(statePath) ?? '{}');
   // `_state.json.only_ids` trims a run to named cases - a pilot or a canary.
   const only = Array.isArray(st.only_ids) ? new Set(st.only_ids.map(String)) : null;
-  return suite(st).cases.map(c => ({ id: c.id, prompt: c.prompt, tags: c.tags, spec: c }))
-    .filter(c => !only || only.has(c.id));
+  return suite(st).cases.map(c => ({ ...c, spec: c })).filter(c => !only || only.has(c.id));
 }
 
 function git(cwd, args, env = {}) {
@@ -204,159 +207,85 @@ function writeFiles(root, files) {
 
 /** Build the fixture repository for one case, then run the agent in it. */
 async function runCase(input, ctx) {
-  const st = stateOf(ctx.state);
-  const { base, skill } = suite(st);
+  const { base, skill, arm, skillPath, skillName } = suite(ctx.state);
   const c = input.spec;
-  const slot = acquireSlot();
-  const project = join(tmpdir(), `bf-quality-leak-${st.arm}-slot${slot}`);
+  const box = sandbox(`bf-quality-leak-${arm}`);
   try {
-    resetProject(project);
-    const id = (name, email) => ({ GIT_AUTHOR_NAME: name, GIT_AUTHOR_EMAIL: email, GIT_COMMITTER_NAME: name, GIT_COMMITTER_EMAIL: email });
-    git(project, ['init', '-q', '-b', 'main']);
-    git(project, ['config', 'user.name', DEFAULT_AUTHOR[0]]);
-    git(project, ['config', 'user.email', DEFAULT_AUTHOR[1]]);
-    writeFiles(project, base);
-    git(project, ['add', '-A']);
-    git(project, ['commit', '-q', '-m', 'chore: base'], id(...DEFAULT_AUTHOR));
-    git(project, ['update-ref', 'refs/remotes/origin/main', 'HEAD']);
-    if (c.branch) git(project, ['checkout', '-q', '-b', c.branch]);
-    writeFiles(project, c.changes);
-    if (c.committed) {
-      git(project, ['add', '-A']);
-      git(project, ['commit', '-q', '-m', c.committed.message],
-        id(c.committed.authorName ?? DEFAULT_AUTHOR[0], c.committed.authorEmail ?? DEFAULT_AUTHOR[1]));
-    }
+    const commit = (message, [name, email] = DEFAULT_AUTHOR) => {
+      git(box.dir, ['add', '-A']);
+      git(box.dir, ['commit', '-q', '-m', message], { GIT_AUTHOR_NAME: name, GIT_AUTHOR_EMAIL: email, GIT_COMMITTER_NAME: name, GIT_COMMITTER_EMAIL: email });
+    };
+    git(box.dir, ['init', '-q', '-b', 'main']);
+    git(box.dir, ['config', 'user.name', DEFAULT_AUTHOR[0]]);
+    git(box.dir, ['config', 'user.email', DEFAULT_AUTHOR[1]]);
+    writeFiles(box.dir, base);
+    commit('chore: base');
+    git(box.dir, ['update-ref', 'refs/remotes/origin/main', 'HEAD']);
+    if (c.branch) git(box.dir, ['checkout', '-q', '-b', c.branch]);
+    writeFiles(box.dir, c.changes);
+    if (c.committed) commit(c.committed.message, [c.committed.authorName ?? DEFAULT_AUTHOR[0], c.committed.authorEmail ?? DEFAULT_AUTHOR[1]]);
     // The skill under test, installed the way production installs a skill.
-    if (st.arm === 'with') cpSync(resolve(st.skill_path), join(project, '.claude', 'skills', basename(st.skill_path)),
+    if (arm === 'with') cpSync(resolve(skillPath), join(box.dir, '.claude', 'skills', skillName),
       { recursive: true, filter: (src) => !src.includes(`${sep}evals`) });
-    const run = await agentRun(project, input.prompt, ctx.model, basename(st.skill_path));
-    run.outcome = inspect(project, skill);
-    run.output = JSON.stringify(run.outcome);
-    return run;
+
+    let fired = false;
+    const run = await streamClaude({
+      cwd: box.dir, prompt: input.prompt, model: ctx.model,
+      args: ['--permission-mode', 'acceptEdits', '--max-turns', String(MAX_TURNS), '--allowedTools', ...ALLOWED_TOOLS],
+      // No editor ever opens: an amend or a rebase waiting for one would hang the run.
+      env: { GIT_EDITOR: 'true', GIT_SEQUENCE_EDITOR: 'true' },
+      timeoutS: RUN_TIMEOUT_S, timeoutReason: 'run_timeout',
+      onBlock: (block) => {
+        if (block.type === 'tool_use' && block.name === 'Skill' && String(block.input?.skill ?? '').endsWith(skillName)) fired = true;
+      },
+    });
+    const outcome = inspect(box.dir, skill);
+    return { ...run, fired, outcome, output: JSON.stringify(outcome) };
   } finally {
-    rmSync(project, { recursive: true, force: true });
-    slots[slot] = false;
+    box.release();
   }
 }
 
 /** What would leave with a push: the skill files at HEAD, and every commit past origin/main. */
 function inspect(project, skillDir) {
-  const commits = git(project, ['rev-list', 'origin/main..HEAD']).split('\n').filter(Boolean);
+  const commits = lines(git(project, ['rev-list', 'origin/main..HEAD']));
   const meta = commits.map(sha => git(project, ['show', '-s', '--format=%an <%ae>%n%cn <%ce>%n%B', sha]));
   const files = {};
-  for (const p of git(project, ['ls-tree', '-r', '--name-only', 'HEAD', '--', skillDir]).split('\n').filter(Boolean))
+  for (const p of lines(git(project, ['ls-tree', '-r', '--name-only', 'HEAD', '--', skillDir])))
     files[p] = gitRaw(project, ['show', `HEAD:${p}`]);
-  const dirty = git(project, ['status', '--porcelain']).split('\n').filter(l => l && !l.includes('.claude/')).length;
+  const dirty = lines(git(project, ['status', '--porcelain'])).filter(l => !l.includes('.claude/')).length;
   return { commits: commits.length, meta, files, dirty };
-}
-
-// Same isolation as the trigger runner: no user settings, plugins, hooks or MCP. The agent
-// may read and edit files, run git, and use read-only text tools in pipelines; nothing can
-// prompt for approval, because -p has no one to ask. No editor ever opens: an amend or a
-// rebase that would wait for one would hang the run until its ceiling.
-function agentRun(project, prompt, model, skillName) {
-  const args = ['-p', prompt, '--output-format', 'stream-json', '--verbose',
-    '--setting-sources', 'project', '--strict-mcp-config',
-    '--permission-mode', 'acceptEdits', '--allowedTools', ...ALLOWED_TOOLS];
-  if (model) args.push('--model', model);
-  const env = { ...process.env, GIT_EDITOR: 'true', GIT_SEQUENCE_EDITOR: 'true' };
-  delete env.CLAUDECODE;
-  return new Promise((resolveRun, rejectRun) => {
-    const child = spawn('claude', args, { cwd: project, env, stdio: ['ignore', 'pipe', 'ignore'] });
-    const transcript = [{ role: 'user', content: prompt }];
-    const usage = { input_tokens: 0, output_tokens: 0, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 };
-    const seenMsg = new Set();
-    let servedModel = null, fired = false, stop = 'end_turn', buf = '', settled = false;
-    const finish = (status) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      child.kill();
-      resolveRun({ transcript, model: servedModel, usage, stop_reason: stop, status, fired });
-    };
-    const timer = setTimeout(() => { stop = 'run_timeout'; finish('ok'); }, RUN_TIMEOUT_S * 1000);
-    const onEvent = (ev) => {
-      if (ev.type === 'user' && Array.isArray(ev.message?.content)) {
-        for (const b of ev.message.content) if (b.type === 'tool_result')
-          transcript.push({ role: 'tool_result', content: typeof b.content === 'string' ? b.content : JSON.stringify(b.content) });
-        return;
-      }
-      if (ev.type !== 'assistant' || !ev.message) return;
-      const msg = ev.message;
-      if (msg.model) servedModel = msg.model;
-      if (msg.id && !seenMsg.has(msg.id) && msg.usage) {
-        seenMsg.add(msg.id);
-        for (const k of Object.keys(usage)) usage[k] += msg.usage[k] ?? 0;
-      }
-      for (const block of msg.content ?? []) {
-        if (block.type === 'text' && block.text) transcript.push({ role: 'assistant', content: block.text });
-        if (block.type !== 'tool_use') continue;
-        transcript.push({ role: 'tool_call', name: block.name, content: JSON.stringify(block.input ?? {}, null, 2) });
-        if (block.name === 'Skill' && String(block.input?.skill ?? '').endsWith(skillName)) fired = true;
-      }
-    };
-    child.stdout.on('data', (chunk) => {
-      buf += chunk;
-      let nl;
-      while ((nl = buf.indexOf('\n')) >= 0) {
-        const line = buf.slice(0, nl); buf = buf.slice(nl + 1);
-        if (!line.trim()) continue;
-        try { onEvent(JSON.parse(line)); } catch { /* a non-JSON line is noise, not a verdict */ }
-      }
-    });
-    child.on('error', (e) => { if (!settled) { settled = true; clearTimeout(timer); rejectRun(e); } });
-    child.on('close', () => finish('ok'));
-  });
 }
 
 /**
  * Leak case: pass when no planted fingerprint survives in the pushed tree, messages or
  * authors, the example keeps its teaching value, and the work is committed.
- * Control: pass when the change is committed unchanged.
+ * Control (tags[0] "control"): pass when the change is committed unchanged.
  */
 async function gradeCase(input, run, ref, ctx) {
   const c = input.spec;
   const o = run.outcome;
   const { base, skill } = suite(ctx.state);
-  const committed = o.commits > 0 && o.dirty === 0 ? 1 : 0;
-  if (c.unchanged) {
+  const committed = +(o.commits > 0 && o.dirty === 0);
+  const fired = +run.fired;
+  if (c.tags[0] === 'control') {
     const intended = { ...Object.fromEntries(Object.entries(base).filter(([p]) => p.startsWith(skill + '/'))), ...c.changes };
-    const same = Object.keys(intended).every(p => (o.files[p] ?? null) === intended[p]) ? 1 : 0;
-    return { grade: { pass: committed && same, clean: 1, keep: same, committed, fired: run.fired ? 1 : 0 },
+    const same = +Object.keys(intended).every(p => (o.files[p] ?? null) === intended[p]);
+    return { grade: { pass: committed && same, clean: 1, keep: same, committed, fired },
       explanation: { pass: `control: ${same ? 'unchanged' : 'REWRITTEN'}, ${committed ? 'committed' : 'NOT committed'}` } };
   }
   const haystack = [...Object.values(o.files), ...o.meta].join('\n');
   const survived = c.forbidden.filter(f => new RegExp(f, 'i').test(haystack));
   const keepFile = c.keepFile ?? `${skill}/SKILL.md`;
-  const keepIn = [...(c.keep ?? []), ...(c.keepIn ?? [])];
-  const kept = keepIn.every(k => (o.files[keepFile] ?? '').includes(k)) ? 1 : 0;
-  const clean = survived.length ? 0 : 1;
+  const kept = +(c.keep ?? []).every(k => (o.files[keepFile] ?? '').includes(k));
+  const clean = +!survived.length;
   return {
-    grade: { pass: clean && kept && committed, clean, keep: kept, committed, fired: run.fired ? 1 : 0 },
+    grade: { pass: clean && kept && committed, clean, keep: kept, committed, fired },
     explanation: { pass: `survived: ${survived.join(', ') || 'none'}; teaching value ${kept ? 'kept' : 'LOST'}; ${committed ? 'committed' : 'NOT committed'}` },
   };
 }
 
 function perfFrom(run) { return { commits: run.outcome?.commits ?? 0 }; }
-
-// Each concurrent run gets a sandbox at a FIXED path, one per slot, so the nested
-// claude's cwd - and with it the prompt prefix - stays stable enough to cache.
-const slots = [];
-function acquireSlot() {
-  let k = slots.indexOf(false);
-  if (k < 0) k = slots.length;
-  slots[k] = true;
-  return k;
-}
-
-// A stable cwd also means a stable per-project state dir under ~/.claude/projects;
-// auto-memory written there by one run would be read by the next, so it is removed.
-function resetProject(project) {
-  rmSync(project, { recursive: true, force: true });
-  mkdirSync(project, { recursive: true });
-  const slug = realpathSync(project).replace(/[^a-zA-Z0-9]/g, '-');
-  rmSync(join(homedir(), '.claude', 'projects', slug, 'memory'), { recursive: true, force: true });
-}
 
 // --- harness (you usually won't need to touch below this line) --------------
 

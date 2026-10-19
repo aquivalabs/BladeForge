@@ -12,7 +12,8 @@ export const RUNNER = 'scripts/hillclimb/trigger-runner.mjs';
 export const MODEL = 'claude-opus-5-5';
 export const ENVIRONMENTS = ['isolated', 'crowded'];
 export const CLIMB_VERDICTS = ['improved', 'within-noise', 'regressed', 'no-headroom'];
-export const HARNESS_PATHS = [RUNNER, 'scripts/hillclimb/skill-description.mjs', 'scripts/hillclimb/flow-lib.mjs'];
+export const HARNESS_PATHS = [RUNNER, 'scripts/hillclimb/skill-description.mjs', 'scripts/hillclimb/flow-lib.mjs',
+  'scripts/hillclimb/sandbox-lib.mjs'];
 
 /** A case id: stable across rubric reordering, path-safe. Split ids and result rows both use it. */
 export function caseId(query) {
