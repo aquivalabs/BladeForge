@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 // Write a trigger-runner variant's measurement into the skill's evals/result.json
 // `trigger` block - the record eval-gate and the showcase read.
-//   node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> <variant>
+//   node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> <variant> [--climb]
+//
+// --climb also records how a `/claude-api hillclimb` run went, as `trigger.hillclimb`:
+// the baseline and final test scores, the rounds run, the noise, and a verdict computed
+// from those numbers. The loop itself is Anthropic's; this only translates its outcome
+// into the record the gate reads. <variant> must be the winner hillclimb recorded in
+// `_state.json.best`. eval-gate demands the block for a skill that is new in the PR.
 //
 // Every number is recomputed from the variant's raw results.jsonl. The record is
 // keyed by two hashes: the queryset hash from scripts/validate_eval.py (the same
@@ -11,13 +17,13 @@
 // Refuses, writing nothing, when the variant is incomplete, mixes models, or was
 // measured against a description other than the one SKILL.md holds now.
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 import { descriptionHash } from './skill-description.mjs';
 
 const HERE = new URL('.', import.meta.url).pathname;
 
-export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve(HERE, '..', '..') } = {}) {
+export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve(HERE, '..', '..'), climb = false } = {}) {
   const st = JSON.parse(readFileSync(join(flow, '_state.json'), 'utf8'));
   if (!st.skill_path) throw new Error(`${flow}/_state.json has no skill_path`);
   const skillDir = resolve(repoRoot, st.skill_path);
@@ -99,6 +105,7 @@ export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve
       + 'over (case, rep) rows.',
     results,
   };
+  if (climb) trigger.hillclimb = climbSummary(flow, variant, st, readRows, split);
 
   // Every sibling key survives a re-measurement - only `trigger` is replaced.
   // A writer that carried one sibling forward by name once deleted the cerberus
@@ -121,15 +128,49 @@ export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve
 
 function round(x) { return Number(x.toFixed(3)); }
 
+// The verdict follows from the numbers alone, so no one can talk a result up.
+// noise is the baseline test interval; a gain or loss inside it is not one.
+export const CLIMB_VERDICTS = ['improved', 'within-noise', 'regressed', 'no-headroom'];
+function climbSummary(flow, variant, st, readRows, split) {
+  // The winner is hillclimb's call, recorded in _state.json.best; never pick it here.
+  if (st.best?.round == null) throw new Error(`${flow}/_state.json has no best.round - run /claude-api hillclimb first`);
+  const winner = st.best.round === 0 ? 'baseline' : `v${st.best.round}`;
+  if (winner !== variant) throw new Error(`hillclimb recorded ${winner} as best, not ${variant}`);
+  const testOf = (v) => {
+    const rows = readRows(join(flow, v, 'results.jsonl'));
+    const set = new Set((st.test_ids ?? []).map(String));
+    const mine = rows.filter(r => set.has(String(r.prompt_id)));
+    if (!mine.length) throw new Error(`${flow}/${v}: no test rows`);
+    return { mean: mine.reduce((a, r) => a + Number(r.grade.pass), 0) / mine.length, n: mine.length };
+  };
+  const base = testOf('baseline');
+  const fin = testOf(variant);
+  const noise = 1 / Math.sqrt(base.n);
+  const rounds = readdirSync(flow).filter(d => /^v[1-9]\d*$/.test(d)
+    && existsSync(join(flow, d, 'results.jsonl'))).length;
+  const delta = fin.mean - base.mean;
+  const verdict = 1 - base.mean < noise ? 'no-headroom'
+    : delta > noise ? 'improved'
+    : delta < -noise ? 'regressed'
+    : 'within-noise';
+  return {
+    baseline_test: round(base.mean), final_test: round(fin.mean), final_variant: variant,
+    rounds, noise: round(noise), verdict,
+  };
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)) {
-  const [flow, variant] = process.argv.slice(2);
+  const args = process.argv.slice(2);
+  const climb = args.includes('--climb');
+  const [flow, variant] = args.filter(a => a !== '--climb');
   if (!flow || !variant) {
-    console.error('usage: node save-result.mjs <flow-dir> <variant>');
+    console.error('usage: node save-result.mjs <flow-dir> <variant> [--climb]');
     process.exit(2);
   }
   try {
-    const { dest, trigger } = saveResult(flow, variant);
-    console.log(`saved ${dest}: ${trigger.best_score} (test ${trigger.test.mean} ±${trigger.test.ci_half_width})`);
+    const { dest, trigger } = saveResult(flow, variant, { climb });
+    console.log(`saved ${dest}: ${trigger.best_score} (test ${trigger.test.mean} ±${trigger.test.ci_half_width})`
+      + (trigger.hillclimb ? `, climb ${trigger.hillclimb.verdict}: ${trigger.hillclimb.baseline_test} -> ${trigger.hillclimb.final_test} in ${trigger.hillclimb.rounds} round(s)` : ''));
   } catch (e) {
     console.error(`refusing to save: ${e.message}`);
     process.exit(1);

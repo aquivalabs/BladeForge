@@ -102,3 +102,24 @@ test('refusal: a description edited after the run writes nothing', () => {
   assert.throws(() => saveResult(f.flow, 'baseline', { repoRoot: f.root }), /Re-measure/);
   assert.equal(existsSync(join(f.skill, 'evals', 'result.json')), false);
 });
+
+test('climb: records hillclimb outcome from its own best, verdict from the numbers', () => {
+  const f = fixture();
+  mkdirSync(join(f.flow, 'v1'));
+  writeFileSync(join(f.flow, 'v1', 'results.jsonl'), readFileSync(join(f.flow, 'baseline', 'results.jsonl')));
+  const st = JSON.parse(readFileSync(join(f.flow, '_state.json'), 'utf8'));
+  writeFileSync(join(f.flow, '_state.json'), JSON.stringify({ ...st, best: { round: 1, test_score: 1 } }));
+  saveResult(f.flow, 'v1', { repoRoot: f.root, climb: true });
+  const h = resultOf(f.skill).trigger.hillclimb;
+  assert.equal(h.final_variant, 'v1');
+  assert.equal(h.rounds, 1);
+  assert.equal(h.verdict, 'no-headroom');
+});
+
+test('climb: refuses a variant hillclimb did not pick, and a flow it never ran', () => {
+  const f = fixture();
+  assert.throws(() => saveResult(f.flow, 'baseline', { repoRoot: f.root, climb: true }), /hillclimb first/);
+  const st = JSON.parse(readFileSync(join(f.flow, '_state.json'), 'utf8'));
+  writeFileSync(join(f.flow, '_state.json'), JSON.stringify({ ...st, best: { round: 2 } }));
+  assert.throws(() => saveResult(f.flow, 'baseline', { repoRoot: f.root, climb: true }), /recorded v2/);
+});
