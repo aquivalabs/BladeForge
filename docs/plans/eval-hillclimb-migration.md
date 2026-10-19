@@ -2,10 +2,10 @@
 
 Status: in progress, phase 2 · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: phase 2, part A, is PR #95. Part B is committed on `feat/skill-pipeline-gate`, stacked on
-part A: harness-approval reuse, the hillclimb record, the new gate requirements, and remeasured
-`new-skill` and `update-skill`. It is reviewed and pushed after #95 merges, so one review covers
-it.
+Now: all of phase 2 is on `feat/hillclimb-trigger-runner`, PR #95: the runner and the gate switch
+(steps 1–5), harness-approval reuse, the hillclimb record, the new gate requirements (steps 6–7),
+remeasured `new-skill` and `update-skill`, and the shared `flow-lib.mjs`. It waits on review and
+merge.
 
 ## Goal
 
