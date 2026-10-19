@@ -75,8 +75,9 @@ Rules in force now:
   new case is only added, it gets its train or test slot at random by seed when it is added, and it
   is retired only when its skill is. The per-skill cases saturate on `claude-opus-5-5` (94–100%), so
   new cases should be HARD ones: queries on the boundary between two skills, taken from real
-  requests wherever they exist. A shared routing set across all skills, `evals/routing.json`, is
-  planned as phase 2b; it does not exist yet.
+  requests wherever they exist. A shared routing set across all skills, `evals/routing.json`, measures
+  every skill in one crowded pass: `scripts/hillclimb/build-routing.mjs` seeds and grows it from the
+  rubrics under the same add-only rule, `routing-runner.mjs` runs it, `routing-report.mjs` reads it.
 - **`eval-gate` enforces where a record came from.** A skill whose `SKILL.md` is in the diff needs a
   record written by `save-result.mjs` from the trigger runner, on `claude-opus-5-5`, with its case
   count, reps and test interval. A skill the diff ADDS also needs `trigger.hillclimb`: run

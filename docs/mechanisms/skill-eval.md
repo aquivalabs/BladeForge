@@ -154,21 +154,22 @@ saved record:
   "eval_type": "quality-with-vs-without",
   "cases": 16,
   "reps": 3,
-  "with_skill": { "cases": 16, "rows": 48, "mean": 0.833, "ci_half_width": 0.144 },
+  "with_skill": { "cases": 16, "rows": 48, "mean": 0.979, "ci_half_width": 0.144 },
   "without_skill": { "cases": 16, "rows": 48, "mean": 0.188, "ci_half_width": 0.144 },
-  "effect": 0.646,
-  "noise": 0.204,
+  "effect": 0.791,
+  "noise": 0.354,
   "verdict": "helps",
   "test": { "with_skill": { "...": "..." }, "without_skill": { "...": "..." } },
   "skill_hash": "every skill file except evals/, by path and content",
   "cases_hash": "the cases file",
-  "flows": { "with": "v1", "without": "baseline" },
+  "flows": { "with": "v2", "without": "v2" },
   "method": "..."
 }
 ```
 
 `effect` is the with-arm pass rate minus the without-arm pass rate. `noise` is the half-width of that
-difference, `sqrt(1/n_with + 1/n_without)` over rows. The verdict follows from those two numbers
+difference, `sqrt(1/n_with + 1/n_without)` where n counts cases, not rows: the reps of one case share
+its prompt and fixture, so they are not independent. The verdict follows from those two numbers
 alone: `helps` when the effect is above the noise, `hurts` when it is below minus the noise, and
 `within-noise` otherwise. The 28 records the earlier single-task grader wrote were removed in phase 4
 of the migration plan: one task run once cannot tell a real effect from zero, so a skill without a
@@ -278,6 +279,20 @@ this branch" — because a prompt that names the check hands the without arm the
 input a quality grader reads; the gate checks only that it is present, never grades against it.
 
 **Never in CI.** It spawns agents; the gate stays deterministic.
+
+## The routing set
+
+`evals/routing.json` measures routing for the whole marketplace at once. Each case is a query with an
+owner: a `<plugin>:<skill>` id, or `none` with `not` naming the skill whose should-not-trigger list
+it came from. `scripts/hillclimb/build-routing.mjs` seeds it from every rubric and adds new rubric
+queries later; it never edits or removes a case, and a case's train or test slot comes from a hash of
+the seed and its id. A query two rubrics both claim is left out and reported.
+
+`scripts/hillclimb/routing-runner.mjs` installs every marketplace skill as a probe, runs the query,
+and stops at the first Skill call, which is the routing decision. An owned case passes when its owner
+was called. A `none` case passes when the skill in `not` was not called; a sibling taking it is not a
+failure, because such a query often belongs to the sibling. `scripts/hillclimb/routing-report.mjs`
+prints a score per owner over cases, and the pairs of skills that take each other's queries.
 
 ## Running one
 

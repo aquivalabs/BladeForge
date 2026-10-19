@@ -161,7 +161,7 @@ test('quality: writes the acceptance block with both arms, the effect and its no
   assert.equal(r.acceptance.with_skill.mean, 0.75);
   assert.equal(r.acceptance.without_skill.mean, 0.25);
   assert.equal(r.acceptance.effect, 0.5);
-  assert.equal(r.acceptance.noise, 0.5);
+  assert.equal(r.acceptance.noise, 0.707);
   assert.equal(r.acceptance.verdict, 'within-noise');
   assert.equal(r.acceptance.runner, 'scripts/hillclimb/leak-check-runner.mjs');
   assert.deepEqual(r.trigger, { best_score: '1/1' });

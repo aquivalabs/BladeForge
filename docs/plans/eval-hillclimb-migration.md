@@ -1,9 +1,10 @@
 # Plan — move skill measurement onto build-eval and hillclimb
 
-Status: in progress, phases 3 and 4 done, next 2b with 5 · Owner: the marketplace maintainer · Started: 2026-10-16
+Status: in progress, phases 3 and 4 done, 2b built · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: phase 2 merged as #95 (2026-10-19). Phases 3 and 4 are done on `feat/quality-stage` (#96).
-Next: phase 2b with phase 5.
+Now: phases 3 and 4 merged as #96 (2026-10-19). Phase 2b is on `feat/routing-set`: the set, its
+runner and a first pass over the test split are done. Next: one shared fix for skills that do not
+fire, measured with the routing set.
 
 Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
 likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
@@ -189,6 +190,49 @@ whole marketplace in one pass.
 Exit check: one crowded pass over the pool produces per-skill scores and a confusion table. At
 least one boundary pair shows real headroom above noise, which gives hillclimb something to climb.
 
+**Built 2026-10-19, not yet run:** `evals/routing.json` holds 701 cases seeded from the 44 rubrics,
+482 train and 219 test: 376 owned and 325 `none`, with no query claimed by two rubrics.
+`build-routing.mjs` seeds and grows it, `routing-runner.mjs` runs it crowded and stops at the first
+Skill call, and `routing-report.mjs` prints per-owner scores over cases plus the confusion lines.
+`routing.test.mjs` pins the seeding and the scoring.
+
+One rule changed from step 3 while building it. A `none` case came from one skill's should-not list
+and often belongs to a sibling, so "nothing fired" would count correct routing as a miss. It now
+passes when the skill named in its `not` field was not called; the confusion lines show who took it.
+
+**First pass, test split, 2026-10-19:** 219 cases, 1 rep, `claude-opus-5-5`, about 29% of a 5-hour
+window (0.13% per run, split across two windows so that no run fell into paid overage).
+
+- `none` cases: 99/100. The one miss is `salesforce:dx_mcp` firing on "what fields does
+  Pkg__Data_View__c have", a query from its own should-not list.
+- Owned cases: 91/119. Of the 28 misses, 21 reached no skill at all - the agent answered unaided -
+  and 7 reached the wrong one.
+- Pairs: `salesforce:sf-deploy-test` -> `salesforce:dx_mcp` 3 runs; `meta:model-routing` -> the
+  built-in `workflow-authoring` skill 2; `frontend-css:responsive-layout` ->
+  `frontend-react:component-placement` 1; `meta:ockham` -> `frontend-react:hooks-registry` 1.
+- With about 5 test cases per skill, a per-skill score carries ±0.45 or more; the pair counts and
+  the "no skill fired" counts are the usable signal so far.
+
+Reading, corrected the same day: `dx_mcp` was not stealing. `sf-deploy-test` is the CLI fallback
+and its own description says to prefer the dx MCP, so `dx_mcp` taking a deploy-and-test request is
+what both descriptions ask for. Its eight deploy cases now carry `accept: ["salesforce:dx_mcp"]`;
+the source-tracking error case stays `sf-deploy-test`'s alone. The report regrades saved rows with
+the same `routingPass` rule the runner uses, so the correction applies to this pass too. The
+`scout:scout` misses are partly the crowded sandbox itself: with all 44 skills installed the agent
+answers "what skills exist" from its own skill list. `scout:plugin-sync` missed queries nearly
+verbatim from its description.
+
+**`plugin-sync` crowded baseline, 2026-10-19:** 12 cases at 5 reps. Test 0.85 ±0.22 on 4 cases,
+train 0.77; "a skill that should be available is missing from my session" fired 0/5. The headroom
+on test (0.15) is below the noise, so hillclimb would stop at its own Step 0.5. Parked: the
+maintainer does not use the skill, and per-skill climbs on 4-case test splits cannot show a gain.
+
+**Decided 2026-10-19: fix under-firing across all skills, not one at a time.** 21 of the 28 owned
+misses reached no skill. The next step reads those 21 descriptions for a shared cause, changes the
+house rule for writing descriptions once, and re-measures with the routing set. The larger finding is under-firing: `scout:scout`,
+`scout:plugin-sync`, `frontend-css:responsive-layout`, `tests:apex` and `i18n:ui-strings` each lost
+both or half of their test cases to "nothing fired".
+
 ### Phase 3 — guide-skill pilot
 
 Decided 2026-10-19: the pilot is `cerberus:leak-check`, not `git:commit`. `git:commit` already
@@ -289,7 +333,8 @@ Exit check: `grep -r skillaxe` finds nothing outside history, and `scout-gate` a
 
 **First quality record, 2026-10-19:** `cerberus:leak-check`, 16 cases at 3 reps on
 `claude-opus-5-5`, flows `v2`. With the skill 0.979 ±0.144, without it 0.188 ±0.144: effect
-+0.791 ±0.204, verdict `helps`. The leak cases split 38/39 against 0/39, and the controls passed
++0.791 ±0.354, verdict `helps`. The noise counts the 16 cases, not the 48 rows, because the reps of
+one case are not independent; counted over rows it read ±0.204. The leak cases split 38/39 against 0/39, and the controls passed
 9/9 in both arms. The skill fired in all 48 with-arm runs. The 96 runs cost about $7.5
 API-equivalent.
 
