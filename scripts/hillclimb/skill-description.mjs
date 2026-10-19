@@ -5,9 +5,22 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-function frontmatterLines(text) {
+/**
+ * The `description:` entry as written: its line plus every following line that is
+ * blank or indented, up to the next top-level key. Both readers below start here,
+ * so they agree on where the entry ends.
+ */
+function descriptionEntry(text) {
   const m = /^---\n([\s\S]*?)\n---/.exec(text);
-  return (m ? m[1] : text).split('\n');
+  const lines = (m ? m[1] : text).split('\n');
+  const idx = lines.findIndex(l => /^description:(\s|$)/.test(l));
+  if (idx < 0) return null;
+  const entry = [lines[idx]];
+  for (const l of lines.slice(idx + 1)) {
+    if (l.trim() && !/^[ \t]/.test(l)) break;
+    entry.push(l);
+  }
+  return entry;
 }
 
 /**
@@ -18,41 +31,33 @@ function frontmatterLines(text) {
  * stay valid across the switch.
  */
 export function descriptionFrom(text) {
-  const lines = frontmatterLines(text);
-  const idx = lines.findIndex(l => /^description:\s/.test(l) || l === 'description:');
-  if (idx < 0) return null;
-  const inline = lines[idx].replace(/^description:\s*/, '').trim();
+  const entry = descriptionEntry(text);
+  if (!entry) return null;
+  const inline = entry[0].replace(/^description:\s*/, '').trim();
   if (['>', '|', '>-', '|-', '>+', '|+'].includes(inline)) {
-    const body = [];
-    for (const l of lines.slice(idx + 1)) {
-      if (l.trim() && !/^[ \t]/.test(l)) break;
-      body.push(l.trim());
-    }
-    return body.join(inline.startsWith('>') ? ' ' : '\n').trim();
+    return entry.slice(1).map(l => l.trim()).join(inline.startsWith('>') ? ' ' : '\n').trim();
   }
   return inline.replace(/^"+|"+$/g, '').replace(/^'+|'+$/g, '');
 }
 
 /**
- * The `description:` entry exactly as written: its line plus any indented
- * continuation lines. A probe skill gets this verbatim, so its YAML parses to
- * the same string production does.
+ * The `description:` entry exactly as written. A probe skill gets this verbatim,
+ * so its YAML parses to the same string production does.
  */
 export function rawDescription(text) {
-  const lines = frontmatterLines(text);
-  const idx = lines.findIndex(l => /^description:(\s|$)/.test(l));
-  if (idx < 0) return null;
-  const out = [lines[idx]];
-  for (const l of lines.slice(idx + 1)) {
-    if (l.trim() && !/^[ \t]/.test(l)) break;
-    out.push(l);
-  }
-  while (out.length > 1 && !out.at(-1).trim()) out.pop();
-  return out.join('\n');
+  const entry = descriptionEntry(text);
+  if (!entry) return null;
+  while (entry.length > 1 && !entry.at(-1).trim()) entry.pop();
+  return entry.join('\n');
+}
+
+/** sha256 hex of a parsed description. */
+export function hashDescription(description) {
+  return createHash('sha256').update(description).digest('hex');
 }
 
 /** sha256 hex of a skill dir's parsed description, or null when it has none. */
 export function descriptionHash(skillDir) {
   const d = descriptionFrom(readFileSync(join(skillDir, 'SKILL.md'), 'utf8'));
-  return d == null ? null : createHash('sha256').update(d).digest('hex');
+  return d == null ? null : hashDescription(d);
 }

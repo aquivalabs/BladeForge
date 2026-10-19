@@ -17,35 +17,29 @@
 // Refuses, writing nothing, when the variant is incomplete, mixes models, or was
 // measured against a description other than the one SKILL.md holds now.
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { readdirSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
+import { parseArgs } from 'node:util';
+import { CLIMB_VERDICTS, RUNNER, readJson, readRows, round, splitScore } from './flow-lib.mjs';
 import { descriptionHash } from './skill-description.mjs';
 
-const HERE = new URL('.', import.meta.url).pathname;
-
-export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve(HERE, '..', '..'), climb = false } = {}) {
-  const st = JSON.parse(readFileSync(join(flow, '_state.json'), 'utf8'));
+export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve(import.meta.dirname, '..', '..'), climb = false } = {}) {
+  const st = readJson(join(flow, '_state.json'));
   if (!st.skill_path) throw new Error(`${flow}/_state.json has no skill_path`);
   const skillDir = resolve(repoRoot, st.skill_path);
-  const readRows = (f) => existsSync(f)
-    ? readFileSync(f, 'utf8').split('\n').filter(l => l.trim()).map(l => JSON.parse(l))
-    : [];
   const rows = readRows(join(flow, variant, 'results.jsonl'));
   const errors = readRows(join(flow, variant, 'errors.jsonl'));
   if (!rows.length) throw new Error(`${flow}/${variant}: no results.jsonl rows`);
 
   const rubricPath = join(skillDir, 'evals', 'rubric.json');
-  const rubric = JSON.parse(readFileSync(rubricPath, 'utf8')).trigger;
+  const caseCount = readJson(rubricPath).trigger.length;
   const byId = new Map();
-  for (const r of rows) {
-    if (!byId.has(r.prompt_id)) byId.set(r.prompt_id, []);
-    byId.get(r.prompt_id).push(r);
-  }
+  for (const r of rows) byId.set(r.prompt_id, [...(byId.get(r.prompt_id) ?? []), r]);
   const reps = Math.max(...[...byId.values()].map(v => v.length));
-  const short = [...byId.entries()].filter(([, v]) => v.length !== reps).map(([k]) => k);
-  if (byId.size !== rubric.length || short.length)
-    throw new Error(`${flow}/${variant}: incomplete - ${byId.size}/${rubric.length} cases, `
-      + `${short.length} with fewer than ${reps} reps, ${errors.length} error rows. Re-run the runner to resume.`);
+  const short = [...byId.values()].filter(v => v.length !== reps).length;
+  if (byId.size !== caseCount || short)
+    throw new Error(`${flow}/${variant}: incomplete - ${byId.size}/${caseCount} cases, `
+      + `${short} with fewer than ${reps} reps, ${errors.length} error rows. Re-run the runner to resume.`);
 
   const models = [...new Set(rows.map(r => r.model))];
   if (models.length !== 1) throw new Error(`${flow}/${variant}: rows were served by ${models.join(', ')}`);
@@ -59,25 +53,15 @@ export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve
   const qhash = execFileSync('python3', [join(repoRoot, 'scripts', 'validate_eval.py'), rubricPath],
     { encoding: 'utf8' }).trim();
 
-  const split = (ids) => {
-    const set = new Set((ids ?? []).map(String));
-    const mine = rows.filter(r => set.has(String(r.prompt_id)));
-    const n = mine.length;
-    return {
-      cases: new Set(mine.map(r => r.prompt_id)).size, rows: n,
-      mean: n ? round(mine.reduce((s, r) => s + Number(r.grade.pass), 0) / n) : null,
-      ci_half_width: n ? round(1 / Math.sqrt(n)) : null,
-    };
-  };
-  const passed = rows.reduce((s, r) => s + Number(r.grade.pass), 0);
+  const passed = rows.reduce((s, r) => s + r.grade.pass, 0);
   const results = [...byId.values()].map(v => {
-    const triggers = v.reduce((s, r) => s + Number(r.grade.fired), 0);
+    const triggers = v.reduce((s, r) => s + r.grade.fired, 0);
     const should = v[0].tags?.[0] === 'should-trigger';
     return {
       query: v[0].prompt, should_trigger: should, triggers, runs: v.length,
       trigger_rate: round(triggers / v.length),
       pass: (triggers / v.length >= 0.5) === should,
-      fired_other: v.reduce((s, r) => s + Number(r.fired_other ?? 0), 0),
+      fired_other: v.reduce((s, r) => s + (r.fired_other ?? 0), 0),
     };
   });
 
@@ -92,83 +76,68 @@ export function saveResult(flow, variant, { now = new Date(), repoRoot = resolve
     description_hash: dnow,
     queryset_hash: qhash,
     eval_type: 'description-triggering',
-    runner: 'scripts/hillclimb/trigger-runner.mjs',
+    runner: RUNNER,
     environment: st.environment ?? 'isolated',
     flow_variant: variant,
     cases: byId.size,
-    reps,
-    train: split(st.train_ids),
-    test: split(st.test_ids),
+    train: splitScore(rows, st.train_ids),
+    test: splitScore(rows, st.test_ids),
     method: 'trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, '
       + 'and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run '
       + 'counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are '
       + 'over (case, rep) rows.',
     results,
   };
-  if (climb) trigger.hillclimb = climbSummary(flow, variant, st, readRows, split);
+  if (climb) trigger.hillclimb = climbSummary(flow, variant, st, rows);
 
   // Every sibling key survives a re-measurement - only `trigger` is replaced.
   // A writer that carried one sibling forward by name once deleted the cerberus
   // `security` walk on every re-measure and silently un-shipped the skill.
   const dest = join(skillDir, 'evals', 'result.json');
   let prev = {};
-  if (existsSync(dest)) {
-    try {
-      const loaded = JSON.parse(readFileSync(dest, 'utf8'));
-      if (loaded && typeof loaded === 'object' && !Array.isArray(loaded)) prev = loaded;
-    } catch { prev = {}; }
-  }
-  const out = { ...prev, trigger };
-  if (!('acceptance' in out)) out.acceptance = null;
+  try {
+    const loaded = readJson(dest);
+    if (loaded && typeof loaded === 'object' && !Array.isArray(loaded)) prev = loaded;
+  } catch { /* absent or unreadable: nothing to carry */ }
   const tmp = `${dest}.tmp`;
-  writeFileSync(tmp, JSON.stringify(out, null, 2) + '\n');
+  writeFileSync(tmp, JSON.stringify({ acceptance: null, ...prev, trigger }, null, 2) + '\n');
   renameSync(tmp, dest);
   return { dest, trigger };
 }
 
-function round(x) { return Number(x.toFixed(3)); }
-
 // The verdict follows from the numbers alone, so no one can talk a result up.
 // noise is the baseline test interval; a gain or loss inside it is not one.
-export const CLIMB_VERDICTS = ['improved', 'within-noise', 'regressed', 'no-headroom'];
-function climbSummary(flow, variant, st, readRows, split) {
-  // The winner is hillclimb's call, recorded in _state.json.best; never pick it here.
+// The winner and the round count are hillclimb's own records, never re-derived here.
+function climbSummary(flow, variant, st, finalRows) {
   if (st.best?.round == null) throw new Error(`${flow}/_state.json has no best.round - run /claude-api hillclimb first`);
   const winner = st.best.round === 0 ? 'baseline' : `v${st.best.round}`;
   if (winner !== variant) throw new Error(`hillclimb recorded ${winner} as best, not ${variant}`);
-  const testOf = (v) => {
-    const rows = readRows(join(flow, v, 'results.jsonl'));
-    const set = new Set((st.test_ids ?? []).map(String));
-    const mine = rows.filter(r => set.has(String(r.prompt_id)));
-    if (!mine.length) throw new Error(`${flow}/${v}: no test rows`);
-    return { mean: mine.reduce((a, r) => a + Number(r.grade.pass), 0) / mine.length, n: mine.length };
-  };
-  const base = testOf('baseline');
-  const fin = testOf(variant);
-  const noise = 1 / Math.sqrt(base.n);
-  const rounds = readdirSync(flow).filter(d => /^v[1-9]\d*$/.test(d)
-    && existsSync(join(flow, d, 'results.jsonl'))).length;
+  const baseRows = variant === 'baseline' ? finalRows : readRows(join(flow, 'baseline', 'results.jsonl'));
+  const base = splitScore(baseRows, st.test_ids);
+  const fin = splitScore(finalRows, st.test_ids);
+  if (!base.rows || !fin.rows) throw new Error(`${flow}: no test rows for baseline or ${variant}`);
+  const noise = base.ci_half_width;
   const delta = fin.mean - base.mean;
   const verdict = 1 - base.mean < noise ? 'no-headroom'
     : delta > noise ? 'improved'
     : delta < -noise ? 'regressed'
     : 'within-noise';
-  return {
-    baseline_test: round(base.mean), final_test: round(fin.mean), final_variant: variant,
-    rounds, noise: round(noise), verdict,
-  };
+  if (!CLIMB_VERDICTS.includes(verdict)) throw new Error(`unknown verdict ${verdict}`);
+  // hillclimb records its own round counter; the v<N> dirs are the fallback for a
+  // state file that predates it.
+  const rounds = st.current_round ?? readdirSync(flow).filter(d => /^v[1-9]\d*$/.test(d)).length;
+  return { baseline_test: base.mean, final_test: fin.mean, final_variant: variant, rounds, noise, verdict };
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)) {
-  const args = process.argv.slice(2);
-  const climb = args.includes('--climb');
-  const [flow, variant] = args.filter(a => a !== '--climb');
+if (process.argv[1] && resolve(process.argv[1]) === import.meta.filename) {
+  const { values, positionals } = parseArgs({ allowPositionals: true, options: { climb: { type: 'boolean', default: false } } });
+  const [flow, variant] = positionals;
   if (!flow || !variant) {
     console.error('usage: node save-result.mjs <flow-dir> <variant> [--climb]');
     process.exit(2);
   }
   try {
-    const { dest, trigger } = saveResult(flow, variant, { climb });
+    const { dest, trigger } = saveResult(flow, variant, { climb: values.climb });
     console.log(`saved ${dest}: ${trigger.best_score} (test ${trigger.test.mean} ±${trigger.test.ci_half_width})`
       + (trigger.hillclimb ? `, climb ${trigger.hillclimb.verdict}: ${trigger.hillclimb.baseline_test} -> ${trigger.hillclimb.final_test} in ${trigger.hillclimb.rounds} round(s)` : ''));
   } catch (e) {

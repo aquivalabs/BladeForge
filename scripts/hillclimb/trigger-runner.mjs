@@ -46,7 +46,8 @@ import { basename } from 'node:path';
 import { homedir, tmpdir } from 'node:os';
 // The one description reader, shared with save-result.mjs and eval-gate. List it
 // in `_state.json.harness_paths` so the harness gate covers it too.
-import { descriptionFrom, rawDescription } from './skill-description.mjs';
+import { descriptionFrom, hashDescription, rawDescription } from './skill-description.mjs';
+import { skillSlug, triggerCases } from './flow-lib.mjs';
 
 // Every output write refuses symlinks: the flow dir is model-influenced, and a
 // prompt-injected round can plant `results.jsonl -> ~/.bashrc` where the next
@@ -169,8 +170,8 @@ const REF_EXTS = ['', '.html', '.txt', '.json'];
 // run at the first Skill call; the same rule keeps cost and timing comparable.
 const TRIGGER_TIMEOUT_S = 40;
 
-function skillDir(ctx) {
-  const p = ctx.state?.skill_path;
+function skillDir(state) {
+  const p = state?.skill_path;
   if (!p) throw new Error('_state.json.skill_path is not set - name the skill dir under test');
   return resolve(p);
 }
@@ -179,54 +180,61 @@ function skillDir(ctx) {
 async function loadCases() {
   const statePath = join(parseArgs(process.argv.slice(2)).flow, '_state.json');
   const st = JSON.parse(readIfPresent(statePath) ?? '{}');
-  const dir = skillDir({ state: st });
-  const rubric = JSON.parse(readFileSync(join(dir, 'evals', 'rubric.json'), 'utf8'));
   // `_state.json.only_ids` trims a run to named cases - a one-case smoke or canary.
   const only = Array.isArray(st.only_ids) ? new Set(st.only_ids.map(String)) : null;
-  return rubric.trigger.map(q => ({
-    id: `q-${createHash('sha256').update(q.query).digest('hex').slice(0, 10)}`,
+  return triggerCases(skillDir(st)).map(q => ({
+    id: q.id,
     prompt: q.query,
     should_trigger: Boolean(q.should_trigger),
     tags: [q.should_trigger ? 'should-trigger' : 'should-not-trigger'],
   })).filter(c => !only || only.has(c.id));
 }
 
-/** Run one query in a sandbox project that holds the probe skill, alone or among its siblings. */
-async function runCase(input, ctx) {
-  const dir = skillDir(ctx);
+// What a run installs, read once per runner process: one process measures one
+// variant, and a hillclimb round edits SKILL.md between processes, never during
+// one. The skill under test and, in crowded mode, every sibling probe are built
+// here instead of being re-read and re-parsed on every (case, rep).
+let probesMemo = null;
+function probes(state) {
+  if (probesMemo) return probesMemo;
+  const dir = skillDir(state);
   const text = readFileSync(join(dir, 'SKILL.md'), 'utf8');
-  if (!descriptionFrom(text)) throw new Error(`no description: frontmatter in ${dir}/SKILL.md`);
-  const crowded = ctx.state?.environment === 'crowded';
+  const description = descriptionFrom(text);
+  if (!description) throw new Error(`no description: frontmatter in ${dir}/SKILL.md`);
   // Isolated: the skill under test is the only probe. Crowded: every marketplace
   // skill is a probe, all named `<plugin>-<skill>` the same way, so the score
   // also counts the queries a sibling skill takes instead.
-  const probe = crowded ? probeName(dir) : basename(dir).toLowerCase().replace(/[^a-z0-9-]/g, '-') + '-probe';
-  const others = crowded ? marketplaceSkills().filter(d => resolve(d) !== dir) : [];
+  const crowded = state?.environment === 'crowded';
+  const probe = crowded ? skillSlug(dir) : basename(dir).toLowerCase().replace(/[^a-z0-9-]/g, '-') + '-probe';
+  const body = (name, skillText) =>
+    `---\nname: ${name}\n${rawDescription(skillText)}\n---\n# ${name}\nConsult before related work.\n`;
+  const files = [[probe, body(probe, text)]];
+  if (crowded) for (const d of marketplaceSkills()) {
+    if (d !== dir) files.push([skillSlug(d), body(skillSlug(d), readFileSync(join(d, 'SKILL.md'), 'utf8'))]);
+  }
+  probesMemo = { probe, files, descriptionHash: hashDescription(description) };
+  return probesMemo;
+}
+
+/** Run one query in a sandbox project that holds the probe skill, alone or among its siblings. */
+async function runCase(input, ctx) {
+  const { probe, files, descriptionHash } = probes(ctx.state);
   const slot = acquireSlot();
   const project = join(tmpdir(), `bf-trigger-${probe}-slot${slot}`);
   try {
     resetProject(project);
-    const writeProbe = (name, skillText) => {
+    for (const [name, content] of files) {
       const sd = join(project, '.claude', 'skills', name);
       mkdirSync(sd, { recursive: true });
-      writeFileSync(join(sd, 'SKILL.md'),
-        `---\nname: ${name}\n${rawDescription(skillText)}\n---\n# ${name}\nConsult before related work.\n`);
-    };
-    writeProbe(probe, text);
-    for (const d of others) writeProbe(probeName(d), readFileSync(join(d, 'SKILL.md'), 'utf8'));
+      writeFileSync(join(sd, 'SKILL.md'), content);
+    }
     const run = await probeRun(project, probe, input.prompt, ctx.model);
-    run.description_hash = createHash('sha256').update(descriptionFrom(text)).digest('hex');
+    run.description_hash = descriptionHash;
     return run;
   } finally {
     rmSync(project, { recursive: true, force: true });
     slots[slot] = false;
   }
-}
-
-// `plugins/<plugin>/skills/<skill>` -> `<plugin>-<skill>`, unique across the marketplace.
-function probeName(dir) {
-  const parts = resolve(dir).split('/');
-  return `${parts.at(-3)}-${parts.at(-1)}`.toLowerCase().replace(/[^a-z0-9-]/g, '-');
 }
 
 // Every skill dir in the marketplace, relative to the repo root the runner is run from.

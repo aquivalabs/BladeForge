@@ -26,5 +26,7 @@ jobs:
           node-version: "20"
       - name: Run the save-result suite
         run: node --test scripts/hillclimb/save-result.test.mjs
+      - name: Pin the harness digest to the runner
+        run: node --test scripts/hillclimb/harness-sha.test.mjs
       - name: Run the eval-gate fixture scenarios
         run: bash scripts/eval-gate.test.sh

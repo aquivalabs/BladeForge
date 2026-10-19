@@ -20,12 +20,14 @@ plugins/meta/skills/skill-eval/       the skill: how to run it, how to read a sc
 scripts/hillclimb/
   trigger-runner.mjs                  the triggering measurer: the claude-api hillclimb scaffold, filled in
   skill-description.mjs               the one description reader: runner, writer and gate all import it
+  flow-lib.mjs                        the shared facts: case ids, skill slugs, row scoring, the record contract
   new-flow.mjs                        creates a flow dir with a fixed, seeded train/test split
   save-result.mjs                     writes result.json `trigger` from a variant's raw rows
   split-scores.mjs                    recomputes train/test scores from raw rows
   description-hash.mjs                prints the description hash for the gate
   validate-trigger-record.mjs         the gate's check that a record came from the runner, with its noise
-  harness-sha.mjs                     the runner's harness digest, so new-flow can reuse an approval
+  harness-sha.mjs                     the runner's harness digest, so new-flow can reuse an approval;
+                                      harness-sha.test.mjs pins it to the runner
 .claude/hillclimb/<flow>/             raw rows and traces per run, gitignored
 scripts/validate_eval.py              rubric.json trigger shape + its canonical hash
 scripts/validate_acceptance.py        rubric.json acceptance shape (array or {not-applicable})
@@ -119,7 +121,7 @@ The record's shape, and the reason for it:
     "eval_type": "description-triggering",
     "runner": "scripts/hillclimb/trigger-runner.mjs",
     "environment": "isolated",
-    "cases": 18, "reps": 5,
+    "cases": 18,
     "train": { "cases": 12, "rows": 60, "mean": 0.917, "ci_half_width": 0.129 },
     "test":  { "cases": 6,  "rows": 30, "mean": 1.0,   "ci_half_width": 0.183 },
     "method": "…how the measurement was taken…",

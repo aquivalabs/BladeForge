@@ -6,17 +6,16 @@
 // `trigger` is replaced), and refusal (an incomplete variant or a description that
 // moved since the run writes nothing).
 import { strict as assert } from 'node:assert';
-import { createHash } from 'node:crypto';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 import { saveResult } from './save-result.mjs';
 import { descriptionHash } from './skill-description.mjs';
+import { MODEL, caseId as idOf } from './flow-lib.mjs';
 
-const REPO = resolve(new URL('.', import.meta.url).pathname, '..', '..');
+const REPO = resolve(import.meta.dirname, '..', '..');
 const QUERIES = ['a', 'b', 'c', 'd', 'e', 'f'].map((q, i) => ({ query: q, should_trigger: i < 3 }));
-const idOf = (q) => `q-${createHash('sha256').update(q).digest('hex').slice(0, 10)}`;
 
 function fixture({ reps = 2, description = 'Use when testing.', prev } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'bf-save-'));
@@ -41,7 +40,7 @@ function fixture({ reps = 2, description = 'Use when testing.', prev } = {}) {
     rows.push({
       prompt_id: idOf(q.query), rep, prompt: q.query,
       tags: [q.should_trigger ? 'should-trigger' : 'should-not-trigger'],
-      model: 'claude-opus-5-5', grade: { pass: 1, fired }, fired_other: 0, description_hash: dh,
+      model: MODEL, grade: { pass: 1, fired }, fired_other: 0, description_hash: dh,
     });
   }
   writeFileSync(join(flow, 'baseline', 'results.jsonl'), rows.map(r => JSON.stringify(r)).join('\n') + '\n');
@@ -56,7 +55,7 @@ test('absence: writes a fresh record when no result.json exists', () => {
   const r = resultOf(f.skill);
   assert.equal(r.trigger.best_score, '12/12');
   assert.equal(r.trigger.cases, 6);
-  assert.equal(r.trigger.reps, 2);
+  assert.equal(r.trigger.runs_per_query, 2);
   assert.equal(r.trigger.environment, 'isolated');
   assert.equal(r.trigger.test.rows, 4);
   assert.equal(r.acceptance, null);

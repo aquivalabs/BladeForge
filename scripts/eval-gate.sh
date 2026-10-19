@@ -15,6 +15,8 @@
 # change alters what reaches a consumer, and stronger (no skip flag) because it is safety.
 # There is NO skip flag: a touched skill whose measurement is missing or stale always
 # blocks. No live clone to measure from means the skill is not shippable yet — get one.
+# One git diff --name-status per pushed ref yields both the changed paths (the last
+# column, so a rename counts under its new name) and the added ones (status A).
 # Reads pre-push stdin; falls back to origin/main..HEAD when run by hand with no
 # stdin. Bash 3.2 compatible.
 set -uo pipefail
@@ -42,16 +44,18 @@ if [ ! -t 0 ]; then
     else
       base="$remotesha"
     fi
+    ns="$(git diff --name-status "$base" "$localsha" 2>/dev/null)"
     changed="$changed
-$(git diff --name-only "$base" "$localsha" 2>/dev/null)"
+$(printf '%s\n' "$ns" | awk -F'\t' 'NF {print $NF}')"
     added="$added
-$(git diff --name-only --diff-filter=A "$base" "$localsha" 2>/dev/null)"
+$(printf '%s\n' "$ns" | awk -F'\t' '$1 == "A" {print $2}')"
   done
 fi
 if [ "$have_stdin" -eq 0 ]; then
   base="$(git merge-base origin/main HEAD 2>/dev/null || echo "$EMPTY_TREE")"
-  changed="$(git diff --name-only "$base" HEAD 2>/dev/null)"
-  added="$(git diff --name-only --diff-filter=A "$base" HEAD 2>/dev/null)"
+  ns="$(git diff --name-status "$base" HEAD 2>/dev/null)"
+  changed="$(printf '%s\n' "$ns" | awk -F'\t' 'NF {print $NF}')"
+  added="$(printf '%s\n' "$ns" | awk -F'\t' '$1 == "A" {print $2}')"
 fi
 
 # --- 2. map changed files -> unique skill dirs -------------------------------
@@ -82,7 +86,7 @@ owes_measurement() {
 }
 
 # Skills whose SKILL.md is ADDED by this push — new skills, which also owe a hillclimb record.
-newskills="$(printf '%s\n' "$added" | sed -n 's#/SKILL\.md$##p' | sed '/^$/d' | sort -u)"
+newskills="$(printf '%s\n' "$added" | sed -n 's#/SKILL\.md$##p' | sort -u)"
 is_new_skill() {
   printf '%s\n' "$newskills" | grep -qx "$1"
 }

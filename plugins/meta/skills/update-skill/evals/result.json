@@ -14,7 +14,6 @@
     "environment": "isolated",
     "flow_variant": "baseline",
     "cases": 15,
-    "reps": 5,
     "train": {
       "cases": 10,
       "rows": 50,
