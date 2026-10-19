@@ -54,8 +54,9 @@ plugin version and lags behind.
    ```
 2. **Price it before running.** Measure one case first and show the `meta:model-routing` cost table.
    A full pass at `--reps 5` is about 8% of a 5-hour window isolated, about 10% crowded.
-3. **The maintainer approves the harness.** The runner refuses to start until a human records its
-   hash. An agent must never pass `--approve-harness` — ask the user to run the first command with it.
+3. **Approve the harness only after review.** The runner refuses to start until its hash is
+   recorded. Pass `--approve-harness` yourself only when every harness change is committed and
+   covered by a passing `/review` attestation; otherwise ask the user to run the first command with it.
 4. **Run, then save:**
    ```bash
    node scripts/hillclimb/trigger-runner.mjs --flow <flow> --variant baseline \

@@ -61,8 +61,10 @@ Rules in force now:
   were removed, because one task run once cannot tell a real effect from zero.
 - **Never measure with skill-creator's `run_eval` or `run_loop`.** They register the skill as a slash
   command, which does not auto-trigger, so a good skill scores near zero.
-- **`--approve-harness` is the maintainer's to run, never an agent's.** The runner refuses to start
-  after its own code changes until a human approves the new version.
+- **`--approve-harness` needs a review first.** The runner refuses to start after its own code
+  changes until someone approves the new version. An agent may approve it only when every harness
+  change is committed and covered by a passing `/review` attestation, since that review already
+  read the code. Any harness change the review has not seen is the maintainer's to approve.
 - **Price a run before you start it.** Measure one case, then show the cost table from
   `meta:model-routing`. A 90-run trigger pass costs about 8% of a 5-hour window isolated, and about
   10% crowded.

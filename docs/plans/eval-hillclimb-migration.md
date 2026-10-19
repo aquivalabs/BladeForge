@@ -2,8 +2,8 @@
 
 Status: in progress, phase 4 · Owner: the marketplace maintainer · Started: 2026-10-16
 
-Now: phase 2 merged as #95 (2026-10-19). Phases 3 and 4 are on `feat/quality-stage` (#96). Phase 4
-waits on one measurement: the first quality record, for `cerberus:leak-check`.
+Now: phase 2 merged as #95 (2026-10-19). Phases 3 and 4 are done on `feat/quality-stage` (#96).
+Next: phase 2b with phase 5.
 
 Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
 likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
@@ -287,10 +287,11 @@ Exit check: `grep -r skillaxe` finds nothing outside history, and `scout-gate` a
   entries are deleted. The catalog holds 44 skills.
 - `grep skillaxe` finds it only in this plan and in old review attestations, which are history.
 
-**Open:** `cerberus:leak-check` has no quality record yet. Its pilot rows predate `skill_hash`, and
-its with arm after the push fix (`v1`) ran 22 rows over a subset, so it cannot be saved. Writing
-the record needs the maintainer to approve the changed runner with `--approve-harness`, then one
-full run of both arms at 3 reps: 96 runs.
+**First quality record, 2026-10-19:** `cerberus:leak-check`, 16 cases at 3 reps on
+`claude-opus-5-5`, flows `v2`. With the skill 0.979 ±0.144, without it 0.188 ±0.144: effect
++0.791 ±0.204, verdict `helps`. The leak cases split 38/39 against 0/39, and the controls passed
+9/9 in both arms. The skill fired in all 48 with-arm runs. The 96 runs cost about $7.5
+API-equivalent.
 
 **Deferred to phase 5:** `eval-gate` does not demand a quality record yet. It would block every
 PR that touches a skill until all 44 have a quality eval, and only one has a runner.
@@ -307,8 +308,10 @@ showed the noise needs. Re-run quality skill by skill, starting with the most us
   table, and follow `meta:model-routing`.
 - **Leaks.** Cases, traces and reports pass `cerberus:leak-check` before they are committed. Flow
   dirs with raw traces stay gitignored.
-- **Human approval for the runner.** The scaffold refuses to run after its own code changes until
-  someone re-approves it with `--approve-harness`. Never pre-approve it in an allowlist.
+- **Reviewed approval for the runner.** The scaffold refuses to run after its own code changes until
+  someone re-approves it with `--approve-harness`. Decided 2026-10-19: an agent may approve a
+  version whose changes are committed and covered by a passing `/review` attestation; anything the
+  review has not seen stays the maintainer's. Never pre-approve it in an allowlist.
 
 ## Phase 1 findings (2026-10-16)
 

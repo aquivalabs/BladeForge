@@ -299,8 +299,9 @@ node scripts/hillclimb/save-result.mjs --quality .claude/hillclimb/leak-check-wi
     .claude/hillclimb/leak-check-without v2
 ```
 
-The runner refuses to start until a human has approved its current code with `--approve-harness`;
-an agent never passes that flag. The nested run is isolated — `--setting-sources project
+The runner refuses to start until its current code is approved with `--approve-harness`. An agent
+passes that flag only when the harness changes are committed and covered by a passing `/review`
+attestation; otherwise the maintainer does. The nested run is isolated — `--setting-sources project
 --strict-mcp-config` — so no user settings, plugins, hooks or MCP servers reach it, and the score does
 not depend on whose machine took it. `environment: "crowded"` in the flow's `_state.json` installs
 every marketplace skill beside the one under test, and a query a sibling takes shows in

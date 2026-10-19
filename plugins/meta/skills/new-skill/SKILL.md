@@ -316,9 +316,9 @@ should-NOT-trigger query that fires is a real defect, not a rounding error.
 **A guide skill also needs its EFFECT measured, not just its trigger.** `meta:skill-eval` scores
 whether the description fires; it says nothing about whether the guidance improves the output once it
 does. If this skill's job is to shape what an agent produces — an authoring guide, a review lens, a
-house-convention skill — it also needs the quality stage: 15 or more tasks built with
-`/claude-api build-eval`, each run with the skill and without it, saved with
-`save-result.mjs --quality`. `docs/mechanisms/skill-eval.md` describes the run. Skip it only for a
+house-convention skill — it should also get the quality stage once it has a quality runner: 15 or
+more tasks built with `/claude-api build-eval`, each run with the skill and without it, saved with
+`save-result.mjs --quality`. `eval-gate` does not demand that record yet. `docs/mechanisms/skill-eval.md` describes the run. Skip it only for a
 skill that produces nothing to shape.
 
 **Run the scripts from the repository, not from the installed plugin cache.** The cache is keyed

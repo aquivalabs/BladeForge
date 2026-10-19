@@ -1,5 +1,48 @@
 {
-  "acceptance": null,
+  "acceptance": {
+    "measured_at": "2026-10-19T13:30:24",
+    "model": "claude-opus-5-5",
+    "runner": "scripts/hillclimb/leak-check-runner.mjs",
+    "eval_type": "quality-with-vs-without",
+    "cases": 16,
+    "reps": 3,
+    "with_skill": {
+      "cases": 16,
+      "rows": 48,
+      "mean": 0.979,
+      "ci_half_width": 0.144
+    },
+    "without_skill": {
+      "cases": 16,
+      "rows": 48,
+      "mean": 0.188,
+      "ci_half_width": 0.144
+    },
+    "effect": 0.791,
+    "noise": 0.204,
+    "verdict": "helps",
+    "test": {
+      "with_skill": {
+        "cases": 5,
+        "rows": 15,
+        "mean": 0.933,
+        "ci_half_width": 0.258
+      },
+      "without_skill": {
+        "cases": 5,
+        "rows": 15,
+        "mean": 0.2,
+        "ci_half_width": 0.258
+      }
+    },
+    "skill_hash": "befe84943fe4cd6acfef3281a02d24d3a70c7ac1845be1aa6eaf9e6fca08b656",
+    "cases_hash": "e2917d1c9edd620961fc548bf567962667cc594a329c005f62e6ed45b82f533b",
+    "flows": {
+      "with": "v2",
+      "without": "v2"
+    },
+    "method": "The same cases run as nested `claude -p` sessions in a fixture repository, once with the skill installed and once without; a programmatic grader reads what the agent left. effect is the difference of the two pass rates over (case, rep) rows; noise is the half-width of that difference."
+  },
   "trigger": {
     "skill": "leak-check",
     "measured_at": "2026-10-19T12:11:42",
