@@ -158,6 +158,8 @@ const REF_EXTS = ['', '.html', '.txt', '.json'];
 // so the agent never sees what is being checked.
 
 const RUN_TIMEOUT_S = 300;
+const ALLOWED_TOOLS = ['Read', 'Edit', 'Write', 'Glob', 'Grep', 'Skill',
+  ...['git', 'grep', 'cat', 'ls', 'head', 'tail', 'wc', 'xargs', 'echo', 'find', 'sed'].map(c => `Bash(${c}:*)`)];
 const DEFAULT_AUTHOR = ['Demo Author', 'author@example.com'];
 
 function stateOf(st) {
@@ -248,13 +250,15 @@ function inspect(project, skillDir) {
 }
 
 // Same isolation as the trigger runner: no user settings, plugins, hooks or MCP. The agent
-// may read and edit files and run git, nothing else - enough to fix, amend and commit.
+// may read and edit files, run git, and use read-only text tools in pipelines; nothing can
+// prompt for approval, because -p has no one to ask. No editor ever opens: an amend or a
+// rebase that would wait for one would hang the run until its ceiling.
 function agentRun(project, prompt, model, skillName) {
   const args = ['-p', prompt, '--output-format', 'stream-json', '--verbose',
     '--setting-sources', 'project', '--strict-mcp-config',
-    '--permission-mode', 'acceptEdits', '--allowedTools', 'Bash(git:*)', 'Read', 'Edit', 'Write', 'Glob', 'Grep', 'Skill'];
+    '--permission-mode', 'acceptEdits', '--allowedTools', ...ALLOWED_TOOLS];
   if (model) args.push('--model', model);
-  const env = { ...process.env };
+  const env = { ...process.env, GIT_EDITOR: 'true', GIT_SEQUENCE_EDITOR: 'true' };
   delete env.CLAUDECODE;
   return new Promise((resolveRun, rejectRun) => {
     const child = spawn('claude', args, { cwd: project, env, stdio: ['ignore', 'pipe', 'ignore'] });

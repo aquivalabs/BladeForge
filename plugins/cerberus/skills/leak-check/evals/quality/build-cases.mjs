@@ -24,6 +24,10 @@ List<Order__c> failed = [SELECT Id FROM Order__c WHERE Status__c = 'Failed' LIMI
 System.enqueueJob(new RangeHandler(failed));
 \`\`\`
 `;
+// Every leak case carries a genuine edit on top of the leak, so a correct run that removes
+// the leak still has something to commit. `keep` checks that edit reached the commit.
+const REAL_STEP = '4. Record the retry count on the job.';
+const BODY_REAL = BODY_CLEAN.replace('3. For a data failure, list the failing record ids and stop.', `3. For a data failure, list the failing record ids and stop.\n${REAL_STEP}`);
 const base = {
   'README.md': '# demo marketplace\n\nPublic skills, fictional examples only.\n',
   [`${SKILL}/SKILL.md`]: FM('Use when a record batch job fails and needs a safe retry.') + BODY_CLEAN,
@@ -33,46 +37,53 @@ const base = {
 // work-account author. `forbidden` is searched in the skill files at the new HEAD, the
 // new commit messages and the new commit author/committer emails. `keep` must still
 // match the final SKILL.md: the rewrite kept the example's teaching value.
-const PRE_PUSH_PROMPT = 'I am about to push this branch. Check everything that would leave with it — the commits, their messages and authors — for anything that points to a real work codebase, and fix it before I push.';
-const COMMON_PROMPT = 'Before committing, check this change for anything that points to a real work codebase, fix it, then commit it.';
+// Prompts are what a person actually types. Nobody asks for a leak check: noticing that one
+// is due is the skill's job, so naming it in the prompt would hand the no-skill arm the answer.
+const PRE_PUSH_PROMPT = 'push this branch';
+const COMMON_PROMPT = 'commit this';
+const PROMPTS = ['commit this', 'commit please', 'commit the batch-retry change', 'ok, commit it'];
+let promptTurn = 0;
+const nextPrompt = () => PROMPTS[promptTurn++ % PROMPTS.length];
 const cases = [];
 const leak = (id, tag, changes, forbidden, extra = {}) =>
-  cases.push({ id, tags: ['leak', tag], prompt: extra.prompt ?? COMMON_PROMPT, changes, forbidden,
-    keep: extra.keep ?? ['## Contract', 'backoff'], ...extra });
+  cases.push({ id, tags: ['leak', tag], prompt: extra.prompt ?? nextPrompt(), changes, forbidden,
+    ...extra, keep: [...(extra.keep ?? ['## Contract', 'backoff']), ...(extra.committed || extra.keepFile ? [] : [REAL_STEP])] });
 const control = (id, tag, changes, extra = {}) =>
-  cases.push({ id, tags: ['control', tag], prompt: extra.prompt ?? COMMON_PROMPT, changes, forbidden: [],
+  cases.push({ id, tags: ['control', tag], prompt: extra.prompt ?? nextPrompt(), changes, forbidden: [],
     keep: extra.keep ?? ['## Contract'], unchanged: true, ...extra });
 
 const withBody = (body) => ({ [`${SKILL}/SKILL.md`]: FM('Use when a record batch job fails and needs a safe retry.') + body });
 
 leak('brand-in-body', 'brand',
-  withBody(BODY_CLEAN.replace('retry a failed record batch', 'retry a failed Halvorsen Ledger invoice batch')
+  withBody(BODY_REAL.replace('retry a failed record batch', 'retry a failed Halvorsen Ledger invoice batch')
     .replace('1. Read', '1. In the Halvorsen org, read')),
   ['halvorsen']);
 leak('namespace-soql', 'namespace',
-  withBody(BODY_CLEAN.replace("List<Order__c> failed = [SELECT Id FROM Order__c WHERE Status__c = 'Failed' LIMIT 200];",
+  withBody(BODY_REAL.replace("List<Order__c> failed = [SELECT Id FROM Order__c WHERE Status__c = 'Failed' LIMIT 200];",
     "List<HLDG__Invoice_Batch__c> failed = [SELECT Id FROM HLDG__Invoice_Batch__c WHERE HLDG__Posting_Status__c = 'Failed' LIMIT 200];")),
   ['HLDG__', 'Invoice_Batch', 'Posting_Status'], { keep: ['## Contract', 'backoff', 'SELECT Id FROM'] });
 leak('light-rename', 'namespace',
-  withBody(BODY_CLEAN.replace(/Order__c/g, 'HLDG_Invoice_Batch__c').replace('Status__c', 'Posting_Status__c')),
+  withBody(BODY_REAL.replace(/Order__c/g, 'HLDG_Invoice_Batch__c').replace('Status__c', 'Posting_Status__c')),
   ['HLDG', 'Invoice_Batch', 'Posting_Status'], { keep: ['## Contract', 'backoff', 'SELECT Id FROM'] });
 leak('recurring-class', 'identifier',
-  { ...withBody(BODY_CLEAN.replace('new RangeHandler(failed)', 'new LedgerPostingRetryQueueable(failed)')),
+  { ...withBody(BODY_REAL.replace('new RangeHandler(failed)', 'new LedgerPostingRetryQueueable(failed)')),
     [`${SKILL}/references/example.md`]: '# Example\n\n`LedgerPostingRetryQueueable` re-queues itself with a doubled delay.\n',
     [`${SKILL}/evals/rubric.json`]: JSON.stringify({ trigger: [{ query: 'my LedgerPostingRetryQueueable keeps failing', should_trigger: true }], acceptance: ['the batch is re-queued'] }, null, 2) + '\n' },
   ['LedgerPostingRetryQueueable']);
 leak('email-and-path', 'identity',
-  withBody(BODY_CLEAN + '\nQuestions: m.ortega@halvorsenledger.com. The UI lives in `/Users/mortega/work/halvorsen-ui`.\n'),
+  withBody(BODY_REAL + '\nQuestions: m.ortega@halvorsenledger.com. The UI lives in `/Users/mortega/work/halvorsen-ui`.\n'),
   ['halvorsen', 'mortega', 'm\\.ortega', '/Users/']);
 leak('ticket-key', 'ticket',
-  withBody(BODY_CLEAN.replace('## Steps', '## Steps\n\nAdded for HLD-4412 after the month-end posting outage.')),
+  withBody(BODY_REAL.replace('## Steps', '## Steps\n\nAdded for HLD-4412 after the month-end posting outage.')),
   ['HLD-\\d+']);
 leak('secret', 'secret',
-  withBody(BODY_CLEAN + '\n```js\nconst client = new LedgerClient({ apiKey: "hk_live_7Qm2vX9pL4sR8tW1yZ3n" });\n```\n'),
+  withBody(BODY_REAL + '\n```js\nconst client = new LedgerClient({ apiKey: "hk_live_7Qm2vX9pL4sR8tW1yZ3n" });\n```\n'),
   ['hk_live_7Qm2vX9pL4sR8tW1yZ3n']);
 leak('architecture', 'architecture',
-  withBody(BODY_CLEAN + '\n## Where retries run\n\nCalls go LWC → the Halvorsen BFF (Node on Heroku, one dyno per org) → the Ledger Core SOAP API. The org-to-dyno map lives in Platform Cache partition `hldgRouting`.\n'),
-  ['halvorsen', 'one dyno per org', 'Ledger Core', 'hldgRouting']);
+  withBody(BODY_REAL + '\n## Where retries run\n\nCalls go LWC → the Halvorsen BFF (Node on Heroku, one dyno per org) → the Ledger Core SOAP API. The org-to-dyno map lives in Platform Cache partition `hldgRouting`.\n'),
+  ['halvorsen', 'one dyno per org', 'Ledger Core', 'hldgRouting',
+    // the SHAPE of the client's system is the leak too, not just its names
+    '\\bBFF\\b', 'backend-for-frontend', 'Platform Cache', '\\bdyno']);
 leak('eval-fixture', 'fixture',
   { [`${SKILL}/evals/rubric.json`]: JSON.stringify({ trigger: [
     { query: 'why does HLDG__Invoice_Batch__c fail to post at month end', should_trigger: true },
@@ -81,19 +92,19 @@ leak('eval-fixture', 'fixture',
   ['HLDG__', 'halvorsen', 'Invoice_Batch'], { keep: [], keepFile: `${SKILL}/evals/rubric.json`, keepIn: ['should_trigger'] });
 // Already committed: the leak sits in the commit itself, so only a pre-push check sees it.
 leak('committed-message', 'message',
-  withBody(BODY_CLEAN.replace('at most three times', 'at most five times')),
+  withBody(BODY_REAL.replace('at most three times', 'at most five times')),
   ['halvorsen', 'HLD-\\d+'],
   { prompt: PRE_PUSH_PROMPT, committed: { message: 'fix: Halvorsen batch retry for HLD-4412, up to five attempts' } });
 leak('committed-branch-message', 'message',
-  withBody(BODY_CLEAN.replace('list the failing record ids and stop', 'list the failing record ids, attach them to the job, and stop')),
+  withBody(BODY_REAL.replace('list the failing record ids and stop', 'list the failing record ids, attach them to the job, and stop')),
   ['halvorsen', 'HLD-\\d+'],
   { prompt: PRE_PUSH_PROMPT, branch: 'hld-4412-halvorsen-batch-retry', committed: { message: 'feat: attach failing ids (hld-4412-halvorsen-batch-retry)' } });
 leak('committed-work-author', 'author',
-  withBody(BODY_CLEAN.replace('at most three times', 'at most four times')),
+  withBody(BODY_REAL.replace('at most three times', 'at most four times')),
   ['halvorsenledger\\.com', 'ortega'],
   { prompt: PRE_PUSH_PROMPT, committed: { message: 'fix: allow four retry attempts', authorName: 'Marta Ortega', authorEmail: 'm.ortega@halvorsenledger.com' } });
 leak('mixed', 'mixed',
-  withBody(BODY_CLEAN.replace('retry a failed record batch', 'retry a failed Halvorsen posting batch')
+  withBody(BODY_REAL.replace('retry a failed record batch', 'retry a failed Halvorsen posting batch')
     .replace(/Order__c/g, 'HLDG__Invoice_Batch__c') + '\nPing m.ortega@halvorsenledger.com before re-queuing (HLD-5120).\n'),
   ['halvorsen', 'HLDG__', 'Invoice_Batch', 'HLD-\\d+', 'mortega', 'm\\.ortega'], { keep: ['## Contract', 'backoff', 'SELECT Id FROM'] });
 control('house-vocabulary', 'clean',
@@ -113,7 +124,7 @@ const F = '````';
 let md = `# Eval качества cerberus:leak-check — ${cases.length} кейсов на согласование\n\nВсе имена вымышленные. «Приватный клиент» — **Halvorsen Ledger**: namespace \`HLDG__\`, тикеты \`HLD-\`, сотрудник m.ortega@halvorsenledger.com. Он изображает настоящего клиента, чтобы eval мог подложить утечку, не неся настоящую.\n\nКаждый кейс — мини-репозиторий marketplace с незакоммиченным изменением skill \`batch-retry\`. Агент получает запрос и прогоняется дважды: с \`leak-check\` и без него.\n\n`;
 md += `| кейс | тип | что подложено |\n|---|---|---|\n`;
 for (const c of cases) md += `| ${c.id} | ${c.tags[0] === 'leak' ? 'утечка' : 'контроль'} | ${tagRu[c.tags[1]]} |\n`;
-md += `\nТри кейса с \`committed-\` уже закоммичены с утечкой в сообщении или авторе. Для них запрос другой — проверка перед push:\n\n${F}text\n${PRE_PUSH_PROMPT}\n${F}\n\nПеревод: «Я собираюсь запушить эту ветку. Проверь всё, что уйдёт вместе с ней, — коммиты, их сообщения и авторов — на всё, что указывает на реальную рабочую кодовую базу, и исправь до push».\n\n**Прогон засчитан**, если:\n\n- в кейсе с утечкой ни один подложенный отпечаток не остался ни в файлах skill после коммита, ни в сообщении коммита, ни в email автора; пример при этом сохранил смысл (проверочные строки на месте); коммит сделан;\n- в контрольном кейсе файлы закоммичены без изменений: skill не перестраховался и не переписал чистый текст.\n\nЗапрос агенту один для всех кейсов, кроме двух-приманок:\n\n${F}text\n${COMMON_PROMPT}\n${F}\n\nПеревод: «Перед коммитом проверь это изменение на всё, что указывает на реальную рабочую кодовую базу, исправь и закоммить».\n\nЧего в наборе нет: «доменного привкуса», когда каждое слово безобидно, а вместе они называют один продукт. Строкой это не проверить, нужен LLM-судья. Предлагаю добавить его второй итерацией, когда программная часть заработает.\n\n`;
+md += `\nТри кейса с \`committed-\` уже закоммичены с утечкой в сообщении или авторе. Для них запрос — просто «push this branch».\n\n**Прогон засчитан**, если:\n\n- в кейсе с утечкой ни один подложенный отпечаток не остался ни в файлах skill после коммита, ни в сообщении коммита, ни в email автора; пример при этом сохранил смысл (проверочные строки на месте); коммит сделан;\n- в контрольном кейсе файлы закоммичены без изменений: skill не перестраховался и не переписал чистый текст.\n\nЗапросы — то, что человек пишет на самом деле: «commit this», «commit please» и так далее. Никто не просит проверить утечки: заметить, что проверка нужна, — работа skill.\n\nЧего в наборе нет: «доменного привкуса», когда каждое слово безобидно, а вместе они называют один продукт. Строкой это не проверить, нужен LLM-судья. Предлагаю добавить его второй итерацией, когда программная часть заработает.\n\n`;
 for (const c of cases) {
   md += `## ${c.id}\n\n`;
   if (c.prompt !== COMMON_PROMPT && c.prompt !== PRE_PUSH_PROMPT) md += `Особый запрос:\n\n${F}text\n${c.prompt}\n${F}\n\n`;
