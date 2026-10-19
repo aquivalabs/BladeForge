@@ -2261,35 +2261,50 @@
       "query": "deploy WidgetConfigResource.cls and WidgetConfigResourceTest.cls then run the tests",
       "owner": "salesforce:sf-deploy-test",
       "split": "test",
-      "source": "rubric:salesforce:sf-deploy-test"
+      "source": "rubric:salesforce:sf-deploy-test",
+      "accept": [
+        "salesforce:dx_mcp"
+      ]
     },
     {
       "id": "q-abf1f7f2f9",
       "query": "push the widgetSettings apex classes to myOrg and run MetricBuilderTest",
       "owner": "salesforce:sf-deploy-test",
       "split": "train",
-      "source": "rubric:salesforce:sf-deploy-test"
+      "source": "rubric:salesforce:sf-deploy-test",
+      "accept": [
+        "salesforce:dx_mcp"
+      ]
     },
     {
       "id": "q-734d2832ae",
       "query": "deploy the whole widgetSettings package to the org and check test results",
       "owner": "salesforce:sf-deploy-test",
       "split": "train",
-      "source": "rubric:salesforce:sf-deploy-test"
+      "source": "rubric:salesforce:sf-deploy-test",
+      "accept": [
+        "salesforce:dx_mcp"
+      ]
     },
     {
       "id": "q-a5bdb617b1",
       "query": "I updated RangeResolver — deploy it and verify the tests still pass",
       "owner": "salesforce:sf-deploy-test",
       "split": "test",
-      "source": "rubric:salesforce:sf-deploy-test"
+      "source": "rubric:salesforce:sf-deploy-test",
+      "accept": [
+        "salesforce:dx_mcp"
+      ]
     },
     {
       "id": "q-c7a75de6e2",
       "query": "deploy metadata ApexClass:MetricBuilder and run MetricBuilderTest,RangeResolverTest",
       "owner": "salesforce:sf-deploy-test",
       "split": "train",
-      "source": "rubric:salesforce:sf-deploy-test"
+      "source": "rubric:salesforce:sf-deploy-test",
+      "accept": [
+        "salesforce:dx_mcp"
+      ]
     },
     {
       "id": "q-65c7fc0c3b",
@@ -2303,21 +2318,30 @@
       "query": "deploy all classes under force-app/widgetSettings/default/classes/ to myOrg",
       "owner": "salesforce:sf-deploy-test",
       "split": "test",
-      "source": "rubric:salesforce:sf-deploy-test"
+      "source": "rubric:salesforce:sf-deploy-test",
+      "accept": [
+        "salesforce:dx_mcp"
+      ]
     },
     {
       "id": "q-defc2dcf9e",
       "query": "run the apex tests for WidgetConfigResourceTest after deploying the latest changes",
       "owner": "salesforce:sf-deploy-test",
       "split": "test",
-      "source": "rubric:salesforce:sf-deploy-test"
+      "source": "rubric:salesforce:sf-deploy-test",
+      "accept": [
+        "salesforce:dx_mcp"
+      ]
     },
     {
       "id": "q-bb03b3cd08",
       "query": "quick deploy-and-test cycle for OrderHandlerTest on the scratch org",
       "owner": "salesforce:sf-deploy-test",
       "split": "train",
-      "source": "rubric:salesforce:sf-deploy-test"
+      "source": "rubric:salesforce:sf-deploy-test",
+      "accept": [
+        "salesforce:dx_mcp"
+      ]
     },
     {
       "id": "q-abbe3b86e5",

@@ -3,12 +3,14 @@
 // other's queries.
 //   node scripts/hillclimb/routing-report.mjs .claude/hillclimb/<flow> <variant> [--split test]
 //
+// Every row is graded again from its saved `routed` with routingPass, so an `accept` a person adds
+// later applies to rows measured before it.
 // A score counts CASES: a case passes when most of its reps passed, and the interval is 1/sqrt(n)
 // over those cases, because the reps of one query are not independent draws. The confusion lines
 // list, for queries an owner should have taken, which skill got them instead.
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
-import { readJson, readRows, round } from './flow-lib.mjs';
+import { readJson, readRows, round, routingPass } from './flow-lib.mjs';
 
 export function routingReport(rows, cases) {
   const byId = new Map(cases.map(c => [c.id, c]));
@@ -19,11 +21,12 @@ export function routingReport(rows, cases) {
     const c = byId.get(id);
     if (!c) continue;
     const key = c.owner === 'none' ? `none (not ${c.not})` : c.owner;
-    const pass = rs.filter(r => r.grade?.pass).length * 2 > rs.length;
+    const ok = (r) => routingPass(c, r.routed ?? null);
+    const pass = rs.filter(ok).length * 2 > rs.length;
     const o = owners.get(key) ?? { cases: 0, passed: 0 };
     o.cases++; o.passed += pass ? 1 : 0;
     owners.set(key, o);
-    if (c.owner !== 'none') for (const r of rs) if (!r.grade?.pass) {
+    if (c.owner !== 'none') for (const r of rs) if (!ok(r)) {
       const k = `${c.owner} -> ${r.routed ?? 'nothing'}`;
       steals.set(k, (steals.get(k) ?? 0) + 1);
     }

@@ -11,6 +11,9 @@
 // claims it: the case then passes when that skill does not take it, whoever else does. A query two rubrics both
 // claim is left out and reported - a person decides its owner.
 //
+// `accept` is the one field a person may add to an existing case: other skills that are also right
+// for it by their own descriptions. The builder never writes or removes it.
+//
 // The freeze rule: an existing case is never edited or deleted, only added to. A new case gets its
 // train or test slot from a hash of the seed and its id, so the slot is random but never moves.
 import { createHash } from 'node:crypto';

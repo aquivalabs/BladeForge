@@ -45,7 +45,7 @@ import { basename } from 'node:path';
 // The one description reader, shared with save-result.mjs and eval-gate. List it
 // in `_state.json.harness_paths` so the harness gate covers it too.
 import { hashDescription, rawDescription } from './skill-description.mjs';
-import { gateApprovalFromArgv, readJson, skillSlug } from './flow-lib.mjs';
+import { gateApprovalFromArgv, readJson, routingPass, skillSlug } from './flow-lib.mjs';
 import { sandbox, streamClaude } from './sandbox-lib.mjs';
 
 // Every output write refuses symlinks: the flow dir is model-influenced, and a
@@ -160,16 +160,14 @@ gateApprovalFromArgv(fileURLToPath(import.meta.url));
 // BladeForge: routing eval over the whole marketplace. Each case is one query from
 // evals/routing.json with its owner. Every marketplace skill is installed as a probe named
 // `<plugin>-<skill>`, the query runs as a nested `claude -p`, and the run stops at the first Skill
-// call: that call is where the query was routed. An owned case passes when its owner was called
-// first. A case owned by "none" came from a skill's should-not-trigger list; it passes when that
-// skill, named in `not`, was not called. A sibling taking it is not a failure, because such a query
+// call: that call is where the query was routed. An owned case passes when its owner, or a skill
+// in its `accept` list, was called first. A case owned by "none" came from a skill's
+// should-not-trigger list; it passes when that skill, named in `not`, was not called. A sibling taking it is not a failure, because such a query
 // often belongs to the sibling - the confusion table in routing-report.mjs shows who took what.
 
 // One query's wall-clock budget, the same as the trigger runner's, so cost and timing compare.
 const TRIGGER_TIMEOUT_S = 40;
 const ROUTING = 'evals/routing.json';
-
-const slugOf = (id) => id.replace(':', '-').toLowerCase().replace(/[^a-z0-9-]/g, '-');
 
 /** One case per routing.json entry; `_state.json.only_ids` or `.split` trims the run. */
 async function loadCases() {
@@ -178,7 +176,7 @@ async function loadCases() {
   const only = Array.isArray(st.only_ids) ? new Set(st.only_ids.map(String)) : null;
   return readJson(ROUTING).cases
     .filter(c => (!only || only.has(c.id)) && (!st.split || c.split === st.split))
-    .map(c => ({ id: c.id, prompt: c.query, owner: c.owner, not: c.not ?? null, tags: [c.owner === 'none' ? 'none' : 'owned', c.split] }));
+    .map(c => ({ id: c.id, prompt: c.query, owner: c.owner, not: c.not ?? null, accept: c.accept ?? [], tags: [c.owner === 'none' ? 'none' : 'owned', c.split] }));
 }
 
 // Every marketplace skill as a probe, built once per runner process, with one hash over all
@@ -227,12 +225,10 @@ async function runCase(input, ctx) {
   }
 }
 
-/** Owned: the owner was called first. None: the skill it came from was not called. */
+/** routingPass in flow-lib.mjs decides; the report applies the same rule to the saved `routed`. */
 async function gradeCase(input, run, ref, ctx) {
   const routed = run.routed;
-  const pass = input.owner === 'none'
-    ? (input.not ? routed !== slugOf(input.not) : routed === null)
-    : routed === slugOf(input.owner);
+  const pass = routingPass(input, routed);
   return {
     grade: { pass: pass ? 1 : 0, fired: routed ? 1 : 0 },
     explanation: { pass: `owner=${input.owner}${input.not ? ` not=${input.not}` : ''}, routed=${routed ?? 'none'}` },

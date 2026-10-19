@@ -7,6 +7,7 @@ import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
 import { seed, splitOf } from './build-routing.mjs';
 import { routingReport } from './routing-report.mjs';
+import { routingPass } from './flow-lib.mjs';
 
 test('seed: a should-trigger query is owned; a should-not query becomes none with not', () => {
   const { cases, contested } = seed([
@@ -40,10 +41,22 @@ test('split: the slot comes from the id alone, so it never moves', () => {
 test('report: a case passes on a majority of its reps, and steals are counted per run', () => {
   const cases = [{ id: 'x', owner: 'p:a' }, { id: 'y', owner: 'p:a' }];
   const rows = [
-    { prompt_id: 'x', grade: { pass: 1 }, routed: 'p-a' }, { prompt_id: 'x', grade: { pass: 1 }, routed: 'p-a' }, { prompt_id: 'x', grade: { pass: 0 }, routed: 'p-b' },
-    { prompt_id: 'y', grade: { pass: 0 }, routed: 'p-b' }, { prompt_id: 'y', grade: { pass: 0 }, routed: null }, { prompt_id: 'y', grade: { pass: 1 }, routed: 'p-a' },
+    { prompt_id: 'x', routed: 'p-a' }, { prompt_id: 'x', routed: 'p-a' }, { prompt_id: 'x', routed: 'p-b' },
+    { prompt_id: 'y', routed: 'p-b' }, { prompt_id: 'y', routed: null }, { prompt_id: 'y', routed: 'p-a' },
   ];
   const { score, confusion } = routingReport(rows, cases);
   assert.deepEqual(score, [{ owner: 'p:a', cases: 2, mean: 0.5, ci_half_width: 0.707 }]);
   assert.deepEqual(confusion, [{ pair: 'p:a -> p-b', runs: 2 }, { pair: 'p:a -> nothing', runs: 1 }]);
+});
+
+test('pass: accept lets a second skill be right, and a none case fails only on its own skill', () => {
+  const owned = { owner: 'p:deploy', accept: ['p:mcp'] };
+  assert.equal(routingPass(owned, 'p-deploy'), true);
+  assert.equal(routingPass(owned, 'p-mcp'), true);
+  assert.equal(routingPass(owned, 'p-other'), false);
+  assert.equal(routingPass(owned, null), false);
+  const none = { owner: 'none', not: 'p:mcp' };
+  assert.equal(routingPass(none, 'p-other'), true);
+  assert.equal(routingPass(none, null), true);
+  assert.equal(routingPass(none, 'p-mcp'), false);
 });

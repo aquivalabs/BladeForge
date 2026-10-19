@@ -3,7 +3,7 @@
 Status: in progress, phases 3 and 4 done, 2b built · Owner: the marketplace maintainer · Started: 2026-10-16
 
 Now: phases 3 and 4 merged as #96 (2026-10-19). Phase 2b is on `feat/routing-set`: the set, its
-runner and a first pass over the test split are done; the first climb target is `salesforce:dx_mcp`.
+runner and a first pass over the test split are done; the first climb target is `scout:plugin-sync`.
 
 Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
 likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
@@ -212,8 +212,14 @@ window (0.13% per run, split across two windows so that no run fell into paid ov
 - With about 5 test cases per skill, a per-skill score carries ±0.45 or more; the pair counts and
   the "no skill fired" counts are the usable signal so far.
 
-Reading: `dx_mcp` is too broad - it takes `sf-deploy-test`'s queries and one it should refuse - so
-its description is the first climb target. The larger finding is under-firing: `scout:scout`,
+Reading, corrected the same day: `dx_mcp` was not stealing. `sf-deploy-test` is the CLI fallback
+and its own description says to prefer the dx MCP, so `dx_mcp` taking a deploy-and-test request is
+what both descriptions ask for. Its eight deploy cases now carry `accept: ["salesforce:dx_mcp"]`;
+the source-tracking error case stays `sf-deploy-test`'s alone. The report regrades saved rows with
+the same `routingPass` rule the runner uses, so the correction applies to this pass too. The
+`scout:scout` misses are partly the crowded sandbox itself: with all 44 skills installed the agent
+answers "what skills exist" from its own skill list. `scout:plugin-sync` missed queries nearly
+verbatim from its description, so it is the first climb target. The larger finding is under-firing: `scout:scout`,
 `scout:plugin-sync`, `frontend-css:responsive-layout`, `tests:apex` and `i18n:ui-strings` each lost
 both or half of their test cases to "nothing fired".
 

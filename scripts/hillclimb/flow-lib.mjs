@@ -81,6 +81,19 @@ export function splitScore(rows, ids) {
   };
 }
 
+/** A routing.json owner id as the probe slug the runner installs: `<plugin>-<skill>`. */
+export const routingSlug = (id) => id.replace(':', '-').toLowerCase().replace(/[^a-z0-9-]/g, '-');
+
+/**
+ * Whether a routing decision is right for a case. An owned case passes when its owner, or a skill
+ * in its `accept` list, was called first; a person adds `accept` where two skills are both right by
+ * their own descriptions. A "none" case passes when the skill named in `not` was not called.
+ */
+export function routingPass(c, routed) {
+  if (c.owner === 'none') return c.not ? routed !== routingSlug(c.not) : routed == null;
+  return [c.owner, ...(c.accept ?? [])].some(id => routed === routingSlug(id));
+}
+
 /**
  * Two arms' pass rates compared: the effect is a minus b, the noise is the half-width of that
  * difference, sqrt(1/n_a + 1/n_b), and the verdict follows from those two alone. n counts CASES,
