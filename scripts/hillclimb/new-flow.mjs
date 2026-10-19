@@ -5,9 +5,14 @@
 // Default flow dir: .claude/hillclimb/<plugin>-<skill>-trigger (or -crowded).
 // The split is random by a fixed seed and stratified by polarity, never chosen
 // by score, and it is written once: an existing _state.json is never overwritten.
+//
+// Harness approval is reused, never granted: when another flow already holds a
+// human-recorded harness_sha for byte-identical harness code, the new flow copies
+// it. Otherwise the runner refuses until the maintainer runs --approve-harness.
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
+import { approvedSha, harnessSha } from './harness-sha.mjs';
 
 const SEED = 20261016;
 const argv = process.argv.slice(2);
@@ -44,6 +49,10 @@ for (const pos of [true, false]) {
   test.push(...ids.slice(k));
 }
 
+const HARNESS = ['scripts/hillclimb/trigger-runner.mjs', 'scripts/hillclimb/skill-description.mjs'];
+const sha = harnessSha(HARNESS);
+const approvedIn = approvedSha(sha);
+
 mkdirSync(flow, { recursive: true });
 writeFileSync(statePath, JSON.stringify({
   skill_path: relative(process.cwd(), skill),
@@ -53,8 +62,12 @@ writeFileSync(statePath, JSON.stringify({
   approve_each_round: false,
   train_ids: train,
   test_ids: test,
-  harness_paths: ['scripts/hillclimb/trigger-runner.mjs', 'scripts/hillclimb/skill-description.mjs'],
+  harness_paths: HARNESS,
+  ...(approvedIn ? { harness_sha: sha } : {}),
   metrics: [{ id: 'pass', kind: 'binary', label: 'Pass' }, { id: 'fired', kind: 'binary', label: 'Fired' }],
 }, null, 2) + '\n');
 console.log(`${flow}: ${cases.length} cases (${cases.filter(c => c.pos).length} should-trigger), `
   + `train ${train.length} / test ${test.length}, ${crowded ? 'crowded' : 'isolated'}`);
+console.log(approvedIn
+  ? `harness approval reused from ${approvedIn} (same code, sha ${sha.slice(0, 12)})`
+  : `harness not yet approved for this code (sha ${sha.slice(0, 12)}): the maintainer runs the first runner command with --approve-harness`);
