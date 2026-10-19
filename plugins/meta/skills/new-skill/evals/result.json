@@ -195,57 +195,57 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-10-19T21:00:00",
+    "scanned_at": "2026-10-19T21:30:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "e946c185cc8a893d028ad0bfa44ea0476199473e765be438bf6e04c1e80bdbe8",
+    "scanned_hash": "d09df2269541851f59dcd130241cceef172563b9f0ae46eb7ba103d075803039",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "the edited block and the reference line are prose and a shell snippet addressed to the author; the added hillclimb step tells the author to run /claude-api hillclimb and save-result --climb, nothing aimed at the reading agent; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added"
+        "note": "the edited block and the reference line are prose and a shell snippet addressed to the author; the added hillclimb step tells the author to run /claude-api hillclimb and save-result --climb, nothing aimed at the reading agent; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added; 2026-10-19 edit: a code comment now points at meta:skill-eval for who approves the harness; no command, host or credential added"
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "the named scripts write only under .claude/hillclimb/ and the skill's evals/result.json; the edit names a local repo script that writes evals/result.json; nothing leaves the machine; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added"
+        "note": "the named scripts write only under .claude/hillclimb/ and the skill's evals/result.json; the edit names a local repo script that writes evals/result.json; nothing leaves the machine; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added; 2026-10-19 edit: a code comment now points at meta:skill-eval for who approves the harness; no command, host or credential added"
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "no embedded key, token or credential; the edit adds no key, token or credential; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added"
+        "note": "no embedded key, token or credential; the edit adds no key, token or credential; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added; 2026-10-19 edit: a code comment now points at meta:skill-eval for who approves the harness; no command, host or credential added"
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "the snippet runs repo scripts whose only deletes are their own temp sandboxes and that sandbox's auto-memory dir; no destructive command in the skill; the edit adds no shell command beyond a mention of a local script that writes one JSON file; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added"
+        "note": "the snippet runs repo scripts whose only deletes are their own temp sandboxes and that sandbox's auto-memory dir; no destructive command in the skill; the edit adds no shell command beyond a mention of a local script that writes one JSON file; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added; 2026-10-19 edit: a code comment now points at meta:skill-eval for who approves the harness; no command, host or credential added"
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "plain prose and commands; plain prose; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added"
+        "note": "plain prose and commands; plain prose; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added; 2026-10-19 edit: a code comment now points at meta:skill-eval for who approves the harness; no command, host or credential added"
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "no external host beyond the nested claude -p the skill already documented; the edit contacts no host; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added"
+        "note": "no external host beyond the nested claude -p the skill already documented; the edit contacts no host; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added; 2026-10-19 edit: a code comment now points at meta:skill-eval for who approves the harness; no command, host or credential added"
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "no credential-store read; the edit reads no credential store; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added"
+        "note": "no credential-store read; the edit reads no credential store; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added; 2026-10-19 edit: a code comment now points at meta:skill-eval for who approves the harness; no command, host or credential added"
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "no sudo, setuid, cron, shell profile or launch agent; the edit adds no sudo, cron, profile or launch agent; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added"
+        "note": "no sudo, setuid, cron, shell profile or launch agent; the edit adds no sudo, cron, profile or launch agent; 2026-10-19 edit: softens one sentence about the quality stage; no command, host or credential added; 2026-10-19 edit: a code comment now points at meta:skill-eval for who approves the harness; no command, host or credential added"
       }
     ]
   }

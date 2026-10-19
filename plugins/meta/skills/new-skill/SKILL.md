@@ -327,7 +327,7 @@ by version and lags behind. `meta:skill-eval` holds the full procedure; in short
 ```bash
 node scripts/hillclimb/new-flow.mjs <skill-dir>          # once per skill
 node scripts/hillclimb/trigger-runner.mjs --flow <flow> --variant baseline \
-  --model claude-opus-5-5 --reps 5 --concurrency 8      # the maintainer approves the harness first
+  --model claude-opus-5-5 --reps 5 --concurrency 8      # approve the harness first: meta:skill-eval step 3
 node scripts/hillclimb/save-result.mjs <flow> baseline
 ```
 

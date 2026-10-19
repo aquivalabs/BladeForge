@@ -1,6 +1,6 @@
 # Plan — move skill measurement onto build-eval and hillclimb
 
-Status: in progress, phase 4 · Owner: the marketplace maintainer · Started: 2026-10-16
+Status: in progress, phases 3 and 4 done, next 2b with 5 · Owner: the marketplace maintainer · Started: 2026-10-16
 
 Now: phase 2 merged as #95 (2026-10-19). Phases 3 and 4 are done on `feat/quality-stage` (#96).
 Next: phase 2b with phase 5.
@@ -329,8 +329,9 @@ showed the noise needs. Re-run quality skill by skill, starting with the most us
   a fixed directory hit the cache. The cause is not known yet.
 - Answered: hillclimb accepts an existing runner (its Step 0 asks for one), and the served-model
   check passes, because `claude -p` reports `claude-opus-5-5`.
-- `--approve-harness` cannot be delegated: auto mode refuses it from a subagent. The maintainer
-  runs it.
+- `--approve-harness` was refused by auto mode from a subagent, so at first the maintainer ran it.
+  Superseded 2026-10-19: an agent may approve a reviewed, committed harness; see the cross-cutting
+  rules.
 
 - **Crowded screening, `--reps 2`, 2026-10-16:** `triage` 34/36, `sf-deploy-test` 36/36,
   `wittgenstein` 36/36, `commit` 38/38, `architecture` 40/44. All four `architecture` misses are
