@@ -83,9 +83,10 @@ Two properties, and they are measured **separately** because they fail separatel
    names the moments to reach for the skill, in the words a real request uses, not how the
    skill works inside. A description that is too *broad* is worse than one too *narrow*: it
    wakes on unrelated work forever, paying on every prompt and helping on few. This is the
-   `trigger` half. `plugins/meta/skills/skill-eval/scripts/score-description.py` runs each
-   rubric query as a nested agent and watches only whether the Skill tool fires. The score
-   reads as a fraction (`16/18`, accuracy `0.889`). **A negative case that fires is a real
+   `trigger` half. `scripts/hillclimb/trigger-runner.mjs` runs each rubric query as an
+   isolated nested agent and watches only whether the Skill tool fires for this skill. The
+   score reads as a fraction over (case, rep) rows (`85/90`, accuracy `0.944`), and the
+   test split is reported with its noise interval. **A negative case that fires is a real
    failure**, whatever the skill's type — a too-broad description grabs work that was never
    yours.
 
@@ -111,7 +112,7 @@ and merging the scores would let the hollow one borrow the radiant one's number.
 uses **one yes/no per criterion** — not a holistic 1–10, which hides *which* part failed —
 and a **paired on/off design** (roughly ten tasks is the floor for a real effect). The
 blocking gate stays **deterministic and agent-free**: no LLM runs in CI, because a merge
-must not wait on a non-deterministic jury; `skillaxe` and `score-description.py` are run by
+must not wait on a non-deterministic jury; `skillaxe` and the trigger runner are run by
 the author, locally, on demand.
 
 The full mechanism — the record shapes, the freshness hashes, the exact gate rules — is
