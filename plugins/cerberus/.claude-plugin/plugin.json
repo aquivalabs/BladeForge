@@ -1,7 +1,7 @@
 {
   "name": "cerberus",
   "description": "CERBERUS \u2014 the two-headed guard at the gate for a PUBLIC skills marketplace. A PostToolUse hook fires on every skill / reference / script / eval / manifest edit and reminds you to run BOTH heads before committing: cerberus:leak-check (outward \u2014 no real work identifier or secret escapes into the public marketplace) and cerberus:security-scan (inward \u2014 the eight-point consumer-safety checklist: prompt injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation, so nothing unsafe reaches whoever installs the skill). Before a push it also guards the commits themselves \u2014 their messages, authors and branch name, which no file check reads: a classic PreToolUse hook has a nested claude judge the outgoing commits and blocks a push that leaks or that it cannot judge, and on Claude Code 2.1.292 or newer a push-guard mod judges them in-process first; an older Claude Code gets a red notice at session start to update. The verdict cache is guarded best-effort, so the hook stops a forgotten check, not a deliberate forgery. Both are agent judgment passes, no denylist by design \u2014 a list of the real names to catch would itself be the leak; the intelligence lives in the agent, not a regex.",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "keywords": [
     "security",
     "leak-guard",
