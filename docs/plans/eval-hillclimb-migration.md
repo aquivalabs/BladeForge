@@ -414,9 +414,8 @@ showed the noise needs. Re-run quality skill by skill, starting with the most us
 
 ## Open work
 
-Open tasks, questions and deferred items live in Linear, project
-[BladeForge](https://linear.app/rmasl-aquivalabs/project/bladeforge-a7d0b328f463), not in this file.
-The ones this plan produced:
+Open tasks, questions and deferred items live in the maintainer's private tracker, not in this
+file; see "Where the work is tracked" in AGENTS.md. The ones this plan produced:
 
 | issue | what |
 |---|---|
