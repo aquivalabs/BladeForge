@@ -10,13 +10,14 @@ own file tree and evals/result.json, emits a multi-page static site under showca
     showcase/assets/base.css            shared styles
     showcase/assets/dots.js             the interactive point-field background
     showcase/assets/video/<slug>.mp4    optional demo film; a page shows it when the file exists
+    showcase/assets/extras/<slug>/      optional extra material (films, images, PDFs, any file); a page lists it
 
 Deliberately shows only REAL, curated data — purpose, when-it-fires, side effects, deps,
 the file bundle (names only), and the measured trigger/effect/security metrics from
 evals/result.json. The SKILL.md BODY is NOT embedded: bodies can carry real identifiers,
 and this page is public, so each page links to the body on GitHub instead of copying it.
 """
-import json, os, math, hashlib, html as _html
+import json, os, math, hashlib, html as _html, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CATALOG = os.path.join(ROOT, "plugins/scout/skills/scout/catalog.json")
@@ -268,6 +269,49 @@ def demo_block(slug):
     if not has_demo(slug): return ""
     return f"""<section class="p-sec"><h3>see it</h3><video class="demo" src="../assets/video/{esc(slug)}.mp4?v={demo_version(slug)}" autoplay muted loop playsinline preload="metadata"></video></section>"""
 
+# --- extras: anything dropped into showcase/assets/extras/<slug>/ shows on that skill's page ---
+EXTRA_VIDEO = (".mp4", ".webm")
+EXTRA_IMAGE = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg")
+
+def file_version(path):
+    with open(path, "rb") as f:
+        return hashlib.sha1(f.read()).hexdigest()[:10]
+
+def extras(slug):
+    """The extra files of one skill, in manifest order: extras.json lists {file, title, caption}; files it
+    does not name follow in name order, titled by their file name. A film may set poster_at, the second its still
+    frame is taken from before it plays (default 0.1). Only plain files directly in the folder."""
+    d = os.path.join(OUTDIR, "assets", "extras", slug)
+    if not os.path.isdir(d): return []
+    names = sorted(n for n in os.listdir(d) if not n.startswith(".") and n != "extras.json" and os.path.isfile(os.path.join(d, n)))
+    meta = []
+    mp = os.path.join(d, "extras.json")
+    if os.path.exists(mp):
+        meta = [m for m in json.load(open(mp)) if isinstance(m, dict) and m.get("file") in names]
+    named = {m["file"] for m in meta}
+    meta += [{"file": n} for n in names if n not in named]
+    return [{"file": m["file"], "title": m.get("title") or m["file"], "caption": m.get("caption", ""),
+             "poster_at": m.get("poster_at"), "path": os.path.join(d, m["file"])} for m in meta]
+
+def extras_block(slug):
+    """A films-images-files section when showcase/assets/extras/<slug>/ holds anything; else nothing."""
+    items = extras(slug)
+    if not items: return ""
+    out = []
+    for it in items:
+        url = f"../assets/extras/{urllib.parse.quote(slug)}/{urllib.parse.quote(it['file'])}?v={file_version(it['path'])}"
+        ext = os.path.splitext(it["file"])[1].lower()
+        if ext in EXTRA_VIDEO:
+            at = it["poster_at"] if isinstance(it["poster_at"], (int, float)) and it["poster_at"] >= 0 else 0.1
+            media = f'<video class="extra-media" src="{esc(url)}#t={at:g}" controls playsinline preload="metadata"></video>'
+        elif ext in EXTRA_IMAGE:
+            media = f'<a href="{esc(url)}" target="_blank" rel="noopener"><img class="extra-media" src="{esc(url)}" alt="{esc(it["title"])}" loading="lazy"></a>'
+        else:
+            media = f'<a class="srclink ghost" href="{esc(url)}" target="_blank" rel="noopener" download>↓ {esc(it["file"])} · {kb(os.path.getsize(it["path"]))}</a>'
+        cap = f'<div class="extra-cap">{esc(it["caption"])}</div>' if it["caption"] else ""
+        out.append(f'<figure class="extra"><div class="extra-title">{esc(it["title"])}</div>{media}{cap}</figure>')
+    return f'<section class="p-sec"><h3>more to see</h3><div class="extras">{"".join(out)}</div></section>'
+
 def skill_page(s):
     ns, nm = s["id"].split(":",1)
     src=f"{REPO}/tree/main/plugins/{ns}/skills/{nm}"
@@ -287,6 +331,7 @@ def skill_page(s):
   </header>
   <div class="p-body">
     {demo_block(s['slug'])}
+    {extras_block(s['slug'])}
     <section class="p-sec"><h3>fires when</h3><div class="when">{esc(s['activates'])}</div></section>
     {f'<section class="p-sec"><h3>best for</h3><div class="when">{esc(s["best"])}</div></section>' if s['best'] else ''}
     {measure_block(s)}
@@ -569,6 +614,8 @@ footer code{font-family:"JetBrains Mono",monospace;color:var(--muted)}
 .srclink:hover{filter:brightness(1.08)}.srclink.ghost{color:var(--accent);background:transparent;border:1px solid var(--accent)}
 .p-body{display:grid;gap:1.3rem}
 .demo{display:block;width:100%;aspect-ratio:16/9;border-radius:10px;background:#101217;box-shadow:var(--shadow)}
+.extras{display:grid;gap:1.2rem}.extra{margin:0}.extra-title{font-weight:700;margin-bottom:.45rem}
+.extra-media{display:block;width:100%;border-radius:10px;background:#101217;box-shadow:var(--shadow)}.extra-cap{color:var(--muted);font-size:.92rem;margin-top:.45rem}
 .p-sec>h3{font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--hd);margin:0 0 .6rem;padding-bottom:.35rem;border-bottom:1px solid color-mix(in srgb,var(--hd) 30%,transparent)}
 .when{font-size:.92rem;color:var(--ink);border-left:2px solid color-mix(in srgb,var(--hd) 45%,transparent);padding-left:.75rem}
 .kv{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
