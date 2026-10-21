@@ -102,6 +102,8 @@ footer code{font-family:"JetBrains Mono",monospace;color:var(--muted)}
 .srclink:hover{filter:brightness(1.08)}.srclink.ghost{color:var(--accent);background:transparent;border:1px solid var(--accent)}
 .p-body{display:grid;gap:1.3rem}
 .demo{display:block;width:100%;aspect-ratio:16/9;border-radius:10px;background:#101217;box-shadow:var(--shadow)}
+.extras{display:grid;gap:1.2rem}.extra{margin:0}.extra-title{font-weight:700;margin-bottom:.45rem}
+.extra-media{display:block;width:100%;border-radius:10px;background:#101217;box-shadow:var(--shadow)}.extra-cap{color:var(--muted);font-size:.92rem;margin-top:.45rem}
 .p-sec>h3{font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--hd);margin:0 0 .6rem;padding-bottom:.35rem;border-bottom:1px solid color-mix(in srgb,var(--hd) 30%,transparent)}
 .when{font-size:.92rem;color:var(--ink);border-left:2px solid color-mix(in srgb,var(--hd) 45%,transparent);padding-left:.75rem}
 .kv{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
