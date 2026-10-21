@@ -117,7 +117,7 @@ const renderEdges = (E, t) => E.forEach(({ p, e, lab }) => {
   const a = e.at || 0, k = eo(seg(t, a, a + 0.8)), out = e.out ? eo(seg(t, e.out, e.out + 0.5)) : 0;
   if (!e.dash) { p.style.strokeDasharray = '1'; p.style.strokeDashoffset = String(1 - k); }
   p.style.opacity = String((e.dash ? k : 1) * (1 - out));
-  if (lab) { lab.style.opacity = String(eo(seg(t, e.at + 0.4, e.at + 0.9)) * (1 - out)); const lx = (e.from[0] + e.to[0]) / 2 - 90 + (e.lx || 0), ly = (e.from[1] + e.to[1]) / 2 - 38 + (e.ly || 0); lab.style.transform = 'translate(' + lx + 'px,' + ly + 'px)'; }
+  if (lab) { lab.style.opacity = String(eo(seg(t, a + 0.4, a + 0.9)) * (1 - out)); const lx = (e.from[0] + e.to[0]) / 2 - 90 + (e.lx || 0), ly = (e.from[1] + e.to[1]) / 2 - 38 + (e.ly || 0); lab.style.transform = 'translate(' + lx + 'px,' + ly + 'px)'; }
 });
 const buildCaps = (kit, g) => { const c = kit.h('<p class="abs" style="margin:0;width:1680px;font-size:34px;line-height:1.35;color:var(--soft)"></p>'); g.append(c); return c; };
 const renderCaps = (c, caps, t, y) => {

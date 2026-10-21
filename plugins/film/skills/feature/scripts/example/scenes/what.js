@@ -1,6 +1,5 @@
 // what — the definition through an everyday analogy: a recipe has a fixed order. The "Frost" step tries to jump
 // before "Bake", slides back, and the card flips into the six steps Price stack runs on every cart.
-const shakeX = (t, a, amp, d) => { const k = seg(t, a, a + (d || 0.5)); return k > 0 && k < 1 ? Math.sin(k * Math.PI * 7) * amp * (1 - k) : 0; };
 const ROW = 76;
 const stepHTML = (n, text) => '<div class="abs" style="width:620px;height:62px;box-sizing:border-box;display:flex;align-items:center;gap:18px;padding:0 18px;border-radius:12px;border:2px solid var(--line);background:var(--card);font-size:28px;font-weight:600;white-space:nowrap"><span class="n" style="flex:none;width:38px;height:38px;border-radius:50%;background:var(--primary-wash);color:var(--primary-2);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center">' + n + '</span><span style="flex:1">' + text + '</span><span class="mk" style="flex:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--on);font-size:22px;font-weight:800"></span></div>';
 

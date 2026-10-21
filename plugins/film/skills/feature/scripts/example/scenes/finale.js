@@ -1,14 +1,12 @@
 // finale — chapters 6 and 7 in three beats: (1) the same cart without and with the feature, (2) the proof typed in
 // a terminal with a counting number and its "not proven yet" line, (3) three problems, two topics, the invitation.
 const B2 = 10.5, B3 = 21.0;
-const eur = (v) => '€' + v.toFixed(2);
-const K = (t, a, d) => eo(seg(t, a, a + (d || 0.5)));
-const shakeX = (t, a, amp, d) => { const k = seg(t, a, a + (d || 0.5)); return k > 0 && k < 1 ? Math.sin(k * Math.PI * 7) * amp * (1 - k) : 0; };
 const popS = (t, a) => lerp(0.5, 1, eob(seg(t, a, a + 0.35), 2.2));
 const place = (s, x, y, o, sc) => { s.opacity = String(o); s.transform = 'translate(' + x + 'px,' + y + 'px)' + (sc != null && sc !== 1 ? ' scale(' + sc + ')' : ''); };
 const beat = (t, a, b) => K(t, a, 0.5) * (b == null ? 1 : 1 - K(t, b - 0.5, 0.5));
 const line = (label, value, cls, extra) => '<div class="row ' + (cls || '') + '" style="height:76px;padding:0 30px;border-bottom:1px solid var(--line);font-size:28px;' + (extra || '') + '"><span>' + label + '</span><span style="display:flex;align-items:center;gap:16px"><span class="num" style="font-weight:800">' + value + '</span><span class="mk" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--on);font-weight:800;font-size:24px"></span></span></div>';
 const OUT = [['price-list', 18], ['resident', 12], ['membership', 21], ['bundle', 26], ['coupon', 34], ['tax', 17]];
+const TOTAL = OUT.reduce((s, [, c]) => s + c, 0);
 
 kit.scene('finale', {
   init(kit) {
@@ -74,8 +72,8 @@ kit.scene('finale', {
     this.tbody.textContent = txt;
     const lastLine = done + 5 * 0.32;
     const sum = OUT.reduce((s, [, c], i) => s + (t2 >= done + i * 0.32 ? c : 0), 0);
-    const shown = Math.round(lerp(0, 128, eio(seg(t2, done, lastLine + 0.6))));
-    this.bigN.textContent = String(Math.min(sum === 128 ? 128 : sum + 0, Math.max(shown, 0)));
+    const shown = Math.round(lerp(0, TOTAL, eio(seg(t2, done, lastLine + 0.6))));
+    this.bigN.textContent = String(Math.min(sum, Math.max(shown, 0)));
     place(this.big.style, 1180, 310 + 20 * (1 - K(t2, done, 0.6)), K(t2, done, 0.6) * o2);
     const land = lastLine + 0.6, br = seg(t2, land, land + 0.8);
     place(this.bring, 1180 + 140 - 110, 310 + 90 - 110, br > 0 && br < 1 ? 0.8 * (1 - br) * o2 : 0, lerp(1, 1.6, eo(br)));

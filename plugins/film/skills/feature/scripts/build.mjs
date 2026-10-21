@@ -13,7 +13,7 @@
 //
 // Writes <work_dir>/out/: scene-<id>.js (kit + scene), base.css, preview.html (?s=<id>&t=<sec>),
 // docs/*.json and docs/writes.json — the ready `writes` array for ONE ArtifactData batch, film/meta first, film/script last.
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -23,9 +23,12 @@ const fail = (msg) => { console.error('build: ' + msg); process.exit(1); };
 const dir = resolve(process.argv[2] ?? fail('usage: node build.mjs <work_dir>'));
 const film = JSON.parse(readFileSync(join(dir, 'film.json'), 'utf8'));
 for (const k of ['title', 'scenes']) if (!(k in film)) fail('film.json misses ' + k);
+if (!Array.isArray(film.scenes) || !film.scenes.length) fail('film.json scenes must be a non-empty array');
+const ids = film.scenes.map((s) => s.id), dup = ids.find((id, i) => ids.indexOf(id) !== i);
+if (dup) fail('scene id ' + JSON.stringify(dup) + ' is used twice');
 const KIT = readFileSync(join(HERE, 'kit.js'), 'utf8') + (film.helpers || []).map((h) => '\n' + readFileSync(join(dir, h), 'utf8')).join('');
 const out = join(dir, 'out'), docsDir = join(out, 'docs');
-mkdirSync(docsDir, { recursive: true });
+rmSync(out, { recursive: true, force: true }); mkdirSync(docsDir, { recursive: true });
 
 let total = 0;
 const sceneText = {};
@@ -46,7 +49,9 @@ const css = readFileSync(existsSync(join(dir, 'base.css')) ? join(dir, 'base.css
 writeFileSync(join(out, 'base.css'), css);
 const fonts = film.fonts || {};
 const sans = fonts.sans || { family: 'Inter', or: 'inter', weights: [400, 600, 800] };
-const mono = fonts.mono || { family: 'JetBrains Mono', or: 'dm-mono', weights: [500, 700] };
+const mono = fonts.mono || { family: 'DM Mono', or: 'dm-mono', weights: [400, 500] };
+for (const f of [sans, mono]) if (typeof f.family !== 'string' || !Array.isArray(f.weights) || !f.weights.length) fail('each font needs a family and a weights array');
+for (const f of [sans, mono]) f.weights = [...f.weights].sort((x, y) => x - y);
 const gf = (f) => 'family=' + f.family.replace(/ /g, '+') + ':wght@' + f.weights.join(';');
 writeFileSync(join(out, 'preview.html'), readFileSync(join(HERE, 'preview.html'), 'utf8')
   .replace('__FONTS__', () => gf(sans) + '&' + gf(mono)).replace('__SANS__', () => sans.family).replace('__MONO__', () => mono.family));

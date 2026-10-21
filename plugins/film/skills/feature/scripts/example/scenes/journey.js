@@ -3,9 +3,6 @@
 // Every amount is invented for the example and adds up: 116.13 -> 115.63 -> 108.43 -> 84.53 -> 79.43 -> 84.20.
 const STARTS = [0, 15, 30, 45, 60, 75];
 const W = 1920;
-const eur = (v) => '€' + v.toFixed(2);
-const K = (t, a, d) => eo(seg(t, a, a + (d || 0.5)));
-const shakeX = (t, a, amp, d) => { const k = seg(t, a, a + (d || 0.5)); return k > 0 && k < 1 ? Math.sin(k * Math.PI * 7) * amp * (1 - k) : 0; };
 const popS = (t, a) => lerp(0.5, 1, eob(seg(t, a, a + 0.35), 2.2));
 const place = (s, x, y, o, sc) => { s.opacity = String(o); s.transform = 'translate(' + x + 'px,' + y + 'px)' + (sc != null && sc !== 1 ? ' scale(' + sc + ')' : ''); };
 // The running total and the rule counter, as keyframes on the film clock: [at, value, seconds].

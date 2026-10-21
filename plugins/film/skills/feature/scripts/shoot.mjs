@@ -21,7 +21,7 @@ rmSync(shots, { recursive: true, force: true }); mkdirSync(shots, { recursive: t
 const MAC = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const chrome = process.env.CHROME || (existsSync(MAC) ? MAC : 'google-chrome');
 
-const asked = process.argv.slice(3).map((a) => { const [s, t] = a.split(':'); return [s, +t]; });
+const asked = process.argv.slice(3).map((a) => { const [s, t] = a.split(':'); if (!s || t === undefined || !Number.isFinite(+t)) { console.error('shoot: frame ' + JSON.stringify(a) + ' must be <scene>:<seconds>'); process.exit(1); } return [s, +t]; });
 const frames = asked.length ? asked : film.scenes.flatMap((s) => [...new Set([+(s.dur * 0.4).toFixed(1), ...(s.shots || []), Math.max(1, s.dur - 0.3)])].sort((a, b) => a - b).map((t) => [s.id, t]));
 const errors = [];
 const run = (url, png, w, h) => spawnSync(chrome, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--enable-logging=stderr', '--log-level=0', '--v=0',

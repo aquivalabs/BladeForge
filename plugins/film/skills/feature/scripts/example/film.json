@@ -2,14 +2,110 @@
   "title": "Price stack",
   "look": "Feature briefing for a fictional demo product, Acme Market: warm paper ground, blue for the product, one orange accent for what the screen is about, red only for a failure.",
   "background": "#FAF7F2",
-  "palette": ["#FAF7F2", "#1B2A4A", "#3A78C9", "#EE8130"],
-  "fonts": { "sans": { "family": "Inter", "or": "inter", "weights": [400, 600, 700, 800] } },
-  "scenes": [
-    { "id": "stakes", "name": "How it goes today", "dur": 26, "file": "scenes/stakes.js", "desc": "Title, then Maya's cart: €84.20 in the cart, €79.10 at checkout, a refund a week later.", "shots": [2, 8, 12.5, 17, 20, 23.5] },
-    { "id": "what", "name": "What it is", "dur": 12, "file": "scenes/what.js", "desc": "A recipe has a fixed order; Price stack prices every cart in six steps.", "shots": [3, 5.5, 9] },
-    { "id": "who", "name": "Who uses it", "dur": 8, "file": "scenes/who.js", "desc": "Shoppers, support agents and finance read the same total.", "shots": [3, 5] },
-    { "id": "journey", "name": "One cart, start to finish", "dur": 90, "file": "scenes/journey.js", "desc": "One camera ride over six stations: cart, region, resident and member, bundle and coupon, tax, receipt.", "shots": [5.5, 12, 16, 21.5, 27, 33.5, 37.5, 43, 47.5, 51, 55.5, 58, 62.5, 66, 72, 79, 84, 88] },
-    { "id": "finale", "name": "What works and what is open", "dur": 34, "file": "scenes/finale.js", "desc": "Both outcomes side by side, the proof with its not-proven line, three problems, two topics, the invitation.", "shots": [3.6, 7.5, 13, 17, 20, 24, 28, 31] }
+  "palette": [
+    "#FAF7F2",
+    "#1B2A4A",
+    "#3A78C9",
+    "#EE8130"
   ],
-  "score": "score.js"
+  "fonts": {
+    "sans": {
+      "family": "Inter",
+      "or": "inter",
+      "weights": [
+        400,
+        600,
+        700,
+        800
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "id": "stakes",
+      "name": "How it goes today",
+      "dur": 26,
+      "file": "scenes/stakes.js",
+      "desc": "Title, then Maya's cart: €84.20 in the cart, €79.10 at checkout, a refund a week later.",
+      "shots": [
+        2,
+        8,
+        12.5,
+        17,
+        20,
+        23.5
+      ]
+    },
+    {
+      "id": "what",
+      "name": "What it is",
+      "dur": 12,
+      "file": "scenes/what.js",
+      "desc": "A recipe has a fixed order; Price stack prices every cart in six steps.",
+      "shots": [
+        3,
+        5.5,
+        9
+      ]
+    },
+    {
+      "id": "who",
+      "name": "Who uses it",
+      "dur": 8,
+      "file": "scenes/who.js",
+      "desc": "Shoppers, support agents and finance read the same total.",
+      "shots": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": "journey",
+      "name": "One cart, start to finish",
+      "dur": 90,
+      "file": "scenes/journey.js",
+      "desc": "One camera ride over six stations: cart, region, resident and member, bundle and coupon, tax, receipt.",
+      "shots": [
+        5.5,
+        12,
+        16,
+        21.5,
+        27,
+        33.5,
+        37.5,
+        43,
+        47.5,
+        51,
+        55.5,
+        58,
+        62.5,
+        66,
+        72,
+        79,
+        84,
+        88
+      ]
+    },
+    {
+      "id": "finale",
+      "name": "What works and what is open",
+      "dur": 34,
+      "file": "scenes/finale.js",
+      "desc": "Both outcomes side by side, the proof with its not-proven line, three problems, two topics, the invitation.",
+      "shots": [
+        3.6,
+        7.5,
+        13,
+        17,
+        20,
+        24,
+        28,
+        31
+      ]
+    }
+  ],
+  "score": "score.js",
+  "helpers": [
+    "lib.js"
+  ]
 }

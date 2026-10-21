@@ -1,8 +1,6 @@
 // stakes — the title card (4 s), then Maya's cart failing without the feature (invented for the demo, footnoted).
 // Local time t = t0 - T0. Three real-looking objects side by side: the cart, the checkout, the support ticket.
 const T0 = 4;
-const eur = (v) => '€' + v.toFixed(2);
-const shakeX = (t, a, amp, d) => { const k = seg(t, a, a + (d || 0.5)); return k > 0 && k < 1 ? Math.sin(k * Math.PI * 7) * amp * (1 - k) : 0; };
 const moneyRow = (label, amount, extra) => '<div class="row" style="height:40px;font-size:22px;' + (extra || '') + '"><span>' + label + '</span><span class="num" style="font-weight:600">' + amount + '</span></div>';
 
 kit.scene('stakes', {

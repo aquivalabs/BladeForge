@@ -2,9 +2,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-10-21T16:09:52",
+    "scanned_at": "2026-10-21T16:18:04",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "58dcc6ef82a3f9836a63de0b7c5f43decd32ae7aa7966a15aa4a6ccee93cbc00",
+    "scanned_hash": "9ce4db0aac5deb9d5f0e94d16331b32c2c298a483a49f6efbddaa76406af4914",
     "checklist": [
       {
         "n": 1,
