@@ -1,0 +1,81 @@
+{
+  "trigger": [
+    {
+      "query": "make a presentation film of the new order-export feature from docs/specs/order-export.md so I can show it to the product leads on friday",
+      "should_trigger": true
+    },
+    {
+      "query": "we shipped the cart price stack (regional prices, member discounts, coupons, tax last). turn the design doc and the PR into a short video briefing for support and finance",
+      "should_trigger": true
+    },
+    {
+      "query": "can you do a claude motion video that explains what TICK-000 changes and why, for the client demo",
+      "should_trigger": true
+    },
+    {
+      "query": "i need an animated walkthrough of the widget-config sync feature for stakeholders: what problem it solves, how one request goes through it, and what's still open",
+      "should_trigger": true
+    },
+    {
+      "query": "build a feature briefing film from this plan and the code in src/checkout, honest, no hype, in russian",
+      "should_trigger": true
+    },
+    {
+      "query": "turn the spec of our new subscription pause feature into a video I can send to the head of sales, so she understands what we built",
+      "should_trigger": true
+    },
+    {
+      "query": "make a motion film presenting the coupon engine refactor to the team, with what works today and the known issues at the end",
+      "should_trigger": true
+    },
+    {
+      "query": "the stakeholders keep misunderstanding the resident-pricing feature. make a short film from the ticket and the design doc that walks one real cart through it",
+      "should_trigger": true
+    },
+    {
+      "query": "make a 20 second promo animation for our product launch with upbeat music and the logo at the end",
+      "should_trigger": false
+    },
+    {
+      "query": "create a slide deck about the checkout redesign for the quarterly review",
+      "should_trigger": false
+    },
+    {
+      "query": "draw a clickable architecture diagram of the order-export classes and how they call each other",
+      "should_trigger": false
+    },
+    {
+      "query": "make the hover film for the git:commit skill on the marketplace showcase page",
+      "should_trigger": false
+    },
+    {
+      "query": "record a how-to tutorial video showing users how to apply a coupon at checkout",
+      "should_trigger": false
+    },
+    {
+      "query": "write release notes for the price stack feature",
+      "should_trigger": false
+    },
+    {
+      "query": "animate a bouncing logo intro for our youtube channel",
+      "should_trigger": false
+    },
+    {
+      "query": "fix the caption that overflows in scene 3 of my existing motion film",
+      "should_trigger": false
+    }
+  ],
+  "acceptance": [
+    "a storyboard exists before any scene: every screen has secs, the total is at most 300, every fact names its source, and every invented fact has a footnote on its screen",
+    "the user saw the storyboard in chat and gave a go-ahead or changes before the film was made",
+    "the film opens with a title of 3-4 s, then the stakes scene: the running example failing without the feature",
+    "one running example is carried through the whole film; each component appears once, as a step of its story",
+    "each showcase station has one real-looking object and one event with an outcome, and a progress counter runs through the story",
+    "no caption is over 15 words, at most two captions per showcase step, no blunt question to the viewer, no fact repeated",
+    "the palette comes from the company design system, else the project's UI tokens, else the user's answer, and has a warm accent",
+    "the finale shows both outcomes of the running example, the proof with a 'not proven yet' line, at most three problems, at most two topics, and an invitation to write to the author",
+    "no competitor or predecessor product is named; no superlative without a sourced number",
+    "every scene was built with scripts/build.mjs, shot with scripts/shoot.mjs (exit 0) and its contact sheet read before the film was published to Claude Motion",
+    "the report gives the film's link, which facts are sourced and which invented, and that the film is private until shared"
+  ]
+}

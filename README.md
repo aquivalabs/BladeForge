@@ -58,6 +58,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable React Flow + ELK page (classes+methods, objects, permission sets, relations); a diagram-model JSON hardened by parallel Sextant reviewers. | [diagram](#diagram) |
 | docs | Documentation standard — four layers with one duty each, a per-section README that states that section's own rules, and one deterministic check that blocks a push when a declared mechanism changes without its doc. | [standard](#standard) |
 | error | Error handling — a framework-agnostic client-side architecture (one code→UX policy table, a state dispatcher, a shared error-tile renderer) plus the uniform `google.rpc.Status` envelope across every layer. | [architecture](#architecture), [format](#format) |
+| film | Feature briefing films in Claude Motion — one honest presentation of a feature: the problem first, one running example through it, what is proven and what is open; the storyboard is reviewed, the scenes are built and checked locally, then published to Claude Motion. | [feature](#feature) |
 | plan-gate | *(project)* PreToolUse hook — blocks Edit/Write to code unless you are off `main` and a plan matching the branch task-id exists. | — (hook only) |
 | frontend-css | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
 | frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
@@ -127,6 +128,9 @@ cuts the fluff. **See the difference:**
 ### error &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="format"></a>**format** — The unified error envelope + reason-code vocabulary: uniform error paths across layers — throwing from a service/route/controller and reading errors on the client.
 - <a id="architecture"></a>**architecture** — The framework-agnostic client-side error-handling architecture: one code→UX policy table as the sole classifier, a state-dispatcher, a shared error-tile renderer that owns escalation, boundary tiers + a single outer floor; role-named with per-framework bindings.
+
+### film &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="feature"></a>**feature** — Turn one feature's spec, plan, code or ticket into an honest briefing film in Claude Motion. The Director writes a storyboard (title, the stakes on a running example, an everyday analogy, who it is for, one showcase ride with an object and an event per step, a three-beat finale), a read-only Braintrust reviews it, the user approves it, the scenes are built and checked frame by frame locally, and the finished film is published to Claude Motion. On-screen copy follows its own voice rules: one idea per caption, at most 15 words, plain-words footnotes. Every invented detail carries a footnote.
 
 ### frontend-css &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="rem"></a>**rem** — Enforce rem units over hardcoded px in CSS/SCSS/Tailwind.

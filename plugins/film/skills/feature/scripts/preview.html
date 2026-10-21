@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Film preview</title>
+<link href="https://fonts.googleapis.com/css2?__FONTS__&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}
+#wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{flex:none;position:relative;width:1920px;height:1080px;overflow:hidden;transform-origin:center;--sans:'__SANS__';--mono:'__MONO__'}
+#clock{position:fixed;left:8px;top:6px;color:#f0bd55;font:14px monospace;z-index:9}</style></head>
+<body><div id="clock"></div><div id="wrap"><div id="stage"></div></div>
+<script>
+// A local stand-in for the Claude Motion kit: enough to render one scene at one time, ?s=<scene>&t=<seconds>.
+const clamp=x=>Math.max(0,Math.min(1,x));
+const kit={scenes:{},seg:(t,a,b)=>clamp((t-a)/(b-a)),lerp:(a,b,x)=>a+(b-a)*x,
+eo:x=>1-Math.pow(1-x,3),eio:x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2,
+eob:(x,s=1.7)=>x<=0?0:1+(s+1)*Math.pow(x-1,3)+s*Math.pow(x-1,2),
+h(s){const d=document.createElement('div');d.innerHTML=s.trim();return d.firstElementChild;},
+scene(id,o){this.scenes[id]=o;}};
+// The scene id names a local file: only the same shape build.mjs accepts, never a path or a URL.
+const q=new URLSearchParams(location.search);const raw=q.get('s')||'',t=+q.get('t');
+const id=/^[a-z][a-z0-9-]{0,31}$/.test(raw)?raw:null;if(!id)console.error('Uncaught: bad scene id '+JSON.stringify(raw));
+const st=document.getElementById('stage');kit.stage=st;
+const fit=()=>st.style.transform='scale('+Math.min(innerWidth/1920,innerHeight/1080)+')';fit();onresize=fit;
+const sc=document.createElement('script');if(id)sc.src='./scene-'+id+'.js';
+sc.onerror=()=>console.error('Uncaught: scene file scene-'+id+'.js did not load');
+sc.onload=()=>document.fonts.ready.then(()=>{try{if(!kit.scenes[id])throw new Error('no kit.scene("'+id+'")');const o=Object.create(kit.scenes[id]);o.init(kit);o.render(t);document.getElementById('clock').textContent=id+' @ '+t+'s';}catch(e){console.error('Uncaught: '+(e&&e.stack||e));}});
+if(id)document.body.append(sc);
+</script></body></html>
