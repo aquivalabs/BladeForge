@@ -137,6 +137,25 @@
       "hooks": []
     },
     {
+      "name": "film:feature",
+      "plugin": "film",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use when someone asks for a presentation film, video briefing or animated walkthrough of one specific feature or change, built from its spec, plan, code or ticket, to show a team, stakeholders or a client why it exists, how it works and what is still open, and made in Claude Motion. Do NOT use for a promo or marketing video, a generic animation or a skill's showcase hover film (plain Claude Motion), for a slide deck (the Slides type), for a clickable code-architecture diagram (diagram:diagram), or for a how-to tutorial.",
+      "category": "docs",
+      "purpose": "Turn one feature's spec, plan, code or ticket into an honest presentation film in Claude Motion, built from a reviewed storyboard.",
+      "best-for": "Authors who need stakeholders to understand why a feature exists, see one real request go through it, and know what is proven and what is still open \u2014 without a promo or a slide deck.",
+      "needs": [],
+      "changes": {
+        "tags": [
+          "files",
+          "network",
+          "other"
+        ],
+        "notes": "Creates and fills a private Claude Motion artifact on claude.ai through the Artifact and ArtifactData tools (network, and an outward-facing publish the user later chooses to share). Writes a work folder (storyboard, scene files, built documents, shot frames) and runs headless Chrome locally; the preview loads fonts from Google Fonts. It does not touch git, an org, or money."
+      },
+      "hooks": []
+    },
+    {
       "name": "frontend:fe-check",
       "plugin": "frontend",
       "plugin-version": "2.0.3",

@@ -1,7 +1,18 @@
 {
   "name": "film",
   "description": "Feature briefing films in Claude Motion: turn a feature's spec, plan, code or ticket into one honest presentation film that opens on the problem, carries one running example through the feature, shows what is proven and what is still open, and invites the viewer to answer the author. film:feature owns the storyboard (chapters, stakes, showcase, finale, honesty, on-screen copy rules, a read-only Braintrust review), builds and checks the scenes locally, and publishes the finished film to Claude Motion.",
-  "version": "0.1.0",
-  "keywords": ["film", "video", "presentation", "briefing", "claude-motion", "storyboard", "stakeholders"],
-  "author": { "name": "Roman Maslennikov", "email": "rmaslennikov@aquivalabs.com" }
+  "version": "0.1.1",
+  "keywords": [
+    "film",
+    "video",
+    "presentation",
+    "briefing",
+    "claude-motion",
+    "storyboard",
+    "stakeholders"
+  ],
+  "author": {
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
+  }
 }
