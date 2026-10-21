@@ -2,9 +2,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-10-21T16:31:38",
+    "scanned_at": "2026-10-21T16:52:24",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "1da8e2007a0f67fcfa7432f69fbbdad8088dc05a92e4676bf053ee58b8e35191",
+    "scanned_hash": "3bff5ae8f566126fde40ee0b24227e174ba28a432ae38216bfe11cd9eba5658a",
     "checklist": [
       {
         "n": 1,
@@ -40,7 +40,7 @@
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "preview.html loads fonts from fonts.googleapis.com, documented in metadata; no download-and-run"
+        "note": "preview.html loads fonts from fonts.googleapis.com, documented in metadata; no download-and-run; the preview loads only a local scene file whose id matches ^[a-z][a-z0-9-]{0,31}$"
       },
       {
         "n": 7,
