@@ -1,0 +1,242 @@
+{
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-10-21T15:59:34",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "b5cedeecb49a86dd5d5434ca4d6f97f427e86e9f270c9585e77d155559617203",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "no directive aimed at the reading agent in SKILL.md, references or scripts; references/voice.md holds copy rules only"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "the only send is the user-requested publish of the built film to a private Claude Motion artifact; build.mjs and shoot.mjs write only under <work_dir>/out"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "no key, token or credential anywhere, example included"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "the only delete is shoot.mjs removing its own <work_dir>/out/shots folder before reshooting"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain readable JS, HTML and CSS; no encoded payload, no eval"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "preview.html loads fonts from fonts.googleapis.com, documented in metadata; no download-and-run"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "no credential-store, dotfile or keychain read; $CHROME only picks the browser binary"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "no sudo, setuid or persistence; headless Chrome runs as the user"
+      }
+    ]
+  },
+  "trigger": {
+    "skill": "feature",
+    "measured_at": "2026-10-21T16:01:14",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "80/80",
+    "accuracy": 1,
+    "baseline_accuracy": null,
+    "description_hash": "9dd7d5833ed4f8119cd415d494ed22d489f742d33ca13d6ae1275995b4a98b84",
+    "queryset_hash": "23c9ef8c227c720c98346965f8378de9555aa8131f8a6548a17c38d6caa88c24",
+    "eval_type": "description-triggering",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "isolated",
+    "flow_variant": "baseline",
+    "cases": 16,
+    "train": {
+      "cases": 10,
+      "rows": 50,
+      "mean": 1,
+      "ci_half_width": 0.141
+    },
+    "test": {
+      "cases": 6,
+      "rows": 30,
+      "mean": 1,
+      "ci_half_width": 0.183
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
+    "results": [
+      {
+        "query": "make a presentation film of the new order-export feature from docs/specs/order-export.md so I can show it to the product leads on friday",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "we shipped the cart price stack (regional prices, member discounts, coupons, tax last). turn the design doc and the PR into a short video briefing for support and finance",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "can you do a claude motion video that explains what TICK-000 changes and why, for the client demo",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "i need an animated walkthrough of the widget-config sync feature for stakeholders: what problem it solves, how one request goes through it, and what's still open",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "build a feature briefing film from this plan and the code in src/checkout, honest, no hype, in russian",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "turn the spec of our new subscription pause feature into a video I can send to the head of sales, so she understands what we built",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "make a motion film presenting the coupon engine refactor to the team, with what works today and the known issues at the end",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "the stakeholders keep misunderstanding the resident-pricing feature. make a short film from the ticket and the design doc that walks one real cart through it",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "make a 20 second promo animation for our product launch with upbeat music and the logo at the end",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "create a slide deck about the checkout redesign for the quarterly review",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "draw a clickable architecture diagram of the order-export classes and how they call each other",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "make the hover film for the git:commit skill on the marketplace showcase page",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "record a how-to tutorial video showing users how to apply a coupon at checkout",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "write release notes for the price stack feature",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "fix the caption that overflows in scene 3 of my existing motion film",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "animate a bouncing logo intro for our youtube channel",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      }
+    ],
+    "hillclimb": {
+      "baseline_test": 1,
+      "final_test": 1,
+      "final_variant": "baseline",
+      "rounds": 0,
+      "noise": 0.183,
+      "verdict": "no-headroom"
+    }
+  }
+}

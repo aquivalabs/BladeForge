@@ -57,6 +57,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | critique | Adversarial critique — the house method for red-teaming a design, spec, or plan: diverse independent lenses, per-layer scope, grounded findings, parallel-then-synthesize. Consumed by pipelines (speccy, a critic role) rather than reinvented. | [critique](#critique) |
 | diagram | Architecture/flow diagram authoring — spec or raw code → a readable, clickable React Flow + ELK page (classes+methods, objects, permission sets, relations); a diagram-model JSON hardened by parallel Sextant reviewers. | [diagram](#diagram) |
 | docs | Documentation standard — four layers with one duty each, a per-section README that states that section's own rules, and one deterministic check that blocks a push when a declared mechanism changes without its doc. | [standard](#standard) |
+| film | Feature briefing films in Claude Motion — one honest presentation of a feature: the problem first, one running example through it, what is proven and what is open; the storyboard is reviewed, the scenes are built and checked locally, then published to Claude Motion. | [feature](#feature) |
 | error | Error handling — a framework-agnostic client-side architecture (one code→UX policy table, a state dispatcher, a shared error-tile renderer) plus the uniform `google.rpc.Status` envelope across every layer. | [architecture](#architecture), [format](#format) |
 | plan-gate | *(project)* PreToolUse hook — blocks Edit/Write to code unless you are off `main` and a plan matching the branch task-id exists. | — (hook only) |
 | frontend-css | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
@@ -123,6 +124,9 @@ cuts the fluff. **See the difference:**
 ### docs &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="standard"></a>**standard** — Where a document belongs and whether anything keeps it honest: four layers separated by update discipline (decision, mechanism, rule, frozen record), a `README.md` in every layer root answering five fixed questions about that section's own rules, and a vendored `docs-check.py` that fails a push when a declared mechanism changes and its doc does not. Installs into a target repo with its own hook and CI workflow.
 
+
+### film &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="feature"></a>**feature** — Turn one feature's spec, plan, code or ticket into an honest briefing film in Claude Motion. The Director writes a storyboard (title, the stakes on a running example, an everyday analogy, who it is for, one showcase ride with an object and an event per step, a three-beat finale), a read-only Braintrust reviews it, the user approves it, the scenes are built and checked frame by frame locally, and the finished film is published to Claude Motion. On-screen copy follows its own voice rules: one idea per caption, at most 15 words, plain-words footnotes. Every invented detail carries a footnote.
 
 ### error &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="format"></a>**format** — The unified error envelope + reason-code vocabulary: uniform error paths across layers — throwing from a service/route/controller and reading errors on the client.

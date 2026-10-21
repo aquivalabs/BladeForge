@@ -1,0 +1,19 @@
+/* Palette tokens for "Price stack" (fictional Acme Market). Warm paper background, one warm accent (orange)
+   for what the screen is about right now, blue for the product, red only for a failure. */
+#stage { --bg1:#FAF7F2; --bg2:#FFF1E2; --ink:#1B2A4A; --soft:#454552; --dim:#8E8A99; --card:#FFFFFF; --paper:#FFFDF7; --line:rgba(27,42,74,.12); --line-2:rgba(27,42,74,.22);
+  --primary:#3A78C9; --primary-2:#24508F; --primary-wash:#E4EEFA; --accent:#EE8130; --accent-2:#C4621A; --accent-soft:#F8CFA8; --accent-wash:#FFE7D1;
+  --alert:#D9483B; --alert-wash:#FBE1DD; --ok:#3B8E4E; --ok-wash:#DFF1E3; --on:#FFFFFF; --shadow:rgba(27,42,74,.10); --veil:rgba(250,247,242,.94);
+  --term-bg:#1B2A4A; --term-bar:#26385E; --term-ink:#E9EEF7; --term-dim:#AFC0DC; --term-ok:#8FD19E; --term-warn:#F6B37A;
+  color:var(--ink); font-family:var(--sans), system-ui, sans-serif }
+.ground { position:absolute; inset:0; overflow:hidden; background:linear-gradient(160deg, var(--bg1) 0%, var(--bg2) 100%) }
+.glow { position:absolute; width:1300px; height:1300px; right:-520px; bottom:-700px; border-radius:50%; background:radial-gradient(circle, var(--accent-soft), transparent 62%); opacity:.7 }
+.glow2 { position:absolute; width:900px; height:900px; left:-420px; top:-480px; border-radius:50%; background:radial-gradient(circle, var(--primary), transparent 60%); opacity:.12 }
+.abs { position:absolute; left:0; top:0; will-change:transform }
+.card { box-sizing:border-box; border-radius:16px; background:var(--card); border:2px solid var(--line); box-shadow:0 14px 38px var(--shadow) }
+.mono { font-family:var(--mono), ui-monospace, monospace }
+.nw { white-space:nowrap }
+.row { display:flex; align-items:center; justify-content:space-between; gap:16px; white-space:nowrap }
+.num { font-variant-numeric:tabular-nums }
+.pill { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; border-radius:999px; font-weight:700 }
+.stamp { white-space:nowrap; font-weight:800; letter-spacing:.08em; border:5px solid currentColor; border-radius:12px; padding:8px 22px; transform-origin:50% 50% }
+.label { font-size:24px; font-weight:700; letter-spacing:.14em; color:var(--accent-2); white-space:nowrap }
