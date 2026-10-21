@@ -24,13 +24,15 @@ const chrome = process.env.CHROME || (existsSync(MAC) ? MAC : 'google-chrome');
 const asked = process.argv.slice(3).map((a) => { const [s, t] = a.split(':'); return [s, +t]; });
 const frames = asked.length ? asked : film.scenes.flatMap((s) => [...new Set([+(s.dur * 0.4).toFixed(1), ...(s.shots || []), Math.max(1, s.dur - 0.3)])].sort((a, b) => a - b).map((t) => [s.id, t]));
 const errors = [];
-const run = (url, png, w, h) => spawnSync(chrome, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--enable-logging=stderr', '--v=0',
+const run = (url, png, w, h) => spawnSync(chrome, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--enable-logging=stderr', '--log-level=0', '--v=0',
   '--window-size=' + w + ',' + h, '--virtual-time-budget=5000', '--screenshot=' + png, url], { encoding: 'utf8' });
 const files = [];
 for (const [id, t] of frames) {
   const png = join(shots, id + '-' + t + '.png');
   const r = run(pathToFileURL(join(out, 'preview.html')).href + '?s=' + id + '&t=' + t, png, 1920, 1080);
-  for (const line of (r.stderr || '').split('\n')) if (/CONSOLE.*Uncaught/.test(line)) errors.push(id + '@' + t + ': ' + line.replace(/^.*CONSOLE:\d+\] /, ''));
+  if (r.error || r.status !== 0) { console.error('shoot: Chrome did not run (' + chrome + '): ' + (r.error ? r.error.message : 'exit ' + r.status) + '. Set $CHROME to the browser binary.'); process.exit(1); }
+  if (!existsSync(png)) { console.error('shoot: no frame written for ' + id + ' @ ' + t); process.exit(1); }
+  for (const line of (r.stderr || '').split('\n')) if (/CONSOLE.*(Uncaught|Error)/.test(line)) errors.push(id + '@' + t + ': ' + line.replace(/^.*CONSOLE[:(]\d+[)\]]*\]? ?/, ''));
   files.push([id + '-' + t + '.png', id + ' @ ' + t + 's']); console.log(png);
 }
 const cols = 4, byScene = {};

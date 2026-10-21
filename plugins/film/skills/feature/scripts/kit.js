@@ -114,7 +114,7 @@ const buildEdges = (kit, g, edges) => {
   });
 };
 const renderEdges = (E, t) => E.forEach(({ p, e, lab }) => {
-  const k = eo(seg(t, e.at, e.at + 0.8)), out = e.out ? eo(seg(t, e.out, e.out + 0.5)) : 0;
+  const a = e.at || 0, k = eo(seg(t, a, a + 0.8)), out = e.out ? eo(seg(t, e.out, e.out + 0.5)) : 0;
   if (!e.dash) { p.style.strokeDasharray = '1'; p.style.strokeDashoffset = String(1 - k); }
   p.style.opacity = String((e.dash ? k : 1) * (1 - out));
   if (lab) { lab.style.opacity = String(eo(seg(t, e.at + 0.4, e.at + 0.9)) * (1 - out)); const lx = (e.from[0] + e.to[0]) / 2 - 90 + (e.lx || 0), ly = (e.from[1] + e.to[1]) / 2 - 38 + (e.ly || 0); lab.style.transform = 'translate(' + lx + 'px,' + ly + 'px)'; }
@@ -144,4 +144,5 @@ const buildRail = (kit, g, R) => {
   g.append(box); return box.style;
 };
 // A terminal window: dark panel, three dots, a title, and a mono body (the last child) to fill with lines.
-const termHTML = (title, w, h) => '<div class="abs" style="width:' + w + 'px;height:' + h + 'px;border-radius:14px;background:var(--term-bg);box-shadow:0 14px 38px rgba(0,0,0,.22);overflow:hidden"><div style="height:36px;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--term-bar)"><i style="width:11px;height:11px;border-radius:50%;background:var(--alert)"></i><i style="width:11px;height:11px;border-radius:50%;background:var(--accent)"></i><i style="width:11px;height:11px;border-radius:50%;background:var(--primary)"></i><span style="margin-left:10px;font-size:16px;font-weight:600;color:var(--term-dim)">' + title + '</span></div><div class="mono" style="padding:14px 20px;font-size:20px;line-height:34px;color:var(--term-ink);white-space:pre"></div></div>';
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const termHTML = (title, w, h) => '<div class="abs" style="width:' + w + 'px;height:' + h + 'px;border-radius:14px;background:var(--term-bg);box-shadow:0 14px 38px rgba(0,0,0,.22);overflow:hidden"><div style="height:36px;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--term-bar)"><i style="width:11px;height:11px;border-radius:50%;background:var(--alert)"></i><i style="width:11px;height:11px;border-radius:50%;background:var(--accent)"></i><i style="width:11px;height:11px;border-radius:50%;background:var(--primary)"></i><span style="margin-left:10px;font-size:16px;font-weight:600;color:var(--term-dim)">' + esc(title) + '</span></div><div class="mono" style="padding:14px 20px;font-size:20px;line-height:34px;color:var(--term-ink);white-space:pre"></div></div>';

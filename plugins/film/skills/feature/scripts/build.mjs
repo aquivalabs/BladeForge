@@ -31,11 +31,11 @@ let total = 0;
 const sceneText = {};
 for (const s of film.scenes) {
   if (!/^[a-z][a-z0-9-]{0,31}$/.test(s.id)) fail('bad scene id ' + JSON.stringify(s.id));
-  if (!(s.dur >= 1)) fail('scene ' + s.id + ' needs dur >= 1');
+  if (typeof s.dur !== 'number' || !(s.dur >= 1)) fail('scene ' + s.id + ' needs a numeric dur >= 1');
   const src = join(dir, s.file || ('scenes/' + s.id + '.js'));
   if (!existsSync(src)) fail('missing ' + src);
   const body = readFileSync(src, 'utf8');
-  if (!body.includes("kit.scene('" + s.id + "'")) fail(src + " does not register kit.scene('" + s.id + "', ...)");
+  if (!new RegExp('kit\\.scene\\(\\s*[\'"`]' + s.id + '[\'"`]').test(body)) fail(src + " does not register kit.scene('" + s.id + "', ...)");
   sceneText[s.id] = KIT + '\n' + body;
   writeFileSync(join(out, 'scene-' + s.id + '.js'), sceneText[s.id]);
   total += s.dur;
@@ -49,7 +49,7 @@ const sans = fonts.sans || { family: 'Inter', or: 'inter', weights: [400, 600, 8
 const mono = fonts.mono || { family: 'JetBrains Mono', or: 'dm-mono', weights: [500, 700] };
 const gf = (f) => 'family=' + f.family.replace(/ /g, '+') + ':wght@' + f.weights.join(';');
 writeFileSync(join(out, 'preview.html'), readFileSync(join(HERE, 'preview.html'), 'utf8')
-  .replace('__FONTS__', gf(sans) + '&' + gf(mono)).replace('__SANS__', sans.family).replace('__MONO__', mono.family));
+  .replace('__FONTS__', () => gf(sans) + '&' + gf(mono)).replace('__SANS__', () => sans.family).replace('__MONO__', () => mono.family));
 
 const scenes = {
   v: 1, stage: 'final', look: film.look || 'Feature briefing film built by film:feature.',

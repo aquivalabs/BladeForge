@@ -18,6 +18,7 @@ const q=new URLSearchParams(location.search);const id=q.get('s'),t=+q.get('t');
 const st=document.getElementById('stage');kit.stage=st;
 const fit=()=>st.style.transform='scale('+Math.min(innerWidth/1920,innerHeight/1080)+')';fit();onresize=fit;
 const sc=document.createElement('script');sc.src='scene-'+id+'.js';
-sc.onload=()=>document.fonts.ready.then(()=>{const o=Object.create(kit.scenes[id]);o.init(kit);o.render(t);document.getElementById('clock').textContent=id+' @ '+t+'s';});
+sc.onerror=()=>console.error('Uncaught: scene file scene-'+id+'.js did not load');
+sc.onload=()=>document.fonts.ready.then(()=>{try{if(!kit.scenes[id])throw new Error('no kit.scene("'+id+'")');const o=Object.create(kit.scenes[id]);o.init(kit);o.render(t);document.getElementById('clock').textContent=id+' @ '+t+'s';}catch(e){console.error('Uncaught: '+(e&&e.stack||e));}});
 document.body.append(sc);
 </script></body></html>
