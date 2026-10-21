@@ -3,8 +3,8 @@
 Status: in progress, phases 3 and 4 done, 2b built · Owner: the marketplace maintainer · Started: 2026-10-16
 
 Now: phases 3 and 4 merged as #96 (2026-10-19). Phase 2b is on `feat/routing-set`: the set, its
-runner and a first pass over the test split are done. Next: one shared fix for skills that do not
-fire, measured with the routing set.
+runner and a first pass over the test split are done. Next: RMA-12, one shared fix for skills that
+do not fire, measured with the routing set.
 
 Order from here, decided 2026-10-19: **3 → 4 → 2b with 5.** Triggers already score 94–100%, so the
 likely headroom is in quality. Phase 4 depends on phase 3 working. Phase 2b's shared routing set
@@ -288,7 +288,7 @@ was not needed: the baseline named the cause.
   waited for a marker the agent itself wrote, which made it a reminder, not a gate; now the hook
   runs the judge. A clean verdict is cached under the hash of what was judged, and a tool call aimed
   at that cache is refused — best effort: a shell can still forge it on purpose, and a push typed
-  by a person in their own terminal is not seen. Closing those needs a git `pre-push` hook. Works on every Claude Code version. Suite: 11/11,
+  by a person in their own terminal is not seen. Closing those needs a git `pre-push` hook, RMA-13. Works on every Claude Code version. Suite: 11/11,
   in CI; a live judge caught a client name and work email in 5.7 s.
 - *Per-repository switch:* the guard is on everywhere by default. A person turns it off for one
   repository with `git config cerberus.pushguard off`; an agent setting it is refused.
@@ -298,7 +298,7 @@ was not needed: the baseline named the cause.
   Suite: 4/4 under `claude plugin test`. `check-version.sh` prints a red update notice at session
   start below 2.1.292, which cannot load the mod.
 - *Not needed:* a new review lens. The `review` plugin's `leak` lens already runs `cerberus`.
-- *Later:* rework `review` as a whole. One decided point: it runs only after a local commit, on
+- *Later, RMA-16:* rework `review` as a whole. One decided point: it runs only after a local commit, on
   committed work.
 
 ### Phase 4 — switch quality, delete skillaxe
@@ -338,7 +338,7 @@ one case are not independent; counted over rows it read ±0.204. The leak cases 
 9/9 in both arms. The skill fired in all 48 with-arm runs. The 96 runs cost about $7.5
 API-equivalent.
 
-**Deferred to phase 5:** `eval-gate` does not demand a quality record yet. It would block every
+**Deferred to phase 5, RMA-20:** `eval-gate` does not demand a quality record yet. It would block every
 PR that touches a skill until all 44 have a quality eval, and only one has a runner.
 
 ### Phase 5 — re-measure
@@ -412,15 +412,21 @@ showed the noise needs. Re-run quality skill by skill, starting with the most us
   `_state.json.environment: "crowded"`: every marketplace skill becomes a probe named
   `<plugin>-<skill>`, and a query a sibling takes counts in `fired_other`.
 
-## Open questions
+## Open work
 
-- `meta:update-skill` fires on a should-not-trigger query: "improve this skill's description so it
-  triggers more reliably — run ev…" (2026-10-19, 70/75). Too broad, or a sibling boundary with
-  `meta:skill-eval`. It is the first real trigger defect the runner found.
+Open tasks, questions and deferred items live in the maintainer's private tracker, not in this
+file; see "Where the work is tracked" in AGENTS.md. The ones this plan produced:
 
-- Should the gate refuse a skill below a fixed trigger score? Lean: no. With 6–7 test cases the
-  noise is about ±18 points, so a fixed bar would mostly catch noise. The gate should fail only a
-  final score below the baseline, or a hillclimb record that is missing.
-
-- Why does the prompt cache miss? In the triage baseline 89 of 90 runs were cold. The median run
-  carried about 39,000 tokens of context and wrote about 26,500 of them to the cache.
+| issue | what |
+|---|---|
+| RMA-12 | skills under-fire: one shared fix to the description rule, measured with the routing set |
+| RMA-14 | routing set: run the train split |
+| RMA-17 | quality runners for more skills |
+| RMA-20 | eval-gate demands a quality record |
+| RMA-21 | trigger records count noise over rows, not cases |
+| RMA-22 | prompt cache misses in nested runs |
+| RMA-23 | leak-check misses a work author on an existing commit |
+| RMA-19 | `meta:update-skill` fires on a should-not query |
+| RMA-26 | question: should the gate refuse a skill below a fixed trigger score? |
+| RMA-13, RMA-15 | push guard: a git pre-push hook; attestation checked against the real diff |
+| RMA-16 | rework the `review` plugin |

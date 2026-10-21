@@ -8,6 +8,12 @@ publicly. Each `plugins/<domain>/` holds skills (`skills/<name>/SKILL.md`), and 
 hooks/commands/agents. It is a standalone marketplace — the single source of truth for these skills.
 Install any plugin as `<plugin>@bladeforge`.
 
+## Where the work is tracked
+Tasks, bugs, open questions and deferred items live in the maintainer's private Linear tracker,
+not in this repository. An id such as `RMA-12` in a doc points there. A plan in `docs/plans/` records
+decisions and findings and names its open items by id; it does not keep its own to-do list. A new
+task found while working becomes an issue there, not a TODO in a file.
+
 ## Hard rules
 - **One problem per change.** A focused edit, not a grab-bag.
 - **Prove the problem first.** Don't restructure tested skill content without evidence it improves behavior.
