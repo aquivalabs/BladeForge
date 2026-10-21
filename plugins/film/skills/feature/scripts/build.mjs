@@ -5,7 +5,7 @@
 //
 // <work_dir>/film.json:
 //   { "title": "Price stack", "background": "#FAF7F2", "palette": ["#FAF7F2", "#1B2A4A", "#3A78C9", "#EE8130"],
-//     "fonts": { "sans": { "family": "Inter", "or": "inter", "weights": [400, 600, 800] } },
+//     "fonts": { "sans": { "family": "Inter", "or": "inter", "weights": [400, 600, 700, 800] } },
 //     "scenes": [ { "id": "stakes", "name": "How it goes today", "dur": 26, "file": "scenes/stakes.js" } ],
 //     "helpers": ["lib.js"],                    // optional: shared helpers, inlined after kit.js in every scene
 //     "score": "score.js" }                      // optional
@@ -42,22 +42,26 @@ for (const s of film.scenes) {
   sceneText[s.id] = KIT + '\n' + body;
   total += s.dur;
 }
-// Everything is valid: only now replace the previous build. out/ is this script's own folder inside the work dir.
-if (existsSync(out) && !existsSync(join(docsDir, 'writes.json'))) fail(out + ' exists and was not made by build.mjs; move it or pick another work dir');
-rmSync(out, { recursive: true, force: true }); mkdirSync(docsDir, { recursive: true });
-for (const s of film.scenes) writeFileSync(join(out, 'scene-' + s.id + '.js'), sceneText[s.id]);
 if (total > MAX_SECONDS) fail(total + 's is over the ' + MAX_SECONDS + 's a Claude Motion film can load; cut by story or split into a series');
-
 const css = readFileSync(existsSync(join(dir, 'base.css')) ? join(dir, 'base.css') : join(HERE, 'base.css'), 'utf8');
-writeFileSync(join(out, 'base.css'), css);
 const fonts = film.fonts || {};
-const sans = fonts.sans || { family: 'Inter', or: 'inter', weights: [400, 600, 800] };
+const sans = fonts.sans || { family: 'Inter', or: 'inter', weights: [400, 600, 700, 800] };
 const mono = fonts.mono || { family: 'DM Mono', or: 'dm-mono', weights: [400, 500] };
 for (const f of [sans, mono]) if (typeof f.family !== 'string' || !Array.isArray(f.weights) || !f.weights.length) fail('each font needs a family and a weights array');
 for (const f of [sans, mono]) f.weights = [...f.weights].sort((x, y) => x - y);
 const gf = (f) => 'family=' + f.family.replace(/ /g, '+') + ':wght@' + f.weights.join(';');
-writeFileSync(join(out, 'preview.html'), readFileSync(join(HERE, 'preview.html'), 'utf8')
-  .replace('__FONTS__', () => gf(sans) + '&' + gf(mono)).replace('__SANS__', () => sans.family).replace('__MONO__', () => mono.family));
+const preview = readFileSync(join(HERE, 'preview.html'), 'utf8')
+  .replace('__FONTS__', () => gf(sans) + '&' + gf(mono)).replace('__SANS__', () => sans.family).replace('__MONO__', () => mono.family);
+const scoreText = film.score ? readFileSync(join(dir, film.score), 'utf8') : null;
+
+// Every input is read and valid: only now replace the previous build. out/ is this script's own folder,
+// marked by out/.film-build the moment it is created, so a build that dies later is still recognised.
+const MARK = join(out, '.film-build');
+if (existsSync(out) && !existsSync(MARK) && !existsSync(join(docsDir, 'writes.json'))) fail(out + ' exists and was not made by build.mjs; move it or pick another work dir');
+rmSync(out, { recursive: true, force: true }); mkdirSync(docsDir, { recursive: true }); writeFileSync(MARK, '');
+for (const s of film.scenes) writeFileSync(join(out, 'scene-' + s.id + '.js'), sceneText[s.id]);
+writeFileSync(join(out, 'base.css'), css);
+writeFileSync(join(out, 'preview.html'), preview);
 
 const scenes = {
   v: 1, stage: 'final', look: film.look || 'Feature briefing film built by film:feature.',
@@ -70,7 +74,7 @@ const docs = [
   ['modules', 'scenes.json', { kind: 'json', text: JSON.stringify(scenes) }],
   ['modules', 'base.css', { kind: 'css', text: css }],
   ...film.scenes.map((s) => ['modules', 'scene-' + s.id + '.js', { kind: 'js', text: sceneText[s.id] }]),
-  ...(film.score ? [['modules', 'score.js', { kind: 'js', text: readFileSync(join(dir, film.score), 'utf8') }]] : []),
+  ...(scoreText ? [['modules', 'score.js', { kind: 'js', text: scoreText }]] : []),
   ['film', 'script', { code: 'window.CUT = kit.scenes();' }],
 ];
 const writes = docs.map(([collection, docId, data]) => {

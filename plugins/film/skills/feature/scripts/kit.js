@@ -78,8 +78,8 @@ const buildEl = (kit, g, e) => {
     if (e.style === 'hi') n.style.borderColor = 'var(--alert)';
     if (e.style === 'ok') n.style.borderColor = 'var(--primary)';
     if (e.style === 'warn') n.style.borderColor = 'var(--accent)';
-    if (e.style === 'muted') { n.style.opacity = '0.55'; }
   }
+  n.style.transformOrigin = '0 50%';
   g.append(n);
   return n.style;
 };
@@ -94,7 +94,6 @@ const renderEl = (s, e, t) => {
   const base = e.style === 'muted' ? 0.55 : 1;
   s.opacity = String(eo(p) * (1 - out) * base);
   s.transform = 'translate(' + x + 'px,' + (y + (pop ? 0 : 12 * (1 - eo(p)))) + 'px) scale(' + sc + ')';
-  s.transformOrigin = '0 50%';
 };
 const buildEdges = (kit, g, edges) => {
   if (!edges || !edges.length) return [];
