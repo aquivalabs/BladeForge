@@ -137,12 +137,6 @@ const buildFoot = (kit, g, F) => {
   g.append(f); return f.style;
 };
 
-const buildRail = (kit, g, R) => {
-  if (!R) return null;
-  const box = kit.h('<div class="abs" style="display:flex;gap:10px;align-items:center"></div>');
-  R.steps.forEach((s, i) => { const p = kit.h('<div style="font-size:19px;font-weight:600;padding:6px 14px;border-radius:999px;border:1.5px solid var(--line);white-space:nowrap"></div>'); p.textContent = s; if (i < R.active) { p.style.color = 'var(--primary-2)'; p.style.borderColor = 'var(--primary)'; } else if (i === R.active) { p.style.background = 'var(--primary)'; p.style.borderColor = 'var(--primary)'; p.style.color = 'var(--on)'; } else { p.style.color = 'var(--dim)'; } box.append(p); });
-  g.append(box); return box.style;
-};
 // A terminal window: dark panel, three dots, a title, and a mono body (the last child) to fill with lines.
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const termHTML = (title, w, h) => '<div class="abs" style="width:' + w + 'px;height:' + h + 'px;border-radius:14px;background:var(--term-bg);box-shadow:0 14px 38px rgba(0,0,0,.22);overflow:hidden"><div style="height:36px;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--term-bar)"><i style="width:11px;height:11px;border-radius:50%;background:var(--alert)"></i><i style="width:11px;height:11px;border-radius:50%;background:var(--accent)"></i><i style="width:11px;height:11px;border-radius:50%;background:var(--primary)"></i><span style="margin-left:10px;font-size:16px;font-weight:600;color:var(--term-dim)">' + esc(title) + '</span></div><div class="mono" style="padding:14px 20px;font-size:20px;line-height:34px;color:var(--term-ink);white-space:pre"></div></div>';

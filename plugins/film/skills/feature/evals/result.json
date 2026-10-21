@@ -2,9 +2,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-10-21T16:18:04",
+    "scanned_at": "2026-10-21T16:23:55",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "9ce4db0aac5deb9d5f0e94d16331b32c2c298a483a49f6efbddaa76406af4914",
+    "scanned_hash": "8721533c6725f7eeba03042bf89ce1f8e2f7882565f092330ff2c224b980aa7f",
     "checklist": [
       {
         "n": 1,
@@ -28,7 +28,7 @@
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "the only delete is shoot.mjs removing its own <work_dir>/out/shots folder before reshooting"
+        "note": "build.mjs replaces only its own <work_dir>/out, after every input is validated, and refuses an out/ it did not make; shoot.mjs replaces its own out/shots"
       },
       {
         "n": 5,

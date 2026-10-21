@@ -26,9 +26,9 @@ for (const k of ['title', 'scenes']) if (!(k in film)) fail('film.json misses ' 
 if (!Array.isArray(film.scenes) || !film.scenes.length) fail('film.json scenes must be a non-empty array');
 const ids = film.scenes.map((s) => s.id), dup = ids.find((id, i) => ids.indexOf(id) !== i);
 if (dup) fail('scene id ' + JSON.stringify(dup) + ' is used twice');
+for (const f of [...(film.helpers || []), ...(film.score ? [film.score] : [])]) if (!existsSync(join(dir, f))) fail('missing ' + join(dir, f));
 const KIT = readFileSync(join(HERE, 'kit.js'), 'utf8') + (film.helpers || []).map((h) => '\n' + readFileSync(join(dir, h), 'utf8')).join('');
 const out = join(dir, 'out'), docsDir = join(out, 'docs');
-rmSync(out, { recursive: true, force: true }); mkdirSync(docsDir, { recursive: true });
 
 let total = 0;
 const sceneText = {};
@@ -40,9 +40,12 @@ for (const s of film.scenes) {
   const body = readFileSync(src, 'utf8');
   if (!new RegExp('kit\\.scene\\(\\s*[\'"`]' + s.id + '[\'"`]').test(body)) fail(src + " does not register kit.scene('" + s.id + "', ...)");
   sceneText[s.id] = KIT + '\n' + body;
-  writeFileSync(join(out, 'scene-' + s.id + '.js'), sceneText[s.id]);
   total += s.dur;
 }
+// Everything is valid: only now replace the previous build. out/ is this script's own folder inside the work dir.
+if (existsSync(out) && !existsSync(join(docsDir, 'writes.json'))) fail(out + ' exists and was not made by build.mjs; move it or pick another work dir');
+rmSync(out, { recursive: true, force: true }); mkdirSync(docsDir, { recursive: true });
+for (const s of film.scenes) writeFileSync(join(out, 'scene-' + s.id + '.js'), sceneText[s.id]);
 if (total > MAX_SECONDS) fail(total + 's is over the ' + MAX_SECONDS + 's a Claude Motion film can load; cut by story or split into a series');
 
 const css = readFileSync(existsSync(join(dir, 'base.css')) ? join(dir, 'base.css') : join(HERE, 'base.css'), 'utf8');

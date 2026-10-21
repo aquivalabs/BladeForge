@@ -41,10 +41,10 @@ it, the user sees it in chat before any scene exists, and Claude Motion builds o
 | `stakes` | 1 | 22 | Maya's cart at €84.20; checkout at €79.10 because the coupon counted twice; a week later the shop bills her the missing €5.10 | the second coupon line drops in; stamp "BILLED AGAIN" | The situation is invented for the example |
 | `what` | 1 | 12 | A recipe card with six steps in a fixed order: price list, resident, membership, bundle, coupon, tax | the "frost" step tries to jump before "bake" and slides back | From the design doc |
 | `who` | 3 | 8 | Shoppers, support agents who explain a total, finance who audits discounts | — | From the design doc |
-| `journey` | 4 | 96 | One camera ride over six stations, rail at the top, counter "rules applied N/6" and the running total | see the stations below | Example cart; amounts invented |
+| `journey` | 4 | 90 | One camera ride over six stations, rail at the top, counter "rules applied N/6" and the running total | see the stations below | Example cart; amounts invented |
 | `finale` | 6–7 | 34 | Beat 1: €84.20 ≠ €79.10 → billed again, against one total everywhere. Beat 2: the test command and its output typed, a counter of test cases with the line "counted, not run". Beat 3: three problems, two topics, the invitation | the count lands with a ring | Test count counted in the test files, not run for this film |
 
-Stations of `journey`, each 14–18 s, each with its object and its event:
+Stations of `journey`, 15 s each, each with its object and its event:
 
 1. **Cart** — the real-looking cart with six lines. Event: Maya adds the third bundled item, a "3 for 2"
    badge snaps on.

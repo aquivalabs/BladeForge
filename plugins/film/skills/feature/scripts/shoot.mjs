@@ -22,7 +22,9 @@ const MAC = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const chrome = process.env.CHROME || (existsSync(MAC) ? MAC : 'google-chrome');
 
 const asked = process.argv.slice(3).map((a) => { const [s, t] = a.split(':'); if (!s || t === undefined || !Number.isFinite(+t)) { console.error('shoot: frame ' + JSON.stringify(a) + ' must be <scene>:<seconds>'); process.exit(1); } return [s, +t]; });
-const frames = asked.length ? asked : film.scenes.flatMap((s) => [...new Set([+(s.dur * 0.4).toFixed(1), ...(s.shots || []), Math.max(1, s.dur - 0.3)])].sort((a, b) => a - b).map((t) => [s.id, t]));
+for (const s of film.scenes) for (const x of s.shots || []) if (!Number.isFinite(x)) { console.error('shoot: scene ' + s.id + ' has a non-numeric shot ' + JSON.stringify(x)); process.exit(1); }
+const r1 = (x) => Math.round(x * 10) / 10;
+const frames = asked.length ? asked : film.scenes.flatMap((s) => [...new Set([r1(s.dur * 0.4), ...(s.shots || []).map(r1), r1(Math.max(1, s.dur - 0.3))])].sort((a, b) => a - b).map((t) => [s.id, t]));
 const errors = [];
 const run = (url, png, w, h) => spawnSync(chrome, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--enable-logging=stderr', '--log-level=0', '--v=0',
   '--window-size=' + w + ',' + h, '--virtual-time-budget=5000', '--screenshot=' + png, url], { encoding: 'utf8' });

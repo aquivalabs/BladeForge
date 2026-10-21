@@ -3,8 +3,6 @@
 // Every amount is invented for the example and adds up: 116.13 -> 115.63 -> 108.43 -> 84.53 -> 79.43 -> 84.20.
 const STARTS = [0, 15, 30, 45, 60, 75];
 const W = 1920;
-const popS = (t, a) => lerp(0.5, 1, eob(seg(t, a, a + 0.35), 2.2));
-const place = (s, x, y, o, sc) => { s.opacity = String(o); s.transform = 'translate(' + x + 'px,' + y + 'px)' + (sc != null && sc !== 1 ? ' scale(' + sc + ')' : ''); };
 // The running total and the rule counter, as keyframes on the film clock: [at, value, seconds].
 const TOTAL = [[3.2, 116.13, 0.8], [21.0, 115.63, 0.8], [32.8, 114.98, 0.6], [35.4, 108.43, 1.6], [46.6, 84.53, 0.8], [52.6, 79.43, 0.8], [63.6, 84.20, 1.0]];
 const RULES = [21.6, 33.0, 36.8, 47.0, 53.0, 64.0];
