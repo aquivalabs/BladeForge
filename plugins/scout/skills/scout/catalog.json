@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-10-21",
+  "generated": "2026-10-22",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -139,7 +139,7 @@
     {
       "name": "film:feature",
       "plugin": "film",
-      "plugin-version": "0.1.1",
+      "plugin-version": "0.1.2",
       "activates-when": "Use when someone asks for a presentation film, video briefing or animated walkthrough of one specific feature or change, built from its spec, plan, code or ticket, to show a team, stakeholders or a client why it exists, how it works and what is still open, and made in Claude Motion. Do NOT use for a promo or marketing video, a generic animation or a skill's showcase hover film (plain Claude Motion), for a slide deck (the Slides type), for a clickable code-architecture diagram (diagram:diagram), or for a how-to tutorial.",
       "category": "docs",
       "purpose": "Turn one feature's spec, plan, code or ticket into an honest presentation film in Claude Motion, built from a reviewed storyboard.",
