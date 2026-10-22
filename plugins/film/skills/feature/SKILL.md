@@ -36,7 +36,7 @@ frame you have looked at is the only proof that nothing overlaps.
 2. **Pick the running example and the stakes.** One request any viewer understands, carried through the
    whole film; the first scene shows it failing without the feature. `references/chapters.md` §2.
 3. **Write the storyboard** — title, stakes, definition with an analogy, who, one showcase ride (one
-   object and one event per station, a progress counter), finale in three beats. Shape and a full worked
+   object and two to four events per station, a progress counter), finale in three beats. Shape and a full worked
    example: `references/storyboard.md`. Screen rules: `references/screen.md`. Estimate the length from it;
    over 300 s, cut by story before you think of a series.
 4. **Edit the copy with `references/voice.md`**, in the viewer's language.

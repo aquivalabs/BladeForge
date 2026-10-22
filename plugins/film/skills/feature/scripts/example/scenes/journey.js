@@ -1,5 +1,5 @@
 // journey — one camera ride over six stations. A world element is translated between stations; the step rail,
-// the counter "rules applied N/6" and the running total stay fixed on top. Each station: one object, one event.
+// the counter "rules applied N/6" and the running total stay fixed on top. Each station: one object, two to four events.
 // Every amount is invented for the example and adds up: 116.13 -> 115.63 -> 108.43 -> 84.53 -> 79.43 -> 84.20.
 const STARTS = [0, 15, 30, 45, 60, 75];
 // Each station is written on a 15 s clock, but its events end by about 10 s. The ride plays each station

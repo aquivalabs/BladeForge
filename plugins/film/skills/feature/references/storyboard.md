@@ -22,7 +22,7 @@ it, the user sees it in chat before any scene exists, and Claude Motion builds o
       "secs": 24,
       "shows": "what moves on screen, in one or two sentences",
       "captions": ["at most 8 words each, one on screen at a time"],
-      "event": "the one thing that happens, with its outcome",
+      "event": "what happens, with its outcome; a showcase station lists two to four",
       "facts": [ { "claim": "...", "source": "spec §2 | code path | commit | author interview | invented" } ],
       "footnote": "plain-words source line, or the invented-example note"
     }

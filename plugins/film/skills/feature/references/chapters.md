@@ -50,7 +50,7 @@ screen has a source.
 | 1 | How it goes today | What goes wrong without the feature, on the running example | A failure scene: the example without the feature runs into a clear loss. Then one definition line with an everyday analogy |
 | 2 | Problem → solution | What changes | The same situation before and after — usually folded into chapters 1 and 6 |
 | 3 | Who and when | Who uses it, in which situation | Roles with their situation, one screen |
-| 4 | One request, start to finish | The running example goes through the feature. Each component appears exactly once, as a step of this story | One scene, one camera ride between stations (`screen.md`). Real-looking objects, one event per step |
+| 4 | One request, start to finish | The running example goes through the feature. Each component appears exactly once, as a step of this story | One scene, one camera ride between stations (`screen.md`). Real-looking objects, two to four events per step |
 | 5 | How it is built | One picture of the whole feature, 3–5 main components, and one "we chose X over Y because Z" if the source has it | Often the station rail of chapter 4 already is this picture. A separate screen only if it adds something chapter 4 did not show |
 | 6 | What already works | What works and what proves it | Proof in motion: a real command and its real output typed out, a number counting up, and right under it one honest line on what is not proven yet |
 | 7 | What we know and what to discuss | At most three known problems, at most two topics, an invitation to write to the author | Short cards; the invitation is the last frame and holds for a few seconds |
