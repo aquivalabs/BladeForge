@@ -15,7 +15,13 @@
 `node scripts/build.mjs <work_dir>` writes `out/`: each scene with `kit.js` in front, `preview.html`,
 and `out/docs/writes.json`. `node scripts/shoot.mjs <work_dir>` shoots every scene at 40 % of its length
 and just before its end (plus each scene's `shots`), writes one sheet per scene, `out/shots/sheet-<id>.png`,
-and exits 1 when a scene threw an error in the console.
+and exits 1 when a scene threw an error in the console. `node scripts/shoot.mjs <work_dir> --pace [seconds]` steps every
+scene through its length and lists each stretch of 3 s (or `seconds`) where nothing new reaches the screen;
+it exits 1 when there is one. Only the closing invitation may hold, up to 6 s.
+
+A hold the story does not need is cut, not filled with filler. The example writes each scene on its own
+clock and plays only some windows of it through `cut()` in its `lib.js`; the score maps its times the same
+way (`scripts/example/score.js`).
 
 ## Writing a scene
 
