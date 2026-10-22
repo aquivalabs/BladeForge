@@ -13,6 +13,7 @@ on:
       - "scripts/gen_showcase.py"
       - "plugins/**/SKILL.md"
       - "showcase/**"
+      - "scripts/gen-previews.mjs"
       - ".github/workflows/pages.yml"
   workflow_run:
     workflows: ["scout-publish"]
@@ -44,6 +45,10 @@ jobs:
           python-version: "3.12"
       - name: Generate showcase from catalog.json
         run: python3 scripts/gen_showcase.py
+      # The animated previews are built here, not committed: 92 GIFs are about 28 MB, four
+      # times the films they come from. Link previews and the README point at the Pages copy.
+      - name: Build the animated previews from the films
+        run: sudo apt-get install -y --no-install-recommends ffmpeg >/dev/null && node scripts/gen-previews.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -161,11 +161,33 @@ def metric_chips(s):
 def kb(n): return f"{n} B" if n<1024 else f"{n/1024:.1f} KB"
 
 # ---------- shared <head> ----------
-def head(title, rel=""):
+# Where Pages serves the site. Link previews need absolute URLs, so og:image and og:url use it.
+SITE = "https://aquivalabs.github.io/BladeForge/"
+
+def og_tags(title, desc, path, slug=None):
+    """Open Graph and Twitter card tags. The image is the skill's animated preview, built by
+    scripts/gen-previews.mjs in the pages workflow; apps that do not animate a GIF show frame 0,
+    which is the film's benefit headline. A page with no film gets no image."""
+    tags = [f'<meta property="og:type" content="website">',
+            f'<meta property="og:title" content="{esc(title)}">',
+            f'<meta property="og:description" content="{esc(desc)}">',
+            f'<meta property="og:url" content="{SITE}{path}">',
+            f'<meta name="description" content="{esc(desc)}">']
+    if slug and has_demo(slug):
+        img = f"{SITE}assets/preview/{slug}.gif"
+        tags += [f'<meta property="og:image" content="{img}">',
+                 '<meta property="og:image:type" content="image/gif">',
+                 '<meta property="og:image:width" content="640">', '<meta property="og:image:height" content="360">',
+                 '<meta name="twitter:card" content="summary_large_image">',
+                 f'<meta name="twitter:image" content="{img}">']
+    return "\n".join(tags)
+
+def head(title, rel="", og=""):
     return f"""<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
+{og}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
@@ -316,7 +338,8 @@ def skill_page(s):
     ns, nm = s["id"].split(":",1)
     src=f"{REPO}/tree/main/plugins/{ns}/skills/{nm}"
     md=f"{REPO}/blob/main/plugins/{ns}/skills/{nm}/SKILL.md"
-    body=head(f"{s['id']} · Skill Marketplace", rel="../")
+    body=head(f"{s['id']} · Skill Marketplace", rel="../",
+              og=og_tags(f"{s['id']} — BladeForge", TAGLINE.get(s['id'], s['purpose']), f"skill/{s['slug']}.html", s['slug']))
     body+=f"""
 <div class="page" style="--dc:var(--dc-{esc(s['plugin'])})">
   <a class="back" href="../index.html">← all skills</a>
@@ -352,7 +375,8 @@ def cicero_page():
     c=CURATED["cicero"]
     src=f"{REPO}/tree/main/plugins/cicero"
     style=f"{REPO}/blob/main/plugins/cicero/output-styles/cicero.md"
-    body=head("cicero · Skill Marketplace", rel="../")
+    body=head("cicero · Skill Marketplace", rel="../",
+              og=og_tags("cicero — BladeForge", TAGLINE.get("cicero", "The house voice for Claude Code."), "skill/cicero.html", "cicero"))
     body+=f"""
 <div class="page" style="--dc:var(--t-git)">
   <a class="back" href="../index.html">← all skills</a>
@@ -394,7 +418,10 @@ def index_page(skills, doms, pal):
             "sec":([s["security"]["passed"],s["security"]["total"]] if s["security"] else None)} for s in skills]
     cats=[c for c in CATEGORY_ORDER if any(s.get("category")==c for s in skills)]
     payload=json.dumps({"skills":gdata,"palette":pal,"domains":doms,"categories":cats,"catLabels":CATEGORY_LABELS}, ensure_ascii=False).replace("</script>","<\\/script>")
-    h=head("Skill Marketplace", rel="")
+    h=head("Skill Marketplace", rel="",
+           og=og_tags("BladeForge — a skill marketplace for Claude Code",
+                      "Curated Claude Code skills, each with what it does, when it fires, and its measured trigger, quality and safety.",
+                      "", "film__feature"))
     h+=f"""
 <div class="wrap">
   <header class="top">
