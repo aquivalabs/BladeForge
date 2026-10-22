@@ -8,6 +8,13 @@
 // readable sheet per scene, <work_dir>/out/shots/sheet-<scene>.png (4 columns of 480x270), prints each
 // file, and exits 1 if any scene threw in the console.
 // Chrome: $CHROME, else the macOS app path, else `google-chrome` on PATH.
+//
+// usage: node shoot.mjs <work_dir> --pace [seconds]
+// Steps every scene through its whole length in 0.25 s steps and lists each stretch where nothing on
+// screen changes for `seconds` or more (default 3). A film where the picture stands still for that long
+// reads as a slide show. Only new information counts as a change: an element appearing or leaving, a text
+// or a number changing; a camera drift does not. The film's closing invitation may hold up to 6 s. Exits 1
+// when any stretch is found.
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -21,6 +28,26 @@ const MAC = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const chrome = process.env.CHROME || (existsSync(MAC) ? MAC : 'google-chrome');
 
 const durOf = Object.fromEntries(film.scenes.map((s) => [s.id, s.dur]));
+if (process.argv[3] === '--pace') {
+  const limit = process.argv[4] === undefined ? 3 : +process.argv[4];
+  if (!Number.isFinite(limit) || limit <= 0) { console.error('shoot: --pace takes a positive number of seconds'); process.exit(1); }
+  let still = 0;
+  for (const s of film.scenes) {
+    const url = pathToFileURL(join(out, 'preview.html')).href + '?s=' + s.id + '&pace=' + s.dur;
+    const r = spawnSync(chrome, ['--headless=new', '--disable-gpu', '--enable-logging=stderr', '--log-level=0', '--v=0', '--window-size=1920,1080', '--virtual-time-budget=20000', '--dump-dom', url], { encoding: 'utf8', maxBuffer: 64 << 20 });
+    if (r.error || r.status !== 0) { console.error('shoot: Chrome did not run (' + chrome + ')'); process.exit(1); }
+    const line = (r.stderr || '').split('\n').find((l) => l.includes('PACE '));
+    if (!line) { console.error('shoot: no pace report for ' + s.id + ' (did the scene throw?)'); process.exit(1); }
+    const runs = JSON.parse(line.slice(line.indexOf('PACE ') + 5).replace(/", source:.*$/, '').replace(/"$/, ''));
+    // The invitation is the last frame and holds on purpose: the film's final stretch may stand still up to 6 s.
+    const last = s === film.scenes[film.scenes.length - 1];
+    const long = runs.filter(([, b, d]) => d >= limit && !(last && b >= s.dur - 1e-9 && d <= 6));
+    still += long.length;
+    console.log(s.id.padEnd(12) + (long.length ? long.map(([a, b, d]) => a + '–' + b + ' s still (' + d + ' s)').join(', ') : 'no stretch of ' + limit + ' s or more without a change'));
+  }
+  if (still) { console.error('pace: ' + still + ' stretch(es) where the picture stands still for ' + limit + ' s or more'); process.exit(1); }
+  process.exit(0);
+}
 const asked = process.argv.slice(3).map((a) => { const [s, t] = a.split(':'); if (!(s in durOf) || t === undefined || !Number.isFinite(+t) || +t < 0 || +t > durOf[s]) { console.error('shoot: frame ' + JSON.stringify(a) + ' must be <scene>:<seconds> for a scene in film.json, within its length'); process.exit(1); } return [s, +t]; });
 for (const s of film.scenes) for (const x of s.shots || []) if (!Number.isFinite(x)) { console.error('shoot: scene ' + s.id + ' has a non-numeric shot ' + JSON.stringify(x)); process.exit(1); }
 const r1 = (x) => Math.round(x * 10) / 10;

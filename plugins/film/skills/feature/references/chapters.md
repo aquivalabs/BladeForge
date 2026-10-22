@@ -50,7 +50,7 @@ screen has a source.
 | 1 | How it goes today | What goes wrong without the feature, on the running example | A failure scene: the example without the feature runs into a clear loss. Then one definition line with an everyday analogy |
 | 2 | Problem → solution | What changes | The same situation before and after — usually folded into chapters 1 and 6 |
 | 3 | Who and when | Who uses it, in which situation | Roles with their situation, one screen |
-| 4 | One request, start to finish | The running example goes through the feature. Each component appears exactly once, as a step of this story | One scene, one camera ride between stations (`screen.md`). Real-looking objects, one event per step |
+| 4 | One request, start to finish | The running example goes through the feature. Each component appears exactly once, as a step of this story | One scene, one camera ride between stations (`screen.md`). Real-looking objects, two to four events per step |
 | 5 | How it is built | One picture of the whole feature, 3–5 main components, and one "we chose X over Y because Z" if the source has it | Often the station rail of chapter 4 already is this picture. A separate screen only if it adds something chapter 4 did not show |
 | 6 | What already works | What works and what proves it | Proof in motion: a real command and its real output typed out, a number counting up, and right under it one honest line on what is not proven yet |
 | 7 | What we know and what to discuss | At most three known problems, at most two topics, an invitation to write to the author | Short cards; the invitation is the last frame and holds for a few seconds |
@@ -74,8 +74,8 @@ invitation.
 - **Real material.** In two or three key moments the screen shows a real object, not a box: diff lines,
   a run's output, a commit line, a PR card, a piece of the spec. Drawn boxes explain; real objects convince.
 - **A showcase step.** Each station of chapter 4 shows its own object the way it looks in life — a terminal,
-  a form with questions, a document, a dashboard, a PR page — and has ONE small event with an outcome:
-  something is caught, blocked, breaks and gets fixed. One progress counter runs through the whole story
+  a form with questions, a document, a dashboard, a PR page — and has two to four small events, each with
+  an outcome: something is caught, blocked, breaks and gets fixed. One event and a long pause is a slide. One progress counter runs through the whole story
   (budget spent, parts done, minutes since the request) and answers the stakes. A step where nothing
   happens is boring even if everything on it is correct.
 - **Balance.** More answers than questions: chapter 6 comes before chapter 7 and is longer. If the source
@@ -87,8 +87,10 @@ invitation.
 ## 3. Scale
 
 - **One film** by default. A Claude Motion film holds at most 300 s.
-- **Estimate length from the storyboard**, before any scene code: about 10 s per plain screen, 14–18 s
-  per showcase step.
+- **Estimate length from the storyboard**, before any scene code: about 2–3 s per event. A plain screen
+  carries three or four events, about 8–12 s; a showcase station two to four, about 6–12 s. A detailed film
+  gets long by having more events, never by holding a screen; a stretch of 3 s with nothing new is a defect
+  that `shoot.mjs --pace` reports.
 - **A series only when the story truly runs past 300 s.** Never split by component for structure's sake:
   five short films of one story are tiring to watch.
 - **If a series is needed**, cut by the course of the story. Each film carries "Title · 2 of 4"; the last

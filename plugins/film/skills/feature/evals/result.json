@@ -2,57 +2,57 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-10-21T16:52:24",
+    "scanned_at": "2026-10-22T12:00:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "3bff5ae8f566126fde40ee0b24227e174ba28a432ae38216bfe11cd9eba5658a",
+    "scanned_hash": "7957c1678d996f5222d19b6708d87b34d6353bf53649aa88c205a6a213b1d378",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "no directive aimed at the reading agent in SKILL.md, references or scripts; references/voice.md holds copy rules only"
+        "note": "no directive aimed at the reading agent in SKILL.md, references or scripts; references/voice.md holds copy rules only; 2026-10-22 edit: new pacing rules and a pace lens in the references; no instruction to an agent beyond running shoot.mjs --pace"
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "the only send is the user-requested publish of the built film to a private Claude Motion artifact; build.mjs and shoot.mjs write only under <work_dir>/out"
+        "note": "the only send is the user-requested publish of the built film to a private Claude Motion artifact; build.mjs and shoot.mjs write only under <work_dir>/out; 2026-10-22 edit: --pace renders local scene files in headless Chrome and prints a report; nothing is sent anywhere"
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "no key, token or credential anywhere, example included"
+        "note": "no key, token or credential anywhere, example included; 2026-10-22 edit: no key, token or credential added"
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "build.mjs replaces only its own <work_dir>/out, after every input is validated, and refuses an out/ it did not make; shoot.mjs replaces its own out/shots"
+        "note": "build.mjs replaces only its own <work_dir>/out, after every input is validated, and refuses an out/ it did not make; shoot.mjs replaces its own out/shots; 2026-10-22 edit: shoot.mjs --pace spawns the same headless Chrome as before on a local file URL, with --dump-dom; no shell, no writes outside out/"
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "plain readable JS, HTML and CSS; no encoded payload, no eval"
+        "note": "plain readable JS, HTML and CSS; no encoded payload, no eval; 2026-10-22 edit: plain JavaScript and prose"
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "preview.html loads fonts from fonts.googleapis.com, documented in metadata; no download-and-run; the preview loads only a local scene file whose id matches ^[a-z][a-z0-9-]{0,31}$"
+        "note": "preview.html loads fonts from fonts.googleapis.com, documented in metadata; no download-and-run; the preview loads only a local scene file whose id matches ^[a-z][a-z0-9-]{0,31}$; 2026-10-22 edit: no new host; the preview page loads Google Fonts as before"
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "no credential-store, dotfile or keychain read; $CHROME only picks the browser binary"
+        "note": "no credential-store, dotfile or keychain read; $CHROME only picks the browser binary; 2026-10-22 edit: no credential store is read"
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "no sudo, setuid or persistence; headless Chrome runs as the user"
+        "note": "no sudo, setuid or persistence; headless Chrome runs as the user; 2026-10-22 edit: no sudo, cron, profile or launch agent"
       }
     ]
   },

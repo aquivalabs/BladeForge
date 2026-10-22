@@ -3,6 +3,9 @@
 const ROW = 76;
 const stepHTML = (n, text) => '<div class="abs" style="width:620px;height:62px;box-sizing:border-box;display:flex;align-items:center;gap:18px;padding:0 18px;border-radius:12px;border:2px solid var(--line);background:var(--card);font-size:28px;font-weight:600;white-space:nowrap"><span class="n" style="flex:none;width:38px;height:38px;border-radius:50%;background:var(--primary-wash);color:var(--primary-2);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center">' + n + '</span><span style="flex:1">' + text + '</span><span class="mk" style="flex:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--on);font-size:22px;font-weight:800"></span></div>';
 
+// The hold after the recipe card settles is cut.
+const CUT_WHAT = cut([[0, 10.4]]);
+
 kit.scene('what', {
   init(kit) {
     const g = kit.h('<div class="ground"><div class="glow2"></div><div class="glow"></div></div>'); kit.stage.append(g);
@@ -27,7 +30,8 @@ kit.scene('what', {
     this.cap = buildCaps(kit, g);
     this.foot = buildFoot(kit, g, { note: 'From the design doc.' });
   },
-  render(t) {
+  render(tFilm) {
+    const t = CUT_WHAT.at(tFilm);
     renderHeader(this.h, t);
     const FLIP = 6.0;
     // Card enters, then flips around its vertical axis at FLIP.
@@ -91,7 +95,7 @@ kit.scene('what', {
     const pd = eo(seg(t, FLIP + 1.0, FLIP + 1.7));
     this.def.style.opacity = String(pd); this.def.style.transform = 'translate(1000px,' + (400 + 16 * (1 - pd)) + 'px)';
 
-    renderCaps(this.cap, [[1.0, 'A recipe has a fixed order: you cannot frost before you bake.'], [FLIP - 0.3, '']], t, 940);
+    renderCaps(this.cap, [[1.0, 'Like a recipe: no frosting before baking.'], [FLIP - 0.3, '']], t, 940);
     enter(this.foot, t, 7.0, 120, 1000, 6);
   },
 });

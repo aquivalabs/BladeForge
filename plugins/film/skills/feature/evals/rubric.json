@@ -70,12 +70,13 @@
     "the user saw the storyboard in chat and gave a go-ahead or changes before the film was made",
     "the film opens with a title of 3-4 s, then the stakes scene: the running example failing without the feature",
     "one running example is carried through the whole film; each component appears once, as a step of its story",
-    "each showcase station has one real-looking object and one event with an outcome, and a progress counter runs through the story",
-    "no caption is over 15 words, at most two captions per showcase step, no blunt question to the viewer, no fact repeated",
+    "each showcase station has one real-looking object and two to four events, each with an outcome, and a progress counter runs through the story",
+    "no caption is over 8 words, at most two captions per showcase step, no blunt question to the viewer, no fact repeated",
     "the palette comes from the company design system, else the project's UI tokens, else the user's answer, and has a warm accent",
     "the finale shows both outcomes of the running example, the proof with a 'not proven yet' line, at most three problems, at most two topics, and an invitation to write to the author",
+    "something new reaches the screen at least every 3 s; only the closing invitation holds, up to 6 s",
     "no competitor or predecessor product is named; no superlative without a sourced number",
-    "every scene was built with scripts/build.mjs, shot with scripts/shoot.mjs (exit 0) and its contact sheet read before the film was published to Claude Motion",
+    "every scene was built with scripts/build.mjs, shot with scripts/shoot.mjs (exit 0) and its contact sheet read, and scripts/shoot.mjs --pace exits 0, before the film was published to Claude Motion",
     "the report gives the film's link, which facts are sourced and which invented, and that the film is private until shared"
   ]
 }

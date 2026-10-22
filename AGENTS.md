@@ -14,6 +14,10 @@ not in this repository. An id such as `RMA-12` in a doc points there. A plan in 
 decisions and findings and names its open items by id; it does not keep its own to-do list. A new
 task found while working becomes an issue there, not a TODO in a file.
 
+**No issue, no push.** Every change starts from an issue, and its branch is named after it:
+`rma-<number>-<slug>`, for example `rma-29-film-pacing`; the PR title starts with the same id. One
+issue, one branch: work found along the way gets its own issue before it is pushed.
+
 ## Hard rules
 - **One problem per change.** A focused edit, not a grab-bag.
 - **Prove the problem first.** Don't restructure tested skill content without evidence it improves behavior.

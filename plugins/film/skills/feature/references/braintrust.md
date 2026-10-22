@@ -16,13 +16,14 @@ director decides.
 | `fresh-eyes` | a newcomer with no context | what is unclear: jargon, field names, too much text, a screen without a picture, a term used before it was explained |
 | `editor` | an editor | register and wording per `voice.md`: blunt questions, raw tags, bureaucratic verbs, internal process words, repeats, draft-like phrasing |
 | `fact-check` | a fact-checker | every claim against its source and the honesty rules in `screen.md`: an invented detail without a footnote, a number without a source, a chapter-7 item without a source. Any breach is S1 |
+| `pace` | an impatient viewer | where the film stands still: a screen or station with fewer events than its seconds call for (about one every 2–3 s), a caption over 8 words, a hold the story does not need. After the build it reads the `shoot.mjs --pace` report too |
 | `verdict` | a judge | the five "done when" sentences in `chapters.md`, one by one, plus the line "what is proven, what is not" and any "only strengths" framing |
 
 ## When and how many
 
 - **Review the storyboard before any scene exists** — fixing it there is cheap. Once the film is made,
   `fresh-eyes` looks once more at what the user scrubbed or at the stills the user asked for.
-- **One film:** two reviewers, one round — `fresh-eyes` with `editor`, `fact-check` with `verdict`.
+- **One film:** two reviewers, one round — `fresh-eyes` with `editor` and `pace`, `fact-check` with `verdict`.
 - **A series:** four reviewers, at most three rounds; a round with no new S1 is the last.
 - **Spawn reviewers with an explicit model tier.** A reviewer reads and reports, so the mid tier is
   enough. Show the cost before launching more than one round.
