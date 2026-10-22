@@ -25,3 +25,6 @@ users-files/
 
 # hillclimb flow dirs: raw traces from local eval runs, never committed
 .claude/hillclimb/
+
+# animated previews, built by the pages workflow from showcase/assets/video (scripts/gen-previews.mjs)
+showcase/assets/preview/
