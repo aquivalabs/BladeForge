@@ -48,7 +48,7 @@ for (const f of films) {
   for (const { suffix, width, fps, colors } of SIZES) {
     const dest = join(OUT, f.replace(/\.mp4$/, `${suffix}.gif`));
     if (existsSync(dest) && statSync(dest).mtimeMs >= statSync(src).mtimeMs) { kept++; continue; }
-    // One palette per film, rebuilt only where frames change, keeps a 10 s film well under 1 MB.
+    // One palette per film, rebuilt only where frames change, keeps a typical 10 s film well under 1 MB.
     const filter = `fps=${fps},scale=${width}:-1:flags=lanczos,split[a][b];`
       + `[a]palettegen=max_colors=${colors}:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle`;
     execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', src, '-vf', filter, '-loop', '0', dest]);

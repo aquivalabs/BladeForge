@@ -17,7 +17,7 @@ installs the rest on demand.
 generated showcase of every skill: what it does, when it fires, what it touches, its measured trigger
 and security-scan results.
 
-Each skill has a ten-second film. Hover a card on the showcase, or watch them here:
+Each skill has a short film, 9 to 30 seconds long. Hover a card on the showcase, or watch them here:
 
 <!-- previews:start -->
 <table>
