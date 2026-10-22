@@ -5,7 +5,13 @@ Each rule exists because a draft broke it and a viewer said so.
 ## Picture and text
 
 - **Picture first.** The mechanism is shown, on the running example. Text is a caption to the picture:
-  at most 12–15 words a caption, one caption on screen at a time. Long text belongs in a document, not a film.
+  at most 8 words a caption, one caption on screen at a time. Long text belongs in a document, not a film.
+- **Never still.** Something new reaches the screen at least every 3 s: an object appears, a value changes,
+  a step lights up. A camera drift alone is not new. `shoot.mjs --pace` lists every stretch that breaks
+  this; only the closing invitation may hold, up to 6 s.
+- **Detail is events, not holds.** A detailed film has more events, not longer screens: two to four small
+  events per showcase station, each with its outcome, rather than one event and a long pause. Explain a
+  long point as several short captions on several events.
 - **Tempo.** At most two captions per showcase step; the picture carries the rest. A caption that retells
   what is already visible is cut. One caption on screen at a time.
 - **No fact twice.** What an animation shows is not retold by a caption and not repeated by a diagram.

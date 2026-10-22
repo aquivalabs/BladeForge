@@ -9,7 +9,7 @@ against it.
 
 | rule | instead of | write |
 |---|---|---|
-| One idea, at most 12–15 words | "The engine resolves the timeframe into periods and reads cube totals with the user's permissions" | "The engine finds the quarter's three periods by itself." |
+| One idea, at most 8 words | "The engine resolves the timeframe into periods and reads cube totals with the user's permissions" | "It finds the quarter's three periods itself." |
 | Active voice, a real subject | "The task is split into parts" | "The engine splits the task into parts." |
 | No blunt or rhetorical question to the viewer | "Is this the problem you wanted solved?" | (cut — the viewer says it in a comment) |
 | No bureaucratic verbs | "enables efficient processing", "ensures", "facilitates" | name what happens: "checks each part itself" |
@@ -37,7 +37,7 @@ tone of a presentation, not of a draft.
 
 ## Check
 
-1. Count the words of every caption: none over 15.
+1. Count the words of every caption: none over 8. A longer point becomes several captions on several events.
 2. Read each line against the table: no blunt question, no bureaucratic verb, no internal process word,
    no unexplained term, no dash link that a comma would carry.
 3. Every number and claim still matches its source; nothing was added in the rewrite.

@@ -7,72 +7,209 @@
   "palette_source": "asked (fictional product, warm paper palette from scripts/base.css)",
   "screens": [
     {
-      "id": "title", "scene": "stakes", "chapter": 0, "kind": "title", "secs": 4,
+      "id": "title",
+      "scene": "stakes",
+      "chapter": 0,
+      "kind": "title",
+      "secs": 4,
       "shows": "FEATURE BRIEFING · ACME MARKET, the name Price stack, one line of what it does; six layers stack up beside it.",
       "captions": [],
-      "on_screen": ["FEATURE BRIEFING · ACME MARKET", "Price stack", "One total for every cart, every euro explained", "An example film about a fictional product."],
+      "on_screen": [
+        "FEATURE BRIEFING · ACME MARKET",
+        "Price stack",
+        "One total for every cart, every euro explained",
+        "An example film about a fictional product."
+      ],
       "event": "",
-      "facts": [ { "claim": "Price stack prices a cart in a fixed order", "source": "chapters.md worked example" } ],
+      "facts": [
+        {
+          "claim": "Price stack prices a cart in a fixed order",
+          "source": "chapters.md worked example"
+        }
+      ],
       "footnote": ""
     },
     {
-      "id": "stakes", "scene": "stakes", "chapter": 1, "kind": "failure", "secs": 22,
+      "id": "stakes",
+      "scene": "stakes",
+      "chapter": 1,
+      "kind": "failure",
+      "secs": 20,
       "shows": "Three real-looking objects side by side: Maya's cart at €84.20, the checkout with the coupon line twice at €79.10, a ticket a week later: the shop bills Maya the missing €5.10. Then the two totals large, with ≠.",
-      "captions": ["Maya fills a cart with a bundle and the coupon SPRING15.", "At checkout, the same coupon counts twice.", "A week later, the shop bills her the missing €5.10.", "After that, Maya stops trusting the totals."],
+      "captions": [
+        "Maya’s cart: a bundle and coupon SPRING15.",
+        "At checkout, the same coupon counts twice.",
+        "A week later, she is billed €5.10.",
+        "After that, Maya stops trusting the totals."
+      ],
       "event": "the second SPRING15 line drops in and the checkout shakes; a BILLED AGAIN stamp lands on the ticket",
       "facts": [
-        { "claim": "cart €84.20, checkout €79.10, coupon applied twice, billed the missing €5.10 a week later, Maya stops trusting totals", "source": "chapters.md worked example (fictional)" },
-        { "claim": "line prices, ticket #4127, coupon value €5.10, tax €4.77", "source": "invented" }
+        {
+          "claim": "cart €84.20, checkout €79.10, coupon applied twice, billed the missing €5.10 a week later, Maya stops trusting totals",
+          "source": "chapters.md worked example (fictional)"
+        },
+        {
+          "claim": "line prices, ticket #4127, coupon value €5.10, tax €4.77",
+          "source": "invented"
+        }
       ],
       "footnote": "The situation is invented for the example."
     },
     {
-      "id": "what", "scene": "what", "chapter": 1, "kind": "definition", "secs": 12,
+      "id": "what",
+      "scene": "what",
+      "chapter": 1,
+      "kind": "definition",
+      "secs": 10.4,
       "shows": "A recipe card: Frost tries to swap above Bake, is refused and slides back while the frosting slides off raw batter; Bake then Frost are checked. The card flips into the six price steps, with the definition beside it.",
-      "captions": ["A recipe has a fixed order: you cannot frost before you bake."],
-      "on_screen": ["Price stack prices every cart in the same six steps, always in the same order."],
+      "captions": [
+        "Like a recipe: no frosting before baking."
+      ],
+      "on_screen": [
+        "Price stack prices every cart in the same six steps, always in the same order."
+      ],
       "event": "the Frost step jumps before Bake and slides back",
-      "facts": [ { "claim": "six steps in a fixed order: price list, resident, membership, bundle, coupon, tax last", "source": "storyboard.md / design doc (fictional)" } ],
+      "facts": [
+        {
+          "claim": "six steps in a fixed order: price list, resident, membership, bundle, coupon, tax last",
+          "source": "storyboard.md / design doc (fictional)"
+        }
+      ],
       "footnote": "From the design doc."
     },
     {
-      "id": "who", "scene": "who", "chapter": 3, "kind": "roles", "secs": 8,
+      "id": "who",
+      "scene": "who",
+      "chapter": 3,
+      "kind": "roles",
+      "secs": 8,
       "shows": "One total at the hub, three roles as spokes, each with an object from its day: the cart and checkout totals, a receipt line with its reason, a discount chart.",
       "captions": [],
       "event": "",
       "facts": [
-        { "claim": "shoppers, support agents who explain a total, finance who audits discounts", "source": "storyboard.md / design doc (fictional)" },
-        { "claim": "€84.20, −€5.10, chart bars", "source": "invented" }
+        {
+          "claim": "shoppers, support agents who explain a total, finance who audits discounts",
+          "source": "storyboard.md / design doc (fictional)"
+        },
+        {
+          "claim": "€84.20, −€5.10, chart bars",
+          "source": "invented"
+        }
       ],
       "footnote": "Roles from the design doc; amounts from the example cart, invented."
     },
     {
-      "id": "journey", "scene": "journey", "chapter": 4, "kind": "showcase", "secs": 90,
+      "id": "journey",
+      "scene": "journey",
+      "chapter": 4,
+      "kind": "showcase",
+      "secs": 59.3,
       "shows": "One camera ride over six stations, 15 s each, the step rail and the counter 'rules applied N/6' with the running total fixed on top, a cart token on the road. Total: 116.13 → 115.63 → 108.43 → 84.53 → 79.43 → 84.20.",
       "stations": [
-        { "n": 1, "object": "product tile and cart with six lines", "event": "Maya adds the third coffee; the 3-for-2 badge snaps on", "captions": ["Maya adds a third coffee, and the 3-for-2 bundle snaps on.", "Six rules will now price this cart, one after another."] },
-        { "n": 2, "object": "delivery-region toggle and price list table", "event": "the list switches to Northshire; olive oil −€1.00, laundry pods +€0.50; total ticks", "captions": ["Maya lives in Northshire, so the Northshire price list applies.", "Two prices change, and the total follows."] },
-        { "n": 3, "object": "resident badge, Acme Plus card, prices table", "event": "subscription checked: active until 30 June; member prices drop in", "captions": ["Her Northshire residency is checked first, then her Acme Plus membership.", "The membership is active, so member prices replace list prices."] },
-        { "n": 4, "object": "bundle card, coupon field, cart lines", "event": "SPRING15 refused on the bundled coffee (one discount per item), then accepted on the other three lines", "captions": ["Bundles come first: the cheapest coffee in the 3 for 2 is free.", "SPRING15 is refused on bundled coffee, then accepted on the other lines."] },
-        { "n": 5, "object": "the six-rule stack and the tax calculation", "event": "the tax layer drops on last; 6% on €79.43 adds €4.77", "captions": ["Tax comes last, on the amount after every discount.", "The same order runs in the cart, at checkout and on the receipt."] },
-        { "n": 6, "object": "receipt with why lines, support desk window", "event": "support opens the same lines; 'Same lines as Maya's receipt'", "captions": ["Every euro on the receipt has a line saying why.", "Support opens the same receipt: the same lines, the same €84.20."] }
+        {
+          "n": 1,
+          "object": "product tile and cart with six lines",
+          "event": "Maya adds the third coffee; the 3-for-2 badge snaps on",
+          "captions": [
+            "A third coffee: the 3-for-2 snaps on.",
+            "Six rules now price the cart, in order."
+          ],
+          "secs": 9.2
+        },
+        {
+          "n": 2,
+          "object": "delivery-region toggle and price list table",
+          "event": "the list switches to Northshire; olive oil −€1.00, laundry pods +€0.50; total ticks",
+          "captions": [
+            "Maya lives in Northshire: its price list applies.",
+            "Two prices change, and the total follows."
+          ],
+          "secs": 9.5
+        },
+        {
+          "n": 3,
+          "object": "resident badge, Acme Plus card, prices table",
+          "event": "subscription checked: active until 30 June; member prices drop in",
+          "captions": [
+            "Residency is checked first, then Acme Plus.",
+            "Membership active: member prices replace list prices."
+          ],
+          "secs": 10.5
+        },
+        {
+          "n": 4,
+          "object": "bundle card, coupon field, cart lines",
+          "event": "SPRING15 refused on the bundled coffee (one discount per item), then accepted on the other three lines",
+          "captions": [
+            "Bundles first: the cheapest coffee is free.",
+            "SPRING15 is refused on bundled coffee.",
+            "Then it is accepted on the other lines."
+          ],
+          "secs": 10.3
+        },
+        {
+          "n": 5,
+          "object": "the six-rule stack and the tax calculation",
+          "event": "the tax layer drops on last; 6% on €79.43 adds €4.77",
+          "captions": [
+            "Tax comes last, after every discount.",
+            "Cart, checkout, receipt: the same order."
+          ],
+          "secs": 9.5
+        },
+        {
+          "n": 6,
+          "object": "receipt with why lines, support desk window",
+          "event": "support opens the same lines; 'Same lines as Maya's receipt'",
+          "captions": [
+            "Every euro on the receipt says why.",
+            "Support sees the same lines, the same €84.20."
+          ],
+          "secs": 10.3
+        }
       ],
       "event": "one event per station, listed above",
       "facts": [
-        { "claim": "stations and their events, 'active until 30 June', 'one discount per item'", "source": "storyboard.md (fictional)" },
-        { "claim": "every price, the 6% Northshire rate, resident benefit on local produce, order A-20417, receipt amounts −€23.90 and −€5.10 (chosen so the arithmetic matches the stakes; storyboard.md had −€1.80 and −€2.10)", "source": "invented" }
+        {
+          "claim": "stations and their events, 'active until 30 June', 'one discount per item'",
+          "source": "storyboard.md (fictional)"
+        },
+        {
+          "claim": "every price, the 6% Northshire rate, resident benefit on local produce, order A-20417, receipt amounts −€23.90 and −€5.10 (chosen so the arithmetic matches the stakes; storyboard.md had −€1.80 and −€2.10)",
+          "source": "invented"
+        }
       ],
       "footnote": "Example cart; amounts and labels invented."
     },
     {
-      "id": "finale", "scene": "finale", "chapter": "6-7", "kind": "finale", "secs": 34,
+      "id": "finale",
+      "scene": "finale",
+      "chapter": "6-7",
+      "kind": "finale",
+      "secs": 27.4,
       "shows": "Beat 1 (0-10.5 s): without and with Price stack side by side. Beat 2 (10.5-21 s): a grep that counts test cases typed in a terminal, 128 counting up, the not-proven line. Beat 3 (21-34 s): three problem cards, two topic chips, the invitation held to the end.",
-      "captions": ["One total everywhere, and every euro explained."],
-      "on_screen": ["Not proven yet: the cases were counted, not run.", "Coupon and bundle on one item · A rule was chosen; product has not signed it off.", "A membership that lapses during checkout", "Tax for delivery to another region", "Resident benefit with member prices: stack or not", "The breakdown: for shoppers, or only for support", "Send ideas, questions and decisions to the feature's author."],
+      "captions": [
+        "One total everywhere, every euro explained."
+      ],
+      "on_screen": [
+        "Not proven yet: the cases were counted, not run.",
+        "Coupon and bundle on one item · A rule was chosen; product has not signed it off.",
+        "A membership that lapses during checkout",
+        "Tax for delivery to another region",
+        "Resident benefit with member prices: stack or not",
+        "The breakdown: for shoppers, or only for support",
+        "Send ideas, questions and decisions to the feature's author."
+      ],
       "event": "a TWO TOTALS stamp on the left, checks pop on the right; the count lands with a ring",
       "facts": [
-        { "claim": "problems and topics", "source": "storyboard.md, from the design doc's open questions (fictional)" },
-        { "claim": "test files and 128 counted cases", "source": "invented" }
+        {
+          "claim": "problems and topics",
+          "source": "storyboard.md, from the design doc's open questions (fictional)"
+        },
+        {
+          "claim": "test files and 128 counted cases",
+          "source": "invented"
+        }
       ],
       "footnote": "Beat 1: The situation is invented for the example. Beat 2: Example output; the count is invented. Counted in the test files, not run for this film. Beat 3: From the design doc's open questions."
     }

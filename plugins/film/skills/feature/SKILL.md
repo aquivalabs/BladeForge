@@ -46,7 +46,9 @@ frame you have looked at is the only proof that nothing overlaps.
    palette tokens in a copy of `scripts/base.css` (company design system, else the project's UI tokens,
    else ask; one warm accent), an optional `score.js` on Claude Motion's sound API. `node scripts/build.mjs
    <work_dir>` packs them; `node scripts/shoot.mjs <work_dir>` shoots every scene and a contact sheet.
-   Read every frame: nothing overlaps, wraps where it should not, or is cut off. Fix and shoot again.
+   Read every frame: nothing overlaps, wraps where it should not, or is cut off. Then `node scripts/shoot.mjs
+   <work_dir> --pace` lists every stretch of 3 s with nothing new on screen; add an event there or cut the
+   hold. Fix and shoot again.
    Details and pitfalls: `references/build.md`.
 8. **Publish to Claude Motion.** Create the film from the Motion type (title only, opens after the first
    write), then write `out/docs/writes.json` as ONE `ArtifactData` batch. A later fix rewrites only the
@@ -67,11 +69,11 @@ hidden. Full rules: `references/screen.md` § Honesty.
 
 1. Open the storyboard: every screen has `secs`, the total is at most 300, every `fact` has a `source`,
    and every `invented` fact has a footnote on its screen.
-2. Read the captions against `references/voice.md` and the limits in `references/screen.md`: at most 15 words a
+2. Read the captions against `references/voice.md` and the limits in `references/screen.md`: at most 8 words a
    caption, at most two captions per showcase step, no blunt question, no fact said twice.
 3. The first screen after the title is the stakes scene; the finale holds both outcomes, the proof with
    its "not proven yet" line, at most three problems, at most two topics, and the invitation.
-4. `node scripts/shoot.mjs <work_dir>` exits 0, you read the contact sheet, and the film is published to
-   Claude Motion.
+4. `node scripts/shoot.mjs <work_dir>` exits 0, you read the contact sheet, `node scripts/shoot.mjs <work_dir>
+   --pace` exits 0, and the film is published to Claude Motion.
 5. The report names the link, the sourced-versus-invented line, and the sharing note.
 6. Any line fails? Fix the storyboard or the scene, and check again from 1.

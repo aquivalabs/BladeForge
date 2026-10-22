@@ -74,8 +74,8 @@ invitation.
 - **Real material.** In two or three key moments the screen shows a real object, not a box: diff lines,
   a run's output, a commit line, a PR card, a piece of the spec. Drawn boxes explain; real objects convince.
 - **A showcase step.** Each station of chapter 4 shows its own object the way it looks in life — a terminal,
-  a form with questions, a document, a dashboard, a PR page — and has ONE small event with an outcome:
-  something is caught, blocked, breaks and gets fixed. One progress counter runs through the whole story
+  a form with questions, a document, a dashboard, a PR page — and has two to four small events, each with
+  an outcome: something is caught, blocked, breaks and gets fixed. One event and a long pause is a slide. One progress counter runs through the whole story
   (budget spent, parts done, minutes since the request) and answers the stakes. A step where nothing
   happens is boring even if everything on it is correct.
 - **Balance.** More answers than questions: chapter 6 comes before chapter 7 and is longer. If the source
@@ -87,8 +87,10 @@ invitation.
 ## 3. Scale
 
 - **One film** by default. A Claude Motion film holds at most 300 s.
-- **Estimate length from the storyboard**, before any scene code: about 10 s per plain screen, 14–18 s
-  per showcase step.
+- **Estimate length from the storyboard**, before any scene code: about 2–3 s per event. A plain screen
+  carries three or four events, about 8–12 s; a showcase station two to four, about 6–12 s. A detailed film
+  gets long by having more events, never by holding a screen; a stretch of 3 s with nothing new is a defect
+  that `shoot.mjs --pace` reports.
 - **A series only when the story truly runs past 300 s.** Never split by component for structure's sake:
   five short films of one story are tiring to watch.
 - **If a series is needed**, cut by the course of the story. Each film carries "Title · 2 of 4"; the last

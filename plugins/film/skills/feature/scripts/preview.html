@@ -21,6 +21,15 @@ const st=document.getElementById('stage');kit.stage=st;
 const fit=()=>st.style.transform='scale('+Math.min(innerWidth/1920,innerHeight/1080)+')';fit();onresize=fit;
 const sc=document.createElement('script');if(id)sc.src='./scene-'+id+'.js';
 sc.onerror=()=>console.error('Uncaught: scene file scene-'+id+'.js did not load');
-sc.onload=()=>document.fonts.ready.then(()=>{try{if(!kit.scenes[id])throw new Error('no kit.scene("'+id+'")');const o=Object.create(kit.scenes[id]);o.init(kit);o.render(t);document.getElementById('clock').textContent=id+' @ '+t+'s';}catch(e){console.error('Uncaught: '+(e&&e.stack||e));}});
+// ?pace=<dur>: step the scene through its whole length and log every stretch where nothing NEW reaches
+// the screen: no element appears or disappears, no text or number changes, nothing grows or is revealed
+// (width, height, clip-path). Camera moves, drifts and pulses do not count, because they bring the
+// viewer no new information.
+const pace=+q.get('pace');
+const shown=e=>{for(let n=e;n&&n!==st;n=n.parentElement){const c=getComputedStyle(n);if(c.display==='none'||c.visibility==='hidden'||+c.opacity<0.5)return false;}return true;};
+const look=()=>[...st.querySelectorAll('*')].map(e=>shown(e)?'1'+e.style.width+e.style.height+e.style.clipPath+(e.childElementCount?'':e.textContent):'0').join('\n');
+sc.onload=()=>document.fonts.ready.then(()=>{try{if(!kit.scenes[id])throw new Error('no kit.scene("'+id+'")');const o=Object.create(kit.scenes[id]);o.init(kit);
+if(pace>0){const step=0.25,runs=[];let prev=null,from=0;for(let x=0;x<=pace+1e-9;x+=step){o.render(Math.round(x*100)/100);const now=look();if(now!==prev){if(prev!==null&&x-step-from>=0)runs.push([from,Math.round((x-step)*100)/100]);from=Math.round(x*100)/100;prev=now;}}runs.push([from,pace]);console.log('PACE '+JSON.stringify(runs.map(([a,b])=>[a,b,Math.round((b-a)*100)/100])));return;}
+o.render(t);document.getElementById('clock').textContent=id+' @ '+t+'s';}catch(e){console.error('Uncaught: '+(e&&e.stack||e));}});
 if(id)document.body.append(sc);
 </script></body></html>

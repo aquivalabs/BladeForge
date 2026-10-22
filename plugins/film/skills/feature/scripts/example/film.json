@@ -24,9 +24,9 @@
     {
       "id": "stakes",
       "name": "How it goes today",
-      "dur": 26,
+      "dur": 24,
       "file": "scenes/stakes.js",
-      "desc": "Title, then Maya's cart: €84.20 in the cart, €79.10 at checkout, a refund a week later.",
+      "desc": "Title, then Maya's cart: \u20ac84.20 in the cart, \u20ac79.10 at checkout, a refund a week later.",
       "shots": [
         2,
         8,
@@ -39,7 +39,7 @@
     {
       "id": "what",
       "name": "What it is",
-      "dur": 12,
+      "dur": 10.4,
       "file": "scenes/what.js",
       "desc": "A recipe has a fixed order; Price stack prices every cart in six steps.",
       "shots": [
@@ -62,7 +62,7 @@
     {
       "id": "journey",
       "name": "One cart, start to finish",
-      "dur": 90,
+      "dur": 59.3,
       "file": "scenes/journey.js",
       "desc": "One camera ride over six stations: cart, region, resident and member, bundle and coupon, tax, receipt.",
       "shots": [
@@ -77,19 +77,13 @@
         47.5,
         51,
         55.5,
-        58,
-        62.5,
-        66,
-        72,
-        79,
-        84,
-        88
+        58
       ]
     },
     {
       "id": "finale",
       "name": "What works and what is open",
-      "dur": 34,
+      "dur": 27.4,
       "file": "scenes/finale.js",
       "desc": "Both outcomes side by side, the proof with its not-proven line, three problems, two topics, the invitation.",
       "shots": [
@@ -98,9 +92,7 @@
         13,
         17,
         20,
-        24,
-        28,
-        31
+        24
       ]
     }
   ],

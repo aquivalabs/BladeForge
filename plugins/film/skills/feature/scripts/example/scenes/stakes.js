@@ -1,6 +1,8 @@
 // stakes — the title card (4 s), then Maya's cart failing without the feature (invented for the demo, footnoted).
 // Local time t = t0 - T0. Three real-looking objects side by side: the cart, the checkout, the support ticket.
 const T0 = 4;
+// The scene's own clock runs 26 s; the hold after the last caption is cut.
+const CUT_STAKES = cut([[0, 24]]);
 const moneyRow = (label, amount, extra) => '<div class="row" style="height:40px;font-size:22px;' + (extra || '') + '"><span>' + label + '</span><span class="num" style="font-weight:600">' + amount + '</span></div>';
 
 kit.scene('stakes', {
@@ -52,7 +54,8 @@ kit.scene('stakes', {
     this.cap = buildCaps(kit, g);
     this.foot = buildFoot(kit, g, { note: 'The situation is invented for the example.' });
   },
-  render(t0) {
+  render(tFilm) {
+    const t0 = CUT_STAKES.at(tFilm);
     // Title, then the layers fly up and away.
     const tin = eo(seg(t0, 0.1, 0.9)), tout = eo(seg(t0, 3.4, 4.0));
     this.ttl.style.opacity = String(tin * (1 - tout)); this.ttl.style.transform = 'translate(120px,' + (330 + 20 * (1 - tin) - 40 * tout) + 'px)';
@@ -102,7 +105,7 @@ kit.scene('stakes', {
     const pn = eo(seg(t, 17.6, 18.4));
     this.neq.style.opacity = String(pn); this.neq.style.transform = 'translate(0px,' + (360 + 20 * (1 - pn)) + 'px) scale(' + lerp(0.94, 1, pn) + ')';
 
-    renderCaps(this.cap, [[1.0, 'Maya fills a cart with a bundle and the coupon SPRING15.'], [5.6, 'At checkout, the same coupon counts twice.'], [11.2, 'A week later, the shop bills her the missing €5.10.'], [17.4, 'After that, Maya stops trusting the totals.']], t, 880);
+    renderCaps(this.cap, [[1.0, 'Maya’s cart: a bundle and coupon SPRING15.'], [5.6, 'At checkout, the same coupon counts twice.'], [11.2, 'A week later, she is billed €5.10.'], [17.4, 'After that, Maya stops trusting the totals.']], t, 880);
     enter(this.foot, t, 1.2, 120, 1000, 6);
   },
 });

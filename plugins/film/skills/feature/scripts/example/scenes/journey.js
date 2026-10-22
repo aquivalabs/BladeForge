@@ -2,6 +2,9 @@
 // the counter "rules applied N/6" and the running total stay fixed on top. Each station: one object, one event.
 // Every amount is invented for the example and adds up: 116.13 -> 115.63 -> 108.43 -> 84.53 -> 79.43 -> 84.20.
 const STARTS = [0, 15, 30, 45, 60, 75];
+// Each station is written on a 15 s clock, but its events end by about 10 s. The ride plays each station
+// up to its last event and the glide to the next, and cuts the rest.
+const CUT_JOURNEY = cut([[0, 9.2], [14.7, 24.2], [29.7, 40.2], [44.7, 55], [59.7, 69.2], [74.7, 78.5], [80.5, 87]]);
 const W = 1920;
 // The running total and the rule counter, as keyframes on the film clock: [at, value, seconds].
 const TOTAL = [[3.2, 116.13, 0.8], [21.0, 115.63, 0.8], [32.8, 114.98, 0.6], [35.4, 108.43, 1.6], [46.6, 84.53, 0.8], [52.6, 79.43, 0.8], [63.6, 84.20, 1.0]];
@@ -102,7 +105,8 @@ kit.scene('journey', {
     this.foot = buildFoot(kit, g, { note: 'Example cart; amounts and labels invented.' });
   },
 
-  render(t) {
+  render(tFilm) {
+    const t = CUT_JOURNEY.at(tFilm);
     // Camera: rests on a station, glides to the next at each start.
     let cam = 0, moving = 0;
     for (let i = 1; i < 6; i++) { const k = seg(t, STARTS[i] - 0.3, STARTS[i] + 1.1); cam = lerp(cam, i * W, eio(k)); if (k > 0 && k < 1) moving = Math.sin(Math.PI * k); }
@@ -263,12 +267,12 @@ kit.scene('journey', {
     }
 
     renderCaps(this.cap, [
-      [1.0, 'Maya adds a third coffee, and the 3-for-2 bundle snaps on.'], [7.5, 'Six rules will now price this cart, one after another.'],
-      [16.0, 'Maya lives in Northshire, so the Northshire price list applies.'], [22.5, 'Two prices change, and the total follows.'],
-      [31.0, 'Her Northshire residency is checked first, then her Acme Plus membership.'], [38.5, 'The membership is active, so member prices replace list prices.'],
-      [46.0, 'Bundles come first: the cheapest coffee in the 3 for 2 is free.'], [49.6, 'SPRING15 is refused on bundled coffee, then accepted on the other lines.'],
-      [61.0, 'Tax comes last, on the amount after every discount.'], [67.5, 'The same order runs in the cart, at checkout and on the receipt.'],
-      [76.0, 'Every euro on the receipt has a line saying why.'], [82.0, 'Support opens the same receipt: the same lines, the same €84.20.'],
+      [1.0, 'A third coffee: the 3-for-2 snaps on.'], [7.5, 'Six rules now price the cart, in order.'],
+      [16.0, 'Maya lives in Northshire: its price list applies.'], [22.5, 'Two prices change, and the total follows.'],
+      [31.0, 'Residency is checked first, then Acme Plus.'], [38.5, 'Membership active: member prices replace list prices.'],
+      [46.0, 'Bundles first: the cheapest coffee is free.'], [49.6, 'SPRING15 is refused on bundled coffee.'], [52.4, 'Then it is accepted on the other lines.'],
+      [61.0, 'Tax comes last, after every discount.'], [67.5, 'Cart, checkout, receipt: the same order.'],
+      [76.0, 'Every euro on the receipt says why.'], [82.0, 'Support sees the same lines, the same €84.20.'],
     ], t, 930);
     enter(this.foot, t, 0.5, 120, 1016, 4);
   },
