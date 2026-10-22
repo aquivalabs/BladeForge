@@ -2,7 +2,7 @@
   {
     "file": "price-stack-example.mp4",
     "title": "Example film: Price stack",
-    "caption": "The full worked example the skill ships, 170 s, about a fictional product (Acme Market). Built from scripts/example/ with the skill's own build and frame check.",
+    "caption": "An earlier 170 s cut of the worked example, about a fictional product (Acme Market). The skill now ships a 129 s version that keeps every event and cuts the holds; this file is replaced once that version is exported.",
     "poster_at": 2
   }
 ]
