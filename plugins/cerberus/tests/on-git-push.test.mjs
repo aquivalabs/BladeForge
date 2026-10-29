@@ -5,7 +5,8 @@
 // stands for the judge: it answers a leak, a clean verdict, nonsense, or fails if it is called
 // when the guard should not have needed it.
 import { strict as assert } from 'node:assert';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { execFileSync, spawn, spawnSync } from 'node:child_process';
+import { createServer } from 'node:http';
 import { existsSync, mkdtempSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -126,4 +127,45 @@ test('a person can turn the guard off for one repository; an agent cannot', () =
   assert.equal(decide(dir, push('git config cerberus.pushguard off'), JUDGE.never).decision, 'deny', 'an agent setting the switch is refused');
   git('config', 'cerberus.pushguard', 'off');
   assert.equal(decide(dir, push(), JUDGE.never).decision, 'allow', 'off: no judge, push passes');
+});
+
+// A stand-in for the GitHub API: `demo/secret` is private (404), `demo/open` is public.
+async function githubApi() {
+  const server = createServer((req, res) => {
+    const open = req.url === '/repos/demo/open';
+    res.writeHead(open ? 200 : 404, { 'content-type': 'application/json' }).end(open ? '{"private":false}' : '{}');
+  });
+  await new Promise(r => server.listen(0, '127.0.0.1', r));
+  return { url: `http://127.0.0.1:${server.address().port}`, close: () => server.close() };
+}
+
+function decideVia(api, dir, command, judge) {
+  const input = JSON.stringify({ tool_name: 'Bash', tool_input: { command }, cwd: dir });
+  const child = spawn('bash', [HOOK], { env: { ...process.env, CERBERUS_GITHUB_API: api, PATH: `${judge}:${process.env.PATH}` } });
+  let out = '';
+  child.stdout.on('data', d => { out += d; });
+  child.stdin.end(input);
+  return new Promise(r => child.on('close', () => r(out.trim() ? JSON.parse(out).hookSpecificOutput.permissionDecision : 'allow')));
+}
+
+// Finds the work email in every push, but under the secrets-only prompt finds nothing.
+const EMAIL_JUDGE = fakeClaude(`grep -q 'PRIVATE repository' && echo '{"leaks":[]}' || echo '{"leaks":[{"where":"a1b2c3d","what":"d@work.test"}]}'`);
+
+test('a push to a private GitHub repository is judged for secrets only; a public one, or another host, in full', async () => {
+  const api = await githubApi();
+  try {
+    const { dir, git, commit } = repo();
+    git('remote', 'add', 'origin', 'git@github.com:demo/secret.git');
+    git('remote', 'add', 'public', 'https://github.com/demo/open.git');
+    git('remote', 'add', 'gitlab', 'git@gitlab.com:demo/secret.git');
+    assert.equal(await decideVia(api.url, dir, 'git push', EMAIL_JUDGE), 'allow', 'origin is private: the email is not a leak');
+    commit('chore: token sk-demo-0000');
+    assert.equal(await decideVia(api.url, dir, 'git push origin main', JUDGE.leak), 'deny', 'a secret in a private push is still denied');
+    assert.equal(await decideVia(api.url, dir, 'git push public main', EMAIL_JUDGE), 'deny', 'named public remote');
+    assert.equal(await decideVia(api.url, dir, 'git push https://github.com/demo/open.git main', EMAIL_JUDGE), 'deny', 'public URL');
+    assert.equal(await decideVia(api.url, dir, 'git push gitlab main', EMAIL_JUDGE), 'deny', 'another host is judged in full');
+    assert.equal(await decideVia('http://127.0.0.1:9', dir, 'git push', EMAIL_JUDGE), 'deny', 'no API answer is judged in full');
+  } finally {
+    api.close();
+  }
 });
