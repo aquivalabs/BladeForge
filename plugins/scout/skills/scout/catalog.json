@@ -1,12 +1,12 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-10-22",
+  "generated": "2026-10-29",
   "skills": [
     {
       "name": "cerberus:leak-check",
       "plugin": "cerberus",
-      "plugin-version": "2.1.6",
+      "plugin-version": "2.1.7",
       "activates-when": "Use before committing OR PUSHING a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this PUBLIC marketplace \u2014 review the change, and before a push also the outgoing commits themselves (messages, author, committer, branch name), for anything that points to a real work codebase (real class/object/namespace/org/ticket names, secrets, real people/emails/paths, an employer or client brand, or the aggregate \"this is one specific company's product\" flavor) and rewrite it to a neutral fictional demo before it ships. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
       "category": "quality",
       "purpose": "Agent judgment pass that reviews a skill/reference/script/eval change \u2014 and, before a push, the outgoing commits' messages, authors, committers and branch name \u2014 for anything pointing to a real work codebase (secrets, real people/emails/paths, employer or client brand, real namespace/object names, or the aggregate \"one company's product\" flavor) and rewrites it to a neutral fictional demo.",
@@ -28,7 +28,7 @@
     {
       "name": "cerberus:security-scan",
       "plugin": "cerberus",
-      "plugin-version": "2.1.6",
+      "plugin-version": "2.1.7",
       "activates-when": "Use before committing a NEW or EDITED skill, its references, its bundled scripts, or its eval fixtures to this marketplace \u2014 review the change for anything UNSAFE to the person who installs and runs it: prompt-injection text, data exfiltration, an embedded secret, a dangerous/destructive command, obfuscated payloads, an unexpected external fetch, credential-store access, or privilege escalation. The consumer-safety half of the gate; the outward-leak half is cerberus:leak-check. Also runs when the CERBERUS hook flags a skill/script/eval edit.",
       "category": "quality",
       "purpose": "The consumer-safety head of cerberus \u2014 reviews a skill/script/fixture for the eight-point security checklist (injection, exfiltration, secrets, dangerous commands, obfuscation, external fetches, credential access, privilege escalation) before it ships.",
