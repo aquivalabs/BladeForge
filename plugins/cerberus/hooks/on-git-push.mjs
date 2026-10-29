@@ -12,7 +12,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { pushRange, recordClean } from './push-range.mjs';
+import { judgePrompt, pushRange, recordClean } from './push-range.mjs';
 
 export const PUSH = /(^|[;&|(\s])git(\s+-[Cc]\s+\S+)*\s+push(\s|$)/;
 
@@ -33,10 +33,10 @@ if (/cerberus-verdicts|cerberus\.pushguard/.test(`${command} ${tool.file_path ??
     'runs `git config cerberus.pushguard off` in their own terminal.');
 if (!PUSH.test(command)) process.exit(0);
 
-const range = pushRange(input.cwd || process.cwd());
+const range = await pushRange(input.cwd || process.cwd(), command);
 if (!range || range.off || !range.log || range.cached) process.exit(0);
 
-const prompt = `${readFileSync(join(import.meta.dirname, 'push-judge-prompt.txt'), 'utf8')}\n` +
+const prompt = `${judgePrompt(import.meta.dirname, range.scope)}\n` +
   `<branch>${range.branch}</branch>\n<commits>\n${range.log}\n</commits>`;
 const judgeDir = mkdtempSync(join(tmpdir(), 'cerberus-judge-'));
 let answer = '';
@@ -54,6 +54,6 @@ if (!Array.isArray(leaks))
   deny('CERBERUS: the push guard could not judge the outgoing commits (no answer from claude -p). The push stays ' +
     'blocked until it can: check that claude is on PATH and signed in, then push again.');
 if (leaks.length)
-  deny(`CERBERUS: this push would publish work fingerprints in its commits — ${leaks.map(l => `${l.where}: ${l.what}`).join('; ')}. ` +
+  deny(`CERBERUS: this push would publish ${range.scope === 'secrets' ? 'a secret' : 'work fingerprints'} in its commits — ${leaks.map(l => `${l.where}: ${l.what}`).join('; ')}. ` +
     'Fix them with cerberus:leak-check (amend or reword the commits, reset a work author, rename the branch), then push again.');
 recordClean(range.gitDir, range.key);

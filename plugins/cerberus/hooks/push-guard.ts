@@ -8,18 +8,18 @@ import type { Register } from 'claude-code'
 
 const PUSH = /(^|[;&|(\s])git(\s+-[Cc]\s+\S+)*\s+push(\s|$)/
 
-type Range = { off: boolean; gitDir: string; log?: string; branch?: string; key?: string; cached?: boolean }
+type Range = { off: boolean; scope?: 'all' | 'secrets'; gitDir: string; log?: string; branch?: string; key?: string; cached?: boolean }
 type Leak = { where: string; what: string }
 
 export const register: Register = on => {
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
     if (!PUSH.test(e.command)) return next(e)
     const script = `${$.plugin.root}/hooks/push-range.mjs`
-    const out = await $.process.run(['node', script])
+    const out = await $.process.run(['node', script, '.', e.command])
     const range: Range | null = out.exitCode === 0 ? JSON.parse(out.stdout) : null
     if (!range || range.off || !range.log || range.cached) return next(e)
 
-    const system = await $.fs.read(`${$.plugin.root}/hooks/push-judge-prompt.txt`)
+    const system = await $.fs.read(`${$.plugin.root}/hooks/${range.scope === 'secrets' ? 'push-judge-secrets-prompt.txt' : 'push-judge-prompt.txt'}`)
     $.ui.status('cerberus: judging the outgoing commits')
     const r = await $.model.complete({ model: 'sonnet', system, prompt: `<branch>${range.branch}</branch>\n<commits>\n${range.log}\n</commits>` })
     $.ui.status(undefined)
