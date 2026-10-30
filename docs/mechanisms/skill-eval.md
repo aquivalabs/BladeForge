@@ -227,11 +227,25 @@ section's shape and, with `--print-material-hash <skill-dir>`, computes the hash
 shared by the head that writes and the gate that checks, so the two can never disagree.
 
 **It also excludes build artefacts** — a `__pycache__`, a `.pyc`, a `node_modules` — because an
-installer never reads one. The walk is over the FILESYSTEM, not over git, so an ignored artefact
-used to fold into the hash: running any bundled script left a `__pycache__` beside it, the machine
-that wrote the scan hashed it, and a clean CI checkout did not. The gate then called a freshly
-written walk stale, on that skill only, with no way to reproduce it locally.
-`scripts/validate_security.test.py` pins the exclusion.
+installer never reads one, even when git does not ignore it. Running any bundled script left a
+`__pycache__` beside it, the machine that wrote the scan hashed it, and a clean CI checkout did not;
+the gate then called a freshly written walk stale, on that skill only, with no way to reproduce it
+locally. `scripts/validate_security.test.py` pins the exclusion.
+
+**Files ignored by git are not part of the material hash.** Inside a git work tree the file list
+comes from git: every file under the skill's `SKILL.md`, `references/` and `scripts/` that git
+tracks, plus every untracked file git would track (not ignored). A local build such as
+`scripts/example/out/`, ignored by that folder's `.gitignore`, therefore hashes the same present or
+absent — before this (RMA-31, PR #101) the hash walked the filesystem, and such a build made the
+scan pass locally and go stale on the clean CI checkout. Only `.gitignore` files committed in the
+repository decide what is ignored: a file hidden only by a machine-local exclude
+(`core.excludesFile`, `.git/info/exclude`) is still hashed, with a stderr warning naming it. A
+tracked file deleted from the working tree is skipped. Whenever ignored files are left out, one
+stderr note gives their count and the first five paths; stdout stays exactly the 64-char hash.
+Outside a git work tree, or when the skill directory itself is ignored by git (git lists none of its
+files although `SKILL.md` exists, with a stderr warning), the hash falls back to a filesystem walk.
+The bytes fed into sha256 are unchanged — files sorted by skill-relative path, each as path, NUL,
+bytes, NUL — so a clean skill with no ignored or artefact files keeps the hash it had before.
 
 ## Who reads what
 
