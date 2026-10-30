@@ -22,9 +22,13 @@ The material is what an installer actually reads and runs: `SKILL.md`, everythin
 `references/`, and everything under `scripts/`. NOT the sidecars or the eval files — a metadata or
 fixture edit does not change what reaches a consumer, and folding them in would restale every scan
 on unrelated churn. The gate compares this hash against `security.scanned_hash` to decide freshness.
+Inside a git work tree the file list is what git tracks or would track (committed `.gitignore`
+files only), so ignored local files never reach the hash; outside one it is a filesystem walk.
 """
 import hashlib
 import json
+import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -42,7 +46,7 @@ POINTS = [
 VERDICTS = {"pass", "flag", "n/a"}
 # Directories whose every file is installer-facing material.
 MATERIAL_DIRS = ("references", "scripts")
-# An installer never reads a build artefact, and the filesystem walk below would otherwise fold
+# An installer never reads a build artefact, and a file list would otherwise fold an unignored
 # one into the hash. A stray `__pycache__` then made the same skill hash differently on a
 # contributor's machine and in a clean CI checkout, so the gate passed locally and failed there.
 ARTEFACT_DIRS = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", "node_modules"}
@@ -56,14 +60,15 @@ def is_material(rel: Path) -> bool:
     )
 
 
-def material_hash(skill_dir: Path) -> str:
-    """sha256 over the skill's installer-facing material, order-independent of the filesystem."""
-    if not skill_dir.is_dir():
-        raise SystemExit(f"{skill_dir}: not a directory")
-    entries = []
-    skill_md = skill_dir / "SKILL.md"
-    if skill_md.is_file():
-        entries.append((Path("SKILL.md"), skill_md))
+def warn(msg: str) -> None:
+    print(f"validate_security: {msg}", file=sys.stderr)
+
+
+def filesystem_files(skill_dir: Path) -> list:
+    """Every material path on disk, skill-relative, artefacts dropped."""
+    rels = []
+    if (skill_dir / "SKILL.md").is_file():
+        rels.append(Path("SKILL.md"))
     for d in MATERIAL_DIRS:
         base = skill_dir / d
         if not base.is_dir():
@@ -71,7 +76,88 @@ def material_hash(skill_dir: Path) -> str:
         for f in base.rglob("*"):
             rel = f.relative_to(skill_dir)
             if f.is_file() and is_material(rel):
-                entries.append((rel, f))
+                rels.append(rel)
+    return rels
+
+
+def git_ls(top: Path, pathspecs: list, excludes: list):
+    """Skill-candidate paths git tracks or would track, relative to `top`; None when git fails."""
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(top), "ls-files", "-z", "--cached", "--others", *excludes, "--", *pathspecs],
+            capture_output=True,
+            env={**os.environ, "GIT_LITERAL_PATHSPECS": "1"},
+            check=True,
+        ).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return {p for p in out.decode("utf-8", "surrogateescape").split("\0") if p}
+
+
+def git_files(skill_dir: Path):
+    """Material paths from git (tracked plus untracked-not-ignored), or None outside a work tree.
+
+    Only committed `.gitignore` files decide what is ignored: machine-local excludes
+    (`core.excludesFile`, `.git/info/exclude`) differ between a contributor and CI, so applying
+    them would bring back the very drift this hash must not have.
+    """
+    try:
+        top = subprocess.run(
+            ["git", "-C", str(skill_dir), "rev-parse", "--show-toplevel"],
+            capture_output=True,
+            check=True,
+        ).stdout.decode("utf-8", "surrogateescape").strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    if not top:
+        return None
+    top_path = Path(top).resolve()
+    try:
+        prefix = skill_dir.resolve().relative_to(top_path)
+    except ValueError:
+        return None
+    pathspecs = [(prefix / name).as_posix() for name in ("SKILL.md", *MATERIAL_DIRS)]
+    listed = git_ls(top_path, pathspecs, ["--exclude-per-directory=.gitignore"])
+    if listed is None:
+        return None
+    standard = git_ls(top_path, pathspecs, ["--exclude-standard"])
+    if standard is None:
+        standard = listed
+    rels = []
+    for p in sorted(listed):
+        rel = Path(p).relative_to(prefix) if prefix != Path(".") else Path(p)
+        if rel != Path("SKILL.md") and not (len(rel.parts) > 1 and rel.parts[0] in MATERIAL_DIRS):
+            continue
+        if not is_material(rel):
+            continue
+        rels.append(rel)
+        if p not in standard and (skill_dir / rel).is_file():
+            warn(
+                f"{rel} is hidden by a local exclude (core.excludesFile or .git/info/exclude); "
+                "local excludes are not applied to the material hash, so it is hashed"
+            )
+    return rels
+
+
+def material_hash(skill_dir: Path) -> str:
+    """sha256 over the skill's installer-facing material, order-independent of the filesystem."""
+    if not skill_dir.is_dir():
+        raise SystemExit(f"{skill_dir}: not a directory")
+    on_disk = filesystem_files(skill_dir)
+    rels = git_files(skill_dir)
+    if rels is None:
+        rels = on_disk
+    elif not rels and (skill_dir / "SKILL.md").is_file():
+        warn(f"{skill_dir} is ignored by git; the filesystem walk was used for the material hash")
+        rels = on_disk
+    else:
+        rels = [rel for rel in rels if (skill_dir / rel).is_file()]
+        kept = set(rels)
+        left_out = sorted(str(rel) for rel in on_disk if rel not in kept)
+        if left_out:
+            shown = ", ".join(left_out[:5]) + (", …" if len(left_out) > 5 else "")
+            warn(f"{len(left_out)} file(s) ignored by git left out of the material hash: {shown}")
+    entries = [(rel, skill_dir / rel) for rel in rels]
     entries.sort(key=lambda e: str(e[0]))
     h = hashlib.sha256()
     for rel, f in entries:
