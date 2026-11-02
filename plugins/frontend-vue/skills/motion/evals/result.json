@@ -1,0 +1,224 @@
+{
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-11-02T19:48:38",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "fb7a2562ed337e7e72cf81e1f6f107b04f99884c8b27cb8866cbb7847db7355d",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Instructional prose for the agent's own task; no directive that overrides or hijacks the session."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "Nothing leaves the machine; the skill reads and writes project files only."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No key, token or credential in SKILL.md or references."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Only grep over the file; nothing destructive."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Readable Markdown and code examples; no encoded payloads or eval of decoded blobs."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No URL, no download, no external host."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, a keychain or a cookie store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, cron, launch agent or shell-profile edits."
+      }
+    ]
+  },
+  "trigger": {
+    "skill": "motion",
+    "measured_at": "2026-11-02T20:01:38",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "70/70",
+    "accuracy": 1,
+    "baseline_accuracy": null,
+    "description_hash": "253e819835604e93f4854bd4db54aaecf9cb86cc296f41335a87adf616d714bd",
+    "queryset_hash": "7407677a9639fe340265c5e43905bd1ff99f45c627ad4b618dc2b60113cccd12",
+    "eval_type": "description-triggering",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "crowded",
+    "flow_variant": "baseline",
+    "cases": 14,
+    "train": {
+      "cases": 9,
+      "rows": 45,
+      "mean": 1,
+      "ci_half_width": 0.149
+    },
+    "test": {
+      "cases": 5,
+      "rows": 25,
+      "mean": 1,
+      "ci_half_width": 0.2
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
+    "results": [
+      {
+        "query": "make the settings sheet fade and slide in when it opens in the Vue app",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "feed rows should animate when a new one arrives at the top",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add a route transition between the dashboard and the report page",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "the unread highlight should pulse once when an item becomes new",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "should we use motion-v or Vue Transition for the drawer",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "the panel fold animates height and janks, fix it",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "make the animations respect prefers-reduced-motion",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "animate the Your move count when it changes",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "draw the dot animal on the canvas behind the dashboard",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add a Framer Motion layout animation to the React card grid",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "style the feed group head with BEM",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 4
+      },
+      {
+        "query": "create a Pinia store for the marks",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "write the TicketCard.vue script setup with typed props",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "write a Vitest test for groupFeed",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 3
+      }
+    ],
+    "hillclimb": {
+      "baseline_test": 1,
+      "final_test": 1,
+      "final_variant": "baseline",
+      "rounds": 0,
+      "noise": 0.2,
+      "verdict": "no-headroom"
+    }
+  }
+}

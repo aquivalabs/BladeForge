@@ -1,0 +1,224 @@
+{
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-11-02T19:48:37",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "0de22f051b801612be540c546243bddbc43a6ab004dd3dd2591f620aa6414eb9",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Instructional prose for the agent's own task; no directive that overrides or hijacks the session."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "Nothing leaves the machine; the skill reads and writes project files only."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No key, token or credential in SKILL.md or references."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Only grep and npx nuxi typecheck; nothing destructive."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Readable Markdown and code examples; no encoded payloads or eval of decoded blobs."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "No URL and no download; Nuxt modules are named for the project's package manager, not fetched."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, a keychain or a cookie store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, cron, launch agent or shell-profile edits."
+      }
+    ]
+  },
+  "trigger": {
+    "skill": "nuxt-conventions",
+    "measured_at": "2026-11-02T19:59:03",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "70/70",
+    "accuracy": 1,
+    "baseline_accuracy": null,
+    "description_hash": "fe29e3979db7a9379f6692c146dbc6353958309f6293256203279e76654d9465",
+    "queryset_hash": "c79930a2ec7ea540269aa0745a48203cbf27376831fa5487b926771f637e342c",
+    "eval_type": "description-triggering",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "crowded",
+    "flow_variant": "baseline",
+    "cases": 14,
+    "train": {
+      "cases": 9,
+      "rows": 45,
+      "mean": 1,
+      "ci_half_width": 0.149
+    },
+    "test": {
+      "cases": 5,
+      "rows": 25,
+      "mean": 1,
+      "ci_half_width": 0.2
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
+    "results": [
+      {
+        "query": "add a /reports/[id] page to the Nuxt app that loads the report from the API",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "the Nuxt page calls $fetch in setup and the data flashes on navigation, what should it use",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "create a server route POST /api/feedback in Nuxt with validated input",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "where do I put the Linear API key in a Nuxt app so the browser never sees it",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "make the dashboard route client-only and prerender the landing page in nuxt.config",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "review the placement of composables and components in this Nuxt 4 project",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add a route middleware that redirects unauthenticated users in Nuxt",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "the component imports ref from vue in a Nuxt project, is that needed",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "where should the new WorkspaceHeader component live in our Vite + Vue Router app",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "write the TicketCard.vue script setup with typed props",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "create a Pinia store for the marks",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "set up Next.js app router pages for the React dashboard",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "style the feed group head with BEM",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "write a Vitest test for groupFeed",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 3
+      }
+    ],
+    "hillclimb": {
+      "baseline_test": 1,
+      "final_test": 1,
+      "final_variant": "baseline",
+      "rounds": 0,
+      "noise": 0.2,
+      "verdict": "no-headroom"
+    }
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-11-02T19:48:38",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "60dd6f985ba4c29e579061a705b82005c2b92c4d692fe7b76d4ee1753f7abd6a",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Instructional prose for the agent's own task; no directive that overrides or hijacks the session."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "Nothing leaves the machine; the skill reads and writes project files only."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No key, token or credential in SKILL.md or the config templates."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "The documented commands are npm i -D of named dev dependencies, npm run check, and the pre-push hook running it; nothing destructive or irreversible."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Plain config files and Markdown; no encoded payloads."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "npm i -D installs named packages through the project's package manager with the registry it already trusts; no URL and no download-and-run script."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, a keychain or a cookie store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo or setuid; the pre-push hook is a project git hook wired by npm run prepare, visible in the repo, not a system-level persistence."
+      }
+    ]
+  },
+  "trigger": {
+    "skill": "tooling",
+    "measured_at": "2026-11-02T20:06:15",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "70/70",
+    "accuracy": 1,
+    "baseline_accuracy": null,
+    "description_hash": "1f3b8a5fddf4ccff15935d16c85eefea7f9e525139f80e7ba02cda50c5333b1f",
+    "queryset_hash": "f399f6d616231068ecff6a92117b85c9f4a71d5ce54f00ed5c3d562fb0be4e96",
+    "eval_type": "description-triggering",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "crowded",
+    "flow_variant": "baseline",
+    "cases": 14,
+    "train": {
+      "cases": 9,
+      "rows": 45,
+      "mean": 1,
+      "ci_half_width": 0.149
+    },
+    "test": {
+      "cases": 5,
+      "rows": 25,
+      "mean": 1,
+      "ci_half_width": 0.2
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
+    "results": [
+      {
+        "query": "set up ESLint for our Vue 3 + TypeScript project with the house rules",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "configure Stylelint so class names must follow BEM in .vue files",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add an npm run check that runs types, lint, stylelint and tests before push",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "prettier and eslint disagree about quotes in the Vue repo, fix the setup",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "tsc passes but the .vue files have type errors, what should the type check be",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add a pre-push hook that gates on the check command in the Vue project",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "eslint complains about vue/multi-word-component-names on App.vue, turn it off properly",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "set up the CI job that runs lint and tests on pull requests for the Vue app",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "write a Vitest test for groupFeed",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 4
+      },
+      {
+        "query": "style the feed group head with BEM",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "rename variable sel to selectedRecord in useAccountsFilter.ts",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "configure ESLint for the React dashboard with react-hooks rules",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "write the TicketCard.vue script setup with typed props",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "run the Apex tests after deploying to the scratch org",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      }
+    ],
+    "hillclimb": {
+      "baseline_test": 1,
+      "final_test": 1,
+      "final_variant": "baseline",
+      "rounds": 0,
+      "noise": 0.2,
+      "verdict": "no-headroom"
+    }
+  }
+}
