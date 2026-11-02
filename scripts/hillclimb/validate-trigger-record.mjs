@@ -9,12 +9,17 @@
 //     isolated or crowded environment, on the model the team measures on;
 //   - it carries the case count, the reps and the test-split interval;
 //   - with --new (a skill added in this change), it also carries a `hillclimb`
-//     block with one of the verdicts save-result.mjs computes.
+//     block with one of the verdicts save-result.mjs computes, unless the test
+//     split already sits within noise of the ceiling: a climb cannot show a win
+//     there, so the record is optional (RMA-140).
 // A record from the deleted score-description.py fails the first check by design.
 // The contract itself lives in flow-lib.mjs, shared with the writer.
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { CLIMB_VERDICTS, ENVIRONMENTS, MODEL, RUNNER, readJson } from './flow-lib.mjs';
+
+// The no-headroom rule of save-result.mjs: nothing above the test mean is distinguishable from noise.
+export const atCeiling = (test) => 1 - test.mean < test.ci_half_width;
 
 export function problemWith(record, { isNew = false } = {}) {
   const t = record?.trigger;
@@ -28,8 +33,8 @@ export function problemWith(record, { isNew = false } = {}) {
     return 'record lacks the test-split score with its interval';
   if (isNew) {
     const h = t.hillclimb;
-    if (!h) return 'a new skill needs a hillclimb record — run /claude-api hillclimb, then save-result.mjs --climb';
-    if (!CLIMB_VERDICTS.includes(h.verdict)) return `hillclimb verdict is ${h.verdict ?? 'missing'}`;
+    if (!h && !atCeiling(t.test)) return 'a new skill with headroom needs a hillclimb record — run /claude-api hillclimb, then save-result.mjs --climb';
+    if (h && !CLIMB_VERDICTS.includes(h.verdict)) return `hillclimb verdict is ${h.verdict ?? 'missing'}`;
   }
   return null;
 }

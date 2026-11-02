@@ -178,6 +178,9 @@ quality record reads as not measured.
 `hillclimb` appears only after a climb. Its verdict is computed from the numbers alone —
 `improved`, `within-noise`, `regressed` or `no-headroom`, with the baseline test interval as the
 noise — and the winner is the variant hillclimb itself recorded in `_state.json.best`.
+The gate asks for it on a skill the change adds only when the test split has headroom above noise;
+a split within noise of the ceiling (`1 − mean < interval`) cannot show a win, so the climb is optional
+there (`atCeiling` in `validate-trigger-record.mjs`, RMA-140).
 
 The record measures one description; it does not search for a better one. Improving a description
 is `/claude-api hillclimb` run on the same flow dir, which keeps the split and reverts any change that

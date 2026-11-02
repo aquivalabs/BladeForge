@@ -90,9 +90,11 @@ Rules in force now:
   rubrics under the same add-only rule, `routing-runner.mjs` runs it, `routing-report.mjs` reads it.
 - **`eval-gate` enforces where a record came from.** A skill whose `SKILL.md` is in the diff needs a
   record written by `save-result.mjs` from the trigger runner, on `claude-opus-5-5`, with its case
-  count, reps and test interval. A skill the diff ADDS also needs `trigger.hillclimb`: run
-  `/claude-api hillclimb` on its flow, then `save-result.mjs <best-variant> --climb`. The loop is
-  Anthropic's; never write a loop of our own.
+  count, reps and test interval. A skill the diff ADDS also needs `trigger.hillclimb` when its test split has
+  headroom above noise: run `/claude-api hillclimb` on its flow, then `save-result.mjs <best-variant>
+  --climb`. A test split within noise of the ceiling (`1 − mean < interval`) needs no climb, because no
+  round can show a win there; climb it only when you want the record. The loop is Anthropic's; never
+  write a loop of our own.
 - **A number without its noise is not a result.** With 6–7 test cases at 5 reps the noise is about
   ±18 points. Report the test-split score with its interval, recomputed from `results.jsonl` by
   `scripts/hillclimb/split-scores.mjs`.
