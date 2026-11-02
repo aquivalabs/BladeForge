@@ -85,7 +85,8 @@ owes_measurement() {
   printf '%s\n' "$descskills" | grep -qx "$1"
 }
 
-# Skills whose SKILL.md is ADDED by this push — new skills, which also owe a hillclimb record.
+# Skills whose SKILL.md is ADDED by this push — new skills, which also owe a hillclimb record
+# unless their test split is already at the ceiling (atCeiling in validate-trigger-record.mjs).
 newskills="$(printf '%s\n' "$added" | sed -n 's#/SKILL\.md$##p' | sort -u)"
 is_new_skill() {
   printf '%s\n' "$newskills" | grep -qx "$1"
@@ -239,7 +240,7 @@ if [ -n "$blocks" ]; then
   echo "      node scripts/hillclimb/trigger-runner.mjs --flow .claude/hillclimb/<flow> \\"
   echo "        --variant baseline --model claude-opus-5-5 --reps 5"
   echo "      node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> baseline"
-  echo "    A NEW skill also runs /claude-api hillclimb on the flow, then"
+  echo "    A NEW skill whose test split has headroom also runs /claude-api hillclimb on the flow, then"
   echo "      node scripts/hillclimb/save-result.mjs .claude/hillclimb/<flow> <best-variant> --climb"
   echo ""
   echo "  No live clone to measure from? The skill is not shippable yet — measurement"
