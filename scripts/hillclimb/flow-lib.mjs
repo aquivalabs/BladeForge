@@ -5,7 +5,7 @@
 // covers it.
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readdirSync, readFileSync, readSync, statSync } from 'node:fs';
+import { closeSync, existsSync, openSync, readdirSync, readFileSync, readSync, statSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 
 /** The record contract: the writer stamps these, the gate checks them. */
@@ -155,7 +155,11 @@ export function gateApprovalFromArgv(runnerFile, argv = process.argv) {
 function askOnTerminal() {
   if (!process.stdin.isTTY) return false;
   process.stderr.write('Type "approve" to record this harness without a review: ');
+  // Read the terminal device itself: touching process.stdin leaves fd 0 non-blocking, and a sync read of it fails with EAGAIN on macOS (RMA-135).
+  let fd;
+  try { fd = openSync('/dev/tty', 'r'); } catch { return false; }
   const buf = Buffer.alloc(64);
-  const n = readSync(0, buf, 0, buf.length, null);
+  const n = readSync(fd, buf, 0, buf.length, null);
+  closeSync(fd);
   return buf.toString('utf8', 0, n).trim() === 'approve';
 }
