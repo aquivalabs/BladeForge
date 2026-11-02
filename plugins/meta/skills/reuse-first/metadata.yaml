@@ -1,5 +1,5 @@
 schema-version: 1
-category: meta
+category: authoring
 purpose: Before writing a non-trivial piece of functionality, walk the ladder codebase → platform → composable or hook library → mature library → compare → choose → own code only with a stated reason, and record the decision.
 best-for: Any project in any stack that wants the agent to take proven solutions before writing its own, without pulling heavy dependencies for trivial needs.
 needs: []
