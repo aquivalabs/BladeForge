@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: Which test goes where in a Vue project — units for lib and composables, Testing Library or Vue Test Utils for components by role and text, Pinia stores through actions, @nuxt/test-utils for Nuxt, Playwright for the few flows that matter — with boundaries mocked, time controlled, and one command before a merge.
+best-for: Vue projects that want tests that survive refactors and a suite that gates a merge.
+needs: []
+changes:
+  tags: []
+  notes: ""

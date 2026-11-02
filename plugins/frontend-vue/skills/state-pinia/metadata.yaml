@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: Pinia setup-syntax stores, one per domain concept, with refs for state, computeds for derived values and actions for changes; explicit loading and error; shallow refs for large server snapshots; TanStack Query for Vue for server state when the project uses it.
+best-for: Vue 3 projects whose state crosses component boundaries and should be written and reviewed one way.
+needs: []
+changes:
+  tags: []
+  notes: ""

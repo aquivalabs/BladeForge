@@ -1,0 +1,25 @@
+{
+  "trigger": [
+    { "query": "make the settings sheet fade and slide in when it opens in the Vue app", "should_trigger": true },
+    { "query": "feed rows should animate when a new one arrives at the top", "should_trigger": true },
+    { "query": "add a route transition between the dashboard and the report page", "should_trigger": true },
+    { "query": "the unread highlight should pulse once when an item becomes new", "should_trigger": true },
+    { "query": "should we use motion-v or Vue Transition for the drawer", "should_trigger": true },
+    { "query": "the panel fold animates height and janks, fix it", "should_trigger": true },
+    { "query": "make the animations respect prefers-reduced-motion", "should_trigger": true },
+    { "query": "animate the Your move count when it changes", "should_trigger": true },
+    { "query": "draw the dot animal on the canvas behind the dashboard", "should_trigger": false },
+    { "query": "add a Framer Motion layout animation to the React card grid", "should_trigger": false },
+    { "query": "style the feed group head with BEM", "should_trigger": false },
+    { "query": "write the TicketCard.vue script setup with typed props", "should_trigger": false },
+    { "query": "create a Pinia store for the marks", "should_trigger": false },
+    { "query": "write a Vitest test for groupFeed", "should_trigger": false }
+  ],
+  "acceptance": [
+    "the motion uses the cheapest tool in order: a CSS transition on a class, then Transition or TransitionGroup, then the View Transitions API, then a library with a reuse-first decision",
+    "only transform and opacity are animated, or a grid-template-rows fold; no height, width, top or left",
+    "durations and easing come from motion tokens and stay under 400 ms for UI state",
+    "every animation has a prefers-reduced-motion fallback",
+    "TransitionGroup children are keyed by id; appear is used only on purpose"
+  ]
+}

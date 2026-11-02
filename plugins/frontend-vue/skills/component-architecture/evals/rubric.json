@@ -1,0 +1,26 @@
+{
+  "trigger": [
+    { "query": "where should the new WorkspaceHeader component live in our Vue app, ui or features?", "should_trigger": true },
+    { "query": "I want a reusable Pill component for statuses — do we already have one and where would it go", "should_trigger": true },
+    { "query": "FeedPanel.vue imports TicketRow from the tickets feature, is that allowed?", "should_trigger": true },
+    { "query": "the DashboardPage.vue has 200 lines of filtering logic, where should that go", "should_trigger": true },
+    { "query": "SettingsSheet.vue grew to 300 lines, how should I split it", "should_trigger": true },
+    { "query": "create a Sheet primitive for modals in the Vue project", "should_trigger": true },
+    { "query": "FieldRow is only used by SettingsSheet, should it be in components/ui?", "should_trigger": true },
+    { "query": "we need the current workspace in deeply nested components, provide/inject or props?", "should_trigger": true },
+    { "query": "write the TicketCard.vue script setup with typed props", "should_trigger": false },
+    { "query": "style the feed group head with BEM and a hover state", "should_trigger": false },
+    { "query": "create a Pinia store for the feed with its unread count", "should_trigger": false },
+    { "query": "write a Vitest test for FeedItem.vue", "should_trigger": false },
+    { "query": "where does the new React SidebarNavItem sub-component go", "should_trigger": false },
+    { "query": "add a Storybook story for the MetricCard React component", "should_trigger": false },
+    { "query": "configure eslint-plugin-vue flat config for the project", "should_trigger": false }
+  ],
+  "acceptance": [
+    "the component sits in the layer its knowledge requires: ui primitives know no domain type, features own one concept, pages hold no logic",
+    "no feature imports another feature's component; no ui primitive imports from features or pages",
+    "before a new primitive was built, the existing ui folder was searched and the result is named",
+    "a component used by one parent stays beside it until a second use",
+    "provide/inject appears only for a real context with a typed InjectionKey"
+  ]
+}

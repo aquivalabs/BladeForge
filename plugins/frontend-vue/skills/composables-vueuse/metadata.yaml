@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: VueUse as the first source for behaviour composables in Vue; our own use* only for business logic or a composition, written to one contract, with the pure part in lib under a test; the rule for composable versus store versus component.
+best-for: Vue 3 projects that want behaviour (storage, media queries, time, events, streams, debounce, focus, drag) taken from VueUse instead of rewritten, and their own composables written consistently.
+needs: []
+changes:
+  tags: []
+  notes: ""

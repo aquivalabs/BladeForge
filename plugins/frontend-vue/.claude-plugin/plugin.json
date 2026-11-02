@@ -1,0 +1,19 @@
+{
+  "name": "frontend-vue",
+  "description": "Frontend Vue 3 skills — single-file components with Composition API and TypeScript, component architecture, BEM in scoped styles, Pinia stores, VueUse-first composables, Nuxt conventions, motion, testing.",
+  "version": "0.1.0",
+  "keywords": [
+    "vue",
+    "vue3",
+    "composition-api",
+    "pinia",
+    "vueuse",
+    "nuxt",
+    "vitest",
+    "bem"
+  ],
+  "author": {
+    "name": "Roman Maslennikov",
+    "email": "rmaslennikov@aquivalabs.com"
+  }
+}
