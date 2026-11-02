@@ -90,7 +90,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | git | Git workflow — atomic commit splitting. | [commit](#commit) |
 | i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | jira | Jira — comment style. | [comment-style](#comment-style) |
-| meta | Meta — design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
+| meta | Meta — design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [reuse-first](#reuse-first), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | no-code-prose | A comment is never an essay — one language-agnostic rule for what may live in one, judged by the craft review lens. | [policy](#policy) |
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [review](#review) · [setup](#setup) |
 | review-workflow | Workflow script that dispatches the review plugin's lenses in parallel (five on by default, plus skill, leak and security-scan where enabled), reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
@@ -189,11 +189,12 @@ cuts the fluff. **See the difference:**
 - <a id="lean-writing"></a>**lean-writing** — Write terse technical documents: specs, design docs, RFCs, decision logs.
 - <a id="model-routing"></a>**model-routing** — Assign an explicit model tier to every spawned agent before any fan-out.
 - <a id="new-skill"></a>**new-skill** — Author a brand-new skill: plugin/domain, folder placement, SKILL.md and frontmatter.
-- <a id="update-skill"></a>**update-skill** — Refresh an existing skill's `metadata.yaml` sidecar after its body, tools, scripts, or hooks changed.
-- <a id="skill-eval"></a>**skill-eval** — Faithfully measure whether a skill's description triggers and score it (`scripts/hillclimb/trigger-runner.mjs`, isolated nested runs over a fixed train/test split); the canonical measurer, replaces skill-creator's false-negative-prone run_eval.
 - <a id="ockham"></a>**ockham** — The Razor: justify before creating any new entity — file, module, class, abstraction.
+- <a id="reuse-first"></a>**reuse-first** — Before writing a non-trivial piece of functionality, walk codebase → platform → composable/hook library → mature library → compare → choose, and record the decision; own code only with a stated reason.
+- <a id="skill-eval"></a>**skill-eval** — Faithfully measure whether a skill's description triggers and score it (`scripts/hillclimb/trigger-runner.mjs`, isolated nested runs over a fixed train/test split); the canonical measurer, replaces skill-creator's false-negative-prone run_eval.
 - <a id="solid"></a>**solid** — The design law: SRP/OCP/LSP/ISP/DIP plus DRY, KISS, YAGNI.
 - <a id="triage"></a>**triage** — Cheap shallow pass over a large batch first, then spend the expensive pass only on the shortlist.
+- <a id="update-skill"></a>**update-skill** — Refresh an existing skill's `metadata.yaml` sidecar after its body, tools, scripts, or hooks changed.
 - <a id="wittgenstein"></a>**wittgenstein** — Clarity gate for an already-written spec, plan, or RFC — a reviewer persona.
 
 ### no-code-prose &nbsp;·&nbsp; [↑ Plugins](#plugins)
