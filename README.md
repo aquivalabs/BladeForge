@@ -86,7 +86,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | frontend-css | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
 | frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
 | frontend-react | React conventions — placement, structure, hooks, primitives, layout, stories. | [component-placement](#component-placement), [component-structure](#component-structure), [feature-components](#feature-components), [hooks-registry](#hooks-registry), [layout-components](#layout-components), [skeleton-components](#skeleton-components), [storybook-stories](#storybook-stories), [ui-primitive-reuse](#ui-primitive-reuse) |
-| frontend-vue | Vue 3 conventions — single-file components, architecture, BEM styles, Pinia, VueUse-first composables, Nuxt, motion, testing. | [sfc-conventions](#sfc-conventions), [component-architecture](#component-architecture), [bem-styles](#bem-styles), [composables-vueuse](#composables-vueuse), [state-pinia](#state-pinia), [nuxt-conventions](#nuxt-conventions), [motion](#motion), [testing](#vue-testing) |
+| frontend-vue | Vue 3 conventions — single-file components, architecture, BEM styles, Pinia, VueUse-first composables, Nuxt, motion, testing. | [sfc-conventions](#sfc-conventions), [component-architecture](#component-architecture), [bem-styles](#bem-styles), [composables-vueuse](#composables-vueuse), [state-pinia](#state-pinia), [nuxt-conventions](#nuxt-conventions), [motion](#motion), [testing](#vue-testing), [tooling](#vue-tooling) |
 | frontend | Frontend dev-harness — types + tests runner. | [fe-check](#fe-check) |
 | git | Git workflow — atomic commit splitting. | [commit](#commit) |
 | i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) |
@@ -183,6 +183,7 @@ cuts the fluff. **See the difference:**
 - <a id="nuxt-conventions"></a>**nuxt-conventions** — Nuxt directories, auto-imports, useFetch and useAsyncData with keys, server routes with validated input, runtime config, rendering per route.
 - <a id="motion"></a>**motion** — The cheapest motion tool that works, transform and opacity only, tokens for timing, a reduced-motion fallback every time.
 - <a id="vue-testing"></a>**testing** — Units for lib and composables, components by role and text, stores through actions, Nuxt test utils, Playwright for the flows that matter.
+- <a id="vue-tooling"></a>**tooling** — ESLint, Prettier, Stylelint with the BEM pattern and vue-tsc from templates, and the one check command that gates a merge.
 
 ### frontend &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="fe-check"></a>**fe-check** — Typecheck and run targeted unit tests for a frontend repo, returning a terse one-block summary.
