@@ -223,6 +223,16 @@
       },
       "source": "./plugins/tests",
       "category": "engineering"
+    },
+    {
+      "name": "whose-turn",
+      "source": "./plugins/whose-turn",
+      "description": "Whose Turn, the Claude Code side of a local monitor of your Jira, GitHub, Linear and other sources: whose turn it is, what changed, your own to-dos, a summary at the start of each session, a hand-off from the monitor window into the session, a /whose-turn command that opens the window, and an MCP server for any agent. The monitor itself is the published whose-turn npm package; the plugin installs the pinned version into the monitor's data directory on first start and runs it from there. Employer-specific values live in a workspace config on the machine, not in the plugin.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "category": "engineering"
     }
   ]
 }
