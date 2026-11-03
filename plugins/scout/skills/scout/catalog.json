@@ -613,6 +613,21 @@
       "hooks": []
     },
     {
+      "name": "meta:reuse-first",
+      "plugin": "meta",
+      "plugin-version": "2.7.5",
+      "activates-when": "Use before implementing any non-trivial piece of functionality in any stack \u2014 a drag-and-drop list, a tooltip or popover, a dialog, a date formatter, a form with validation, a debounce, a virtual list, a data table, a fetch cache, an animation, a parser \u2014 when the question is whether to write it or take it from somewhere: the codebase, the platform, a composable/hook library, or a mature package. Also use when reviewing a change that added a hand-written version of a well-known thing, or when asked \\\"is there a library for this\\\" / \\\"should we write our own\\\". NOT for reusing an in-repo React UI primitive (frontend-react:ui-primitive-reuse) and NOT for trimming an over-built design that is already ours (meta:ockham).",
+      "category": "authoring",
+      "purpose": "Before writing a non-trivial piece of functionality, walk the ladder codebase \u2192 platform \u2192 composable or hook library \u2192 mature library \u2192 compare \u2192 choose \u2192 own code only with a stated reason, and record the decision.",
+      "best-for": "Any project in any stack that wants the agent to take proven solutions before writing its own, without pulling heavy dependencies for trivial needs.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
+      },
+      "hooks": []
+    },
+    {
       "name": "meta:skill-eval",
       "plugin": "meta",
       "plugin-version": "2.7.5",
