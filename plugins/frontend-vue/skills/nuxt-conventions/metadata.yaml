@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: Where files live and how data flows in a Nuxt 3 or 4 project — the convention directories, auto-imports, useFetch and useAsyncData with keys, server routes with validated input, runtime config over process.env, rendering chosen per route.
+best-for: Nuxt projects that want pages, server routes and data fetching written the way Nuxt expects, with the other frontend-vue skills applying unchanged inside.
+needs: []
+changes:
+  tags: []
+  notes: ""

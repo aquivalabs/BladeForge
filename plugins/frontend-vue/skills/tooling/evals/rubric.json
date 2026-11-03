@@ -1,0 +1,27 @@
+{
+  "trigger": [
+    { "query": "set up ESLint for our Vue 3 + TypeScript project with the house rules", "should_trigger": true },
+    { "query": "configure Stylelint so class names must follow BEM in .vue files", "should_trigger": true },
+    { "query": "add an npm run check that runs types, lint, stylelint and tests before push", "should_trigger": true },
+    { "query": "prettier and eslint disagree about quotes in the Vue repo, fix the setup", "should_trigger": true },
+    { "query": "tsc passes but the .vue files have type errors, what should the type check be", "should_trigger": true },
+    { "query": "add a pre-push hook that gates on the check command in the Vue project", "should_trigger": true },
+    { "query": "eslint complains about vue/multi-word-component-names on App.vue, turn it off properly", "should_trigger": true },
+    { "query": "set up the CI job that runs lint and tests on pull requests for the Vue app", "should_trigger": true },
+    { "query": "write a Vitest test for groupFeed", "should_trigger": false },
+    { "query": "style the feed group head with BEM", "should_trigger": false },
+    { "query": "rename variable sel to selectedRecord in useAccountsFilter.ts", "should_trigger": false },
+    { "query": "configure ESLint for the React dashboard with react-hooks rules", "should_trigger": false },
+    { "query": "write the TicketCard.vue script setup with typed props", "should_trigger": false },
+    { "query": "run the Apex tests after deploying to the scratch org", "should_trigger": false }
+  ],
+  "acceptance": [
+    "ESLint uses the flat config from the template with eslint-plugin-vue, typescript-eslint and eslint-config-prettier last; the house rules are present",
+    "Prettier is configured from the template and no ESLint formatting rule conflicts with it",
+    "Stylelint runs on .vue, .css and .scss with the BEM selector pattern, no !important and no id selectors",
+    "vue-tsc --noEmit is the type check; tsc alone is not used for .vue files",
+    "npm run check runs typecheck, lint, style lint and tests and exits non-zero on any failure",
+    "the pre-push hook or the CI job on pull requests runs npm run check",
+    "a rule turned off carries a comment with the reason in the config, never a file-wide disable"
+  ]
+}

@@ -4,7 +4,7 @@
 # Usage:
 #   fe-check.sh [--dir <repo>] [--test <vitest-glob-or-path> ...]
 #
-# Defaults: --dir current dir. With no --test, runs the full vitest suite. Needs npx (tsc + vitest).
+# Defaults: --dir current dir. With no --test, runs the full vitest suite. Needs npx (tsc or vue-tsc, + vitest).
 set -euo pipefail
 
 DIR="$PWD"
@@ -25,7 +25,9 @@ cd "$DIR"
 RC=0
 
 # ── Types ────────────────────────────────────────────────────────────────────
-TSC_OUT="$(npx tsc --noEmit 2>&1 || true)"
+# A Vue project type-checks its .vue files with vue-tsc; tsc alone skips them (frontend-vue:tooling).
+TSC="tsc"; [[ -x node_modules/.bin/vue-tsc ]] && TSC="vue-tsc"
+TSC_OUT="$(npx "$TSC" --noEmit 2>&1 || true)"
 TSC_ERRORS="$(printf '%s\n' "$TSC_OUT" | grep -c 'error TS' || true)"
 if [[ "$TSC_ERRORS" -eq 0 ]]; then
   echo "tsc:   clean"

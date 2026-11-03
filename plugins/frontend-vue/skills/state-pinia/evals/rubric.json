@@ -1,0 +1,27 @@
+{
+  "trigger": [
+    { "query": "create a Pinia store for the current workspace, its turn rows and marks", "should_trigger": true },
+    { "query": "the feed unread count is needed in the rail and in the feed panel, where should it live", "should_trigger": true },
+    { "query": "review workspace.store.ts, it uses the options object syntax", "should_trigger": true },
+    { "query": "the component assigns store.snapshot = await fetch(...) directly, is that ok", "should_trigger": true },
+    { "query": "should we use TanStack Query for Vue or keep server data in the store", "should_trigger": true },
+    { "query": "persist the selected workspace id across reloads in the store", "should_trigger": true },
+    { "query": "split the settings store, it holds both the form draft and the saved config", "should_trigger": true },
+    { "query": "how do I read two refs from a Pinia store in a component without losing reactivity", "should_trigger": true },
+    { "query": "write a composable that tracks the colour scheme", "should_trigger": false },
+    { "query": "the expanded flag of a feed item, ref or reactive?", "should_trigger": false },
+    { "query": "write the TicketCard.vue script setup with typed props", "should_trigger": false },
+    { "query": "set up a Redux slice for the React dashboard", "should_trigger": false },
+    { "query": "style the feed group head with BEM", "should_trigger": false },
+    { "query": "write a Vitest test for groupFeed", "should_trigger": false },
+    { "query": "configure Nuxt server routes", "should_trigger": false }
+  ],
+  "acceptance": [
+    "every store uses the setup syntax and holds one domain concept, named after it",
+    "state is refs, derived values are computeds, changes are actions; components never assign store state directly",
+    "a large server snapshot is a shallowRef replaced wholesale",
+    "every async action exposes loading and error on the store",
+    "persistence uses VueUse or the project's Pinia plugin, never hand-written localStorage",
+    "server state goes through TanStack Query for Vue when the project uses it, and the choice is recorded once in the project's ADR"
+  ]
+}

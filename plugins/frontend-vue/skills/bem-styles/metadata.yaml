@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: BEM inside each Vue component's scoped style block — one block per component, elements and modifiers, state toggled from the template, tokens over literals, the global stylesheet reduced to tokens and primitives, Stylelint enforcing the pattern.
+best-for: Vue projects that had class clashes or a growing global stylesheet and want every component's styles self-contained and greppable.
+needs: []
+changes:
+  tags: []
+  notes: ""

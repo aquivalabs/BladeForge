@@ -1,0 +1,27 @@
+{
+  "trigger": [
+    { "query": "style the feed group head in FeedPanel.vue with a hover state and an unread modifier", "should_trigger": true },
+    { "query": "two components both use .wt-report and the button broke — how should the classes be named", "should_trigger": true },
+    { "query": "move the island rules from base.css into Island.vue scoped styles", "should_trigger": true },
+    { "query": "stylelint complains about selector-class-pattern on .wt-feed-group-head, what pattern do we want", "should_trigger": true },
+    { "query": "should the unread highlight be an inline style or a class in the Vue template", "should_trigger": true },
+    { "query": "review the <style scoped> block of SettingsSheet.vue", "should_trigger": true },
+    { "query": "how do I override a child component's padding from the parent in Vue scoped css", "should_trigger": true },
+    { "query": "add a dense modifier to the ticket card styles", "should_trigger": true },
+    { "query": "set up the SCSS colour and spacing variables file for the project", "should_trigger": false },
+    { "query": "should the sidebar width be rem or px", "should_trigger": false },
+    { "query": "write the TicketCard.vue script setup with typed props", "should_trigger": false },
+    { "query": "where does the new Pill component live, ui or features", "should_trigger": false },
+    { "query": "scaffold a React component folder with BEM scss", "should_trigger": false },
+    { "query": "create a Pinia store for the marks", "should_trigger": false },
+    { "query": "write a Vitest test for the feed grouping", "should_trigger": false }
+  ],
+  "acceptance": [
+    "every class in the component is block, block__element or a modifier of those, with the block named after the component in kebab-case; global primitives are the only other classes",
+    "the component's rules live in its own <style scoped> block; no component-specific rule remains in the global stylesheet",
+    "state is toggled as a modifier class from the template, never as an inline style with a colour",
+    "colours, spacing and radii come from tokens; no hex literal or px value in the component's styles",
+    "no id selectors, no !important, no element selectors used for structure; a parent reaches into a child only through :deep()",
+    "stylelint with the BEM selector pattern passes on the file"
+  ]
+}

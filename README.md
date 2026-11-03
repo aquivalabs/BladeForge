@@ -86,6 +86,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | frontend-css | CSS conventions — rem units, SCSS modules, responsive breakpoint validity. | [rem](#rem), [scss-modules](#scss-modules), [responsive-layout](#responsive-layout) |
 | frontend-js | JavaScript/TypeScript style conventions. | [conventions](#conventions) |
 | frontend-react | React conventions — placement, structure, hooks, primitives, layout, stories. | [component-placement](#component-placement), [component-structure](#component-structure), [feature-components](#feature-components), [hooks-registry](#hooks-registry), [layout-components](#layout-components), [skeleton-components](#skeleton-components), [storybook-stories](#storybook-stories), [ui-primitive-reuse](#ui-primitive-reuse) |
+| frontend-vue | Vue 3 conventions — single-file components, architecture, BEM styles, Pinia, VueUse-first composables, Nuxt, motion, testing. | [sfc-conventions](#sfc-conventions), [component-architecture](#component-architecture), [bem-styles](#bem-styles), [composables-vueuse](#composables-vueuse), [state-pinia](#state-pinia), [nuxt-conventions](#nuxt-conventions), [motion](#motion), [testing](#vue-testing), [tooling](#vue-tooling) |
 | frontend | Frontend dev-harness — types + tests runner. | [fe-check](#fe-check) |
 | git | Git workflow — atomic commit splitting. | [commit](#commit) |
 | i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) |
@@ -172,6 +173,17 @@ cuts the fluff. **See the difference:**
 - <a id="skeleton-components"></a>**skeleton-components** — Build a colocated loading-skeleton component for async-loaded data.
 - <a id="storybook-stories"></a>**storybook-stories** — When and how to write a Storybook story and which states it should cover.
 - <a id="ui-primitive-reuse"></a>**ui-primitive-reuse** — Search the primitive library before building a new shared UI primitive; reuse or extend first.
+
+### frontend-vue &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="sfc-conventions"></a>**sfc-conventions** — The house shape of a single-file component: script setup with TypeScript, Composition API only, typed props and emits, defineModel, declarative templates.
+- <a id="component-architecture"></a>**component-architecture** — Where a component lives and what it may know: pages, layouts, features, ui primitives, composables; imports go down only; reuse before new.
+- <a id="bem-styles"></a>**bem-styles** — BEM inside each component's scoped style block, tokens over literals, the global stylesheet reduced to tokens and primitives, Stylelint on the pattern.
+- <a id="composables-vueuse"></a>**composables-vueuse** — VueUse first for behaviour; our own use* only for business logic or a composition, to one contract.
+- <a id="state-pinia"></a>**state-pinia** — Pinia setup stores, one per concept, with explicit loading and error; TanStack Query for Vue for server state when the project uses it.
+- <a id="nuxt-conventions"></a>**nuxt-conventions** — Nuxt directories, auto-imports, useFetch and useAsyncData with keys, server routes with validated input, runtime config, rendering per route.
+- <a id="motion"></a>**motion** — The cheapest motion tool that works, transform and opacity only, tokens for timing, a reduced-motion fallback every time.
+- <a id="vue-testing"></a>**testing** — Units for lib and composables, components by role and text, stores through actions, Nuxt test utils, Playwright for the flows that matter.
+- <a id="vue-tooling"></a>**tooling** — ESLint, Prettier, Stylelint with the BEM pattern and vue-tsc from templates, and the one check command that gates a merge.
 
 ### frontend &nbsp;·&nbsp; [↑ Plugins](#plugins)
 - <a id="fe-check"></a>**fe-check** — Typecheck and run targeted unit tests for a frontend repo, returning a terse one-block summary.

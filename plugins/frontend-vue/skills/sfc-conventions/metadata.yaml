@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: The house shape of a Vue single-file component — script setup with TypeScript, Composition API only, typed props and emits, defineModel, declarative templates, derived state over stored state, watchers only for effects.
+best-for: Vue 3 projects that want every component written and reviewed the same way, including conversions from the Options API or plain JavaScript.
+needs: []
+changes:
+  tags: []
+  notes: ""

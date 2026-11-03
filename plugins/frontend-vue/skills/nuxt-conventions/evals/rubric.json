@@ -1,0 +1,26 @@
+{
+  "trigger": [
+    { "query": "add a /reports/[id] page to the Nuxt app that loads the report from the API", "should_trigger": true },
+    { "query": "the Nuxt page calls $fetch in setup and the data flashes on navigation, what should it use", "should_trigger": true },
+    { "query": "create a server route POST /api/feedback in Nuxt with validated input", "should_trigger": true },
+    { "query": "where do I put the Linear API key in a Nuxt app so the browser never sees it", "should_trigger": true },
+    { "query": "make the dashboard route client-only and prerender the landing page in nuxt.config", "should_trigger": true },
+    { "query": "review the placement of composables and components in this Nuxt 4 project", "should_trigger": true },
+    { "query": "add a route middleware that redirects unauthenticated users in Nuxt", "should_trigger": true },
+    { "query": "the component imports ref from vue in a Nuxt project, is that needed", "should_trigger": true },
+    { "query": "where should the new WorkspaceHeader component live in our Vite + Vue Router app", "should_trigger": false },
+    { "query": "write the TicketCard.vue script setup with typed props", "should_trigger": false },
+    { "query": "create a Pinia store for the marks", "should_trigger": false },
+    { "query": "set up Next.js app router pages for the React dashboard", "should_trigger": false },
+    { "query": "style the feed group head with BEM", "should_trigger": false },
+    { "query": "write a Vitest test for groupFeed", "should_trigger": false }
+  ],
+  "acceptance": [
+    "pages, layouts, components, composables, stores, middleware, plugins and server handlers sit in their convention directories",
+    "page data comes through useFetch or useAsyncData with a stable key that includes the identifiers; no bare fetch or $fetch in a page's setup",
+    "server handlers use defineEventHandler, validate input with a schema and fail with createError",
+    "no process.env in app or server code outside nuxt.config.ts; secrets come from runtimeConfig",
+    "no explicit import of something Nuxt auto-imports",
+    "rendering per route is set in routeRules with the reason stated"
+  ]
+}

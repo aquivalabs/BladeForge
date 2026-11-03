@@ -1,0 +1,27 @@
+{
+  "trigger": [
+    { "query": "write a Vitest test for the groupFeed function in src/lib/feed.ts", "should_trigger": true },
+    { "query": "test FeedItem.vue: clicking a fresh item emits seen", "should_trigger": true },
+    { "query": "how do I test a Pinia store action that calls the API", "should_trigger": true },
+    { "query": "the StatusBar test is flaky because of the 'ago' text", "should_trigger": true },
+    { "query": "write a component test with Testing Library for the settings sheet save flow", "should_trigger": true },
+    { "query": "test the Nuxt page /reports/[id] with a mocked endpoint", "should_trigger": true },
+    { "query": "what should run before a PR merges in our Vue repo", "should_trigger": true },
+    { "query": "should I snapshot the whole dashboard component", "should_trigger": true },
+    { "query": "add a Playwright test for filing a report from the window", "should_trigger": true },
+    { "query": "configure eslint-plugin-vue flat config for the project", "should_trigger": false },
+    { "query": "write an Apex test for AccountRangeResolver with @TestSetup", "should_trigger": false },
+    { "query": "write a React Testing Library test for the MetricCard", "should_trigger": false },
+    { "query": "write the TicketCard.vue script setup with typed props", "should_trigger": false },
+    { "query": "style the feed group head with BEM", "should_trigger": false },
+    { "query": "create a Pinia store for the marks", "should_trigger": false }
+  ],
+  "acceptance": [
+    "pure functions and composables have unit tests; components are tested through rendered output and emitted events by role and text, never through internal refs",
+    "stores are tested through actions with a fresh Pinia per test; component tests use createTestingPinia",
+    "mocks sit at the boundary (API module or HTTP), never on a composable of ours",
+    "time and randomness are controlled in tests that depend on them",
+    "no whole-component snapshot tests",
+    "the project's one check command runs types, lint, style lint and the tests and is green"
+  ]
+}

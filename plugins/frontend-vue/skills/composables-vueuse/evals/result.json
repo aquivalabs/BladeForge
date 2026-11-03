@@ -1,0 +1,242 @@
+{
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-11-02T19:48:37",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "76bf6e184db8a871660e82e0c4c3579bcc968f1f257576f1dcea9ab78aab80c1",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Instructional prose for the agent's own task; no directive that overrides or hijacks the session."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "Nothing leaves the machine; the skill reads and writes project files only."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No key, token or credential in SKILL.md or references."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Only grep over the source tree; nothing destructive."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Readable Markdown and code examples; no encoded payloads or eval of decoded blobs."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "VueUse is named as a dependency to install through the project's package manager; no URL and no download-and-run."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, a keychain or a cookie store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, cron, launch agent or shell-profile edits."
+      }
+    ]
+  },
+  "trigger": {
+    "skill": "composables-vueuse",
+    "measured_at": "2026-11-02T19:54:27",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "78/80",
+    "accuracy": 0.975,
+    "baseline_accuracy": null,
+    "description_hash": "e7f714c401a4ab5db99fa69326977bb31edf18458767a05ab23eb5205ecc4ec4",
+    "queryset_hash": "cf3ae9c3b075fc2d2e5fb42a193b38b3bf109c7b2a9d97ed7fa378e1dd62c5e8",
+    "eval_type": "description-triggering",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "crowded",
+    "flow_variant": "baseline",
+    "cases": 16,
+    "train": {
+      "cases": 11,
+      "rows": 55,
+      "mean": 0.964,
+      "ci_half_width": 0.135
+    },
+    "test": {
+      "cases": 5,
+      "rows": 25,
+      "mean": 1,
+      "ci_half_width": 0.2
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
+    "results": [
+      {
+        "query": "the window needs to remember the chosen feed view in localStorage, write that for the Vue app",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "write a composable that tracks the colour scheme and updates when the OS theme changes",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "we have a setInterval in StatusBar.vue to refresh the 'ago' text, is that the right place",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "connect to the SSE stream from the Vue store, with reconnect",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "debounce the feed search input in Vue",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "review useFeedSearch.ts before I commit",
+        "should_trigger": true,
+        "triggers": 4,
+        "runs": 5,
+        "trigger_rate": 0.8,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "should the drag-to-reorder logic of the rail be a composable or stay in Rail.vue",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add a keyboard shortcut Cmd+K that opens the search in the Vue app",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "copy the hand-off text to the clipboard when the sparkle is clicked",
+        "should_trigger": true,
+        "triggers": 4,
+        "runs": 5,
+        "trigger_rate": 0.8,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "write the TicketCard.vue script setup with typed props",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "create a Pinia store for the current workspace, its turn rows and marks",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "add a custom React hook useAccountsFilter to the hooks registry",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "style the feed group head with BEM",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 2
+      },
+      {
+        "query": "write a Vitest test for groupFeed",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "set up Nuxt server routes for the API",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "animate the sheet opening with a fade",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 4
+      }
+    ],
+    "hillclimb": {
+      "baseline_test": 1,
+      "final_test": 1,
+      "final_variant": "baseline",
+      "rounds": 0,
+      "noise": 0.2,
+      "verdict": "no-headroom"
+    }
+  }
+}

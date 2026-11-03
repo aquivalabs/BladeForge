@@ -1,0 +1,27 @@
+{
+  "trigger": [
+    { "query": "the window needs to remember the chosen feed view in localStorage, write that for the Vue app", "should_trigger": true },
+    { "query": "write a composable that tracks the colour scheme and updates when the OS theme changes", "should_trigger": true },
+    { "query": "we have a setInterval in StatusBar.vue to refresh the 'ago' text, is that the right place", "should_trigger": true },
+    { "query": "connect to the SSE stream from the Vue store, with reconnect", "should_trigger": true },
+    { "query": "debounce the feed search input in Vue", "should_trigger": true },
+    { "query": "review useFeedSearch.ts before I commit", "should_trigger": true },
+    { "query": "should the drag-to-reorder logic of the rail be a composable or stay in Rail.vue", "should_trigger": true },
+    { "query": "add a keyboard shortcut Cmd+K that opens the search in the Vue app", "should_trigger": true },
+    { "query": "copy the hand-off text to the clipboard when the sparkle is clicked", "should_trigger": true },
+    { "query": "create a Pinia store for the current workspace, its turn rows and marks", "should_trigger": false },
+    { "query": "write the TicketCard.vue script setup with typed props", "should_trigger": false },
+    { "query": "add a custom React hook useAccountsFilter to the hooks registry", "should_trigger": false },
+    { "query": "style the feed group head with BEM", "should_trigger": false },
+    { "query": "write a Vitest test for groupFeed", "should_trigger": false },
+    { "query": "set up Nuxt server routes for the API", "should_trigger": false },
+    { "query": "animate the sheet opening with a fade", "should_trigger": false }
+  ],
+  "acceptance": [
+    "for each behaviour that VueUse covers, the VueUse function is used directly; a composable of ours exists only for business logic or a composition and names the VueUse function it checked",
+    "no component holds addEventListener, setInterval or storage access; those live in a composable or VueUse",
+    "a composable of ours is named use<Thing>, takes refs or getters for changing inputs, returns an object of refs and functions, and cleans up what it set up",
+    "the pure part of a composable lives in lib with a unit test",
+    "no wrapper composable that only forwards a VueUse call"
+  ]
+}

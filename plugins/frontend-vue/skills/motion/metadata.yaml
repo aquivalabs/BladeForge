@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: Motion in Vue by the cheapest tool that works — CSS transitions, Transition and TransitionGroup, the View Transitions API, a motion library last — animating transform and opacity, with durations from tokens and a reduced-motion fallback every time.
+best-for: Vue projects adding sheets, list changes, highlights and route transitions that should feel quick and respect user settings.
+needs: []
+changes:
+  tags: []
+  notes: ""

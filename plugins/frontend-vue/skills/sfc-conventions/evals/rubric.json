@@ -1,0 +1,29 @@
+{
+  "trigger": [
+    { "query": "write a TicketCard.vue component that shows the key, the summary and an Open button", "should_trigger": true },
+    { "query": "convert this Options API component with data() and methods to script setup with TypeScript", "should_trigger": true },
+    { "query": "how do I type the props and emits of FeedItem.vue — object literal or generic?", "should_trigger": true },
+    { "query": "the search box needs v-model from the parent, should I emit update:modelValue myself?", "should_trigger": true },
+    { "query": "review StatusBar.vue before I commit", "should_trigger": true },
+    { "query": "I have a watch that copies props.items into a local ref, is that right?", "should_trigger": true },
+    { "query": "the v-for and v-if are on the same li in the todo list, is that a problem?", "should_trigger": true },
+    { "query": "add a named slot with typed slot props to the Island component", "should_trigger": true },
+    { "query": "should this be ref or reactive for the settings form state in SettingsSheet.vue", "should_trigger": true },
+    { "query": "where should the new WorkspaceHeader component live, ui or features?", "should_trigger": false },
+    { "query": "the feed group head needs a hover state and a BEM modifier for unread", "should_trigger": false },
+    { "query": "create a Pinia store for the current workspace and its marks", "should_trigger": false },
+    { "query": "write a composable that tracks the colour scheme and updates on change", "should_trigger": false },
+    { "query": "write a Vitest test for the groupFeed function", "should_trigger": false },
+    { "query": "create a new React WidgetCard component with its folder and scss", "should_trigger": false },
+    { "query": "bump vue to 3.5.x in package.json", "should_trigger": false },
+    { "query": "write an Apex trigger handler for Account updates", "should_trigger": false }
+  ],
+  "acceptance": [
+    "the component uses <script setup lang=\"ts\"> and no Options API members (data, methods, defineComponent) outside a documented library boundary",
+    "defineProps and defineEmits use the generic type form; two-way state uses defineModel",
+    "derivable values are computed, not stored in a second ref; watchers only perform side effects",
+    "every v-for has a :key and no element carries both v-for and v-if",
+    "the template contains no inline logic beyond a condition, a loop or a modifier",
+    "the file order is script setup, template, style scoped; the file and component name are PascalCase"
+  ]
+}

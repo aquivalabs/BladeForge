@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: The Vue project toolchain from templates — ESLint flat config with eslint-plugin-vue and typescript-eslint carrying the house rules, Prettier, Stylelint with the BEM pattern, vue-tsc — and the one check command that gates a merge through the pre-push hook and CI.
+best-for: Vue 3 projects that want lint, format, style lint and type checks set up once the house way and run before every merge.
+needs: []
+changes:
+  tags: []
+  notes: ""

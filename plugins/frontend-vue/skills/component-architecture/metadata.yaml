@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: Where a Vue component lives and what it may know — pages, layouts, features, ui primitives, composables and lib — with imports going down only, reuse of primitives before new ones, and the split rule.
+best-for: Vue projects past a handful of components that want every new one placed by its knowledge, not by habit.
+needs: []
+changes:
+  tags: []
+  notes: ""
