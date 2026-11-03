@@ -33,7 +33,7 @@ test('the package lives under <dataDir>/app/node_modules/whose-turn', () => {
 });
 
 test('npm installs the wanted version into <dataDir>/app without touching a package.json', () => {
-  assert.deepEqual(npmInstallArgs(DATA, '1.0.0-alpha.2'), ['install', '--prefix', join(DATA, 'app'), '--no-audit', '--no-fund', '--no-save', 'whose-turn@1.0.0-alpha.2']);
+  assert.deepEqual(npmInstallArgs(DATA, '1.0.0-alpha.2'), ['install', '--prefix', join(DATA, 'app'), '--no-audit', '--no-fund', '--no-save', '--ignore-scripts', 'whose-turn@1.0.0-alpha.2']);
 });
 
 test('install decision: only a missing package installs; any installed version is left to the server to update', () => {

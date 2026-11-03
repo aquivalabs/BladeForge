@@ -32,7 +32,8 @@ export const installedVersion = (data = dataDir(), read = (path) => readFileSync
 /** Only a missing package is installed here; a newer version is the running server's job. */
 export const needsInstall = (installed) => !installed;
 
-export const npmInstallArgs = (data, version) => ['install', '--prefix', appDir(data), '--no-audit', '--no-fund', '--no-save', `whose-turn@${version}`];
+/** `--ignore-scripts`: the package declares no install scripts, so a release that gained one would run nothing on the user's machine. */
+export const npmInstallArgs = (data, version) => ['install', '--prefix', appDir(data), '--no-audit', '--no-fund', '--no-save', '--ignore-scripts', `whose-turn@${version}`];
 
 const execute = (file, args, options = {}) => {
   const result = spawnSync(file, args, { stdio: ['ignore', 2, 2], ...options });
