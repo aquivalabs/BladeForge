@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-10-30",
+  "generated": "2026-11-03",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -158,7 +158,7 @@
     {
       "name": "frontend:fe-check",
       "plugin": "frontend",
-      "plugin-version": "2.0.3",
+      "plugin-version": "2.0.4",
       "activates-when": "Typecheck and run (targeted) unit tests for a frontend repo, returning a terse one-block summary. Use after editing TypeScript/React to quickly confirm types are clean and the relevant tests pass \u2014 instead of running tsc and vitest separately and reading full output. Do NOT use for reviewing a diff, nor for any Apex or Salesforce-org check \u2014 this runs the frontend tsc + vitest and nothing else.",
       "category": "frontend",
       "purpose": "Typecheck a frontend repo with tsc and run (optionally targeted) vitest tests, printing one terse pass/fail summary instead of two noisy tool outputs.",
@@ -362,6 +362,141 @@
       "changes": {
         "tags": [],
         "notes": "Advisory/search-first discipline \u2014 it searches and reads the existing codebase and defers actual file creation to other placement/structure skills; it does not itself create, edit, or run anything."
+      },
+      "hooks": []
+    },
+    {
+      "name": "frontend-vue:bem-styles",
+      "plugin": "frontend-vue",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use when writing or reviewing the styles of a Vue component \u2014 the <style scoped> block, BEM class names for its block, elements and modifiers, state classes bound from the template, design tokens as CSS variables, SCSS inside the component, Stylelint complaints about selector patterns, or moving rules from a global stylesheet into a component. Also when two components share a class name by accident. NOT for the SCSS token system itself or rem sizing (frontend-css:scss-modules, frontend-css:rem), nor for React components (frontend-react:component-structure).",
+      "category": "frontend",
+      "purpose": "BEM inside each Vue component's scoped style block \u2014 one block per component, elements and modifiers, state toggled from the template, tokens over literals, the global stylesheet reduced to tokens and primitives, Stylelint enforcing the pattern.",
+      "best-for": "Vue projects that had class clashes or a growing global stylesheet and want every component's styles self-contained and greppable.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
+      },
+      "hooks": []
+    },
+    {
+      "name": "frontend-vue:component-architecture",
+      "plugin": "frontend-vue",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use before creating a Vue component or when deciding where one lives and what it may know \u2014 a reusable UI primitive, a feature component bound to the domain, a layout piece of the app chrome, a page or view, a component that only exists for one parent. Also when a component grew into two, when a feature reaches into another feature's component, when a page holds logic, or when asked \\\"where does X go\\\" in a Vue project. NOT for the inside of the .vue file (frontend-vue:sfc-conventions), nor for React (frontend-react:component-placement).",
+      "category": "frontend",
+      "purpose": "Where a Vue component lives and what it may know \u2014 pages, layouts, features, ui primitives, composables and lib \u2014 with imports going down only, reuse of primitives before new ones, and the split rule.",
+      "best-for": "Vue projects past a handful of components that want every new one placed by its knowledge, not by habit.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
+      },
+      "hooks": []
+    },
+    {
+      "name": "frontend-vue:composables-vueuse",
+      "plugin": "frontend-vue",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use when a Vue component needs behaviour that is not display \u2014 reading or writing local storage, the colour scheme or a media query, the clock, window size, an event source or websocket, a debounce or throttle, the clipboard, focus, keyboard shortcuts, intersection, drag position, fetch with abort \u2014 or when about to write a use* composable, review one, or decide whether a piece of logic belongs in a composable, a store or a component. VueUse is checked first. NOT for app-wide state (frontend-vue:state-pinia) and NOT for React hooks (frontend-react:hooks-registry).",
+      "category": "frontend",
+      "purpose": "VueUse as the first source for behaviour composables in Vue; our own use* only for business logic or a composition, written to one contract, with the pure part in lib under a test; the rule for composable versus store versus component.",
+      "best-for": "Vue 3 projects that want behaviour (storage, media queries, time, events, streams, debounce, focus, drag) taken from VueUse instead of rewritten, and their own composables written consistently.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
+      },
+      "hooks": []
+    },
+    {
+      "name": "frontend-vue:motion",
+      "plugin": "frontend-vue",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use when adding or reviewing motion in a Vue app \u2014 a sheet or dialog that fades in, a list whose rows enter and leave, a highlight that pulses on new items, a route transition, a drawer that slides, a counter that animates, a skeleton shimmer \u2014 or when choosing between CSS transitions, Vue Transition and TransitionGroup, the View Transitions API, and a motion library. Also when motion must respect prefers-reduced-motion. NOT for the dot-animal or canvas drawing of a specific app, and NOT for React (Motion for React is its own choice).",
+      "category": "frontend",
+      "purpose": "Motion in Vue by the cheapest tool that works \u2014 CSS transitions, Transition and TransitionGroup, the View Transitions API, a motion library last \u2014 animating transform and opacity, with durations from tokens and a reduced-motion fallback every time.",
+      "best-for": "Vue projects adding sheets, list changes, highlights and route transitions that should feel quick and respect user settings.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
+      },
+      "hooks": []
+    },
+    {
+      "name": "frontend-vue:nuxt-conventions",
+      "plugin": "frontend-vue",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use when the project is Nuxt 3 or 4 \u2014 creating pages, layouts, server routes or middleware, fetching data with useFetch or useAsyncData, relying on auto-imports, choosing rendering (SSR, SSG, SPA, hybrid routes), configuring modules in nuxt.config, handling runtime config and environment, or reviewing a Nuxt file placement. NOT for a plain Vite + Vue Router app (frontend-vue:component-architecture) and NOT for the inside of a component (frontend-vue:sfc-conventions).",
+      "category": "frontend",
+      "purpose": "Where files live and how data flows in a Nuxt 3 or 4 project \u2014 the convention directories, auto-imports, useFetch and useAsyncData with keys, server routes with validated input, runtime config over process.env, rendering chosen per route.",
+      "best-for": "Nuxt projects that want pages, server routes and data fetching written the way Nuxt expects, with the other frontend-vue skills applying unchanged inside.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
+      },
+      "hooks": []
+    },
+    {
+      "name": "frontend-vue:sfc-conventions",
+      "plugin": "frontend-vue",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use when writing, editing or reviewing a Vue single-file component \u2014 the <script setup lang=\\\"ts\\\"> block, props and emits and their types, defineModel, slots, template syntax, refs and computeds, watchers, lifecycle, the order of blocks in the .vue file, component and file naming. Also for converting an Options API or a JavaScript component to Composition API with TypeScript. NOT for where a component lives (frontend-vue:component-architecture), its styles (frontend-vue:bem-styles), a Pinia store (frontend-vue:state-pinia), or a reusable composable (frontend-vue:composables-vueuse).",
+      "category": "frontend",
+      "purpose": "The house shape of a Vue single-file component \u2014 script setup with TypeScript, Composition API only, typed props and emits, defineModel, declarative templates, derived state over stored state, watchers only for effects.",
+      "best-for": "Vue 3 projects that want every component written and reviewed the same way, including conversions from the Options API or plain JavaScript.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
+      },
+      "hooks": []
+    },
+    {
+      "name": "frontend-vue:state-pinia",
+      "plugin": "frontend-vue",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use when a Vue app needs state that more than one component reads or writes \u2014 the current user or workspace, lists from the server, selections, filters, marks \u2014 or when creating, editing, reviewing or splitting a Pinia store, deciding whether something belongs in a store at all, loading server data into one, or wiring server state through TanStack Query for Vue. NOT for behaviour composables (frontend-vue:composables-vueuse), not for component-local state (frontend-vue:sfc-conventions).",
+      "category": "frontend",
+      "purpose": "Pinia setup-syntax stores, one per domain concept, with refs for state, computeds for derived values and actions for changes; explicit loading and error; shallow refs for large server snapshots; TanStack Query for Vue for server state when the project uses it.",
+      "best-for": "Vue 3 projects whose state crosses component boundaries and should be written and reviewed one way.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
+      },
+      "hooks": []
+    },
+    {
+      "name": "frontend-vue:testing",
+      "plugin": "frontend-vue",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use when writing, fixing or reviewing tests for a Vue project \u2014 a unit test for a composable or a lib function, a component test with Vue Test Utils or Testing Library for Vue, a Pinia store test, a Nuxt test with @nuxt/test-utils, an end-to-end flow with Playwright \u2014 or when deciding what to test at which level, what to mock, how to run the suite before a merge, or why a test is flaky. NOT for the toolchain configs themselves (frontend-vue:tooling) and NOT for Apex or React tests.",
+      "category": "frontend",
+      "purpose": "Which test goes where in a Vue project \u2014 units for lib and composables, Testing Library or Vue Test Utils for components by role and text, Pinia stores through actions, @nuxt/test-utils for Nuxt, Playwright for the few flows that matter \u2014 with boundaries mocked, time controlled, and one command before a merge.",
+      "best-for": "Vue projects that want tests that survive refactors and a suite that gates a merge.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
+      },
+      "hooks": []
+    },
+    {
+      "name": "frontend-vue:tooling",
+      "plugin": "frontend-vue",
+      "plugin-version": "0.1.1",
+      "activates-when": "Use when setting up, changing or running the toolchain of a Vue project \u2014 ESLint with eslint-plugin-vue and typescript-eslint, Prettier, Stylelint with the BEM selector pattern, vue-tsc type checking, the one `npm run check` that runs all of them with the tests, the pre-push hook or CI job that gates a merge on it, or when lint, format and type errors conflict or a rule needs turning on or off. NOT for writing the tests themselves (frontend-vue:testing) nor for the style rules' content (frontend-vue:bem-styles, frontend-js:conventions).",
+      "category": "frontend",
+      "purpose": "The Vue project toolchain from templates \u2014 ESLint flat config with eslint-plugin-vue and typescript-eslint carrying the house rules, Prettier, Stylelint with the BEM pattern, vue-tsc \u2014 and the one check command that gates a merge through the pre-push hook and CI.",
+      "best-for": "Vue 3 projects that want lint, format, style lint and type checks set up once the house way and run before every merge.",
+      "needs": [],
+      "changes": {
+        "tags": [],
+        "notes": ""
       },
       "hooks": []
     },
