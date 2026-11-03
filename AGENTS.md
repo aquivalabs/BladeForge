@@ -21,7 +21,7 @@ issue, one branch: work found along the way gets its own issue before it is push
 ## Hard rules
 - **One problem per change.** A focused edit, not a grab-bag.
 - **Prove the problem first.** Don't restructure tested skill content without evidence it improves behavior.
-- **English only** in all artifacts (skills, docs, commit messages). Conversation language is the author's choice.
+- **English only** in all artifacts (skills, docs, commit messages, eval cases and test data). The user's own language lives only in the session; it is never written into the repository, not even as an eval input. Conversation language is the author's choice.
 - **New scripts are Node.** Any new script or tool is an ESM `.mjs` file on Node's built-in `node:` modules, with no npm dependencies unless the task needs one. The Python and shell scripts already in `scripts/` stay as they are; port one only as its own change.
 - **No `Co-Authored-By: Claude` / Anthropic attribution** trailers in commits or PR bodies.
 - **Changes land via PR — no direct pushes to `main`.** The `scout-gate` and `eval-gate` checks must

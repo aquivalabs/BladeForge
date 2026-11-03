@@ -1,5 +1,5 @@
 ---
-description: Use when the user asks what is going on with their tasks, what is waiting on them, what changed, or whose turn it is ("что по задачам", "что нового", "что на мне", "чей ход"), asks to add, finish or list a personal to-do ("запиши в туду", "добавь в список", "не забыть"), wants to connect a source or set up the monitor, open its window, or file a bug or an idea about the monitor itself ("заведи баг на монитор"). Reads and writes the local Whose Turn monitor instead of querying Jira, GitHub or Linear again.
+description: Use when the user asks what is going on with their tasks, what is waiting on them, what changed, or whose turn it is, in any language; asks to add, finish or list a personal to-do or something not to forget; wants to connect a source or set up the monitor, open its window, or file a bug or an idea about the monitor itself. Reads and writes the local Whose Turn monitor instead of querying Jira, GitHub or Linear again.
 ---
 
 # Whose Turn

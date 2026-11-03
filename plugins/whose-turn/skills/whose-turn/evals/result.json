@@ -2,15 +2,15 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-11-03T14:38:09",
+    "scanned_at": "2026-11-03T22:10:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "340ff1d2aa46ad706c1bba8ee5f571ad78ed0c0f979a04fe01c18545676b13be",
+    "scanned_hash": "55d217c51dead62b73fcfb1e47e3dd7739f17c929d412fc6adab93ff63895d16",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag."
+        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag. The 2026-11-03 rewrite of the description (RMA-247) only drops quoted Russian phrases; it adds no directive and no new behaviour."
       },
       {
         "n": 2,
@@ -58,30 +58,30 @@
   },
   "trigger": {
     "skill": "whose-turn",
-    "measured_at": "2026-11-03T12:59:27",
+    "measured_at": "2026-11-03T21:12:25",
     "model": "claude-opus-5-5",
     "runs_per_query": 5,
-    "best_score": "83/85",
-    "accuracy": 0.976,
+    "best_score": "84/85",
+    "accuracy": 0.988,
     "baseline_accuracy": null,
-    "description_hash": "bdbdec525b03b8982e62b3dfd99adf1eb7b206265e99363442f8be86060207d5",
-    "queryset_hash": "7a34aefe39a7e8b375c49e4dd1f795603d4624779f7954d1a47ce3799d484890",
+    "description_hash": "d7fc84749b50b0e976b08524c606b357bfa34e2b8755baf8db28010ab3c7949b",
+    "queryset_hash": "0c2a7f3c56a386f6b96c191474e6c9041b921cef7664b8f169b06ef1a78b4df5",
     "eval_type": "description-triggering",
     "runner": "scripts/hillclimb/trigger-runner.mjs",
     "environment": "crowded",
     "flow_variant": "baseline",
     "cases": 17,
     "train": {
-      "cases": 12,
-      "rows": 60,
-      "mean": 0.967,
-      "ci_half_width": 0.129
+      "cases": 10,
+      "rows": 50,
+      "mean": 0.98,
+      "ci_half_width": 0.141
     },
     "test": {
-      "cases": 5,
-      "rows": 25,
+      "cases": 4,
+      "rows": 20,
       "mean": 1,
-      "ci_half_width": 0.2
+      "ci_half_width": 0.224
     },
     "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
     "results": [
@@ -106,18 +106,18 @@
       {
         "query": "add a to-do: send the release notes for the demo app to the support team by Friday",
         "should_trigger": true,
-        "triggers": 4,
+        "triggers": 5,
         "runs": 5,
-        "trigger_rate": 0.8,
+        "trigger_rate": 1,
         "pass": true,
         "fired_other": 0
       },
       {
         "query": "the monitor window keeps showing a stale poll time after I reconnect the GitHub source, file a bug on the monitor for that",
         "should_trigger": true,
-        "triggers": 4,
+        "triggers": 5,
         "runs": 5,
-        "trigger_rate": 0.8,
+        "trigger_rate": 1,
         "pass": true,
         "fired_other": 0
       },
@@ -131,7 +131,7 @@
         "fired_other": 0
       },
       {
-        "query": "что на мне сейчас?",
+        "query": "anything waiting on me before I log off?",
         "should_trigger": true,
         "triggers": 5,
         "runs": 5,
@@ -140,7 +140,7 @@
         "fired_other": 0
       },
       {
-        "query": "что нового по задачам? чей ход?",
+        "query": "whose move is it on the checkout ticket, mine or the reviewer's?",
         "should_trigger": true,
         "triggers": 5,
         "runs": 5,
@@ -149,7 +149,7 @@
         "fired_other": 0
       },
       {
-        "query": "запиши в туду: обновить демо-данные для Northwind",
+        "query": "put it on my list not to forget: refresh the Northwind demo data",
         "should_trigger": true,
         "triggers": 5,
         "runs": 5,
@@ -178,6 +178,15 @@
       {
         "query": "write a JQL query that finds every bug in project NW created in the last week",
         "should_trigger": false,
+        "triggers": 1,
+        "runs": 5,
+        "trigger_rate": 0.2,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "how do I require two approving reviews on the main branch in GitHub settings?",
+        "should_trigger": false,
         "triggers": 0,
         "runs": 5,
         "trigger_rate": 0,
@@ -185,7 +194,7 @@
         "fired_other": 0
       },
       {
-        "query": "how do I require two approving reviews on the main branch in GitHub settings?",
+        "query": "build me a small to-do list app in React with local storage",
         "should_trigger": false,
         "triggers": 0,
         "runs": 5,
@@ -204,15 +213,6 @@
       },
       {
         "query": "explain how the GitHub REST API paginates the list of pull requests",
-        "should_trigger": false,
-        "triggers": 0,
-        "runs": 5,
-        "trigger_rate": 0,
-        "pass": true,
-        "fired_other": 0
-      },
-      {
-        "query": "build me a small to-do list app in React with local storage",
         "should_trigger": false,
         "triggers": 0,
         "runs": 5,

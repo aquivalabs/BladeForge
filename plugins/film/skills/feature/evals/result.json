@@ -2,15 +2,15 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-10-22T12:00:00",
+    "scanned_at": "2026-11-03T22:30:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "7957c1678d996f5222d19b6708d87b34d6353bf53649aa88c205a6a213b1d378",
+    "scanned_hash": "59b89112b3846ee9a23ad3a4b2faa2886c189f2a964e218dcfaf1186bc6e41ce",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "no directive aimed at the reading agent in SKILL.md, references or scripts; references/voice.md holds copy rules only; 2026-10-22 edit: new pacing rules and a pace lens in the references; no instruction to an agent beyond running shoot.mjs --pace"
+        "note": "no directive aimed at the reading agent in SKILL.md, references or scripts; references/voice.md holds copy rules only; 2026-10-22 edit: new pacing rules and a pace lens in the references; no instruction to an agent beyond running shoot.mjs --pace 2026-11-03 (RMA-247): references/voice.md only rewords its language paragraph without the Russian examples; no directive, script or fetch added."
       },
       {
         "n": 2,

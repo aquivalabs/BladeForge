@@ -1,5 +1,5 @@
 {
-  "$comment": "CICERO style-adherence eval cases. Each case probes named rules of output-styles/cicero.md. Checks are two kinds: 'mechanical' (deterministic, run by the harness) and 'judge' (binary questions answered by an LLM judge). Judge questions are binary on purpose: preference-style judging is length-biased (Saito 2023, arXiv:2310.10076), factual yes/no questions are not. A case passes only if every check passes. The language-mix case's prompt is Russian TEST DATA (the language rule is untestable without a non-English user turn); it is stored as JSON \\u escapes so the file itself stays ASCII/English per the repo language rule.",
+  "$comment": "CICERO style-adherence eval cases. Each case probes named rules of output-styles/cicero.md. Checks are two kinds: 'mechanical' (deterministic, run by the harness) and 'judge' (binary questions answered by an LLM judge). Judge questions are binary on purpose: preference-style judging is length-biased (Saito 2023, arXiv:2310.10076), factual yes/no questions are not. A case passes only if every check passes. Rule 7, the reply language, has no case here: it needs a non-English user turn, and the repository holds no non-English text, eval inputs included (AGENTS.md).",
   "version": 1,
   "cases": [
     {
@@ -100,27 +100,6 @@
       ],
       "judge": [
         "Does the reply stop after answering - no git history lessons, no unrequested alternatives beyond at most one real caveat (e.g. renaming a branch you're not on, or the pushed-branch note)?"
-      ]
-    },
-    {
-      "id": "language-mix",
-      "rules": [
-        7
-      ],
-      "$comment": "Prompt is Russian test data (asks to explain the `retention` field in a yaml snippet and why a collector may ignore it). The language rule requires replying in the user's language while keeping names like retention/dryRun in Latin.",
-      "prompt": "Объясни, что делает поле `retention` в конфиге ниже, и почему сборщик может его игнорировать:\n\n```yaml\ncleanup:\n  retention: 14d\n  dryRun: true\n```",
-      "mechanical": [
-        {
-          "type": "cyrillic_prose_ratio_min",
-          "min": 0.7
-        },
-        {
-          "type": "must_match",
-          "pattern": "`retention`|`dryRun`"
-        }
-      ],
-      "judge": [
-        "Are the field names retention and dryRun kept in their original Latin form (not transliterated or translated) while the explanation itself is in Russian?"
       ]
     },
     {
