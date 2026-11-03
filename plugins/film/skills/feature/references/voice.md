@@ -29,9 +29,9 @@ A footnote says where a fact comes from, in plain words, at the bottom of the sc
 ## Languages
 
 Write in the viewer's language. Keep identifiers, commands and commit lines exactly as they are: they are
-real objects on screen, not copy. Russian: no bureaucratic register ("осуществляет", "обеспечивает",
-"позволяет эффективно"), no anglicisms where a plain Russian word exists, and the familiar professional
-tone of a presentation, not of a draft.
+real objects on screen, not copy. In any language: no bureaucratic register (officialese such as "carries out",
+"ensures", "allows to efficiently"), no borrowed English word where a plain native word exists, and the familiar
+professional tone of a presentation, not of a draft.
 
 ---
 

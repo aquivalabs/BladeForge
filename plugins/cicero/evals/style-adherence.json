@@ -107,12 +107,12 @@
       "rules": [
         7
       ],
-      "$comment": "Prompt is Russian test data (asks to explain the `retention` field in a yaml snippet and why a collector may ignore it). The language rule requires replying in the user's language while keeping names like retention/dryRun in Latin.",
-      "prompt": "Объясни, что делает поле `retention` в конфиге ниже, и почему сборщик может его игнорировать:\n\n```yaml\ncleanup:\n  retention: 14d\n  dryRun: true\n```",
+      "$comment": "Prompt is German test data (asks to explain the `retention` field in a yaml snippet and why a collector may ignore it). The language rule requires replying in the user's language while keeping names like retention/dryRun in Latin. The repository carries no Russian (maintainer, 2026-11-03), so the case uses German and checks for German prose instead of a Cyrillic ratio.",
+      "prompt": "Erklär mir, was das Feld `retention` in der Konfiguration unten macht und warum der Collector es ignorieren kann:\n\n```yaml\ncleanup:\n  retention: 14d\n  dryRun: true\n```",
       "mechanical": [
         {
-          "type": "cyrillic_prose_ratio_min",
-          "min": 0.7
+          "type": "must_match",
+          "pattern": "\\b(und|nicht|das|die|der|wird|kann|ist)\\b"
         },
         {
           "type": "must_match",
