@@ -2,15 +2,15 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-11-03T14:38:09",
+    "scanned_at": "2026-11-03T22:10:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "340ff1d2aa46ad706c1bba8ee5f571ad78ed0c0f979a04fe01c18545676b13be",
+    "scanned_hash": "55d217c51dead62b73fcfb1e47e3dd7739f17c929d412fc6adab93ff63895d16",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag."
+        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag. The 2026-11-03 rewrite of the description (RMA-247) only drops quoted Russian phrases; it adds no directive and no new behaviour."
       },
       {
         "n": 2,
