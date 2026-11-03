@@ -223,6 +223,20 @@
       },
       "source": "./plugins/tests",
       "category": "engineering"
+    },
+    {
+      "name": "whose-turn",
+      "description": "Whose Turn — a local monitor that answers \"what is waiting on me right now\" across GitHub, Jira and Linear: whose turn each ticket is, what changed, your own to-dos, a summary at session start, a hand-off from the window into the session, and an MCP server for any agent. Installed from the published npm package, which carries the built window; sources at aquivalabs/whose-turn.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": {
+        "source": "npm",
+        "package": "whose-turn",
+        "version": "alpha"
+      },
+      "category": "engineering"
     }
   ]
 }
