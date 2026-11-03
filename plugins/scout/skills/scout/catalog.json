@@ -139,7 +139,7 @@
     {
       "name": "film:feature",
       "plugin": "film",
-      "plugin-version": "0.1.2",
+      "plugin-version": "0.1.3",
       "activates-when": "Use when someone asks for a presentation film, video briefing or animated walkthrough of one specific feature or change, built from its spec, plan, code or ticket, to show a team, stakeholders or a client why it exists, how it works and what is still open, and made in Claude Motion. Do NOT use for a promo or marketing video, a generic animation or a skill's showcase hover film (plain Claude Motion), for a slide deck (the Slides type), for a clickable code-architecture diagram (diagram:diagram), or for a how-to tutorial.",
       "category": "docs",
       "purpose": "Turn one feature's spec, plan, code or ticket into an honest presentation film in Claude Motion, built from a reviewed storyboard.",
@@ -926,8 +926,8 @@
     {
       "name": "whose-turn:whose-turn",
       "plugin": "whose-turn",
-      "plugin-version": "1.0.2",
-      "activates-when": "Use when the user asks what is going on with their tasks, what is waiting on them, what changed, or whose turn it is (\"\u0447\u0442\u043e \u043f\u043e \u0437\u0430\u0434\u0430\u0447\u0430\u043c\", \"\u0447\u0442\u043e \u043d\u043e\u0432\u043e\u0433\u043e\", \"\u0447\u0442\u043e \u043d\u0430 \u043c\u043d\u0435\", \"\u0447\u0435\u0439 \u0445\u043e\u0434\"), asks to add, finish or list a personal to-do (\"\u0437\u0430\u043f\u0438\u0448\u0438 \u0432 \u0442\u0443\u0434\u0443\", \"\u0434\u043e\u0431\u0430\u0432\u044c \u0432 \u0441\u043f\u0438\u0441\u043e\u043a\", \"\u043d\u0435 \u0437\u0430\u0431\u044b\u0442\u044c\"), wants to connect a source or set up the monitor, open its window, or file a bug or an idea about the monitor itself (\"\u0437\u0430\u0432\u0435\u0434\u0438 \u0431\u0430\u0433 \u043d\u0430 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\"). Reads and writes the local Whose Turn monitor instead of querying Jira, GitHub or Linear again.",
+      "plugin-version": "1.0.3",
+      "activates-when": "Use when the user asks what is going on with their tasks, what is waiting on them, what changed, or whose turn it is, in any language; asks to add, finish or list a personal to-do or something not to forget; wants to connect a source or set up the monitor, open its window, or file a bug or an idea about the monitor itself. Reads and writes the local Whose Turn monitor instead of querying Jira, GitHub or Linear again.",
       "category": "workflow",
       "purpose": "Answer what is waiting on the user, what changed and what is on their to-do list from the local Whose Turn monitor, and write to-dos, workspace config and monitor bug reports back to it.",
       "best-for": "A machine running the Whose Turn monitor, in any session where the user asks about their tasks across Jira, GitHub or Linear, keeps personal to-dos, pastes a hand-off from the monitor window, or wants to file something about the monitor itself.",
