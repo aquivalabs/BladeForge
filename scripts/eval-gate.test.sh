@@ -27,7 +27,8 @@ setup_repo() {
 
 # print a result.json with a fresh trigger-runner measurement AND a fresh, passing security section.
 # args: repo skill_rel qhash dhash [shape] — shape: full (default: runner record + hillclimb block),
-# noclimb (runner record, no hillclimb block), legacy (the old score-description shape), nosec
+# noclimb (runner record, no hillclimb block, test split at the ceiling), headroom (noclimb with a
+# test split below the ceiling), legacy (the old score-description shape), nosec
 result_json() {
   local mh; mh="$(cd "$1" && python3 scripts/validate_security.py --print-material-hash "$2")"
   python3 - "$3" "$4" "$mh" "${5:-full}" <<'PY'
@@ -40,6 +41,8 @@ if shape != "legacy":
     trigger.update({"runner": "scripts/hillclimb/trigger-runner.mjs", "environment": "isolated",
                     "model": "claude-opus-5-5", "cases": 6, "runs_per_query": 1,
                     "test": {"cases": 2, "rows": 2, "mean": 1.0, "ci_half_width": 0.707}})
+if shape == "headroom":
+    trigger["test"] = {"cases": 10, "rows": 10, "mean": 0.5, "ci_half_width": 0.2}
 if shape in ("full", "nosec"):
     trigger["hillclimb"] = {"baseline_test": 1.0, "final_test": 1.0, "final_variant": "baseline",
                             "rounds": 0, "noise": 0.707, "verdict": "no-headroom"}
@@ -149,11 +152,17 @@ write_result "$r" plugins/p/skills/old legacy
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
 check "record from the old scorer blocks a touched skill" 1 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
 
-# L: NEW skill with a runner record but no hillclimb block -> BLOCK
+# L: NEW skill with headroom on its test split, runner record but no hillclimb block -> BLOCK
 r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/fresh" "$RUBRIC"
-write_result "$r" plugins/p/skills/fresh noclimb
+write_result "$r" plugins/p/skills/fresh headroom
 git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
-check "new skill without a hillclimb record blocks" 1 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
+check "new skill with headroom and no hillclimb record blocks" 1 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
+
+# L2: NEW skill whose test split is at the ceiling, no hillclimb block -> PASS (no round can show a win there, RMA-140)
+r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/ceiling" "$RUBRIC"
+write_result "$r" plugins/p/skills/ceiling noclimb
+git -C "$r" add -A >/dev/null; git -C "$r" commit -qm c
+check "new skill at the ceiling needs no hillclimb record" 0 "$(stdin_all "$r" | run_gate "$r" >/dev/null 2>&1; echo $?)"
 
 # M: EXISTING skill whose SKILL.md is edited, runner record without hillclimb -> PASS (only new skills owe a climb)
 r="$(setup_repo)"; add_skill "$r" "plugins/p/skills/edit" "$RUBRIC"
