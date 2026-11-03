@@ -926,7 +926,7 @@
     {
       "name": "whose-turn:whose-turn",
       "plugin": "whose-turn",
-      "plugin-version": "1.0.1",
+      "plugin-version": "1.0.2",
       "activates-when": "Use when the user asks what is going on with their tasks, what is waiting on them, what changed, or whose turn it is (\"\u0447\u0442\u043e \u043f\u043e \u0437\u0430\u0434\u0430\u0447\u0430\u043c\", \"\u0447\u0442\u043e \u043d\u043e\u0432\u043e\u0433\u043e\", \"\u0447\u0442\u043e \u043d\u0430 \u043c\u043d\u0435\", \"\u0447\u0435\u0439 \u0445\u043e\u0434\"), asks to add, finish or list a personal to-do (\"\u0437\u0430\u043f\u0438\u0448\u0438 \u0432 \u0442\u0443\u0434\u0443\", \"\u0434\u043e\u0431\u0430\u0432\u044c \u0432 \u0441\u043f\u0438\u0441\u043e\u043a\", \"\u043d\u0435 \u0437\u0430\u0431\u044b\u0442\u044c\"), wants to connect a source or set up the monitor, open its window, or file a bug or an idea about the monitor itself (\"\u0437\u0430\u0432\u0435\u0434\u0438 \u0431\u0430\u0433 \u043d\u0430 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\"). Reads and writes the local Whose Turn monitor instead of querying Jira, GitHub or Linear again.",
       "category": "workflow",
       "purpose": "Answer what is waiting on the user, what changed and what is on their to-do list from the local Whose Turn monitor, and write to-dos, workspace config and monitor bug reports back to it.",
@@ -938,7 +938,7 @@
           "files",
           "other"
         ],
-        "notes": "Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or idea report, which the monitor files into its maintainer's Linear backlog when feedback is configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the pinned whose-turn npm package into the monitor's data directory and, for install, registers a launchd agent or systemd user unit that starts it at login."
+        "notes": "Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or idea report, which the monitor files into its maintainer's Linear backlog when feedback is configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the latest whose-turn npm package into the monitor's data directory and, for install, registers a launchd agent or systemd user unit that starts it at login. After that the monitor updates itself from npm's latest tag; the SessionStart hook starts an available update and every update is announced, in the session's start line and in the window."
       },
       "hooks": [
         "SessionStart",
