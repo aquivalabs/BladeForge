@@ -1,0 +1,14 @@
+schema-version: 1
+category: workflow
+purpose: Answer what is waiting on the user, what changed and what is on their to-do list from the local Whose Turn monitor, and write to-dos, workspace config and monitor bug reports back to it.
+best-for: A machine running the Whose Turn monitor, in any session where the user asks about their tasks across Jira, GitHub or Linear, keeps personal to-dos, pastes a hand-off from the monitor window, or wants to file something about the monitor itself.
+needs: []
+changes:
+  tags: [network, files, other]
+  notes: >-
+    Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, the
+    workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or
+    idea report, which the monitor files into its maintainer's Linear backlog when feedback is
+    configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the
+    pinned whose-turn npm package into the monitor's data directory and, for install, registers a
+    launchd agent or systemd user unit that starts it at login.

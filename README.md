@@ -97,6 +97,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | review-workflow | Workflow script that dispatches the review plugin's lenses in parallel (five on by default, plus skill, leak and security-scan where enabled), reconciles findings, and checks the gate criteria before `/review` may attest. | — (workflow script only) |
 | salesforce | Salesforce — LWC, security, deploy/run harness. | [dx_mcp](#dx_mcp), [lwc_development](#lwc_development), [security_review-rules](#security_review-rules), [sf-deploy-test](#sf-deploy-test), [sf-run](#sf-run) |
 | tests | The test standard — execution tiers declared by filename, the numbered rules a test must satisfy, the axes a case space is derived from, factories, matchers and fakes, a JSON failure envelope, and the coverage and mutation gates. Ships a whole-tree audit agent, a per-repo config, and a recommendations reporter that installs only what you name. | [architecture](#architecture), [apex](#apex) |
+| whose-turn | Claude Code side of the Whose Turn monitor — what is waiting on you across Jira, GitHub and Linear at the start of each session, your own to-dos, hand-offs from the monitor window, `/whose-turn` to open the window, and an MCP server. Runs the published `whose-turn` npm package, pinned by version, from the monitor's data directory. | [whose-turn](#whose-turn) |
 
 ## Skills
 
@@ -239,6 +240,11 @@ wire these plugins into a repo and keep the config thin (rules live in skills).
 - <a id="apex"></a>**apex** — The Apex delta of the same standard: what that runtime does differently, and nothing the shared rules already say. Loads `architecture` first by design.
 
 Also in the plugin, and neither is a skill: a read-only whole-tree audit agent that answers for every numbered rule — including the ones nothing runs unattended — and `tests-recommend`, which reports what the recommended environment is missing and what its absence costs, installing only what you name.
+
+### whose-turn &nbsp;·&nbsp; [↑ Plugins](#plugins)
+- <a id="whose-turn"></a>**whose-turn** — Answers what is on you, what changed and what is on your to-do list from the local Whose Turn monitor instead of querying the sources again; adds and finishes to-dos, connects sources, reads a pasted hand-off from the window, and files a bug or idea about the monitor itself.
+
+Also in the plugin: a SessionStart hook that starts the monitor when it is down and puts its summary into the session, a UserPromptSubmit hook that delivers items handed over from the window, the `/whose-turn` command, and the `whose-turn` MCP server. `bin/app.mjs` installs the pinned `whose-turn` npm package into `<data dir>/app` on first start; `node plugins/whose-turn/bin/app.mjs install` registers it to start at login.
 
 ## Contributing
 
