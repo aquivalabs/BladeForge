@@ -1,0 +1,260 @@
+{
+  "acceptance": null,
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-11-02T19:48:38",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "dfc8b1fbe0ecd9aab3a4f3aefa9ec5df1447d28ead8a74205048366d62524ffe",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "Instructional prose for the agent's own task; no directive that overrides or hijacks the session."
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "Nothing leaves the machine; the skill reads and writes project files only."
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "No key, token or credential in SKILL.md or references/catalog.md."
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "Only git diff package.json as a check; nothing destructive."
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "Readable Markdown and code examples; no encoded payloads or eval of decoded blobs."
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "Library names are listed as directions to look in; no URL, no download, nothing fetched."
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "No reference to ~/.ssh, ~/.aws, .env, a keychain or a cookie store."
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "No sudo, setuid, cron, launch agent or shell-profile edits."
+      }
+    ]
+  },
+  "trigger": {
+    "skill": "reuse-first",
+    "measured_at": "2026-11-02T20:08:28",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "87/90",
+    "accuracy": 0.967,
+    "baseline_accuracy": null,
+    "description_hash": "8bf82de6eb320e3f4a6cb183832837c23432e2dbb5d18f87a6f917f9d0c9f9ce",
+    "queryset_hash": "288863388116f5919a174eb3d4a16543845bcce70f3a53ff57985125336b2b9f",
+    "eval_type": "description-triggering",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "crowded",
+    "flow_variant": "baseline",
+    "cases": 18,
+    "train": {
+      "cases": 12,
+      "rows": 60,
+      "mean": 0.95,
+      "ci_half_width": 0.129
+    },
+    "test": {
+      "cases": 6,
+      "rows": 30,
+      "mean": 1,
+      "ci_half_width": 0.183
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
+    "results": [
+      {
+        "query": "I need to make the sidebar items sortable by drag and drop in our Vue app — write the handlers?",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add a tooltip to the status chip that stays positioned when the page scrolls",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "write a debounce helper for the search input",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "we need to format dates like 'Nov 2, 06:24 PM' in several places — write a formatter",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "is there a library for a virtual list of 10k feed rows or should we write our own windowing",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "review this PR: it adds a 300-line hand-written form validation module",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "should we take TanStack Query or write a small fetch cache for the dashboard",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "implement a modal dialog component with focus trapping for the settings sheet",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add a popover menu to the row actions in the React table",
+        "should_trigger": true,
+        "triggers": 2,
+        "runs": 5,
+        "trigger_rate": 0.4,
+        "pass": false,
+        "fired_other": 0
+      },
+      {
+        "query": "we keep reimplementing useLocalStorage in every project, what should we do",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "rename variable sel to selectedRecord throughout useAccountsFilter.ts",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "the MetricCard component already exists in ui/ — reuse it in the new dashboard page instead of a copy",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 2
+      },
+      {
+        "query": "this class hierarchy for the three report types is over-engineered, simplify it",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 2
+      },
+      {
+        "query": "write an Apex test for AccountRangeResolver with @TestSetup",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "add margin-top: 1.5rem to the card header scss",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "fix the typo in the README install section",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "the BFF route /api/items is missing auth — fix the middleware",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "bump vue to 3.5.x in package.json",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      }
+    ],
+    "hillclimb": {
+      "baseline_test": 1,
+      "final_test": 1,
+      "final_variant": "baseline",
+      "rounds": 0,
+      "noise": 0.183,
+      "verdict": "no-headroom"
+    }
+  }
+}

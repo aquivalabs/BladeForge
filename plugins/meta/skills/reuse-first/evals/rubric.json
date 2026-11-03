@@ -1,0 +1,29 @@
+{
+  "trigger": [
+    { "query": "I need to make the sidebar items sortable by drag and drop in our Vue app — write the handlers?", "should_trigger": true },
+    { "query": "add a tooltip to the status chip that stays positioned when the page scrolls", "should_trigger": true },
+    { "query": "write a debounce helper for the search input", "should_trigger": true },
+    { "query": "we need to format dates like 'Nov 2, 06:24 PM' in several places — write a formatter", "should_trigger": true },
+    { "query": "is there a library for a virtual list of 10k feed rows or should we write our own windowing", "should_trigger": true },
+    { "query": "review this PR: it adds a 300-line hand-written form validation module", "should_trigger": true },
+    { "query": "should we take TanStack Query or write a small fetch cache for the dashboard", "should_trigger": true },
+    { "query": "implement a modal dialog component with focus trapping for the settings sheet", "should_trigger": true },
+    { "query": "add a popover menu to the row actions in the React table", "should_trigger": true },
+    { "query": "we keep reimplementing useLocalStorage in every project, what should we do", "should_trigger": true },
+    { "query": "rename variable sel to selectedRecord throughout useAccountsFilter.ts", "should_trigger": false },
+    { "query": "the MetricCard component already exists in ui/ — reuse it in the new dashboard page instead of a copy", "should_trigger": false },
+    { "query": "this class hierarchy for the three report types is over-engineered, simplify it", "should_trigger": false },
+    { "query": "write an Apex test for AccountRangeResolver with @TestSetup", "should_trigger": false },
+    { "query": "add margin-top: 1.5rem to the card header scss", "should_trigger": false },
+    { "query": "fix the typo in the README install section", "should_trigger": false },
+    { "query": "the BFF route /api/items is missing auth — fix the middleware", "should_trigger": false },
+    { "query": "bump vue to 3.5.x in package.json", "should_trigger": false }
+  ],
+  "acceptance": [
+    "a decision paragraph exists before the code (PR description, issue, or a comment at the seam) naming the rung chosen and the rungs checked",
+    "when a dependency is added, the diff of package.json adds one package for one task and the paragraph names at least one alternative that lost and why",
+    "when our own code is written for a task listed in references/catalog.md, the paragraph names the rejected library and the reason from rung 7",
+    "no composable or hook of ours merely wraps a library call without adding business meaning",
+    "no dependency over roughly 50 kB is added for a function the platform or the existing code covers in a few lines"
+  ]
+}
