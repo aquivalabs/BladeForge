@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * The one place that knows the monitor's npm package. It installs `whose-turn@<WHOSE_TURN_VERSION>` once into
- * `<dataDir>/app`, installs it again when the installed version differs, and runs the package's own scripts from there.
+ * The one place that knows the monitor's npm package. The first start, with nothing in `<dataDir>/app` yet, installs
+ * `whose-turn@latest` there; after that the server keeps itself current (`POST /api/update`). It runs the package's own scripts from there.
  *   node app.mjs path               prints the package folder
  *   node app.mjs install            registers the launch agent / user unit (the package's install.sh)
  *   node app.mjs open [--browser]   opens the window (the package's open.sh)
  *   node app.mjs start              starts a detached server
- * WHOSE_TURN_APP_VERSION overrides the pin, for trying another published version.
+ * WHOSE_TURN_APP_VERSION names the version that first install takes, for trying a specific one; while it is set, the hook starts no update.
  */
 import { spawn, spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -14,9 +14,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dataDir, port } from './lib.mjs';
 
-export const WHOSE_TURN_VERSION = '1.0.0-alpha.2';
-
-export const wantedVersion = (env = process.env) => env.WHOSE_TURN_APP_VERSION || WHOSE_TURN_VERSION;
+export const wantedVersion = (env = process.env) => env.WHOSE_TURN_APP_VERSION || 'latest';
 
 export const appDir = (data = dataDir()) => join(data, 'app');
 
@@ -31,18 +29,20 @@ export const installedVersion = (data = dataDir(), read = (path) => readFileSync
   }
 };
 
-export const needsInstall = (installed, wanted = wantedVersion()) => installed !== wanted;
+/** Only a missing package is installed here; a newer version is the running server's job. */
+export const needsInstall = (installed) => !installed;
 
-export const npmInstallArgs = (data, version) => ['install', '--prefix', appDir(data), '--no-audit', '--no-fund', '--no-save', `whose-turn@${version}`];
+/** `--ignore-scripts`: the package declares no install scripts, so a release that gained one would run nothing on the user's machine. */
+export const npmInstallArgs = (data, version) => ['install', '--prefix', appDir(data), '--no-audit', '--no-fund', '--no-save', '--ignore-scripts', `whose-turn@${version}`];
 
 const execute = (file, args, options = {}) => {
   const result = spawnSync(file, args, { stdio: ['ignore', 2, 2], ...options });
   return { status: result.status, missing: result.error?.code === 'ENOENT' };
 };
 
-/** Installs the pinned package when it is missing or another version; returns its folder, or null after printing why it could not. */
+/** Installs the package when there is none; returns its folder, or null after printing why it could not. */
 export const ensurePackage = ({ data = dataDir(), version = wantedVersion(), run = execute, read, log = console.error } = {}) => {
-  if (!needsInstall(installedVersion(data, read), version)) {
+  if (!needsInstall(installedVersion(data, read))) {
     return packagePath(data);
   }
   const { status, missing } = run('npm', npmInstallArgs(data, version));

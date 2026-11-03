@@ -1,10 +1,9 @@
-/** Starts the monitor when it is down: the launch agent on macOS, the user unit on Linux, else a detached server through app.mjs. Repoints an agent that runs a server.mjs that is gone, one an earlier plugin carried in the plugin cache, or the package at a version other than the pin. Platform, runner and probe are injectable. */
+/** Starts the monitor when it is down: the launch agent on macOS, the user unit on Linux, else a detached server through app.mjs. Repoints an agent that runs a server.mjs that is gone or one an earlier plugin carried in the plugin cache; the installed package updates itself. Platform, runner and probe are injectable. */
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { installedVersion, needsInstall, packagePath } from './app.mjs';
 import { base } from './lib.mjs';
 
 const APP = join(dirname(fileURLToPath(import.meta.url)), 'app.mjs');
@@ -15,16 +14,10 @@ const AGENT_FILES = {
   linux: (home) => join(home, '.config', 'systemd', 'user', 'whose-turn.service'),
 };
 
-/** True when the agent text runs a server.mjs that is gone, one inside a Claude Code plugin cache, or the package's own server at a version other than the pin. */
-export const staleAgent = (text, { exists = existsSync, server = join(packagePath(), 'server.mjs'), outdated = () => needsInstall(installedVersion()) } = {}) => {
+/** True when the agent text runs a server.mjs that is gone or one inside a Claude Code plugin cache. */
+export const staleAgent = (text, { exists = existsSync } = {}) => {
   const named = String(text).match(/(?:<string>|")([^"<]*\/server\.mjs)(?:<\/string>|")/)?.[1];
-  if (!named) {
-    return false;
-  }
-  if (named === server) {
-    return outdated();
-  }
-  return !exists(named) || named.includes('/.claude/plugins/cache/');
+  return Boolean(named) && (!exists(named) || named.includes('/.claude/plugins/cache/'));
 };
 
 const detachedServer = () => [process.execPath, [APP, 'start'], { detached: true }];

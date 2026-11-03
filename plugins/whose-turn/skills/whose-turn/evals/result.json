@@ -2,7 +2,7 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-11-03T13:00:00",
+    "scanned_at": "2026-11-03T14:38:09",
     "scanned_by": "cerberus:security-scan",
     "scanned_hash": "340ff1d2aa46ad706c1bba8ee5f571ad78ed0c0f979a04fe01c18545676b13be",
     "checklist": [
@@ -40,7 +40,7 @@
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "bin/app.mjs downloads one exact pinned version of the published whose-turn npm package from the npm registry and runs it; explicit, versioned, disclosed. WHOSE_TURN_APP_VERSION overrides the pin only when the user sets it."
+        "note": "bin/app.mjs installs the published whose-turn npm package from the npm registry with --ignore-scripts and runs it: the first start takes `latest` (WHOSE_TURN_APP_VERSION names another version), and after that the server updates itself from the `latest` dist-tag; the SessionStart hook starts an available update and says so on its line. Unpinned by design and disclosed in README, plugin.json and metadata.yaml; npm checks each tarball's integrity, and releases carry provenance from the package's own GitHub Actions workflow."
       },
       {
         "n": 7,
