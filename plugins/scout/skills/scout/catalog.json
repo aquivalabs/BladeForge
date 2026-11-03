@@ -922,6 +922,28 @@
         "notes": "The skill body is read-only advice: it states rules and names the command that checks each one. Two things in the plugin around it do mutate, and they are declared here because the skill points at them. install.sh seeds .claude/tests.config.json and its schema into the target repo and merges the marketplace plus this plugin into the target's .claude/settings.json \u2014 it seeds and never overwrites, so a second run cannot reset a ratchet somebody spent a release lowering, and it wires no git hook because the deterministic layer for tests is the repo's existing linter, type check and runner rather than a new gate. tests-recommend.py reads package.json and two config files and prints; with --apply it runs `npm install --save-dev` for the packages named on the command line and nothing else, which is the only network access and the only dependency change. There is no --apply-all on the documented path: a recommendation that installs itself is not a recommendation.\n"
       },
       "hooks": []
+    },
+    {
+      "name": "whose-turn:whose-turn",
+      "plugin": "whose-turn",
+      "plugin-version": "1.0.1",
+      "activates-when": "Use when the user asks what is going on with their tasks, what is waiting on them, what changed, or whose turn it is (\"\u0447\u0442\u043e \u043f\u043e \u0437\u0430\u0434\u0430\u0447\u0430\u043c\", \"\u0447\u0442\u043e \u043d\u043e\u0432\u043e\u0433\u043e\", \"\u0447\u0442\u043e \u043d\u0430 \u043c\u043d\u0435\", \"\u0447\u0435\u0439 \u0445\u043e\u0434\"), asks to add, finish or list a personal to-do (\"\u0437\u0430\u043f\u0438\u0448\u0438 \u0432 \u0442\u0443\u0434\u0443\", \"\u0434\u043e\u0431\u0430\u0432\u044c \u0432 \u0441\u043f\u0438\u0441\u043e\u043a\", \"\u043d\u0435 \u0437\u0430\u0431\u044b\u0442\u044c\"), wants to connect a source or set up the monitor, open its window, or file a bug or an idea about the monitor itself (\"\u0437\u0430\u0432\u0435\u0434\u0438 \u0431\u0430\u0433 \u043d\u0430 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\"). Reads and writes the local Whose Turn monitor instead of querying Jira, GitHub or Linear again.",
+      "category": "workflow",
+      "purpose": "Answer what is waiting on the user, what changed and what is on their to-do list from the local Whose Turn monitor, and write to-dos, workspace config and monitor bug reports back to it.",
+      "best-for": "A machine running the Whose Turn monitor, in any session where the user asks about their tasks across Jira, GitHub or Linear, keeps personal to-dos, pastes a hand-off from the monitor window, or wants to file something about the monitor itself.",
+      "needs": [],
+      "changes": {
+        "tags": [
+          "network",
+          "files",
+          "other"
+        ],
+        "notes": "Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or idea report, which the monitor files into its maintainer's Linear backlog when feedback is configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the pinned whose-turn npm package into the monitor's data directory and, for install, registers a launchd agent or systemd user unit that starts it at login."
+      },
+      "hooks": [
+        "SessionStart",
+        "UserPromptSubmit"
+      ]
     }
   ]
 }
