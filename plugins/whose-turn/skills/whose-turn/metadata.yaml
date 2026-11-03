@@ -10,5 +10,7 @@ changes:
     workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or
     idea report, which the monitor files into its maintainer's Linear backlog when feedback is
     configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the
-    pinned whose-turn npm package into the monitor's data directory and, for install, registers a
-    launchd agent or systemd user unit that starts it at login.
+    latest whose-turn npm package into the monitor's data directory and, for install, registers a
+    launchd agent or systemd user unit that starts it at login. After that the monitor updates
+    itself from npm's latest tag; the SessionStart hook starts an available update and every update
+    is announced, in the session's start line and in the window.

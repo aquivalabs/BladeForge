@@ -1,7 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { join } from 'node:path';
-import { WHOSE_TURN_VERSION, commandFor, ensurePackage, installedVersion, main, needsInstall, npmInstallArgs, packagePath, wantedVersion } from './app.mjs';
+import { execFile } from 'node:child_process';
+import { createServer } from 'node:http';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { commandFor, ensurePackage, installedVersion, main, needsInstall, npmInstallArgs, packagePath, wantedVersion } from './app.mjs';
 import { ensureRunning, staleAgent } from './ensure-running.mjs';
 
 const DATA = '/home/u/data dir';
@@ -18,9 +23,8 @@ const recorder = (status = 0, missing = false) => {
   return { calls, run: (file, args, options) => (calls.push([file, args, options]), { status, missing }) };
 };
 
-test('the pin is the one published version the plugin runs, overridable only by WHOSE_TURN_APP_VERSION', () => {
-  assert.equal(WHOSE_TURN_VERSION, '1.0.0-alpha.2');
-  assert.equal(wantedVersion({}), WHOSE_TURN_VERSION);
+test('the first install takes latest, or the version WHOSE_TURN_APP_VERSION names', () => {
+  assert.equal(wantedVersion({}), 'latest');
   assert.equal(wantedVersion({ WHOSE_TURN_APP_VERSION: '1.0.0-alpha.1' }), '1.0.0-alpha.1');
 });
 
@@ -28,28 +32,27 @@ test('the package lives under <dataDir>/app/node_modules/whose-turn', () => {
   assert.equal(packagePath(DATA), PACKAGE);
 });
 
-test('npm installs the pinned version into <dataDir>/app without touching a package.json', () => {
+test('npm installs the wanted version into <dataDir>/app without touching a package.json', () => {
   assert.deepEqual(npmInstallArgs(DATA, '1.0.0-alpha.2'), ['install', '--prefix', join(DATA, 'app'), '--no-audit', '--no-fund', '--no-save', 'whose-turn@1.0.0-alpha.2']);
 });
 
-test('reinstall decision: missing or another version installs, the same version does not', () => {
-  assert.equal(needsInstall(null, '1.0.0-alpha.2'), true);
-  assert.equal(needsInstall('1.0.0-alpha.1', '1.0.0-alpha.2'), true);
-  assert.equal(needsInstall('1.0.0-alpha.2', '1.0.0-alpha.2'), false);
+test('install decision: only a missing package installs; any installed version is left to the server to update', () => {
+  assert.equal(needsInstall(null), true);
+  assert.equal(needsInstall('1.0.0-alpha.1'), false);
   assert.equal(installedVersion(DATA, installed('1.0.0-alpha.1')), '1.0.0-alpha.1');
   assert.equal(installedVersion(DATA, installed(null)), null);
 });
 
-test('an installed package at the pin runs npm not at all', () => {
+test('the first install, with no package yet, takes whose-turn@latest', () => {
   const { calls, run } = recorder();
-  assert.equal(ensurePackage({ data: DATA, version: '1.0.0-alpha.2', run, read: installed('1.0.0-alpha.2') }), PACKAGE);
-  assert.deepEqual(calls, []);
+  assert.equal(ensurePackage({ data: DATA, version: wantedVersion({}), run, read: installed(null) }), PACKAGE);
+  assert.deepEqual(calls.map(([file, args]) => [file, args.at(-1)]), [['npm', 'whose-turn@latest']]);
 });
 
-test('an older installed package is replaced by the pinned one', () => {
+test('an installed package, whatever its version, runs npm not at all', () => {
   const { calls, run } = recorder();
-  assert.equal(ensurePackage({ data: DATA, version: '1.0.0-alpha.2', run, read: installed('1.0.0-alpha.1') }), PACKAGE);
-  assert.deepEqual(calls.map(([file, args]) => [file, args.at(-1)]), [['npm', 'whose-turn@1.0.0-alpha.2']]);
+  assert.equal(ensurePackage({ data: DATA, version: 'latest', run, read: installed('1.0.0-alpha.1') }), PACKAGE);
+  assert.deepEqual(calls, []);
 });
 
 test('no npm on PATH: one line saying so, and no package', () => {
@@ -89,14 +92,13 @@ const plistFor = (server) => `<array><string>/usr/bin/node</string><string>${ser
 
 test('stale agent: a server.mjs that is gone, or one an earlier plugin kept in the plugin cache', () => {
   const old = '/home/u/.claude/plugins/cache/whose-turn/whose-turn/0.3.0/server.mjs';
-  assert.equal(staleAgent(plistFor('/gone/server.mjs'), { exists: () => false, server: SERVER }), true);
-  assert.equal(staleAgent(plistFor(old), { exists: () => true, server: SERVER }), true);
-  assert.equal(staleAgent(plistFor('/home/u/src/whose-turn/server.mjs'), { exists: () => true, server: SERVER }), false);
+  assert.equal(staleAgent(plistFor('/gone/server.mjs'), { exists: () => false }), true);
+  assert.equal(staleAgent(plistFor(old), { exists: () => true }), true);
+  assert.equal(staleAgent(plistFor('/home/u/src/whose-turn/server.mjs'), { exists: () => true }), false);
 });
 
-test('stale agent: the package\'s own server is stale only when its installed version is not the pin', () => {
-  assert.equal(staleAgent(plistFor(SERVER), { server: SERVER, outdated: () => false }), false);
-  assert.equal(staleAgent(plistFor(SERVER), { server: SERVER, outdated: () => true }), true);
+test('stale agent: the package\'s own server is never stale while it is there, whatever its version', () => {
+  assert.equal(staleAgent(plistFor(SERVER), { exists: () => true }), false);
 });
 
 const attempt = async ({ platform, present = [], stale = false }) => {
@@ -136,4 +138,48 @@ test('a stale agent is repointed through app.mjs install, detached, before the s
   assert.equal(calls[0][1][1], 'install');
   assert.deepEqual(calls[0][2], { detached: true });
   assert.deepEqual(calls[1], ['launchctl', ['kickstart', 'gui/501/local.whose-turn'], undefined]);
+});
+
+const SUMMARY = join(dirname(fileURLToPath(import.meta.url)), 'summary.mjs');
+
+/** Runs the SessionStart hook against a stub monitor in a scratch HOME and data dir; returns its output and the POSTs it sent. */
+const hookWith = async (update, answer = { status: 200, body: { update: { ...update, state: 'installing' } } }) => {
+  const posts = [];
+  const server = createServer((request, response) => {
+    if (request.method === 'POST') {
+      posts.push({ path: request.url, type: request.headers['content-type'] });
+      response.writeHead(answer.status, { 'Content-Type': 'application/json' }).end(JSON.stringify(answer.body));
+      return;
+    }
+    response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify({ workspaces: [{ connectors: [{ label: 'GitHub' }] }], update }));
+  });
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const scratch = mkdtempSync(join(tmpdir(), 'whose-turn-hook-'));
+  try {
+    const env = { ...process.env, HOME: scratch, WHOSE_TURN_DATA: scratch, WHOSE_TURN_PORT: String(server.address().port) };
+    const stdout = await new Promise((resolve, reject) => execFile(process.execPath, [SUMMARY, 'hook'], { env, timeout: 10000 }, (error, out) => (error ? reject(error) : resolve(out))));
+    return { output: JSON.parse(stdout), posts };
+  } finally {
+    server.close();
+    rmSync(scratch, { recursive: true, force: true });
+  }
+};
+
+test('the hook posts /api/update when the summary offers one, and says so in its line', async () => {
+  const { output, posts } = await hookWith({ current: '1.0.0-alpha.3', latest: '1.0.0-alpha.9', available: true, state: 'idle' });
+  assert.deepEqual(posts, [{ path: '/api/update', type: 'application/json' }]);
+  assert.match(output.systemMessage, / · Whose Turn is updating to 1\.0\.0-alpha\.9$/);
+  assert.match(output.hookSpecificOutput.additionalContext, /Whose Turn is updating to 1\.0\.0-alpha\.9/);
+});
+
+test('an update already running (409 UPDATE_IN_PROGRESS) is still announced as updating', async () => {
+  const { output, posts } = await hookWith({ current: '1.0.0-alpha.3', latest: '1.0.0-alpha.9', available: true, state: 'installing' }, { status: 409, body: { error: { code: 409, details: [{ reason: 'UPDATE_IN_PROGRESS' }] } } });
+  assert.equal(posts.length, 1);
+  assert.match(output.systemMessage, /Whose Turn is updating to 1\.0\.0-alpha\.9/);
+});
+
+test('no update available: no POST and no update phrase', async () => {
+  const { output, posts } = await hookWith({ current: '1.0.0-alpha.3', latest: '1.0.0-alpha.3', available: false, state: 'idle' });
+  assert.deepEqual(posts, []);
+  assert.doesNotMatch(JSON.stringify(output), /updating/);
 });

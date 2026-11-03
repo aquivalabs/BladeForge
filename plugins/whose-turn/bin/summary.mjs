@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-/** Formats /api/summary for the SessionStart hook ("hook") or the status line ("status"). Source data is wrapped as untrusted text. */
+/** Formats /api/summary for the SessionStart hook ("hook") or the status line ("status"). Source data is wrapped as untrusted text. When the summary offers an update, the hook starts it (`POST /api/update`) and says so. */
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { port, getJson, flat } from './lib.mjs';
+import { port, getJson, postJson, flat } from './lib.mjs';
 
 const mode = process.argv[2] || 'hook';
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -39,6 +39,12 @@ const where = (item) => (workspaces.length > 1 && item.ws ? `[${flat(item.ws, 30
 const sources = [...new Set(workspaces.flatMap((workspace) => (workspace.connectors || []).map((connector) => flat(connector.label, 30))))];
 const tail = () => ` · ${unread} unread${todos.length ? ` · ${todos.length} to-do` : ''}`;
 
+// The server answers at once and installs in the background; a 409 UPDATE_IN_PROGRESS means it is already updating.
+const updating = mode === 'hook' && summary.update?.available ? flat(summary.update.latest, 40) : '';
+if (updating) {
+  postJson('/api/update', {}, 3000).catch(() => {});
+}
+
 if (mode === 'status') {
   console.log(`▲ ${moves.length} your move${tail()}${errors.length || health.length ? ' · error' : ''}`);
   process.exit(0);
@@ -61,6 +67,9 @@ if (errors.length) {
 if (health.length) {
   lines.push(`Monitor health: ${health.map((text) => flat(text)).join('; ')}. The data above may be out of date.`);
 }
+if (updating) {
+  lines.push(`Whose Turn is updating to ${updating}; the monitor restarts by itself when the install is done.`);
+}
 if (handed) {
   lines.push(`${handed} item(s) were handed to Claude from the window; they arrive with the user's next message, or through the whose_turn_inbox MCP tool.`);
 }
@@ -68,5 +77,5 @@ let message = sources.length ? `Whose Turn: ${moves.length} your move` : 'Whose 
 if (moves.length) {
   message += ` — ${moves.slice(0, 3).map((move) => `${where(move)}${flat(move.key, 40)} ${flat(move.next, 80)}`).join('; ')}`;
 }
-message += `${tail()}${errors.length || health.length ? ' · monitor error' : ''}`;
+message += `${tail()}${errors.length || health.length ? ' · monitor error' : ''}${updating ? ` · Whose Turn is updating to ${updating}` : ''}`;
 console.log(JSON.stringify({ systemMessage: message, hookSpecificOutput: { hookEventName: 'SessionStart', additionalContext: lines.filter(Boolean).join('\n') } }));
