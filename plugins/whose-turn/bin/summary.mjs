@@ -40,7 +40,9 @@ const sources = [...new Set(workspaces.flatMap((workspace) => (workspace.connect
 const tail = () => ` · ${unread} unread${todos.length ? ` · ${todos.length} to-do` : ''}`;
 
 // The server answers at once and installs in the background; a 409 UPDATE_IN_PROGRESS means it is already updating.
-const updating = mode === 'hook' && summary.update?.available ? flat(summary.update.latest, 40) : '';
+// A user who named a version in WHOSE_TURN_APP_VERSION chose to stay on it, so the hook starts no update for them.
+const pinned = Boolean(process.env.WHOSE_TURN_APP_VERSION);
+const updating = mode === 'hook' && !pinned && summary.update?.available ? flat(summary.update.latest, 40) : '';
 if (updating) {
   postJson('/api/update', {}, 3000).catch(() => {});
 }

@@ -6,7 +6,7 @@
  *   node app.mjs install            registers the launch agent / user unit (the package's install.sh)
  *   node app.mjs open [--browser]   opens the window (the package's open.sh)
  *   node app.mjs start              starts a detached server
- * WHOSE_TURN_APP_VERSION names the version that first install takes, for trying a specific one.
+ * WHOSE_TURN_APP_VERSION names the version that first install takes, for trying a specific one; while it is set, the hook starts no update.
  */
 import { spawn, spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';

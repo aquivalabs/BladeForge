@@ -143,7 +143,7 @@ test('a stale agent is repointed through app.mjs install, detached, before the s
 const SUMMARY = join(dirname(fileURLToPath(import.meta.url)), 'summary.mjs');
 
 /** Runs the SessionStart hook against a stub monitor in a scratch HOME and data dir; returns its output and the POSTs it sent. */
-const hookWith = async (update, answer = { status: 200, body: { update: { ...update, state: 'installing' } } }) => {
+const hookWith = async (update, answer = { status: 200, body: { update: { ...update, state: 'installing' } } }, extraEnv = {}) => {
   const posts = [];
   const server = createServer((request, response) => {
     if (request.method === 'POST') {
@@ -156,7 +156,7 @@ const hookWith = async (update, answer = { status: 200, body: { update: { ...upd
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const scratch = mkdtempSync(join(tmpdir(), 'whose-turn-hook-'));
   try {
-    const env = { ...process.env, HOME: scratch, WHOSE_TURN_DATA: scratch, WHOSE_TURN_PORT: String(server.address().port) };
+    const env = { ...process.env, HOME: scratch, WHOSE_TURN_DATA: scratch, WHOSE_TURN_PORT: String(server.address().port), ...extraEnv };
     const stdout = await new Promise((resolve, reject) => execFile(process.execPath, [SUMMARY, 'hook'], { env, timeout: 10000 }, (error, out) => (error ? reject(error) : resolve(out))));
     return { output: JSON.parse(stdout), posts };
   } finally {
@@ -176,6 +176,12 @@ test('an update already running (409 UPDATE_IN_PROGRESS) is still announced as u
   const { output, posts } = await hookWith({ current: '1.0.0-alpha.3', latest: '1.0.0-alpha.9', available: true, state: 'installing' }, { status: 409, body: { error: { code: 409, details: [{ reason: 'UPDATE_IN_PROGRESS' }] } } });
   assert.equal(posts.length, 1);
   assert.match(output.systemMessage, /Whose Turn is updating to 1\.0\.0-alpha\.9/);
+});
+
+test('a version named in WHOSE_TURN_APP_VERSION is kept: the hook posts no update even when one is offered', async () => {
+  const { output, posts } = await hookWith({ current: '1.0.0-alpha.3', latest: '1.0.0-alpha.9', available: true, state: 'idle' }, undefined, { WHOSE_TURN_APP_VERSION: '1.0.0-alpha.3' });
+  assert.deepEqual(posts, []);
+  assert.ok(!JSON.stringify(output).includes('updating'));
 });
 
 test('no update available: no POST and no update phrase', async () => {
