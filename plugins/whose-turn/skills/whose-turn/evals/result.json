@@ -2,15 +2,15 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-11-03T22:10:00",
+    "scanned_at": "2026-11-03T23:40:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "55d217c51dead62b73fcfb1e47e3dd7739f17c929d412fc6adab93ff63895d16",
+    "scanned_hash": "60124dca5142032a49363610683733bef003727d0dad25b40f43ac95bde8f4ae",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag. The 2026-11-03 rewrite of the description (RMA-247) only drops quoted Russian phrases; it adds no directive and no new behaviour."
+        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag. The 2026-11-03 rewrite of the description (RMA-247) only drops quoted Russian phrases; it adds no directive and no new behaviour. 2026-11-03 (RMA-213, RMA-214): the body now names the gone row group and tells the agent to answer a pasted hand-off from the hand-off and the monitor rather than the trackers; no directive that widens access."
       },
       {
         "n": 2,
