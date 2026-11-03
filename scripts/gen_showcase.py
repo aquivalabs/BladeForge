@@ -36,12 +36,13 @@ CATEGORY_LABELS = {
 }
 
 # --- featured curation ---
-HERO_IDS = ["scout:scout", "cicero"]
+HERO_IDS = ["scout:scout", "cicero", "whose-turn:whose-turn"]
 FLAGSHIP_IDS = ["cerberus:security-scan", "review:setup", "critique:critique", "diagram:diagram"]
 # short marketing taglines for the featured cards (never invented facts — a plain gloss)
 TAGLINE = {
     "scout:scout": "Find the right skill. The catalogue that answers “what should I use for this?” before you build.",
     "cicero": "The house voice. Result first, plain words, honesty about verification — an always-on output style, not a skill you invoke.",
+    "whose-turn:whose-turn": "What is on you now. GitHub, Jira and Linear sorted into one queue of your moves, in every session and in its own window.",
     "cerberus:security-scan": "The safety gate. An eight-point consumer-safety scan before a skill runs on anyone else’s machine.",
     "review:setup": "The pre-push review gate. Eight reviewer lenses plus a deterministic secret scan, wired into the push.",
     "critique:critique": "Adversarial design review. Independent critics tear a spec apart from named angles before you commit.",
@@ -566,6 +567,7 @@ h1{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:800;margin:0;letter-spacing:-.
 .featured{margin-bottom:2.6rem}
 .hero-duo{display:grid;gap:1rem;grid-template-columns:1fr;margin-bottom:1rem}
 @media(min-width:720px){.hero-duo{grid-template-columns:1fr 1fr}}
+@media(min-width:1040px){.hero-duo{grid-template-columns:repeat(3,1fr)}}
 .hero-card{display:flex;flex-direction:column;gap:.7rem;min-height:12rem;padding:1.4rem 1.5rem;border-radius:1rem;
   background:linear-gradient(150deg,color-mix(in srgb,var(--dc) 16%,var(--panel)),var(--panel) 62%);
   border:1px solid var(--line-2);box-shadow:var(--shadow);overflow:hidden;position:relative;transition:transform .18s,box-shadow .18s}
