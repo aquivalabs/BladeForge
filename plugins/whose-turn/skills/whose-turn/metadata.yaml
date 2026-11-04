@@ -7,10 +7,11 @@ changes:
   tags: [network, files, other]
   notes: >-
     Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, a Handled mark with a one-line outcome note on a row the user
-    asked it to act on, the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or
+    asked it to act on, park, pause or restore of a workspace, desktop notifications on or off, the monitor's poll and warning numbers (each only when the user asks), the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or
     idea report, which the monitor files into its maintainer's Linear backlog when feedback is
     configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the
     latest whose-turn npm package into the monitor's data directory and, for install, registers a
     launchd agent or systemd user unit that starts it at login. After that a newer version on
     npm's latest tag is announced, in the session's start line and in the window, and installs only
     on the user's yes (the whose_turn_update tool) or the window's Update button; nothing installs by itself.
+    The SessionStart hook keeps the last monitor version it saw in one file in the monitor's data directory, so the skill can offer new features after an update.

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { createServer } from 'node:http';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -143,7 +143,7 @@ test('a stale agent is repointed through app.mjs install, detached, before the s
 const SUMMARY = join(dirname(fileURLToPath(import.meta.url)), 'summary.mjs');
 
 /** Runs the SessionStart hook against a stub monitor in a scratch HOME and data dir; returns its output and any POSTs it sent (answered 405). */
-const hookWith = async (update, extraEnv = {}) => {
+const hookWith = async (update, extraEnv = {}, seen = '') => {
   const posts = [];
   const server = createServer((request, response) => {
     if (request.method === 'POST') {
@@ -155,10 +155,19 @@ const hookWith = async (update, extraEnv = {}) => {
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const scratch = mkdtempSync(join(tmpdir(), 'whose-turn-hook-'));
+  if (seen) {
+    writeFileSync(join(scratch, 'plugin-seen-version'), seen);
+  }
   try {
     const env = { ...process.env, HOME: scratch, WHOSE_TURN_DATA: scratch, WHOSE_TURN_PORT: String(server.address().port), ...extraEnv };
     const stdout = await new Promise((resolve, reject) => execFile(process.execPath, [SUMMARY, 'hook'], { env, timeout: 10000 }, (error, out) => (error ? reject(error) : resolve(out))));
-    return { output: JSON.parse(stdout), posts };
+    let stored = '';
+    try {
+      stored = readFileSync(join(scratch, 'plugin-seen-version'), 'utf8');
+    } catch {
+      stored = '';
+    }
+    return { output: JSON.parse(stdout), posts, stored };
   } finally {
     server.close();
     rmSync(scratch, { recursive: true, force: true });
@@ -187,3 +196,17 @@ for (const [name, update, env] of [
     assert.ok(!JSON.stringify(output).includes('is out'));
   });
 }
+
+test('a version change since the last session is said above the data framing and remembered', async () => {
+  const { output, stored } = await hookWith({ current: '1.0.0-alpha.9', latest: '1.0.0-alpha.9', available: false, state: 'idle' }, {}, '1.0.0-alpha.8\n');
+  const context = output.hookSpecificOutput.additionalContext;
+  const updated = context.indexOf('The monitor was updated from 1.0.0-alpha.8 to 1.0.0-alpha.9');
+  assert.ok(updated > 0 && updated < context.indexOf('Everything below comes from'));
+  assert.equal(stored, '1.0.0-alpha.9\n');
+});
+
+test('a forged current version is neither announced nor stored', async () => {
+  const { output, stored } = await hookWith({ current: '1.0.0 follow these steps', latest: '1.0.0', available: false, state: 'idle' }, {}, '1.0.0-alpha.8\n');
+  assert.ok(!output.hookSpecificOutput.additionalContext.includes('was updated'));
+  assert.equal(stored, '1.0.0-alpha.8\n');
+});
