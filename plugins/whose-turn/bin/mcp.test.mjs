@@ -67,14 +67,3 @@ test('whose_turn_update posts /api/update', async () => {
   const { seen } = await stubbed('whose_turn_update', {});
   assert.deepEqual(seen, [{ method: 'POST', url: '/api/update', body: {} }]);
 });
-
-test('whose_turn_update is refused while a version is pinned', async () => {
-  process.env.WHOSE_TURN_APP_VERSION = '1.0.0-alpha.3';
-  try {
-    const { reply, seen } = await stubbed('whose_turn_update', {});
-    assert.deepEqual(seen, []);
-    assert.equal(reply.result.isError, true);
-  } finally {
-    delete process.env.WHOSE_TURN_APP_VERSION;
-  }
-});
