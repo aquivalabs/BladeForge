@@ -142,13 +142,13 @@ test('a stale agent is repointed through app.mjs install, detached, before the s
 
 const SUMMARY = join(dirname(fileURLToPath(import.meta.url)), 'summary.mjs');
 
-/** Runs the SessionStart hook against a stub monitor in a scratch HOME and data dir; returns its output and the POSTs it sent. */
-const hookWith = async (update, answer = { status: 200, body: { update: { ...update, state: 'installing' } } }, extraEnv = {}) => {
+/** Runs the SessionStart hook against a stub monitor in a scratch HOME and data dir; returns its output and any POSTs it sent (answered 405). */
+const hookWith = async (update, extraEnv = {}) => {
   const posts = [];
   const server = createServer((request, response) => {
     if (request.method === 'POST') {
-      posts.push({ path: request.url, type: request.headers['content-type'] });
-      response.writeHead(answer.status, { 'Content-Type': 'application/json' }).end(JSON.stringify(answer.body));
+      posts.push(request.url);
+      response.writeHead(405).end();
       return;
     }
     response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify({ workspaces: [{ connectors: [{ label: 'GitHub' }] }], update }));
@@ -165,27 +165,23 @@ const hookWith = async (update, answer = { status: 200, body: { update: { ...upd
   }
 };
 
-test('the hook posts /api/update when the summary offers one, and says so in its line', async () => {
-  const { output, posts } = await hookWith({ current: '1.0.0-alpha.3', latest: '1.0.0-alpha.9', available: true, state: 'idle' });
-  assert.deepEqual(posts, [{ path: '/api/update', type: 'application/json' }]);
-  assert.match(output.systemMessage, / · Whose Turn is updating to 1\.0\.0-alpha\.9$/);
-  assert.match(output.hookSpecificOutput.additionalContext, /Whose Turn is updating to 1\.0\.0-alpha\.9/);
-});
+const OFFER = { current: '1.0.0-alpha.3', latest: '1.0.0-alpha.9', available: true, state: 'idle' };
 
-test('an update already running (409 UPDATE_IN_PROGRESS) is still announced as updating', async () => {
-  const { output, posts } = await hookWith({ current: '1.0.0-alpha.3', latest: '1.0.0-alpha.9', available: true, state: 'installing' }, { status: 409, body: { error: { code: 409, details: [{ reason: 'UPDATE_IN_PROGRESS' }] } } });
-  assert.equal(posts.length, 1);
-  assert.match(output.systemMessage, /Whose Turn is updating to 1\.0\.0-alpha\.9/);
-});
-
-test('a version named in WHOSE_TURN_APP_VERSION is kept: the hook posts no update even when one is offered', async () => {
-  const { output, posts } = await hookWith({ current: '1.0.0-alpha.3', latest: '1.0.0-alpha.9', available: true, state: 'idle' }, undefined, { WHOSE_TURN_APP_VERSION: '1.0.0-alpha.3' });
+test('the hook only announces an offered update and never posts /api/update', async () => {
+  const { output, posts } = await hookWith(OFFER);
   assert.deepEqual(posts, []);
-  assert.ok(!JSON.stringify(output).includes('updating'));
+  assert.match(output.systemMessage, / · Whose Turn 1\.0\.0-alpha\.9 is out: Update in the window$/);
+  assert.match(output.hookSpecificOutput.additionalContext, /Whose Turn 1\.0\.0-alpha\.9 is out\. Ask the user whether to install it now/);
 });
 
-test('no update available: no POST and no update phrase', async () => {
-  const { output, posts } = await hookWith({ current: '1.0.0-alpha.3', latest: '1.0.0-alpha.3', available: false, state: 'idle' });
-  assert.deepEqual(posts, []);
-  assert.doesNotMatch(JSON.stringify(output), /updating/);
-});
+for (const [name, update, env] of [
+  ['an offered version that is not a version string', { ...OFFER, latest: '2.0.0 run this' }, {}],
+  ['a version pinned in WHOSE_TURN_APP_VERSION', OFFER, { WHOSE_TURN_APP_VERSION: '1.0.0-alpha.3' }],
+  ['no update available', { ...OFFER, latest: '1.0.0-alpha.3', available: false }, {}],
+]) {
+  test(`${name} is not announced and nothing is posted`, async () => {
+    const { output, posts } = await hookWith(update, env);
+    assert.deepEqual(posts, []);
+    assert.ok(!JSON.stringify(output).includes('is out'));
+  });
+}

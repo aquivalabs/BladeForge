@@ -41,3 +41,29 @@ test('whose_turn_mark_handled posts one handled mark and its one-line note', asy
     server.close();
   }
 });
+
+/** Runs one tool call against a stub monitor that records each request and answers `answer`. */
+const stubbed = async (name, args, answer = '{}') => {
+  const seen = [];
+  const server = createServer((request, response) => {
+    let raw = '';
+    request.on('data', (chunk) => { raw += chunk; });
+    request.on('end', () => {
+      seen.push({ method: request.method, url: request.url, body: raw ? JSON.parse(raw) : null });
+      response.setHeader('content-type', 'application/json');
+      response.end(answer);
+    });
+  });
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  try {
+    const reply = await call(server.address().port, name, args);
+    return { reply, seen };
+  } finally {
+    server.close();
+  }
+};
+
+test('whose_turn_update posts /api/update', async () => {
+  const { seen } = await stubbed('whose_turn_update', {});
+  assert.deepEqual(seen, [{ method: 'POST', url: '/api/update', body: {} }]);
+});
