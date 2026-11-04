@@ -6,8 +6,8 @@ needs: []
 changes:
   tags: [network, files, other]
   notes: >-
-    Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, the
-    workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or
+    Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, a Handled mark with a one-line outcome note on a row the user
+    asked it to act on, the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or
     idea report, which the monitor files into its maintainer's Linear backlog when feedback is
     configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the
     latest whose-turn npm package into the monitor's data directory and, for install, registers a
