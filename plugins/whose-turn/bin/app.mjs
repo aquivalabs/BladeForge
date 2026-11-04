@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * The one place that knows the monitor's npm package. The first start, with nothing in `<dataDir>/app` yet, installs
- * `whose-turn@latest` there; after that the server keeps itself current (`POST /api/update`). It runs the package's own scripts from there.
+ * `whose-turn@latest` there; after that a newer version installs only on the user's yes (`POST /api/update`). It runs the package's own scripts from there.
  *   node app.mjs path               prints the package folder
  *   node app.mjs install            registers the launch agent / user unit (the package's install.sh)
  *   node app.mjs open [--browser]   opens the window (the package's open.sh)
