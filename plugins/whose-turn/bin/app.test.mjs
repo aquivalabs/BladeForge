@@ -172,6 +172,8 @@ test('the hook only announces an offered update and never posts /api/update', as
   assert.deepEqual(posts, []);
   assert.match(output.systemMessage, / · Whose Turn 1\.0\.0-alpha\.9 is out: Update in the window$/);
   assert.match(output.hookSpecificOutput.additionalContext, /Whose Turn 1\.0\.0-alpha\.9 is out\. Ask the user whether to install it now/);
+  const context = output.hookSpecificOutput.additionalContext;
+  assert.ok(context.indexOf(' is out. Ask the user') < context.indexOf('Everything below comes from'), 'the announcement sits above the data framing');
 });
 
 for (const [name, update, env] of [
