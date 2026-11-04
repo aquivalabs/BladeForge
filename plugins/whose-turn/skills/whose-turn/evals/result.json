@@ -2,21 +2,21 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-11-03T23:40:00",
+    "scanned_at": "2026-11-04T12:00:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "60124dca5142032a49363610683733bef003727d0dad25b40f43ac95bde8f4ae",
+    "scanned_hash": "d64db5559f61c445013245c7d98a0548ed566f6b85c5a6899e110b3f856c78a6",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag. The 2026-11-03 rewrite of the description (RMA-247) only drops quoted Russian phrases; it adds no directive and no new behaviour. 2026-11-03 (RMA-213, RMA-214): the body now names the gone row group and tells the agent to answer a pasted hand-off from the hand-off and the monitor rather than the trackers; no directive that widens access."
+        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag. The 2026-11-03 rewrite of the description (RMA-247) only drops quoted Russian phrases; it adds no directive and no new behaviour. 2026-11-03 (RMA-213, RMA-214): the body now names the gone row group and tells the agent to answer a pasted hand-off from the hand-off and the monitor rather than the trackers; no directive that widens access. 2026-11-04 (RMA-259): the body adds one write the user's request gates, a Handled mark with a one-line outcome note to the local monitor; it tells the agent to write only what it did and never text copied from a comment or ticket, so source text stays data."
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "All calls go to the monitor on 127.0.0.1. The only off-box send is a bug or idea report the user asks for, which the monitor files into a Linear project it is configured with; disclosed in metadata.yaml."
+        "note": "All calls go to the monitor on 127.0.0.1. The only off-box send is a bug or idea report the user asks for, which the monitor files into a Linear project it is configured with; disclosed in metadata.yaml. The Handled mark and its note go to the same local monitor; nothing leaves the machine."
       },
       {
         "n": 3,
