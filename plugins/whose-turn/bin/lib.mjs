@@ -34,7 +34,7 @@ export const base = `http://127.0.0.1:${port}`;
 export const inboxHasItems = () => existsSync(join(dataDir(), 'inbox.pending'));
 
 // eslint-disable-next-line no-control-regex
-export const flat = (text, limit = 200) => String(text || '').replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029\u{E0000}-\u{E007F}]+/gu, ' ').slice(0, limit);
+export const flat = (text, limit = 200) => String(text || '').replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u2028-\u202e\u2060-\u2069\ufe00-\ufe0f\ufeff\u{E0000}-\u{E01EF}]+/gu, ' ').slice(0, limit);
 
 /** The text when it matches `pattern` after flattening, else ''. */
 const checked = (pattern) => (text) => {

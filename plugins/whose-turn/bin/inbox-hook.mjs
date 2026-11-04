@@ -2,6 +2,9 @@
 /** UserPromptSubmit hook: when the window handed items to an agent, takes them for this Claude Code session and puts their context into the prompt, framed as data. */
 import { inboxHasItems, postJson, slug } from './lib.mjs';
 
+/** JSON text that can neither close a hand-off block nor open a new one. */
+const escapeTags = (text) => text.replace(/<\//g, '<\\/').replace(/<handoff/gi, '<\\handoff');
+
 const CONSUMER = 'claude-code-hook';
 const BUDGET = 20000;
 
@@ -21,7 +24,7 @@ const blocks = [];
 let used = 0;
 let left = 0;
 for (const item of items) {
-  const text = (JSON.stringify(item.context ?? item.snapshot) ?? 'null').replace(/<\//g, '<\\/');
+  const text = escapeTags(JSON.stringify(item.context ?? item.snapshot) ?? 'null');
   if (used + text.length > BUDGET) {
     left += 1;
     continue;
