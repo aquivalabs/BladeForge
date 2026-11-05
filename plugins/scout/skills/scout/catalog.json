@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-11-04",
+  "generated": "2026-11-05",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -926,7 +926,7 @@
     {
       "name": "whose-turn:whose-turn",
       "plugin": "whose-turn",
-      "plugin-version": "1.0.5",
+      "plugin-version": "1.0.6",
       "activates-when": "Use when the user asks what is going on with their tasks, what is waiting on them, what changed, or whose turn it is, in any language; asks to add, finish or list a personal to-do or something not to forget; wants to connect a source or set up the monitor, open its window, or file a bug or an idea about the monitor itself. Reads and writes the local Whose Turn monitor instead of querying Jira, GitHub or Linear again.",
       "category": "workflow",
       "purpose": "Answer what is waiting on the user, what changed and what is on their to-do list from the local Whose Turn monitor, and write to-dos, workspace config and monitor bug reports back to it.",
@@ -938,7 +938,7 @@
           "files",
           "other"
         ],
-        "notes": "Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, a Handled mark with a one-line outcome note on a row the user asked it to act on, the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or idea report, which the monitor files into its maintainer's Linear backlog when feedback is configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the latest whose-turn npm package into the monitor's data directory and, for install, registers a launchd agent or systemd user unit that starts it at login. After that the monitor updates itself from npm's latest tag; the SessionStart hook starts an available update and every update is announced, in the session's start line and in the window."
+        "notes": "Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, a Handled mark with a one-line outcome note on a row the user asked it to act on, the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or idea report, which the monitor files into its maintainer's Linear backlog when feedback is configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the latest whose-turn npm package into the monitor's data directory and, for install, registers a launchd agent or systemd user unit that starts it at login. After that a newer version on npm's latest tag is announced, in the session's start line and in the window, and installs only on the user's yes (the whose_turn_update tool) or the window's Update button; nothing installs by itself."
       },
       "hooks": [
         "SessionStart",
