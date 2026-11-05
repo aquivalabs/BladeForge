@@ -7,7 +7,7 @@
 import { strict as assert } from 'node:assert';
 import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import { createServer } from 'node:http';
-import { existsSync, mkdtempSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
@@ -38,26 +38,50 @@ function repo() {
   return { dir, git, commit };
 }
 
-function decide(dir, toolInput, judge) {
-  const input = JSON.stringify({ tool_name: 'Bash', tool_input: toolInput, cwd: dir });
+function decide(dir, toolInput, judge, event = 'PreToolUse') {
+  const input = JSON.stringify({ hook_event_name: event, tool_name: 'Bash', tool_input: toolInput, cwd: dir });
   const run = spawnSync('bash', [HOOK], { input, encoding: 'utf8', env: { ...process.env, PATH: `${judge}:${process.env.PATH}` } });
   assert.equal(run.status, 0, 'the hook always exits 0');
   const out = run.stdout.trim() ? JSON.parse(run.stdout).hookSpecificOutput : null;
-  return out?.permissionDecision === 'deny' ? { decision: 'deny', reason: out.permissionDecisionReason } : { decision: 'allow' };
+  return out?.permissionDecision ? { decision: out.permissionDecision, reason: out.permissionDecisionReason } : { decision: 'allow' };
 }
 const push = (c = 'git push') => ({ command: c });
 
-test('a push whose commits the judge finds leaking is denied, naming the leak', () => {
+test('a finding off the whitelist is put to the person as a question, naming it', () => {
   const { dir } = repo();
   const r = decide(dir, push('git push origin main'), JUDGE.leak);
-  assert.equal(r.decision, 'deny');
+  assert.equal(r.decision, 'ask');
   assert.match(r.reason, /Halvorsen/);
+});
+
+test('the person\'s yes adds the finding to the whitelist, and the next push with it passes', () => {
+  const { dir, git, commit } = repo();
+  assert.equal(decide(dir, push(), JUDGE.leak).decision, 'ask');
+  decide(dir, push(), JUDGE.never, 'PostToolUse');
+  const common = git('rev-parse', '--path-format=absolute', '--git-common-dir');
+  assert.equal(readFileSync(join(common, 'cerberus-allow'), 'utf8'), 'Halvorsen\n');
+  commit('fix: another Halvorsen retry');
+  assert.equal(decide(dir, push(), JUDGE.leak).decision, 'allow', 'on the whitelist: no question');
+});
+
+test('a push the person never approved adds nothing to the whitelist', () => {
+  const { dir, git } = repo();
+  assert.equal(decide(dir, push('git push origin main'), JUDGE.leak).decision, 'ask');
+  decide(dir, push('git push'), JUDGE.never, 'PostToolUse');
+  const common = git('rev-parse', '--path-format=absolute', '--git-common-dir');
+  assert.ok(!existsSync(join(common, 'cerberus-allow')), 'a different push ran: nothing is whitelisted');
+});
+
+test('a tool call aimed at the whitelist is refused', () => {
+  const { dir } = repo();
+  assert.equal(decide(dir, { command: 'echo x >> .git/cerberus-allow' }, JUDGE.never).decision, 'deny');
+  assert.equal(decide(dir, { file_path: `${dir}/.git/cerberus-allow`, content: 'x' }, JUDGE.never).decision, 'deny');
 });
 
 test('every shape of push is judged', () => {
   const { dir } = repo();
   for (const c of ['git push', 'git push --force origin main', 'cd sub && git -C . push', 'git -c core.x=1 push origin'])
-    assert.equal(decide(dir, push(c), JUDGE.leak).decision, 'deny', c);
+    assert.equal(decide(dir, push(c), JUDGE.leak).decision, 'ask', c);
 });
 
 test('a clean verdict lets the push through and is cached; the same push is not judged again', () => {
@@ -70,7 +94,7 @@ test('a new commit after a clean verdict is judged afresh', () => {
   const { dir, commit } = repo();
   assert.equal(decide(dir, push(), JUDGE.clean).decision, 'allow');
   commit('fix: Halvorsen retry');
-  assert.equal(decide(dir, push(), JUDGE.leak).decision, 'deny');
+  assert.equal(decide(dir, push(), JUDGE.leak).decision, 'ask');
 });
 
 test('a judge that cannot answer blocks the push: the guard fails closed', () => {
@@ -140,7 +164,7 @@ async function githubApi() {
 }
 
 function decideVia(api, dir, command, judge) {
-  const input = JSON.stringify({ tool_name: 'Bash', tool_input: { command }, cwd: dir });
+  const input = JSON.stringify({ hook_event_name: 'PreToolUse', tool_name: 'Bash', tool_input: { command }, cwd: dir });
   const child = spawn('bash', [HOOK], { env: { ...process.env, CERBERUS_GITHUB_API: api, PATH: `${judge}:${process.env.PATH}` } });
   let out = '';
   child.stdout.on('data', d => { out += d; });
@@ -160,11 +184,11 @@ test('a push to a private GitHub repository is judged for secrets only; a public
     git('remote', 'add', 'gitlab', 'git@gitlab.com:demo/secret.git');
     assert.equal(await decideVia(api.url, dir, 'git push', EMAIL_JUDGE), 'allow', 'origin is private: the email is not a leak');
     commit('chore: token sk-demo-0000');
-    assert.equal(await decideVia(api.url, dir, 'git push origin main', JUDGE.leak), 'deny', 'a secret in a private push is still denied');
-    assert.equal(await decideVia(api.url, dir, 'git push public main', EMAIL_JUDGE), 'deny', 'named public remote');
-    assert.equal(await decideVia(api.url, dir, 'git push https://github.com/demo/open.git main', EMAIL_JUDGE), 'deny', 'public URL');
-    assert.equal(await decideVia(api.url, dir, 'git push gitlab main', EMAIL_JUDGE), 'deny', 'another host is judged in full');
-    assert.equal(await decideVia('http://127.0.0.1:9', dir, 'git push', EMAIL_JUDGE), 'deny', 'no API answer is judged in full');
+    assert.equal(await decideVia(api.url, dir, 'git push origin main', JUDGE.leak), 'ask', 'a secret in a private push is still stopped');
+    assert.equal(await decideVia(api.url, dir, 'git push public main', EMAIL_JUDGE), 'ask', 'named public remote');
+    assert.equal(await decideVia(api.url, dir, 'git push https://github.com/demo/open.git main', EMAIL_JUDGE), 'ask', 'public URL');
+    assert.equal(await decideVia(api.url, dir, 'git push gitlab main', EMAIL_JUDGE), 'ask', 'another host is judged in full');
+    assert.equal(await decideVia('http://127.0.0.1:9', dir, 'git push', EMAIL_JUDGE), 'ask', 'no API answer is judged in full');
   } finally {
     api.close();
   }
