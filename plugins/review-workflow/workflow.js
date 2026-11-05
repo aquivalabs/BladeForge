@@ -43,7 +43,7 @@ export const meta = {
 };
 
 const parsedArgs = typeof args === "string" ? JSON.parse(args) : args;
-const { base, hash, round, attempt, changedFiles, diffPath, config, agentsDir, machineFacts, gateResults, priorPerAgent } =
+const { base, hash, round, attempt, changedFiles, diffPath, config, agentsDir, machineFacts, gateResults, priorPerAgent, skillProofs } =
   parsedArgs;
 
 // Deterministic gates — the external oracle layer. `machineFacts` are soft: a
@@ -149,7 +149,8 @@ const LENS_RESPONSE_SCHEMA = {
           },
           required: ["blocker", "major", "minor", "advisory"]
         },
-        one_line: { type: "string" }
+        one_line: { type: "string" },
+        skills_read: { type: "object", additionalProperties: { type: "string" } }
       },
       required: ["agent", "verdict", "score", "counts", "one_line"]
     }
@@ -233,6 +234,33 @@ function lensAgentFilePath(entry) {
 // and a judgment with no contract behind it came back as PASS 10 in a measured round.
 const contractPathIsAGuess = !(typeof agentsDir === "string" && agentsDir.trim());
 
+// The skills a lens must apply: its config's skills plus its extensionSkill; skill-proofs.mjs
+// `configuredSkills` is the same rule for /review. README § Skill proofs.
+function lensSkills(entry) {
+  const ids = [...(Array.isArray(entry.skills) ? entry.skills : []), ...(entry.extensionSkill ? [entry.extensionSkill] : [])];
+  return [...new Set(ids.filter((id) => typeof id === "string" && id.trim()))];
+}
+
+// The proof /review computed for a skill: its SKILL.md path and one line to quote. README § Skill proofs.
+function skillProof(id) {
+  const proof = skillProofs && typeof skillProofs === "object" ? skillProofs[id] : null;
+  return proof && typeof proof.path === "string" && Number.isInteger(proof.line) && typeof proof.text === "string" ? proof : null;
+}
+
+function skillsBlock(entry) {
+  const ids = lensSkills(entry);
+  if (ids.length === 0) {
+    return "";
+  }
+  return `
+## Your skills — read each one in full before judging
+These files are the house rules this lens applies. Read every one with the **Read tool, one call per file** (a Bash \`cat\` of several files goes over the output limit and shows only a preview). The Skill tool cannot load them here.
+${ids.map((id) => { const proof = skillProof(id); return proof ? `- \`${id}\`: \`${proof.path}\` — quote line ${proof.line}` : `- \`${id}\`: (no path from the caller; this lens fails without it)`; }).join("\n")}
+
+In \`summary.skills_read\` give, for each id, the exact text of the line named beside it, trimmed. A skill whose line is missing or wrong counts as not applied, and the lens fails this round whatever its findings.
+`;
+}
+
 // The machine-verified facts /review computed for this lens, rendered for its prompt. A lens told a
 // fact by a command does not spend judgment calls re-deriving it — measured: one round's docs lens
 // spent 25 tool calls, most of them re-proving what `docs-check` had already decided in seconds, and
@@ -307,12 +335,11 @@ ${changedList}
 
 ## Your config
 - threshold: ${entry.threshold}
-- skills: ${JSON.stringify(entry.skills || [])}
 - rules: ${JSON.stringify(entry.rules || [])}
 - pairedDocs: ${JSON.stringify(entry.pairedDocs || {})}
 - extensionSkill: ${entry.extensionSkill || "(none)"}
 - persona: ${persona || "(none)"}
-${machineFactsBlock(entry)}${fixVerificationBlock(entry)}
+${skillsBlock(entry)}${machineFactsBlock(entry)}${fixVerificationBlock(entry)}
 Return your verdict against the forced response schema.`;
 }
 
@@ -708,10 +735,17 @@ function scoreLens(entry) {
   const reportedScore =
     typeof entry.response.summary?.score === "number" ? entry.response.summary.score : null;
   const threshold = Number(entry.entry?.threshold ?? 0);
-  const verdict = score >= threshold ? "PASS" : "FAIL";
+  const quoted = entry.response.summary?.skills_read && typeof entry.response.summary.skills_read === "object" ? entry.response.summary.skills_read : {};
+  const proven = (id) => { const proof = skillProof(id); return Boolean(proof) && typeof quoted[id] === "string" && quoted[id].trim() === proof.text.trim(); };
+  const ids = lensSkills(entry.entry || {});
+  const skillsLoaded = ids.filter(proven);
+  const skillsMissing = ids.filter((id) => !skillsLoaded.includes(id));
+  const verdict = score >= threshold && skillsMissing.length === 0 ? "PASS" : "FAIL";
   return {
     name: entry.name,
     dispatched: true,
+    skillsLoaded,
+    skillsMissing,
     retried: entry.retried,
     threshold,
     findings,
@@ -723,7 +757,9 @@ function scoreLens(entry) {
     score,
     reportedScore,
     verdict,
-    oneLine: entry.response.summary?.one_line || ""
+    oneLine: skillsMissing.length
+      ? `judged without its skills ${skillsMissing.join(", ")} (no proof it read them) — not a pass. ${entry.response.summary?.one_line || ""}`
+      : entry.response.summary?.one_line || ""
   };
 }
 
@@ -1008,7 +1044,8 @@ const failedLenses = roundAdjustedAgents
     name: entry.name,
     score: entry.score,
     threshold: entry.threshold,
-    blockers: entry.counts?.blocker || 0
+    blockers: entry.counts?.blocker || 0,
+    skillsMissing: entry.skillsMissing || []
   }));
 
 // A carried lens was not judged against THIS diff, so a round holding one is not a
@@ -1041,7 +1078,7 @@ if (noLensToJudge) {
   log("Gate: refused — no enabled lens in config; a review that judges zero lenses cannot attest.");
 } else if (failedLenses.length > 0) {
   const named = failedLenses
-    .map((lens) => `${lens.name} ${lens.score}/${lens.threshold}${lens.blockers > 0 ? ` with ${lens.blockers} blocker(s)` : ""}`)
+    .map((lens) => `${lens.name} ${lens.score}/${lens.threshold}${lens.blockers > 0 ? ` with ${lens.blockers} blocker(s)` : ""}${lens.skillsMissing.length ? ` without skills ${lens.skillsMissing.join(", ")}` : ""}`)
     .join(", ");
   log(`Gate: refused — lens verdict: ${named}`);
 } else {
@@ -1148,6 +1185,8 @@ const perAgent = roundAdjustedAgents.map((entry) => ({
   counts: entry.counts,
   findingsTotal: entry.findingsTotal ?? 0,
   findingsUnique: entry.findingsUnique ?? 0,
+  skillsLoaded: entry.skillsLoaded ?? [],
+  skillsMissing: entry.skillsMissing ?? [],
   findings: entry.findings,
   claims: entry.claims,
   demotions: entry.demotions,
