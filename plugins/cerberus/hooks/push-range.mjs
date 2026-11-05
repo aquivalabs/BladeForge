@@ -65,7 +65,54 @@ export async function pushRange(cwd, command = '') {
   const log = git(cwd, ['log', `--format=${FMT}`, base ? `${base}..HEAD` : 'HEAD']) ?? '';
   const branch = git(cwd, ['branch', '--show-current']) ?? '';
   const key = log ? git(cwd, ['hash-object', '--stdin'], `${scope}\n${log}\n${branch}`) : null;
-  return { off: false, gitDir, log, branch, scope, key, cached: Boolean(key) && existsSync(verdictPath(gitDir, key)) };
+  const commonDir = git(cwd, ['rev-parse', '--path-format=absolute', '--git-common-dir']) ?? gitDir;
+  return { off: false, gitDir, commonDir, log, branch, scope, key, allow: allowed(commonDir),
+    cached: Boolean(key) && existsSync(verdictPath(gitDir, key)) };
+}
+
+// The person's whitelist for this repository, one accepted fingerprint per line, shared by every
+// worktree. A push whose only findings are on it goes out; a new finding is asked about, and the
+// person's yes adds it here (on-git-push.mjs). Like the off switch, it is the person's: a tool call
+// aimed at it is refused.
+export const allowPath = (commonDir) => join(commonDir, 'cerberus-allow');
+export const pendingPath = (commonDir) => join(commonDir, 'cerberus-allow.pending');
+
+export function allowed(commonDir) {
+  try {
+    return readFileSync(allowPath(commonDir), 'utf8').split('\n').map(l => l.trim()).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+// An entry is an exact value (an email, a name) or a tracker key such as `RMA`, which accepts any
+// `RMA-<n>` id and any `rma-<n>-<slug>` branch. push-guard.ts repeats `covers`; it cannot import.
+const TRACKER = /\b([A-Za-z][A-Za-z0-9]*)-\d+[\w./-]*/g;
+
+/** The tracker key a finding consists of, or null when it holds anything besides tracker ids. */
+const trackerKey = (text) => {
+  const keys = [...text.matchAll(TRACKER)].map(m => m[1].toUpperCase());
+  const rest = text.replace(TRACKER, '').replace(/[\s,;:]+/g, '');
+  return keys.length && !rest && keys.every(k => k === keys[0]) ? keys[0] : null;
+};
+
+/** What the whitelist keeps for a finding the person accepted: its tracker key, else the value. */
+export const entryFor = (what) => {
+  const text = String(what).trim();
+  return trackerKey(text) ?? text;
+};
+
+export const covers = (entry, what) => {
+  const text = String(what).trim();
+  return text.toLowerCase() === entry.toLowerCase() || trackerKey(text) === entry.toUpperCase();
+};
+
+/** The findings the whitelist does not cover. */
+export const unaccepted = (leaks, allow) => leaks.filter(l => !allow.some(entry => covers(entry, l.what)));
+
+export function addAllowed(commonDir, whats) {
+  const next = [...new Set([...allowed(commonDir), ...whats.map(entryFor).filter(Boolean)])];
+  writeFileSync(allowPath(commonDir), `${next.join('\n')}\n`);
 }
 
 export const verdictPath = (gitDir, key) => join(gitDir, 'cerberus-verdicts', key);
@@ -84,4 +131,6 @@ if (process.argv[1] && resolve(process.argv[1]) === import.meta.filename) {
   }
 }
 
-export const judgePrompt = (root, scope) => readFileSync(join(root, scope === 'secrets' ? 'push-judge-secrets-prompt.txt' : 'push-judge-prompt.txt'), 'utf8');
+export const judgePrompt = (root, scope, allow = []) =>
+  readFileSync(join(root, scope === 'secrets' ? 'push-judge-secrets-prompt.txt' : 'push-judge-prompt.txt'), 'utf8') +
+  (allow.length ? `\nThe person has accepted these fingerprints for this repository; do not report them: ${JSON.stringify(allow)}` : '');

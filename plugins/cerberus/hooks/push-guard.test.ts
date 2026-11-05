@@ -24,12 +24,18 @@ function engine(on: any, { leaks, range }: { leaks: unknown[]; range?: Record<st
   return { recorded, wasPushed: () => pushed }
 }
 
-test('a push whose commits leak is stopped, and nothing is cached', async ($, on) => {
+test('a finding off the whitelist goes to the hook beneath, which asks; nothing is cached', async ($, on) => {
   const env = engine(on, { leaks: [{ where: 'a1b2c3d', what: 'Halvorsen, HLD-4412' }] })
-  const r: any = await $.tool.call({ tool: 'Bash', command: 'git push origin main' })
-  expect(env.wasPushed()).toBe(false)
-  expect(JSON.stringify(r)).toContain('Halvorsen')
+  await $.tool.call({ tool: 'Bash', command: 'git push origin main' })
+  expect(env.wasPushed()).toBe(true)
   expect(env.recorded.length).toBe(0)
+})
+
+test('a finding on the whitelist passes and the push is recorded clean', async ($, on) => {
+  const env = engine(on, { leaks: [{ where: 'a1b2c3d', what: 'Halvorsen, HLD-4412' }], range: { allow: ['Halvorsen, HLD-4412'] } })
+  await $.tool.call({ tool: 'Bash', command: 'git push' })
+  expect(env.wasPushed()).toBe(true)
+  expect(env.recorded).toEqual([['/repo/.git', KEY]])
 })
 
 test('a clean push runs and records its verdict under the content key', async ($, on) => {

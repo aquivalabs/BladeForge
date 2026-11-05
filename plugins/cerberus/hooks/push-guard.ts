@@ -8,8 +8,19 @@ import type { Register } from 'claude-code'
 
 const PUSH = /(^|[;&|(\s])git(\s+-[Cc]\s+\S+)*\s+push(\s|$)/
 
-type Range = { off: boolean; scope?: 'all' | 'secrets'; gitDir: string; log?: string; branch?: string; key?: string; cached?: boolean }
+type Range = { off: boolean; scope?: 'all' | 'secrets'; gitDir: string; log?: string; branch?: string; key?: string; cached?: boolean; allow?: string[] }
 type Leak = { where: string; what: string }
+
+// push-range.mjs `covers`, repeated because a mod cannot import outside its sandbox: an exact value,
+// or a tracker key such as `RMA` that accepts any `RMA-<n>` id and `rma-<n>-<slug>` branch.
+const TRACKER = /\b([A-Za-z][A-Za-z0-9]*)-\d+[\w./-]*/g
+const trackerKey = (text: string): string | null => {
+  const keys = [...text.matchAll(TRACKER)].map(m => m[1].toUpperCase())
+  const rest = text.replace(TRACKER, '').replace(/[\s,;:]+/g, '')
+  return keys.length && !rest && keys.every(k => k === keys[0]) ? keys[0] : null
+}
+const covers = (entry: string, text: string) =>
+  text.toLowerCase() === entry.toLowerCase() || trackerKey(text) === entry.toUpperCase()
 
 export const register: Register = on => {
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
@@ -21,19 +32,19 @@ export const register: Register = on => {
 
     const system = await $.fs.read(`${$.plugin.root}/hooks/${range.scope === 'secrets' ? 'push-judge-secrets-prompt.txt' : 'push-judge-prompt.txt'}`)
     $.ui.status('cerberus: judging the outgoing commits')
-    const r = await $.model.complete({ model: 'sonnet', system, prompt: `<branch>${range.branch}</branch>\n<commits>\n${range.log}\n</commits>` })
+    const accepted = range.allow?.length ? `\nThe person has accepted these fingerprints for this repository; do not report them: ${JSON.stringify(range.allow)}` : ''
+    const r = await $.model.complete({ model: 'sonnet', system: system + accepted, prompt: `<branch>${range.branch}</branch>\n<commits>\n${range.log}\n</commits>` })
     $.ui.status(undefined)
     const leaks = ((): Leak[] | null => {
       if (!r.isAnswered) return null
       try { return JSON.parse(r.text.slice(r.text.indexOf('{'), r.text.lastIndexOf('}') + 1)).leaks } catch { return null }
     })()
     if (!Array.isArray(leaks)) return next(e)
-    if (leaks.length) {
-      $.ui.toast(`cerberus: push stopped, ${leaks.length} leak(s) in the outgoing commits`)
-      return {
-        deny: `CERBERUS: this push would publish work fingerprints in its commits — ${leaks.map(l => `${l.where}: ${l.what}`).join('; ')}. ` +
-          'Fix them with cerberus:leak-check (amend or reword the commits, reset a work author, rename the branch), then push again.',
-      }
+    // A finding off the whitelist goes to the classic hook beneath, which asks the person about it.
+    const fresh = leaks.filter(l => !(range.allow ?? []).some(entry => covers(entry, String(l.what).trim())))
+    if (fresh.length) {
+      $.ui.toast(`cerberus: ${fresh.length} finding(s) not on the whitelist; asking you`)
+      return next(e)
     }
     await $.process.run(['node', script, 'record', range.gitDir, range.key!])
     $.ui.toast('cerberus: outgoing commits are clean')
