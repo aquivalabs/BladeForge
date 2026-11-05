@@ -1,5 +1,5 @@
 /** Shared by the plugin's scripts: where the monitor keeps its data and listens, a safe one-line text, and a short-timeout JSON fetch. */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
@@ -34,7 +34,44 @@ export const base = `http://127.0.0.1:${port}`;
 export const inboxHasItems = () => existsSync(join(dataDir(), 'inbox.pending'));
 
 // eslint-disable-next-line no-control-regex
-export const flat = (text, limit = 200) => String(text || '').replace(/[\u0000-\u001f\u007f]+/g, ' ').slice(0, limit);
+export const flat = (text, limit = 200) => String(text || '').replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u2028-\u202e\u2060-\u2069\ufe00-\ufe0f\ufeff\u{E0000}-\u{E01EF}]+/gu, ' ').slice(0, limit);
+
+/** The text when it matches `pattern` after flattening, else ''. */
+const checked = (pattern) => (text) => {
+  const value = flat(text, 40).trim();
+  return pattern.test(value) ? value : '';
+};
+
+/** A version string, or '' when the text is not one. */
+export const semver = checked(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.]+)?$/);
+
+/** An ISO-like timestamp, or '' when the text is not one. */
+export const timestamp = checked(/^[\d:.TZ+-]+$/);
+
+/** Text reduced to word characters, dots and dashes, safe inside a quoted attribute or an id. */
+export const slug = (text, limit = 40) => String(text || '').replace(/[^\w.-]+/g, '_').slice(0, limit);
+
+/** Records `current` as the version this plugin saw and returns the one seen before it, or '' on a first run or a failed write. */
+export const seenVersion = (current) => {
+  const file = join(dataDir(), 'plugin-seen-version');
+  let previous = '';
+  try {
+    previous = semver(readFileSync(file, 'utf8'));
+  } catch {
+    writeSeen(file, current);
+    return '';
+  }
+  return previous === current || writeSeen(file, current) ? previous : '';
+};
+
+const writeSeen = (file, current) => {
+  try {
+    writeFileSync(file, `${current}\n`);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 /** The endpoint body, JSON of any shape. @returns {Promise<any>} */
 export const getJson = async (path, timeoutMs = 3000) => {

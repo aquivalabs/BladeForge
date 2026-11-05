@@ -1,0 +1,357 @@
+{
+  "diffHash": "dee1da792f061a706b050ccea31a1cb2438fb0c8c43ebd02dc5393aab274883a",
+  "commitSha": "2d86ee1c85f30f5512da408ce63888d386fd2572",
+  "perAgent": [
+    {
+      "name": "docs",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "declined",
+          "reason": "Test file; not a paired code file and no doc pairing applies."
+        },
+        {
+          "path": "plugins/whose-turn/bin/inbox-hook.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/inbox-hook.test.mjs",
+          "disposition": "declined",
+          "reason": "New test; no paired doc."
+        },
+        {
+          "path": "plugins/whose-turn/bin/lib.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/lib.test.mjs",
+          "disposition": "declined",
+          "reason": "New test; no paired doc."
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/rubric.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/references/capabilities.md",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "No pairedDocs code file changed, and the new MCP tools, hook version line and update flow are matched in capabilities.md, SKILL.md, metadata.yaml, README and result.json."
+    },
+    {
+      "name": "skill",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 1
+      },
+      "findingsTotal": 1,
+      "findingsUnique": 1,
+      "findings": [
+        {
+          "severity": "advisory",
+          "why_this_severity": "Q9 and Q10 each dropped it a step: the break routes outside the file, but the MCP tool descriptions are a workaround and I inferred rather than ran a trigger measurement.",
+          "where": "plugins/whose-turn/skills/whose-turn/SKILL.md:2",
+          "occurrences": 1,
+          "problem": "The Contract `In:` now covers parking, pausing, restoring a workspace, monitor settings, notifications and what is new after an update. The `description` frontmatter was not touched and still lists only status, to-dos, connecting a source, opening the window and filing a bug.",
+          "scenario": "The user says \"park the demo workspace\" or \"what is new in the monitor?\" in a session where the SessionStart hook did not name the skill. The description gives no match, so the skill may not fire and `references/capabilities.md` is never read.",
+          "confidence": "low",
+          "evidence": "SKILL.md description line 2 (unchanged in the diff) against the Contract `In:` line (changed). The rubric `trigger` set has no case for the new ground.",
+          "disputed": false
+        }
+      ],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "declined",
+          "reason": "Index text is not a declaration this lens judges."
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "declined",
+          "reason": "Test code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/inbox-hook.mjs",
+          "disposition": "declined",
+          "reason": "Hook code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/inbox-hook.test.mjs",
+          "disposition": "declined",
+          "reason": "Test code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/lib.mjs",
+          "disposition": "declined",
+          "reason": "Script code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/lib.test.mjs",
+          "disposition": "declined",
+          "reason": "Test code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "declined",
+          "reason": "Script code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "declined",
+          "reason": "Test code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "declined",
+          "reason": "Script code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "declined",
+          "reason": "Security scan record, not a declaration of the skill's contract."
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/rubric.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/references/capabilities.md",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "Contract, rubric acceptance and metadata match the body and the long table moved to references; the description was not widened to the new ground, which is advisory only."
+    },
+    {
+      "name": "leak",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/inbox-hook.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/inbox-hook.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/lib.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/lib.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/rubric.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/references/capabilities.md",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "No real employer, client, person, path or private-system identifier in the diff; fixtures use neutral names (w1, NW-1, Dana, 127.0.0.1) and RMA ids are the tracker pointers the contributor contract allows."
+    },
+    {
+      "name": "security-scan",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/inbox-hook.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/inbox-hook.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/lib.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/lib.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/rubric.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/references/capabilities.md",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "All eight points walked with no finding: new tools hit 127.0.0.1 only, are schema-validated and user-gated, changelog text is flattened and capped, and the one new file write is a fixed path in the data dir. Note: the cerberus:security-scan skill was not available in this session, so the house rules were not loaded."
+    }
+  ],
+  "overall": "PASS",
+  "timestamp": "2026-11-04T21:52:44.626Z"
+}

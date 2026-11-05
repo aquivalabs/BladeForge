@@ -1,16 +1,17 @@
 schema-version: 1
 category: workflow
-purpose: Answer what is waiting on the user, what changed and what is on their to-do list from the local Whose Turn monitor, and write to-dos, workspace config and monitor bug reports back to it.
-best-for: A machine running the Whose Turn monitor, in any session where the user asks about their tasks across Jira, GitHub or Linear, keeps personal to-dos, pastes a hand-off from the monitor window, or wants to file something about the monitor itself.
+purpose: Answer what is waiting on the user, what changed and what is on their to-do list from the local Whose Turn monitor, and act on it for the user (to-dos, Handled marks, workspace config, park or pause, monitor settings and notifications, marking the feed read, a fresh check, an update on the user's yes, and bug reports); after an update it offers the new features that need setting up.
+best-for: A machine running the Whose Turn monitor, in any session where the user asks about their tasks across Jira, GitHub or Linear, keeps personal to-dos, pastes a hand-off from the monitor window, wants to change how the monitor watches or notifies, asks what is new in it, or wants to file something about the monitor itself.
 needs: []
 changes:
   tags: [network, files, other]
   notes: >-
-    Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor: to-dos, a Handled mark with a one-line outcome note on a row the user
-    asked it to act on, the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or
+    Talks to the monitor's HTTP API on 127.0.0.1 only. Writes go to the monitor, each only on the user's request: to-dos, a Handled mark with a one-line outcome note on a row the user
+    asked it to act on, or its undo, the feed marked read, a fresh check of every source, park, pause or restore of a workspace, desktop notifications on or off, the monitor's poll and warning numbers (each only when the user asks), the workspace config (and a pasted token, sent on stdin, never on a command line), and a bug or
     idea report, which the monitor files into its maintainer's Linear backlog when feedback is
     configured. Installing or opening the monitor runs the plugin's bin/app.mjs, which downloads the
     latest whose-turn npm package into the monitor's data directory and, for install, registers a
     launchd agent or systemd user unit that starts it at login. After that a newer version on
     npm's latest tag is announced, in the session's start line and in the window, and installs only
     on the user's yes (the whose_turn_update tool) or the window's Update button; nothing installs by itself.
+    The SessionStart hook keeps the last monitor version it saw in one file in the monitor's data directory, so the skill can offer new features after an update.

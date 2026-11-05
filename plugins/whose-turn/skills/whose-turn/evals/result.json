@@ -2,57 +2,57 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-11-04T21:28:22",
+    "scanned_at": "2026-11-04T21:49:51",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "a123eb2751ae6966a30b579d17924ce8f6ab17841f3e1d164a333afbe944888a",
+    "scanned_hash": "499ec7d8291d85b0376b7a2fbf600cd66829c2c19c8ae0ded7ef17e25ec3b610",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag. The 2026-11-03 rewrite of the description (RMA-247) only drops quoted Russian phrases; it adds no directive and no new behaviour. 2026-11-03 (RMA-213, RMA-214): the body now names the gone row group and tells the agent to answer a pasted hand-off from the hand-off and the monitor rather than the trackers; no directive that widens access. 2026-11-04 (RMA-259): the body adds one write the user's request gates, a Handled mark with a one-line outcome note to the local monitor; it tells the agent to write only what it did and never text copied from a comment or ticket, so source text stays data. 2026-11-05 (RMA-329), full walk plus the five-lens escalation audit: the hook's update announcement carries only a regex-checked version and sits above the data framing, so a forged line inside the data cannot pass for it; whose_turn_update takes no input and its description, the hook line and SKILL.md all require the user's yes; whose_turn_config and whose_turn_feedback now write only on the user's explicit request."
+        "note": "SKILL.md and both hooks frame comment, feed and hand-off text from the sources as data, never instructions; hand-off blocks escape a closing tag. The 2026-11-03 rewrite of the description (RMA-247) only drops quoted Russian phrases; it adds no directive and no new behaviour. 2026-11-03 (RMA-213, RMA-214): the body now names the gone row group and tells the agent to answer a pasted hand-off from the hand-off and the monitor rather than the trackers; no directive that widens access. 2026-11-04 (RMA-259): the body adds one write the user's request gates, a Handled mark with a one-line outcome note to the local monitor; it tells the agent to write only what it did and never text copied from a comment or ticket, so source text stays data. 2026-11-05 (RMA-329), full walk plus the five-lens escalation audit: the hook's update announcement carries only a regex-checked version and sits above the data framing, so a forged line inside the data cannot pass for it; whose_turn_update takes no input and its description, the hook line and SKILL.md all require the user's yes; whose_turn_config and whose_turn_feedback now write only on the user's explicit request. RMA-286 on top of RMA-329, full walk plus the five-lens escalation audit (2026-11-04): changelog text reaches the model only through whose_turn_whats_new, flattened and capped, and the After-an-update flow uses it only to know which feature is new; values and workspaces come from the user. The hook's version lines are semver-checked and sit above the data framing; polled_at is timestamp-checked; flat() also strips zero-width, bidi and variation characters; a hand-off can neither close nor open a block."
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "All calls go to the monitor on 127.0.0.1. The only off-box send is a bug or idea report the user asks for, which the monitor files into a Linear project it is configured with; disclosed in metadata.yaml. The Handled mark and its note go to the same local monitor; nothing leaves the machine. RMA-329: whose_turn_feedback no longer files on the agent's own initiative; it shows the user the text first and never copies ticket, comment or workspace data or secrets into a report the user did not write. whose_turn_update posts {} to 127.0.0.1 only."
+        "note": "All calls go to the monitor on 127.0.0.1. The only off-box send is a bug or idea report the user asks for, which the monitor files into a Linear project it is configured with; disclosed in metadata.yaml. The Handled mark and its note go to the same local monitor; nothing leaves the machine. RMA-329: whose_turn_feedback no longer files on the agent's own initiative; it shows the user the text first and never copies ticket, comment or workspace data or secrets into a report the user did not write. whose_turn_update posts {} to 127.0.0.1 only. RMA-286: the seven new tools talk to 127.0.0.1 only; every write, including mark read, unmark and refresh, needs the user's request."
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "No key or token in the skill, scripts or fixtures; a token the user pastes goes to the local monitor on stdin, never on a command line or into config. RMA-329: no key or token added; whose_turn_config's description forbids echoing a secret back."
+        "note": "No key or token in the skill, scripts or fixtures; a token the user pastes goes to the local monitor on stdin, never on a command line or into config. RMA-329: no key or token added; whose_turn_config's description forbids echoing a secret back. RMA-286: none added; test fixtures use example hosts."
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "No destructive shell. The scripts run npm install into the monitor's own data directory, launchctl/systemctl start of the user's own agent, and the package's install.sh/open.sh. RMA-329: the SessionStart hook no longer starts an install; an update runs only through whose_turn_update or the window's Update button."
+        "note": "No destructive shell. The scripts run npm install into the monitor's own data directory, launchctl/systemctl start of the user's own agent, and the package's install.sh/open.sh. RMA-329: the SessionStart hook no longer starts an install; an update runs only through whose_turn_update or the window's Update button. RMA-286: no shell; tool arguments are checked against each tool's inputSchema (types, enums, ranges) before any request, so out-of-range settings cannot silence alerts."
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "Plain Node and markdown; nothing encoded or eval'd. RMA-329: plain code; the only new regex is a version pattern."
+        "note": "Plain Node and markdown; nothing encoded or eval'd. RMA-329: plain code; the only new regex is a version pattern. RMA-286: plain code, no hidden characters outside one deliberate test fixture."
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "bin/app.mjs installs the published whose-turn npm package from the npm registry with --ignore-scripts and runs it: the first start takes `latest` (WHOSE_TURN_APP_VERSION names another version), and after that the server updates itself from the `latest` dist-tag; the SessionStart hook starts an available update and says so on its line. Unpinned by design and disclosed in README, plugin.json and metadata.yaml; npm checks each tarball's integrity, and releases carry provenance from the package's own GitHub Actions workflow. RMA-329: the unattended install at session start is gone. An update now needs the user's yes; The unpinned latest tag on first install stays, disclosed."
+        "note": "bin/app.mjs installs the published whose-turn npm package from the npm registry with --ignore-scripts and runs it: the first start takes `latest` (WHOSE_TURN_APP_VERSION names another version), and after that the server updates itself from the `latest` dist-tag; the SessionStart hook starts an available update and says so on its line. Unpinned by design and disclosed in README, plugin.json and metadata.yaml; npm checks each tarball's integrity, and releases carry provenance from the package's own GitHub Actions workflow. RMA-329: the unattended install at session start is gone. An update now needs the user's yes; The unpinned latest tag on first install stays, disclosed. RMA-286: no new host."
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "No read of ~/.ssh, ~/.aws, .env, a keychain or a token store. RMA-329: unchanged, no credential read."
+        "note": "No read of ~/.ssh, ~/.aws, .env, a keychain or a token store. RMA-329: unchanged, no credential read. RMA-286: unchanged."
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "No sudo or setuid. app.mjs install, run on the user's request, registers a per-user launchd agent or systemd user unit (the monitor's declared start-at-login); the SessionStart hook only repoints an agent the user already registered when its server.mjs is gone or outdated. Disclosed in metadata.yaml. RMA-329: unchanged; nothing new registers or persists."
+        "note": "No sudo or setuid. app.mjs install, run on the user's request, registers a per-user launchd agent or systemd user unit (the monitor's declared start-at-login); the SessionStart hook only repoints an agent the user already registered when its server.mjs is gone or outdated. Disclosed in metadata.yaml. RMA-329: unchanged; nothing new registers or persists. RMA-286: the only new write is plugin-seen-version in the monitor's own data directory, at a fixed path."
       }
     ]
   },
