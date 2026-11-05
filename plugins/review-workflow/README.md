@@ -22,11 +22,15 @@ scriptPath: ${CLAUDE_PLUGIN_ROOT}/../review-workflow/workflow.js
 ## Skill proofs
 
 A lens applies the house rules its config names only if it reads them, and the Skill tool finds a
-plugin's skills only when that plugin is enabled in the session: a project that enables its plugins in
-its own `.claude/settings.json` gives a session started elsewhere, and every agent it spawns, none of
-them ("Unknown skill"). `skill-proofs.mjs` (run by `/review`) gives each configured
-skill its `SKILL.md` path and one line near the end; the prompt names the path and the line number,
-the lens quotes the line back in `summary.skills_read`, and the script compares. A skill not proven
+plugin's skills only when that plugin is both enabled and installed for the session's project: a
+project that enables its plugins in its own `.claude/settings.json` gives a session started
+elsewhere, or one whose plugins were installed for another project only, and every agent it spawns,
+none of them ("Unknown skill"). `skill-proofs.mjs` (run by `/review`) gives each configured skill its
+`SKILL.md` path and its last fifth; the prompt names the path and the line that part starts at, the
+lens quotes one line of at least 20 characters from it in `summary.skills_read`, and the script checks
+that the quote is in that part, with whitespace folded so a line copied across a wrap still counts.
+Measured on the first round: asking for one exact line by number failed two lenses that had read the
+file, one that copied across a wrap and one that picked a line further down. A skill not proven
 read fails its lens (`skillsMissing` in `perAgent`), so the gate cannot attest a round judged without
 its rules. The proof reads the file from disk, so it holds whichever directory the session started in.
 Measured before this existed: from mid-October 2026 most rounds ran from such a session, scored

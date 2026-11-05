@@ -95,7 +95,7 @@ until this section existed five of the six arrived with no instruction at all.
 
 **`skills`** — skill ids that encode this project's rules. Read each one's `SKILL.md` in full with
 the Read tool, one call per file, at the path the prompt's "Your skills" section gives, and quote the
-line it names in `summary.skills_read`; the Skill tool cannot load them inside a lens (RMA-345). Do
+one line of at least 20 characters from the part it names in `summary.skills_read`; the Skill tool cannot load them inside a lens (RMA-345). Do
 this before you judge. A house rule you never read is a rule you cannot enforce, and the generic
 best practice you would fall back on is not what this repository agreed.
 
