@@ -1,0 +1,154 @@
+{
+  "diffHash": "bf21a56aa9f0852b54cc6346725b65cded0c76851d69032df2c5c5c6694f94ac",
+  "commitSha": "166baa4f3fa7d1f30141d812dac996983093a5c5",
+  "perAgent": [
+    {
+      "name": "docs",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 1
+      },
+      "findingsTotal": 1,
+      "findingsUnique": 1,
+      "findings": [
+        {
+          "severity": "advisory",
+          "why_this_severity": "Q3: no writable break inside this diff; the claim concerns a process outside the reviewed repo, so it is advisory.",
+          "where": "README.md:10",
+          "occurrences": 1,
+          "problem": "README says the whose-turn release refuses to ship until monitor-version on main matches, and that every skill sync sets it. Nothing in this repo reads or writes the file (grep finds only the README), so the enforcement could not be verified here.",
+          "scenario": null,
+          "confidence": "low",
+          "evidence": "grep -rIl monitor-version over the repo returns only README.md; the check presumably lives in the whose-turn repo, which I did not search.",
+          "disputed": false
+        }
+      ],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/monitor-version",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "No pairedDocs entry matches the changed files, and the new monitor-version file is documented in the README in the same diff."
+    },
+    {
+      "name": "skill",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "declined",
+          "reason": "The one-line change is prose in the whose-turn plugin note and touches no SKILL.md, description, rubric or metadata.yaml. It declares nothing a skill must declare."
+        },
+        {
+          "path": "plugins/whose-turn/monitor-version",
+          "disposition": "declined",
+          "reason": "A one-line version marker file, not a SKILL.md or sidecar (no evals/ or metadata.yaml). No skill declaration is involved."
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "The diff touches no SKILL.md, evals or metadata.yaml, so no skill declaration changed and there is nothing to deduct."
+    },
+    {
+      "name": "leak",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/monitor-version",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "The added README sentence and the version string 1.0.0-alpha.10 name only the public whose-turn package and a repo-relative path, with no real identifier, person, URL or private system. The configured skill cerberus:leak-check was not found, so I judged against the agent file's Subject only."
+    },
+    {
+      "name": "security-scan",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/monitor-version",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "One README sentence and a plain version string file; none of the eight consumer-safety points apply (the cerberus:security-scan skill was not installed here, so only the agent contract's checklist was applied)."
+    }
+  ],
+  "overall": "PASS",
+  "timestamp": "2026-11-04T21:59:22.092Z"
+}
