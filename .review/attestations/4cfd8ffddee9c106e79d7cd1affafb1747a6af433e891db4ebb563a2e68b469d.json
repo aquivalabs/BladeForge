@@ -1,0 +1,346 @@
+{
+  "diffHash": "4cfd8ffddee9c106e79d7cd1affafb1747a6af433e891db4ebb563a2e68b469d",
+  "commitSha": "e40238f82051f9586c6252e470e410e1f9d473e9",
+  "perAgent": [
+    {
+      "name": "docs",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 1
+      },
+      "findingsTotal": 1,
+      "findingsUnique": 1,
+      "findings": [
+        {
+          "severity": "advisory",
+          "why_this_severity": "Q3: no reader is misled, because the same note corrects the stale sentence, so the break has no scenario that writes.",
+          "where": "plugins/whose-turn/skills/whose-turn/evals/result.json:43 (check 6 note); check 1 note dates the entry 2026-11-05",
+          "occurrences": 1,
+          "problem": "The check 6 note still says the server updates itself and that the SessionStart hook starts an available update. The RMA-329 sentence that follows reverses this. The old sentence was kept, not rewritten. The check 1 note also dates the entry 2026-11-05, while scanned_at is 2026-11-04.",
+          "scenario": null,
+          "confidence": "high",
+          "evidence": "Diff of result.json. README, plugin.json, marketplace.json, metadata.yaml, SKILL.md, the app.mjs header and the summary.mjs header all moved to the opt-in wording. A grep of plugins, docs and README.md found no other stale 'updating to' or 'updates itself' text. catalog.json is regenerated on merge, so it is not hand-edited.",
+          "disputed": false
+        }
+      ],
+      "claims": [
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "declined",
+          "reason": "Test file; coverage is not a pairing question and no pairedDocs entry names it."
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "declined",
+          "reason": "Test file; no paired doc."
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "The update-behavior change moved README, marketplace.json, plugin.json, metadata.yaml, SKILL.md and the code headers together; the only leftover is an old sentence in a result.json note that the same note corrects."
+    },
+    {
+      "name": "skill",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "disposition": "declined",
+          "reason": "Plugin description wording in the marketplace index, not a skill declaration."
+        },
+        {
+          "path": "README.md",
+          "disposition": "declined",
+          "reason": "Prose index text; no skill declaration changed."
+        },
+        {
+          "path": "plugins/whose-turn/.claude-plugin/plugin.json",
+          "disposition": "declined",
+          "reason": "Plugin description wording, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.mjs",
+          "disposition": "declined",
+          "reason": "Script comment, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "declined",
+          "reason": "Test code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "declined",
+          "reason": "Script code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "declined",
+          "reason": "Test code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "declined",
+          "reason": "Script code, not a skill declaration."
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "SKILL.md keeps its Contract section, rubric.json acceptance is a non-empty string array, the description is trigger-only, and metadata.yaml matches the new announce-then-ask update behavior."
+    },
+    {
+      "name": "leak",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": ".review/attestations/4c708a8dda19e1a0b3a4bf84497c1e3ddf7073707ef87cee9ffaa652d9f7de7d.json",
+          "disposition": "judged"
+        },
+        {
+          "path": ".review/lens-stats/3f8543d0edcec750adfba8a043ed637d41ea7774378ddb9fd6b4e7fe82603d3f.jsonl",
+          "disposition": "judged"
+        },
+        {
+          "path": ".review/lens-stats/4c708a8dda19e1a0b3a4bf84497c1e3ddf7073707ef87cee9ffaa652d9f7de7d.jsonl",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "No real employer, client, person, namespace, private URL or home path in the added lines; only loopback addresses, invented versions and the repo's own RMA ids."
+    },
+    {
+      "name": "security-scan",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 1
+      },
+      "findingsTotal": 1,
+      "findingsUnique": 1,
+      "findings": [
+        {
+          "severity": "advisory",
+          "why_this_severity": "Q4: the unpinned `latest` install was already there. This change narrows it, so scenario is null.",
+          "where": "plugins/whose-turn/bin/app.mjs (first install of whose-turn@latest); plugins/whose-turn/bin/mcp.mjs whose_turn_update",
+          "occurrences": 1,
+          "problem": "The first start and the update path still install the unpinned npm `latest` tag. The new whose_turn_update tool is gated only by its description text and SKILL.md, not by code. A manipulated agent could still call it. The call takes no input and installs only the same package from the same dist-tag, which the user could already trigger from the window.",
+          "scenario": null,
+          "confidence": "high",
+          "evidence": "Read the full diff. summary.mjs no longer calls postJson, and the SessionStart hook posts nothing. The announced version must match a strict version regex, and the announcement sits above the data framing. whose_turn_update posts {} to the 127.0.0.1 monitor. The npm install flags and provenance claims in result.json were not re-verified in code.",
+          "occurrences_note": "disclosed in result.json point 6 and metadata.yaml",
+          "disputed": false
+        }
+      ],
+      "claims": [
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": ".review/attestations/4c708a8dda19e1a0b3a4bf84497c1e3ddf7073707ef87cee9ffaa652d9f7de7d.json",
+          "disposition": "declined",
+          "reason": "Review bookkeeping record. It holds no skill content or executable path, so none of the eight points apply."
+        },
+        {
+          "path": ".review/lens-stats/3f8543d0edcec750adfba8a043ed637d41ea7774378ddb9fd6b4e7fe82603d3f.jsonl",
+          "disposition": "declined",
+          "reason": "Review bookkeeping log with no skill content or executable path."
+        },
+        {
+          "path": ".review/lens-stats/4c708a8dda19e1a0b3a4bf84497c1e3ddf7073707ef87cee9ffaa652d9f7de7d.jsonl",
+          "disposition": "declined",
+          "reason": "Review bookkeeping log with no skill content or executable path."
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "The change removes the unattended session-start install, announces updates through a regex-checked version placed above the data framing, and gates the new whose_turn_update tool on the user's yes. I found no reachable unsafe behavior."
+    }
+  ],
+  "overall": "PASS",
+  "timestamp": "2026-11-04T21:34:57.700Z"
+}

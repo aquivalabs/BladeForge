@@ -1,0 +1,310 @@
+{
+  "diffHash": "4c708a8dda19e1a0b3a4bf84497c1e3ddf7073707ef87cee9ffaa652d9f7de7d",
+  "commitSha": "db51aa87b209db08a3edc1b7c14ac12c17bcd72f",
+  "perAgent": [
+    {
+      "name": "docs",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 1
+      },
+      "findingsTotal": 1,
+      "findingsUnique": 1,
+      "findings": [
+        {
+          "severity": "advisory",
+          "why_this_severity": "Q3/Q4: the sentence is stale but the same note immediately corrects it, so no reader is misled; the break does not write.",
+          "where": "plugins/whose-turn/skills/whose-turn/evals/result.json:43 (check 6 note)",
+          "occurrences": 1,
+          "problem": "The note still opens with 'after that the server updates itself ... the SessionStart hook starts an available update and says so', then appends 'RMA-329: the unattended install at session start is gone'. The old sentence was kept rather than rewritten.",
+          "scenario": null,
+          "confidence": "high",
+          "evidence": "Diff of result.json check 6; README, plugin.json, metadata.yaml, SKILL.md and app.mjs header were all moved to the opt-in wording, and grep found no other stale 'updating to' text under plugins/whose-turn or docs.",
+          "disputed": false
+        }
+      ],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "declined",
+          "reason": "Test file; coverage is outside the pairing subject and no pairedDocs entry names it."
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "declined",
+          "reason": "Test file; no paired doc."
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "The hook behavior change moved README, plugin.json, metadata.yaml, SKILL.md and the app.mjs header together; the only leftover is an old sentence in a result.json note that the same note corrects."
+    },
+    {
+      "name": "skill",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 8,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "README.md",
+          "disposition": "declined",
+          "reason": "Prose index text; no skill declaration changed."
+        },
+        {
+          "path": "plugins/whose-turn/.claude-plugin/plugin.json",
+          "disposition": "declined",
+          "reason": "Plugin description wording, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.mjs",
+          "disposition": "declined",
+          "reason": "Script code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "declined",
+          "reason": "Test code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "declined",
+          "reason": "Script code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "declined",
+          "reason": "Test code, not a skill declaration."
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "declined",
+          "reason": "Script code, not a skill declaration."
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "SKILL.md keeps its Contract section, rubric.json acceptance is a string array, the description stays trigger-only, and metadata.yaml matches the new update behavior."
+    },
+    {
+      "name": "leak",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 0
+      },
+      "findingsTotal": 0,
+      "findingsUnique": 0,
+      "findings": [],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": ".review/lens-stats/3f8543d0edcec750adfba8a043ed637d41ea7774378ddb9fd6b4e7fe82603d3f.jsonl",
+          "disposition": "judged"
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "No real employer, client, person, namespace, path or private URL in the diff; only loopback addresses, invented versions and tracker ids that the repo contract already allows."
+    },
+    {
+      "name": "security-scan",
+      "dispatched": true,
+      "carried": false,
+      "retried": false,
+      "threshold": 9,
+      "score": 10,
+      "verdict": "PASS",
+      "counts": {
+        "blocker": 0,
+        "major": 0,
+        "minor": 0,
+        "advisory": 1
+      },
+      "findingsTotal": 1,
+      "findingsUnique": 1,
+      "findings": [
+        {
+          "severity": "advisory",
+          "why_this_severity": "Q4: already there, not introduced by this change. Advisory by definition.",
+          "where": "plugins/whose-turn/bin/app.mjs (first install of whose-turn@latest)",
+          "occurrences": 1,
+          "problem": "The first start still installs the unpinned npm `latest` tag, and the later update path does too. A compromised package release would reach installers. This change narrows exposure, because later updates now need the user's yes.",
+          "scenario": null,
+          "confidence": "high",
+          "evidence": "The diff touches only comments in app.mjs. result.json point 6 and metadata.yaml disclose the unpinned latest tag. The install uses --ignore-scripts per the scan note, which I did not re-verify in code.",
+          "disputed": false
+        }
+      ],
+      "claims": [
+        {
+          "path": "README.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/.claude-plugin/plugin.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/app.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/mcp.test.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/bin/summary.mjs",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/SKILL.md",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/evals/result.json",
+          "disposition": "judged"
+        },
+        {
+          "path": "plugins/whose-turn/skills/whose-turn/metadata.yaml",
+          "disposition": "judged"
+        },
+        {
+          "path": ".review/lens-stats/3f8543d0edcec750adfba8a043ed637d41ea7774378ddb9fd6b4e7fe82603d3f.jsonl",
+          "disposition": "declined",
+          "reason": "Review bookkeeping log. It holds no skill content, script or executable path, so none of the eight points apply."
+        }
+      ],
+      "demotions": [],
+      "deferredMajors": [],
+      "deferredMinors": [],
+      "reopensRound": false,
+      "oneLine": "The change removes the unattended session-start install and gates the new whose_turn_update tool on the user's yes. The announcement is regex-checked and sits above the data framing, and I found no reachable unsafe behavior."
+    }
+  ],
+  "overall": "PASS",
+  "timestamp": "2026-11-04T21:32:09.322Z"
+}
