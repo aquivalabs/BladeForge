@@ -1,0 +1,4 @@
+{"at":"2026-11-05T08:30:00Z","hash":"d86a82c931f0e2e2c448c68daf255e58d408578f90cee6402dc14183f07a9e9c","round":1,"lens":"docs","verdict":"FAIL","score":10,"findings":0,"unique":0,"refuted":0}
+{"at":"2026-11-05T08:30:00Z","hash":"d86a82c931f0e2e2c448c68daf255e58d408578f90cee6402dc14183f07a9e9c","round":1,"lens":"skill","verdict":"FAIL","score":10,"findings":0,"unique":0,"refuted":0}
+{"at":"2026-11-05T08:30:00Z","hash":"d86a82c931f0e2e2c448c68daf255e58d408578f90cee6402dc14183f07a9e9c","round":1,"lens":"leak","verdict":"PASS","score":10,"findings":0,"unique":0,"refuted":0}
+{"at":"2026-11-05T08:30:00Z","hash":"d86a82c931f0e2e2c448c68daf255e58d408578f90cee6402dc14183f07a9e9c","round":1,"lens":"security-scan","verdict":"PASS","score":10,"findings":0,"unique":0,"refuted":0}
