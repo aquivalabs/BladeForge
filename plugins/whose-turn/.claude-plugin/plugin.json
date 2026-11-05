@@ -1,7 +1,7 @@
 {
   "name": "whose-turn",
   "description": "Whose Turn, the Claude Code side of a local monitor of your Jira, GitHub, Linear and other sources: whose turn it is, what changed, your own to-dos, a summary at the start of each session, a hand-off from the monitor window into the session, a /whose-turn command that opens the window, and an MCP server for any agent. The monitor itself is the published whose-turn npm package; the plugin installs its latest version into the monitor's data directory on first start and runs it from there; each newer version is then announced in its window and at session start and installs only when the user says yes or clicks Update. Employer-specific values live in a workspace config on the machine, not in the plugin.",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "keywords": [
     "monitor",
     "jira",
