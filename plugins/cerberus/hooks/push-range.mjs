@@ -85,11 +85,33 @@ export function allowed(commonDir) {
   }
 }
 
+// An entry is an exact value (an email, a name) or a tracker key such as `RMA`, which accepts any
+// `RMA-<n>` id and any `rma-<n>-<slug>` branch. push-guard.ts repeats `covers`; it cannot import.
+const TRACKER = /\b([A-Za-z][A-Za-z0-9]*)-\d+[\w./-]*/g;
+
+/** The tracker key a finding consists of, or null when it holds anything besides tracker ids. */
+const trackerKey = (text) => {
+  const keys = [...text.matchAll(TRACKER)].map(m => m[1].toUpperCase());
+  const rest = text.replace(TRACKER, '').replace(/[\s,;:]+/g, '');
+  return keys.length && !rest && keys.every(k => k === keys[0]) ? keys[0] : null;
+};
+
+/** What the whitelist keeps for a finding the person accepted: its tracker key, else the value. */
+export const entryFor = (what) => {
+  const text = String(what).trim();
+  return trackerKey(text) ?? text;
+};
+
+export const covers = (entry, what) => {
+  const text = String(what).trim();
+  return text.toLowerCase() === entry.toLowerCase() || trackerKey(text) === entry.toUpperCase();
+};
+
 /** The findings the whitelist does not cover. */
-export const unaccepted = (leaks, allow) => leaks.filter(l => !allow.includes(String(l.what).trim()));
+export const unaccepted = (leaks, allow) => leaks.filter(l => !allow.some(entry => covers(entry, l.what)));
 
 export function addAllowed(commonDir, whats) {
-  const next = [...new Set([...allowed(commonDir), ...whats.map(w => String(w).trim()).filter(Boolean)])];
+  const next = [...new Set([...allowed(commonDir), ...whats.map(entryFor).filter(Boolean)])];
   writeFileSync(allowPath(commonDir), `${next.join('\n')}\n`);
 }
 

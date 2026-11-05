@@ -64,6 +64,23 @@ test('the person\'s yes adds the finding to the whitelist, and the next push wit
   assert.equal(decide(dir, push(), JUDGE.leak).decision, 'allow', 'on the whitelist: no question');
 });
 
+test('an accepted tracker id is kept as its key, which then covers every id and branch of that key', () => {
+  const { dir, git, commit } = repo();
+  const ids = fakeClaude(`cat >/dev/null; echo '{"leaks":[{"where":"a1b2c3d","what":"RMA-345"},{"where":"branch","what":"rma-345-lens-skills"},{"where":"author","what":"d@work.test"}]}'`);
+  assert.equal(decide(dir, push(), ids).decision, 'ask');
+  decide(dir, push(), JUDGE.never, 'PostToolUse');
+  const common = git('rev-parse', '--path-format=absolute', '--git-common-dir');
+  assert.equal(readFileSync(join(common, 'cerberus-allow'), 'utf8'), 'RMA\nd@work.test\n');
+  commit('RMA-350: next task');
+  const next = fakeClaude(`cat >/dev/null; echo '{"leaks":[{"where":"b","what":"RMA-350"},{"where":"branch","what":"rma-350-next"},{"where":"author","what":"D@Work.test"}]}'`);
+  assert.equal(decide(dir, push(), next).decision, 'allow', 'a new id, branch and the same email pass');
+  commit('ABC-1: another tracker');
+  const other = fakeClaude(`cat >/dev/null; echo '{"leaks":[{"where":"c","what":"ABC-1"},{"where":"c","what":"RMA-351 Halvorsen"}]}'`);
+  const r = decide(dir, push(), other);
+  assert.equal(r.decision, 'ask', 'another key, or an id mixed with a name, is still asked about');
+  assert.match(r.reason, /ABC-1.*RMA-351 Halvorsen/);
+});
+
 test('a push the person never approved adds nothing to the whitelist', () => {
   const { dir, git } = repo();
   assert.equal(decide(dir, push('git push origin main'), JUDGE.leak).decision, 'ask');
