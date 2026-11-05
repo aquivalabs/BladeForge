@@ -9,7 +9,7 @@ Answer "can the monitor do X?" from this list and act with the tool or call name
 | To bring a Handled row back | The mark and its note go, and the row is back in Your move | `whose_turn_unmark_handled` |
 | To clear What changed | Every event of a workspace's feed marked read, or only some; marked unread again on request | `whose_turn_mark_read` |
 | Fresh data now | Every source is checked at once instead of at the next poll | `whose_turn_refresh`, then `whose_turn_summary` |
-| A newer monitor | An update is announced at session start and in the window; it installs only on the user's yes or the window's Update button | `whose_turn_update` |
+| A newer monitor | An update is announced at session start and in the window; it installs only on the user's yes or the window's Update button, and updates this Claude plugin too: `update.plugin.copy` is what the user pastes or runs next | `whose_turn_update` |
 | To log what was done on a row | Handled: the row leaves Your move and shows under Handled with a one-line outcome note, until something newer happens on it (7 days at most) | `whose_turn_mark_handled` |
 | To know when a ticket waits for a release | A ticket whose status is Ready for release (or Ready to release, Awaiting release) is not the user's move: it waits under Waiting on others, with the next step "the next release" (Waiting for the next release). The row's `next` and `why` say so | `whose_turn_state` |
 | Who still has to review a pull request | A ticket in code review lists every reviewer of its PR: the ones asked by name, and the ones who answered with approved or changes requested; the user's own review is left out | `whose_turn_state` (the row's `why`) |
