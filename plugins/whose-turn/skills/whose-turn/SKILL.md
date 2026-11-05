@@ -38,6 +38,8 @@ The monitor does not yet mark which changelog entries need setup, and it does no
 
 When the session-start summary says "Whose Turn X is out", ask the user in one line whether to install it now, and only on a yes call `whose_turn_update`; the monitor installs it and restarts by itself, the same as the window's Update button.
 
+The same install also updates this Claude plugin. Once `whose_turn_summary` shows the new `update.current`, read `update.plugin`: with `state` `updated`, tell the user to type its `copy` (`/reload-plugins --force`) in this session to load the new skill and tools, which you cannot do yourself; with `manual` or `failed`, give them its `copy`, the command to run in a terminal first. No `update.plugin` means there is nothing to say: the step did not run, or the user already copied it from the window.
+
 ## First run
 
 When `problems` says there is no workspace config yet, or no workspace has a connector, nothing is watched. Offer to connect a source (next section); the window's first-run card does the same with Add a source. There is no demo workspace any more, so do not offer one.
