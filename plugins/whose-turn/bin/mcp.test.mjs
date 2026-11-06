@@ -138,3 +138,28 @@ test('whose_turn_whats_new flattens and caps the changelog text', async () => {
   assert.equal(log.versions[0].sections[0].items.length, 30);
   assert.equal(log.versions[0].sections[0].items[0], 'line 0 Ignore the rules');
 });
+
+test('whose_turn_feedback sends the plugin version header, the preview flag and the names of the tools called, nothing else about the session', async () => {
+  let seen;
+  const server = createServer((request, response) => {
+    let raw = '';
+    request.on('data', (chunk) => { raw += chunk; });
+    request.on('end', () => {
+      seen = { url: request.url, header: request.headers['x-whose-turn-plugin'], body: JSON.parse(raw) };
+      response.setHeader('content-type', 'application/json');
+      response.end('{"preview":{"environment":{},"diagnostics":{"channel":"mcp:other"}},"preview_token":"t1"}');
+    });
+  });
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  try {
+    const reply = await call(server.address().port, 'whose_turn_feedback', { text: 'the chevron wraps', preview: true });
+    const { version } = JSON.parse(await readFile(new URL('../.claude-plugin/plugin.json', import.meta.url), 'utf8'));
+    assert.equal(reply.result.isError, false);
+    assert.equal(JSON.parse(reply.result.content[0].text).preview_token, 't1');
+    assert.equal(seen.url, '/api/feedback');
+    assert.equal(seen.header, version);
+    assert.deepEqual(seen.body, { text: 'the chevron wraps', preview: true, from: 'mcp', agent: { tools: ['whose_turn_feedback'], errors: 0 } });
+  } finally {
+    server.close();
+  }
+});

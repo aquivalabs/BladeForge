@@ -14,6 +14,10 @@ export const defaultDataDir = (platform = process.platform, env = process.env, h
   return join(env.XDG_CONFIG_HOME || join(home, '.config'), 'whose-turn');
 };
 
+/** This plugin's version, sent to the monitor with every request so a report can say which plugin filed it. */
+export const PLUGIN_VERSION = JSON.parse(readFileSync(new URL('../.claude-plugin/plugin.json', import.meta.url), 'utf8')).version;
+const HEADERS = { 'X-Whose-Turn-Plugin': PLUGIN_VERSION };
+
 export const dataDir = () => process.env.WHOSE_TURN_DATA || defaultDataDir();
 
 /** The monitor's port: WHOSE_TURN_PORT, then `port` in the config file, then 8765, the same rule as the server's `resolvePort`. */
@@ -75,12 +79,12 @@ const writeSeen = (file, current) => {
 
 /** The endpoint body, JSON of any shape. @returns {Promise<any>} */
 export const getJson = async (path, timeoutMs = 3000) => {
-  const response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(timeoutMs) });
+  const response = await fetch(`${base}${path}`, { headers: HEADERS, signal: AbortSignal.timeout(timeoutMs) });
   return response.json();
 };
 
 /** The endpoint body, JSON of any shape. @returns {Promise<any>} */
 export const postJson = async (path, body, timeoutMs = 10000) => {
-  const response = await fetch(`${base}${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(timeoutMs) });
+  const response = await fetch(`${base}${path}`, { method: 'POST', headers: { ...HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(timeoutMs) });
   return response.json();
 };
