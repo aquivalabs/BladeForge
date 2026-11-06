@@ -12,12 +12,12 @@ that shape: a plugin with no skill is simply absent from the catalog.
 
 ## Invocation
 
-`/review` (in the `review` plugin) calls this workflow with a relative sibling path, because a
-marketplace install clones the whole repository and both plugins land side by side:
-
-```
-scriptPath: ${CLAUDE_PLUGIN_ROOT}/../review-workflow/workflow.js
-```
+`/review` (in the `review` plugin) does not pass `args` to this script. It writes them to a file
+without `skillTexts` and runs `run-copy.mjs`, which reads every lens's skills, adds them, and writes
+a copy of `workflow.js` with the whole object in place of the line that reads `args`. The Workflow
+tool then runs that copy by `scriptPath`. The skills are about 110 KB here; pasted into the call they
+cost about 28k output tokens a round (RMA-418). `run-copy.mjs` refuses a `workflow.js` that does not
+hold that line exactly once, so a change to it cannot quietly produce a copy that ignores its args.
 
 ## Skill texts
 
