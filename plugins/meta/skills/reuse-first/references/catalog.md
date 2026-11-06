@@ -21,6 +21,20 @@ an entry here the day it is found.
 | Markdown, sanitising | none | markdown-it plus DOMPurify | react-markdown plus DOMPurify | markdown-it, DOMPurify |
 | Charts | none | ECharts, Chart.js | Recharts, ECharts | ECharts, Chart.js |
 
+## Checks: the analyser before the lens
+
+Where a rule about code is usually enforced, for the checks ladder in the skill. Which rules to turn
+on, and with which exceptions, belongs to the stack's tooling or conventions skill, not here.
+
+| Rule kind | JS / TS / Node | Vue | React | CSS / SCSS | Apex / LWC |
+|---|---|---|---|---|---|
+| Style and naming in code | ESLint core, `typescript-eslint` | `eslint-plugin-vue` | `eslint-plugin-react`, `eslint-plugin-react-hooks` | none | PMD, `@salesforce/eslint-config-lwc` |
+| Types | `tsc` | `vue-tsc` | `tsc` | none | the Apex compiler |
+| Formatting | Prettier | Prettier | Prettier | Prettier | Prettier with `prettier-plugin-apex` |
+| Units, colours, selectors | none | Stylelint with `stylelint-config-html` | Stylelint | Stylelint core, `stylelint-config-standard-scss` | Stylelint for LWC CSS |
+| BEM block tied to the component file | none | `stylelint-selector-bem-pattern` | `stylelint-selector-bem-pattern` | `stylelint-selector-bem-pattern` | none |
+| Import direction and layers | `eslint-plugin-import`, `no-restricted-imports`, `eslint-plugin-boundaries` | the same | the same | none | none |
+
 ## How to compare two candidates in five minutes
 
 - Last release and the age of the oldest open bug with a maintainer reply.
