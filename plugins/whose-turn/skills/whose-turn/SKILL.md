@@ -40,6 +40,14 @@ When the session-start summary says "Whose Turn X is out", ask the user in one l
 
 The same install also updates this Claude plugin. Once `whose_turn_summary` shows the new `update.current`, read `update.plugin`: with `state` `updated`, tell the user to type its `copy` (`/reload-plugins --force`) in this session to load the new skill and tools, which you cannot do yourself; with `manual` or `failed`, give them its `copy`, the command to run in a terminal first. No `update.plugin` means there is nothing to say: the step did not run, or the user already copied it from the window.
 
+## Restart, quit and start
+
+"Restart the monitor" is `whose_turn_restart`; the window reconnects by itself. "Stop the monitor" or "quit" is `whose_turn_quit`: say that it stops checking every source until it is started again, ask for a yes, and only then call it. "Start the monitor", or every other tool saying the monitor did not answer, is `whose_turn_start`, which brings it up within a few seconds; a new Claude Code session starts it too.
+
+## Settings belong to the user
+
+What the monitor watches is the user's config: each setting says in its hint what it does and what it costs, for example the Jira switch "Mentions on other tickets" (`mentions`), on by default, which also shows a ticket that mentions the user though it was never theirs. When a setting would fix what the user describes, explain it in plain words and offer it; change it only on their word, and never rewrite a value they wrote themselves, such as their own JQL.
+
 ## First run
 
 When `problems` says there is no workspace config yet, or no workspace has a connector, nothing is watched. Offer to connect a source (next section); the window's first-run card does the same with Add a source. There is no demo workspace any more, so do not offer one.

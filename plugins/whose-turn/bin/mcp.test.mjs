@@ -2,10 +2,13 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { test } from 'node:test';
 
-const call = (port, name, args) => new Promise((resolve, reject) => {
-  const child = spawn('node', [new URL('./mcp.mjs', import.meta.url).pathname], { env: { ...process.env, WHOSE_TURN_PORT: String(port) } });
+const call = (port, name, args, env = {}) => new Promise((resolve, reject) => {
+  const child = spawn('node', [new URL('./mcp.mjs', import.meta.url).pathname], { env: { ...process.env, WHOSE_TURN_PORT: String(port), ...env } });
   let out = '';
   child.stdout.on('data', (chunk) => {
     out += chunk;
@@ -183,6 +186,43 @@ test('a preview against a monitor too old to preview files nothing: it carries n
     assert.equal('text' in seen || 'title' in seen, false);
     assert.equal(answer.preview, null);
     assert.match(answer.note, /nothing was sent/);
+  } finally {
+    server.close();
+  }
+});
+
+test('whose_turn_restart and whose_turn_quit post to their monitor endpoints and pass the answer through (RMA-356)', async () => {
+  const seen = [];
+  const server = createServer((request, response) => {
+    let raw = '';
+    request.on('data', (chunk) => { raw += chunk; });
+    request.on('end', () => {
+      seen.push([request.method, request.url]);
+      response.setHeader('content-type', 'application/json');
+      response.end(JSON.stringify({ lifecycle: request.url === '/api/quit' ? 'quitting' : 'restarting' }));
+    });
+  });
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  try {
+    const restart = await call(server.address().port, 'whose_turn_restart', {});
+    const quit = await call(server.address().port, 'whose_turn_quit', {});
+    assert.deepEqual(seen, [['POST', '/api/restart'], ['POST', '/api/quit']]);
+    assert.equal(JSON.parse(restart.result.content[0].text).lifecycle, 'restarting');
+    assert.equal(JSON.parse(quit.result.content[0].text).lifecycle, 'quitting');
+  } finally {
+    server.close();
+  }
+});
+
+test('whose_turn_start answers running when the monitor already responds, and starts nothing (RMA-356)', async () => {
+  const server = createServer((request, response) => {
+    response.setHeader('content-type', 'application/json');
+    response.end('{}');
+  });
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  try {
+    const reply = await call(server.address().port, 'whose_turn_start', {}, { HOME: mkdtempSync(join(tmpdir(), 'wt-start-')) });
+    assert.deepEqual(JSON.parse(reply.result.content[0].text), { running: true });
   } finally {
     server.close();
   }
