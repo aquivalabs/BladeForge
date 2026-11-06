@@ -70,6 +70,7 @@ Install as `<plugin>@bladeforge`; invoke skills as `<plugin>:<skill>`. Skill lin
 | git | Git workflow — atomic commit splitting. | [commit](#commit) |
 | i18n | i18n — route user-facing strings through localization. | [ui-strings](#ui-strings) |
 | jira | Jira — comment style. | [comment-style](#comment-style) |
+| machine-health | Tells you and Claude at session start what is slowing the machine — orphaned agent and test processes, sustained memory pressure and swap growth, low disk, a runaway `fseventsd` — each with one suggested step Claude offers and runs only on your yes. Ships a status-line command your own script calls. macOS first. Release binaries come with RMA-380; until then `/machine-health:install` builds from source and needs Go. Plan: [docs/plans/machine-health-plugin.md](docs/plans/machine-health-plugin.md). | hook only |
 | meta | Meta — design law, doc writing, skill authoring, model routing. | [lean-writing](#lean-writing), [model-routing](#model-routing), [new-skill](#new-skill), [update-skill](#update-skill), [skill-eval](#skill-eval), [ockham](#ockham), [reuse-first](#reuse-first), [solid](#solid), [triage](#triage), [wittgenstein](#wittgenstein) |
 | no-code-prose | A comment is never an essay — one language-agnostic rule for what may live in one, judged by the craft review lens. | [policy](#policy) |
 | review | Stack-agnostic pre-push review framework — reviewer agents, the `/review` orchestrator, secret-scan + attestation gate. | [review](#review) · [setup](#setup) |
