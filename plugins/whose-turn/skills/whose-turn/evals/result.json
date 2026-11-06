@@ -2,9 +2,9 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-11-06T20:30:00",
+    "scanned_at": "2026-11-06T20:45:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "510adf4e4cbbef3fdc0009d9d543fef0b895c580ae46597b1d3fc6e6f7b85b4e",
+    "scanned_hash": "79852aa457d863c5626ab56ef6826e47dfe06230dfd4e1ebb0685e7d7c506b1b",
     "checklist": [
       {
         "n": 1,
@@ -16,7 +16,7 @@
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "All calls go to the monitor on 127.0.0.1. The only off-box send is a bug or idea report the user asks for, which the monitor files into a Linear project it is configured with; disclosed in metadata.yaml. The Handled mark and its note go to the same local monitor; nothing leaves the machine. RMA-329: whose_turn_feedback no longer files on the agent's own initiative; it shows the user the text first and never copies ticket, comment or workspace data or secrets into a report the user did not write. whose_turn_update posts {} to 127.0.0.1 only. RMA-286: the seven new tools talk to 127.0.0.1 only; every write, including mark read, unmark and refresh, needs the user's request. RMA-341: nothing new leaves the machine; the plugin result is read from 127.0.0.1. RMA-385: a report now carries diagnostics (closed keys, bucketed counts, failure codes by source type) and the names of the last five whose_turn_* tools called, never their arguments or results; it leaves only on the user's request, after preview=true shows the exact payload. The plugin version header goes only to the local monitor on 127.0.0.1. RMA-356: the new tools talk only to the local monitor. RMA-414: nothing leaves the machine."
+        "note": "All calls go to the monitor on 127.0.0.1. The only off-box send is a bug or idea report the user asks for, which the monitor files into a Linear project it is configured with; disclosed in metadata.yaml. The Handled mark and its note go to the same local monitor; nothing leaves the machine. RMA-329: whose_turn_feedback no longer files on the agent's own initiative; it shows the user the text first and never copies ticket, comment or workspace data or secrets into a report the user did not write. whose_turn_update posts {} to 127.0.0.1 only. RMA-286: the seven new tools talk to 127.0.0.1 only; every write, including mark read, unmark and refresh, needs the user's request. RMA-341: nothing new leaves the machine; the plugin result is read from 127.0.0.1. RMA-385: a report now carries diagnostics (closed keys, bucketed counts, failure codes by source type) and the names of the last five whose_turn_* tools called, never their arguments or results; it leaves only on the user's request, after preview=true shows the exact payload. The plugin version header goes only to the local monitor on 127.0.0.1. RMA-356: the new tools talk only to the local monitor. RMA-414: nothing leaves the machine. RMA-414: the plugin also sends its monitor-version to the local monitor only."
       },
       {
         "n": 3,
