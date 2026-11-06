@@ -293,8 +293,10 @@ was not needed: the baseline named the cause.
 - *Per-repository switch:* the guard is on everywhere by default. A person turns it off for one
   repository with `git config cerberus.pushguard off`; an agent setting it is refused.
 - *Layer 3:* `plugins/cerberus/hooks/push-guard.ts`, a function-hooks mod. It judges the same text
-  with the same prompt in-process, denies a push that leaks, and caches a clean verdict under the
-  same key, so layer 2 passes without judging twice.
+  with the same prompt in-process and caches a clean verdict under the same key, so layer 2 passes
+  without judging twice. A finding off the whitelist is handed to layer 2 under that key, and layer
+  2 asks the person about exactly it without judging again (RMA-411): a second judge that found
+  nothing used to let through a push the mod's toast had promised to ask about.
   Suite: 4/4 under `claude plugin test`. `check-version.sh` prints a red update notice at session
   start below 2.1.292, which cannot load the mod.
 - *Not needed:* a new review lens. The `review` plugin's `leak` lens already runs `cerberus`.
