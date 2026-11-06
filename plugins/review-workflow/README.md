@@ -24,7 +24,7 @@ hold that line exactly once, so a change to it cannot quietly produce a copy tha
 A lens applies the house rules its config names only if they are in its context, and the Skill tool
 finds a plugin's skills only when that plugin is both enabled and installed for the session's
 project: a session started elsewhere, and every agent it spawns, gets none of them ("Unknown skill").
-`skill-texts.mjs` (run by `/review`) reads each configured skill's `SKILL.md` whole, and the script
+`skill-texts.mjs` (called by `run-copy.mjs`, which `/review` runs) reads each configured skill's `SKILL.md` whole, and the script
 puts that text into the lens prompt. A skill whose file was not given, or is empty, fails its lens
 (`skillsMissing` in `perAgent`), so the gate cannot attest a round judged without its rules.
 
