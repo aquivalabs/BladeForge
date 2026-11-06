@@ -1,6 +1,6 @@
 # Plan: machine-health plugin
 
-Status: design, research done · Owner: the marketplace maintainer · Started: 2026-11-06 · Issue: RMA-371
+Status: v1 built (macOS), release binaries pending RMA-380 · Owner: the marketplace maintainer · Started: 2026-11-06 · Issue: RMA-371
 
 **Decision:** a plugin that tells the user and Claude, at session start, what is slowing the machine.
 v1 has four detectors and only reports: it kills nothing, deletes nothing, and proposes no fix. Working name:
@@ -58,7 +58,7 @@ bounds. Orphan reports peaked in Q3 2026.
 flowchart LR
   H[SessionStart hook] -->|runs, under 1 s| S[scanner]
   S -->|facts block| C[Claude context]
-  S -->|atomic write| J[(state.json)]
+  S -->|appends a snapshot| R
   L[user's status-line script] -->|calls| T[status command]
   T -->|reads; appends a snapshot at most once a minute| R[(history ring)]
   S -->|reads windows from| R
@@ -79,7 +79,8 @@ flowchart LR
 - **History comes from the status command (decided after critique round 1).** The status line runs
   constantly while a session is open, so it doubles as the sampler. There is still no daemon.
   - At most once a minute, the status command appends a snapshot to a fixed-size ring of the last 120
-    snapshots. Each snapshot is 1–2 KB, so the ring is capped at about 240 KB. The oldest snapshot is
+    snapshots; the hook appends one at each session start too. A snapshot is about 200 bytes of JSON,
+    so the ring stays near 24 KB. The oldest snapshot is
     overwritten, so nothing needs cleaning.
   - v1 keeps no per-process entries in the ring, only system values and `fseventsd`'s RSS and CPU
     time. Per-process history, keyed by `pid + start time`, arrives with the v1.1 kill path.
@@ -87,8 +88,8 @@ flowchart LR
     This also settles two sessions starting at once.
   - Detectors with a time window (D2, D4) use only the real intervals in the ring. With no history,
     they stay silent.
-  - The status command prints the age of its data. On a first run, or with stale data, it prints an
-    empty segment and exits 0.
+  - On a first run, or when the newest snapshot is more than 10 minutes old, the status command
+    prints an empty line and exits 0, so stale numbers never look current.
   - The ring lives in a fixed per-user cache directory (`~/Library/Caches/machine-health` on macOS),
     not in the plugin's own data directory. The user's status-line script calls the binary outside
     any plugin environment, and both must find the same ring. So removing the plugin does not remove
@@ -156,8 +157,8 @@ Hook output enters Claude's context, is saved in the transcript, and is replayed
 - Never render argv, env, cwd, paths, ports, the host name, the user name, or the EDR vendor.
 - Never read `/proc/*/environ`, `ps eww` or temp-file contents. Count and stat only.
 - No telemetry. The only network calls are `/machine-health:install` and `/machine-health:update`,
-  run by the user. They download the pinned binary and send no user data. `state.json`, the history
-  ring and the log are mode 0600.
+  run by the user. They download the pinned binary and send no user data. The history ring is mode
+  0600. v1 keeps no action log, because it takes no action.
 
 ## Measurement
 
@@ -165,7 +166,7 @@ Hook output enters Claude's context, is saved in the transcript, and is replayed
 |---|---|---|
 | Process table | `KERN_PROC_ALL` / `/proc` / Toolhelp | 0.14 s for 716 procs via `ps` |
 | Memory per process | `proc_pid_rusage` footprint; `ps` RSS is up to 12× low | 0.056 ms per pid |
-| CPU busy % | system tick delta against the previous snapshot in `state.json`; never `ps %cpu` | microseconds |
+| CPU busy % | system tick delta against the previous snapshot in the ring; never `ps %cpu` | microseconds |
 | Listeners | `netstat -anv -p tcp` / `/proc/net/tcp` / `GetExtendedTcpTable` | 0.05 s |
 | Pressure, thermal | sysctl, PSI, notify key | about 0.1 ms |
 

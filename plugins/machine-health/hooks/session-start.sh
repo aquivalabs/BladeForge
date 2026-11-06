@@ -7,6 +7,8 @@ root="$(cd "$(dirname "$0")/.." && pwd)"
 source "$root/bin/paths.sh"
 
 if [[ ! -x "$MH_BIN" ]]; then
+  # Until a release binary exists for this platform (RMA-380), asking to install would only fail.
+  [[ -n "$(mh_lock_field "$MH_OS-$MH_ARCH")" ]] || exit 0
   # Claude tells the user, in their language; the plugin prints nothing to the user itself.
   printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"machine-health is installed as a plugin but its binary is not. Tell the user in their language, in one sentence, to run /machine-health:install."}}\n'
   exit 0
