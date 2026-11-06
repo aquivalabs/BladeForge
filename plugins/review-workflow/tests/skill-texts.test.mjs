@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { configuredSkills, proofTail, readSkillProofs, skillPath } from '../skill-proofs.mjs';
+import { configuredSkills, readSkillTexts, skillPath } from '../skill-texts.mjs';
 
 const config = { agents: [
   { name: 'craft', skills: ['frontend-css:rem', 'meta:ockham'], extensionSkill: 'no-code-prose:policy' },
@@ -34,17 +34,13 @@ test('every readable skill is returned and an unreadable or empty one is named m
       mkdirSync(join(root, 'plugins', plugin, 'skills', skill), { recursive: true });
       writeFileSync(join(root, 'plugins', plugin, 'skills', skill, 'SKILL.md'), text);
     };
-    put('frontend-css', 'rem', Array.from({ length: 10 }, (_, index) => `rule line number ${index + 1} of the skill`).join('\n'));
+    const rem = Array.from({ length: 10 }, (_, index) => `rule line number ${index + 1} of the skill`).join('\n');
+    put('frontend-css', 'rem', rem);
     put('meta', 'ockham', '   ');
-    const { proofs, missing } = readSkillProofs(join(root, 'plugins', 'review', 'agents'), config);
-    assert.deepEqual(proofs, { 'frontend-css:rem': { path: join(root, 'plugins', 'frontend-css', 'skills', 'rem', 'SKILL.md'), line: 6, text: ['6', '7', '8', '9', '10'].map((n) => `rule line number ${n} of the skill`).join('\n') } });
+    const { texts, missing } = readSkillTexts(join(root, 'plugins', 'review', 'agents'), config);
+    assert.deepEqual(texts, { 'frontend-css:rem': { path: join(root, 'plugins', 'frontend-css', 'skills', 'rem', 'SKILL.md'), text: rem } });
     assert.deepEqual(missing, ['meta:ockham', 'no-code-prose:policy']);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
-});
-
-test('the proof is the second half of the file, and a half with no line long enough to quote is none', () => {
-  assert.deepEqual(proofTail(['# Title', 'a long first rule line', 'x', 'another long rule line', 'the closing rule of this skill'].join('\n')), { line: 3, text: 'x\nanother long rule line\nthe closing rule of this skill' });
-  assert.equal(proofTail(['a long first rule line here', 'x', 'y', 'z', 'end'].join('\n')), null);
 });

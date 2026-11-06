@@ -115,7 +115,7 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
   "machineFacts": "<see table below>",
   "gateResults": "<see table below>",
   "priorPerAgent": null,
-  "skillProofs": "<see table below>"
+  "skillTexts": "<see table below>"
 }
 ```
 
@@ -131,7 +131,7 @@ Build the following object and hand it to the `Workflow` tool as `args`. This is
 | `agentsDir` | the ABSOLUTE directory holding `review-<lens>.md`, resolved by `/review` alongside `workflow.js` in step 3 — the `agents/` sibling of whichever `plugins/review/` won there. The script cannot resolve it: it reads nothing, by design. Passing a relative path instead is the defect this key exists to close (see below) |
 | `machineFacts` | the results of step 2.5's per-lens checks, `{"<lens>": [{name, command, exitCode, output}]}` — `null` when no lens configures any. Computed by `/review`, once per round; the script only renders them into the lens prompts |
 | `gateResults` | the results of step 2.6's deterministic gates, `[{name, command, exitCode, output}]` — `null` when the config declares no `gates`. Computed by `/review`, once per round; a gate with a nonzero `exitCode` makes the script refuse the attestation outright (like the secret scan), whatever the lens verdicts. This is the review↔pre-push convergence: the review runs the same oracle the push runs |
-| `skillProofs` | the output of `node <review-workflow dir>/skill-proofs.mjs --agents-dir <agentsDir> --config <the project's .claude/review.config.json>`: for every skill an enabled lens names, its `SKILL.md` path and its second half. Each lens must quote one line of at least 20 characters from that part, after a full read; a lens that does not, or whose skill has no proof here, FAILS and the gate does not attest. A nonzero exit means a configured skill has no readable `SKILL.md`: stop and fix the config or the checkout, never run the round without it. See review-workflow README § Skill proofs (RMA-345) |
+| `skillTexts` | the output of `node <review-workflow dir>/skill-texts.mjs --agents-dir <agentsDir> --config <the project's .claude/review.config.json>`: for every skill an enabled lens names, its `SKILL.md` path and whole text, which the script puts into that lens's prompt. A lens whose skill has no text here FAILS and the gate does not attest. A nonzero exit means a configured skill has no readable `SKILL.md`: stop and fix the config or the checkout, never run the round without it. See review-workflow README § Skill texts (RMA-395) |
 | `priorPerAgent` | the `perAgent` array this command received on the previous round — this is what makes the round a DELTA, dispatching only the lenses that failed. Pass it WHOLE, findings included: a re-dispatched lens is prompted to verify its own prior findings rather than cold-review the diff again, which is where repeat rounds mint noise. Pass `null` for the final, attestable full round. It survives a hash change on purpose (see the round shape above): a fix that changes the diff does not un-pass an unrelated lens |
 
 **Launch from the repository under review.** A lens runs in whatever working directory the session's
