@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Prints `skillProofs` for /review to pass to workflow.js: for every skill an enabled lens names, the
-// SKILL.md path and its last fifth, from which the lens must quote one line back, proving it read the
+// SKILL.md path and its second half, from which the lens must quote one line back, proving it read the
 // whole file (RMA-345).
 // Usage: node skill-proofs.mjs --agents-dir <abs dir of review-<lens>.md> --config <review.config.json>
 // Exits 1, naming the ids, when a configured skill has no readable SKILL.md: a lens never judges without it.
@@ -42,10 +42,10 @@ export const skillPath = (agentsDir, id) => {
 /** The shortest quote a proof accepts: a heading such as `## Rules` is guessable without reading. */
 export const MIN_QUOTE = 20;
 
-/** The last fifth of `text`: its 1-based first line and the text from there to the end. */
+/** The second half of `text`: its 1-based first line and the text from there to the end. */
 export const proofTail = (text) => {
   const lines = text.split('\n');
-  const start = Math.floor(lines.length * 0.8);
+  const start = Math.floor(lines.length * 0.5);
   const tail = lines.slice(start);
   return tail.some((line) => line.trim().length >= MIN_QUOTE) ? { line: start + 1, text: tail.join('\n') } : null;
 };

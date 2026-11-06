@@ -975,7 +975,7 @@ console.log("\ndeterministic gates");
 }
 
 // ── Group: skills ──────────────────────────────────────────────────
-// A configured skill counts only when the lens quotes a line from the last fifth the caller read from its
+// A configured skill counts only when the lens quotes a line from the second half the caller read from its
 // SKILL.md; otherwise the lens fails and the gate never attests (RMA-345). Measured: a lens that "read"
 // twelve files had seen a 2 KB preview of 51 KB and claimed all twelve.
 
@@ -1005,7 +1005,7 @@ console.log("\nskills");
   check("skills: every line quoted → the lens passes and attests", full.result?.perAgent?.[0]?.verdict === "PASS" && full.result?.attest === true);
   checkEqual("skills: the record lists the skills proven read", full.result?.perAgent?.[0]?.skillsLoaded, ["frontend-css:rem", "no-code-prose:policy", "meta:ockham"]);
   const prompt = full.calls.find((call) => call.label === "lens:craft")?.prompt || "";
-  checkIncludes("skills: the prompt names the path and the line to quote from", prompt, "/m/plugins/frontend-css/skills/rem/SKILL.md` — quote from line 40 on");
+  checkIncludes("skills: the prompt names the path and the line to quote from", prompt, "/m/plugins/frontend-css/skills/rem/SKILL.md` — quote one line numbered **40 or higher**");
   check("skills: the prompt does not give the answer away", !prompt.includes("never in px"));
 
   const short = await runWorkflow({ args: args(), agents: quoting({ "frontend-css:rem": "## Exceptions", "no-code-prose:policy": "A comment is a pointer to a document, not prose.", "meta:ockham": "Make the simplest change that solves the problem." }) });

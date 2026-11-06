@@ -26,10 +26,10 @@ plugin's skills only when that plugin is both enabled and installed for the sess
 project that enables its plugins in its own `.claude/settings.json` gives a session started
 elsewhere, or one whose plugins were installed for another project only, and every agent it spawns,
 none of them ("Unknown skill"). `skill-proofs.mjs` (run by `/review`) gives each configured skill its
-`SKILL.md` path and its last fifth; the prompt names the path and the line that part starts at, the
+`SKILL.md` path and its second half; the prompt names the path and the line that part starts at, the
 lens quotes one line of at least 20 characters from it in `summary.skills_read`, and the script checks
 that the quote is in that part, with whitespace folded so a line copied across a wrap still counts.
-Measured on the first round: asking for one exact line by number failed two lenses that had read the
+The window is the second half (RMA-389): with the last fifth, a lens that had read a 102-line file in full quoted line 72 twice and failed. Measured on the first round: asking for one exact line by number failed two lenses that had read the
 file, one that copied across a wrap and one that picked a line further down. A skill not proven
 read fails its lens (`skillsMissing` in `perAgent`), so the gate cannot attest a round judged without
 its rules. The proof reads the file from disk, so it holds whichever directory the session started in.

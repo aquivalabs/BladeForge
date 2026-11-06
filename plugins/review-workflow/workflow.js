@@ -241,7 +241,7 @@ function lensSkills(entry) {
   return [...new Set(ids.filter((id) => typeof id === "string" && id.trim()))];
 }
 
-// The proof /review computed for a skill: its SKILL.md path and the last fifth to quote from. README § Skill proofs.
+// The proof /review computed for a skill: its SKILL.md path and the second half to quote from. README § Skill proofs.
 function skillProof(id) {
   const proof = skillProofs && typeof skillProofs === "object" ? skillProofs[id] : null;
   return proof && typeof proof.path === "string" && Number.isInteger(proof.line) && typeof proof.text === "string" ? proof : null;
@@ -260,7 +260,7 @@ function skillsBlock(entry) {
   return `
 ## Your skills — read each one in full before judging
 These files are the house rules this lens applies. Read every one with the **Read tool, one call per file** (a Bash \`cat\` of several files goes over the output limit and shows only a preview). The Skill tool cannot load them here.
-${ids.map((id) => { const proof = skillProof(id); return proof ? `- \`${id}\`: \`${proof.path}\` — quote from line ${proof.line} on` : `- \`${id}\`: (no path from the caller; this lens fails without it)`; }).join("\n")}
+${ids.map((id) => { const proof = skillProof(id); return proof ? `- \`${id}\`: \`${proof.path}\` — quote one line numbered **${proof.line} or higher**` : `- \`${id}\`: (no path from the caller; this lens fails without it)`; }).join("\n")}
 
 In \`summary.skills_read\` give, for each id, one line copied exactly from that file at or after the line named beside it, at least ${MIN_QUOTE} characters long. A skill whose quote is missing, shorter, or not in that part of the file counts as not applied, and the lens fails this round whatever its findings.
 `;
