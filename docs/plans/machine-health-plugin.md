@@ -81,7 +81,8 @@ flowchart LR
   - At most once a minute, the status command appends a snapshot to a fixed-size ring of the last 120
     snapshots. Each snapshot is 1–2 KB, so the ring is capped at about 240 KB. The oldest snapshot is
     overwritten, so nothing needs cleaning.
-  - Per-process entries are keyed by `pid + start time`. Each write drops the processes that are gone.
+  - v1 keeps no per-process entries in the ring, only system values and `fseventsd`'s RSS and CPU
+    time. Per-process history, keyed by `pid + start time`, arrives with the v1.1 kill path.
   - The writer takes a lock. If the lock is busy, it skips that write, and the next minute catches up.
     This also settles two sessions starting at once.
   - Detectors with a time window (D2, D4) use only the real intervals in the ring. With no history,
@@ -100,9 +101,9 @@ only report. The last column is what the skill may offer from v1.1, not in v1.
 
 | # | Detector | Qualifies when | Threshold | Fix (v1.1) |
 |---|---|---|---|---|
-| D1 | Orphaned agent / tool processes | own uid; known tool by exe path; no tmux, IDE, launchd job or systemd unit in the ancestor chain; no live agent ancestor; older than the grace | one grace of 24 h (zclean) until the log calibrates per-class values | kill by verified pid: TERM, 10 s, KILL, verify exit |
+| D1 | Orphaned agent / tool processes | own uid; a known agent or test tool by its arguments (allowlist in `scanner/tools.go`); parent is launchd (pid 1); older than the grace. v1 does not walk the ancestor chain: the allowlist keeps tmux, IDE and launchd-job processes out, and the full chain check arrives with v1.1 | one grace of 24 h (zclean) until the log calibrates per-class values | kill by verified pid: TERM, 10 s, KILL, verify exit |
 | D2 | Memory pressure and swap growth | pressure warn or critical on two scans at least 5 min apart, not within 3 min of wake; or swap growing between scans | mac level ≥ 2; Linux PSI `some avg60 > 10`; Windows commit > 90% | none; lists the top consumers by footprint and marks agent processes among them |
-| D3 | Disk | the Data volume (`/System/Volumes/Data` on macOS), with purgeable counted; temp, task `.output` and `~/.claude` counts are added only when the volume threshold fires | < 15% **and** < 25 GB warn; < 8% **and** < 10 GB urgent | none in v1 |
+| D3 | Disk | the Data volume (`/System/Volumes/Data` on macOS) via `statfs`, which does not count purgeable space, so v1 errs towards warning. Purgeable space and temp, task `.output` and `~/.claude` counts are v1.1 | < 15% **and** < 25 GB warn; < 8% **and** < 10 GB urgent | none in v1 |
 | D4 | `fseventsd` runaway (mac) | two scans at least 10 min apart; not within 15 min of a `.git/index` change in the working repo | warn > 500 MB; runaway > 2 GB or > 0.5 core across the two scans | prints the `sudo` line; the plugin never runs it |
 
 Most numbers are proposals with no published source. Two exceptions: the 24 h grace comes from zclean,
@@ -174,17 +175,17 @@ Kept out of the hook: `du` (11.8 s measured), `lsof` over the whole box (0.85 s)
 ## Language and distribution
 
 - **Go (decided 2026-11-06), because it is the simplest to write and to build.** It needs no runtime
-  on the user's machine. It cross-compiles to all six targets without cgo through `gopsutil` and
+  on the user's machine. It cross-compiles to all six targets without cgo through `x/sys` and
   `purego`, and it starts in about 5 ms. Rust starts about 4 ms faster, which does not matter here,
   and it is harder to write and to cross-build for macOS. Node needs a runtime and starts in
   35–50 ms, too slow for a command the status line runs on every update. The language rule this rests
-  on is RMA-370. `gopsutil` lacks pressure level, thermal level and footprint; those go through `x/sys`
-  plus `purego`.
+  on is RMA-370. v1 does not use `gopsutil`: it lacks pressure level, thermal level and footprint, and `x/sys` plus
+  `purego` cover what v1 reads.
 - **The hook never downloads (decided after critique round 1).** If the binary is missing, the hook
   tells Claude to ask the user to run `/machine-health:install`, and exits within milliseconds. No binary is committed.
 - **Pinned by the plugin.** The Go source lives in the plugin. A PR that changes it builds the
   binaries in CI for darwin, linux and windows on amd64 and arm64, and commits `bin.lock.json` with
-  the binary version and one SHA-256 per platform. CI fails if the file does not match its own
+  the binary version and one SHA-256 per platform. (RMA-380, not in v1: v1 ships an empty `bin.lock.json`, and install builds from source.) CI fails if the file does not match its own
   build. On merge, a release workflow builds the same binaries and uploads them under that version.
   The hashes are the trust root, and they pass review in the PR. They never sit only beside the
   binary they check.
