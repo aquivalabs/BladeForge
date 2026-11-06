@@ -38,7 +38,7 @@ The monitor does not yet mark which changelog entries need setup, and it does no
 
 When the session-start summary says "Whose Turn X is out", ask the user in one line whether to install it now, and only on a yes call `whose_turn_update`; the monitor installs it and restarts by itself, the same as the window's Update button.
 
-The same install also updates this Claude plugin. Once `whose_turn_summary` shows the new `update.current`, read `update.plugin`: with `state` `updated`, tell the user to type its `copy` (`/reload-plugins --force`) in this session to load the new skill and tools, which you cannot do yourself; with `manual` or `failed`, give them its `copy`, the command to run in a terminal first. No `update.plugin` means there is nothing to say: the step did not run, or the user already copied it from the window.
+The same install also updates this Claude plugin. Once `whose_turn_summary` shows the new `update.current`, read `update.plugin`: with `state` `updated`, tell the user to type its `copy` (`/reload-plugins --force`) in this session to load the new skill and tools, which you cannot do yourself; with `manual` or `failed`, give them its `copy`, the command to run in a terminal first. With `behind`, the plugin running here is older than the one in the marketplace (`seen` against `latest`) although the monitor itself did not just update: give them its `copy` to run in a terminal, then `/reload-plugins --force` here. No `update.plugin` means there is nothing to say: the step did not run, or the user already copied it from the window.
 
 ## Restart, quit and start
 
