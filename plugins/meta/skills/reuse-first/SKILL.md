@@ -61,9 +61,15 @@ tires. A lens reads a diff once, under a budget, and counts a whole class of bre
    with `npx eslint --print-config <file>` or `npx stylelint --print-config <file>`. A config that
    comes later can switch an earlier rule off: `eslint-config-prettier` turns `curly` off unless it
    is set again after it.
-2. **A built-in rule of the stack's linter, type checker or formatter.** The analysers by stack are
-   in `references/catalog.md` § Checks; the exact rules a stack turns on live in its tooling skill.
-3. **A maintained plugin for the rule.** Compare it the way rung 5 above compares a library.
+2. **A built-in rule of the stack's linter, type checker or formatter.** This holds in every
+   language, back end as much as front end: ESLint and `tsc` for TypeScript, Ruff and mypy for
+   Python, golangci-lint for Go, Checkstyle and Error Prone for Java, Roslyn analyzers for C#,
+   RuboCop for Ruby, PHPStan for PHP, Clippy for Rust, PMD for Apex, ShellCheck for shell,
+   Stylelint for CSS. The full table, with formatters, rule engines and cross-language checks, is in
+   `references/catalog.md` § Checks; the exact rules a stack turns on live in its tooling skill.
+3. **A maintained plugin or a rule engine for the rule**: a linter plugin, Semgrep or ast-grep for a
+   project rule in any language, ArchUnit, Deptrac or `eslint-plugin-boundaries` for layers.
+   Compare it the way rung 5 above compares a library.
 4. **A short script or test in the repo** that fails on the break, wired into the one check command.
 5. **An LLM lens or reviewer**, only for what no tool can judge: design, naming that needs meaning,
    whether a test proves the behaviour, whether a document tells the truth.
