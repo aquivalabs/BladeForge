@@ -158,7 +158,31 @@ test('whose_turn_feedback sends the plugin version header, the preview flag and 
     assert.equal(JSON.parse(reply.result.content[0].text).preview_token, 't1');
     assert.equal(seen.url, '/api/feedback');
     assert.equal(seen.header, version);
-    assert.deepEqual(seen.body, { text: 'the chevron wraps', preview: true, from: 'mcp', agent: { tools: ['whose_turn_feedback'], errors: 0 } });
+    assert.deepEqual(seen.body, { preview: true, from: 'mcp', agent: { tools: ['whose_turn_feedback'], errors: 0 } });
+  } finally {
+    server.close();
+  }
+});
+
+test('a preview against a monitor too old to preview files nothing: it carries no text, so the old monitor refuses it', async () => {
+  let seen;
+  const server = createServer((request, response) => {
+    let raw = '';
+    request.on('data', (chunk) => { raw += chunk; });
+    request.on('end', () => {
+      seen = JSON.parse(raw);
+      response.statusCode = 400;
+      response.setHeader('content-type', 'application/json');
+      response.end('{"error":{"code":400,"message":"text is empty"}}');
+    });
+  });
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  try {
+    const reply = await call(server.address().port, 'whose_turn_feedback', { text: 'the chevron wraps', title: 'T', preview: true });
+    const answer = JSON.parse(reply.result.content[0].text);
+    assert.equal('text' in seen || 'title' in seen, false);
+    assert.equal(answer.preview, null);
+    assert.match(answer.note, /nothing was sent/);
   } finally {
     server.close();
   }
