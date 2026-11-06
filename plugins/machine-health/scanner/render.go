@@ -54,13 +54,13 @@ func statusLine(segments []string, prev, cur Snapshot, now int64) string {
 		switch seg {
 		case "cpu":
 			if prev.Total > 0 && cur.Total > prev.Total && cur.Busy >= prev.Busy {
-				parts = append(parts, fmt.Sprintf("cpu %.0f%%", 100*float64(cur.Busy-prev.Busy)/float64(cur.Total-prev.Total)))
+				parts = append(parts, fmt.Sprintf("cpu: %.0f%%", 100*float64(cur.Busy-prev.Busy)/float64(cur.Total-prev.Total)))
 			}
 		case "mem":
-			parts = append(parts, "mem "+pressureName(cur.Pressure))
+			parts = append(parts, "mem: "+pressureName(cur.Pressure))
 		case "swap":
 			if cur.SwapTotal > 0 {
-				parts = append(parts, fmt.Sprintf("swap %.0f/%.0fG", gb(cur.SwapUsed), gb(cur.SwapTotal)))
+				parts = append(parts, fmt.Sprintf("swap: %.0f/%.0fG", gb(cur.SwapUsed), gb(cur.SwapTotal)))
 			}
 		}
 	}
