@@ -1,6 +1,7 @@
 package main
 
 import (
+	"path/filepath"
 	"sort"
 	"strings"
 )
@@ -84,6 +85,9 @@ func classifyLargest(procs []Proc, args func(Proc) []string) {
 func classify(comm string, argv []string) string {
 	// claude itself is never a tool id: a live `claude daemon` is parented by launchd and runs for
 	// days, so it would match the orphan rule. It is named only as an app in the memory report.
+	if comm == "claude" || (len(argv) > 0 && filepath.Base(argv[0]) == "claude") {
+		return ""
+	}
 	if comm == "tsserver" {
 		return "tsserver"
 	}

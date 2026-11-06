@@ -12,6 +12,8 @@ func TestClassifyKnownToolsAndNothingElse(t *testing.T) {
 		{"node", []string{"node", "/repo/node_modules/typescript/bin/tsc", "-w"}, "tsc"},
 		{"python3", []string{"python3", "-I", "-"}, "python-stdin"},
 		{"claude", []string{"claude", "daemon", "run"}, ""},
+		{"claude", []string{"claude", "--mcp-config", "/home/demo/.claude/mcp-servers.json", "daemon"}, ""},
+		{"node", []string{"/usr/local/bin/claude", "--mcp-config", "mcp-servers.json"}, ""},
 		{"node", []string{"node", "server.js"}, ""},
 		{"node", []string{"node", "/repo/node_modules/@modelcontextprotocol/server-files/dist/index.js"}, "mcp-server"},
 		{"node", []string{"node", "/home/demo/mcp-notes/app.js"}, ""},
