@@ -148,7 +148,7 @@ test('whose_turn_feedback sends the plugin version header, the preview flag and 
     let raw = '';
     request.on('data', (chunk) => { raw += chunk; });
     request.on('end', () => {
-      seen = { url: request.url, header: request.headers['x-whose-turn-plugin'], body: JSON.parse(raw) };
+      seen = { url: request.url, header: request.headers['x-whose-turn-plugin'], knows: request.headers['x-whose-turn-plugin-knows'], body: JSON.parse(raw) };
       response.setHeader('content-type', 'application/json');
       response.end('{"preview":{"environment":{},"diagnostics":{"channel":"mcp:other"}},"preview_token":"t1"}');
     });
@@ -161,6 +161,7 @@ test('whose_turn_feedback sends the plugin version header, the preview flag and 
     assert.equal(JSON.parse(reply.result.content[0].text).preview_token, 't1');
     assert.equal(seen.url, '/api/feedback');
     assert.equal(seen.header, version);
+    assert.equal(seen.knows, (await readFile(new URL('../monitor-version', import.meta.url), 'utf8')).trim());
     assert.deepEqual(seen.body, { preview: true, from: 'mcp', agent: { tools: ['whose_turn_feedback'], errors: 0 } });
   } finally {
     server.close();

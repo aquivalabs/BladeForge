@@ -16,7 +16,9 @@ export const defaultDataDir = (platform = process.platform, env = process.env, h
 
 /** This plugin's version, sent to the monitor with every request so a report can say which plugin filed it. */
 export const PLUGIN_VERSION = JSON.parse(readFileSync(new URL('../.claude-plugin/plugin.json', import.meta.url), 'utf8')).version;
-const HEADERS = { 'X-Whose-Turn-Plugin': PLUGIN_VERSION };
+/** The monitor version this plugin's skill knows, so the monitor can tell when the plugin is behind it. */
+const KNOWS = readFileSync(new URL('../monitor-version', import.meta.url), 'utf8').trim();
+const HEADERS = { 'X-Whose-Turn-Plugin': PLUGIN_VERSION, 'X-Whose-Turn-Plugin-Knows': KNOWS };
 
 export const dataDir = () => process.env.WHOSE_TURN_DATA || defaultDataDir();
 
