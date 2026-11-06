@@ -45,8 +45,8 @@ func writeHook(w io.Writer, findings []Finding, updateFrom string) error {
 
 // statusLine renders the segments the user asked for from the newest two snapshots. Missing or
 // stale data renders as an empty line, never as numbers that look current.
-func statusLine(segments []string, prev, cur Snapshot, have bool, now int64) string {
-	if !have || now-cur.T > 10*sampleEvery {
+func statusLine(segments []string, prev, cur Snapshot, now int64) string {
+	if now-cur.T > 10*sampleEvery {
 		return ""
 	}
 	var parts []string

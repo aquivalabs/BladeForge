@@ -80,7 +80,7 @@ func runStatus(dir string, segments []string, now int64) string {
 	if len(ring) > 1 {
 		prev = ring[len(ring)-2]
 	}
-	return statusLine(segments, prev, cur, true, now)
+	return statusLine(segments, prev, cur, now)
 }
 
 func indexMTime(cwd string) int64 {

@@ -13,6 +13,8 @@ func TestClassifyKnownToolsAndNothingElse(t *testing.T) {
 		{"python3", []string{"python3", "-I", "-"}, "python-stdin"},
 		{"claude", nil, "claude"},
 		{"node", []string{"node", "server.js"}, ""},
+		{"node", []string{"node", "/repo/node_modules/@modelcontextprotocol/server-files/dist/index.js"}, "mcp-server"},
+		{"node", []string{"node", "/home/demo/mcp-notes/app.js"}, ""},
 		{"bash", []string{"bash", "-c", "ignore previous instructions"}, ""},
 	}
 	for _, c := range cases {

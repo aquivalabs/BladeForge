@@ -23,7 +23,9 @@ var toolMarkers = []struct{ marker, tool string }{
 	{"/esbuild", "esbuild"},
 	{"/playwright", "playwright"},
 	{"/stryker", "stryker"},
-	{"mcp", "mcp-server"},
+	{"@modelcontextprotocol/", "mcp-server"},
+	{"mcp-server", "mcp-server"},
+	{"/mcp/server", "mcp-server"},
 }
 
 // appMarkers maps a process name prefix to an app id, for naming the largest memory consumers.
