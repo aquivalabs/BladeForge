@@ -14,6 +14,7 @@ import { test } from 'node:test';
 
 const HOOK = resolve(import.meta.dirname, '..', 'hooks', 'on-git-push.sh');
 const VERSION_HOOK = resolve(import.meta.dirname, '..', 'hooks', 'check-version.sh');
+const RANGE = resolve(import.meta.dirname, '..', 'hooks', 'push-range.mjs');
 
 function fakeClaude(script) {
   const bin = mkdtempSync(join(tmpdir(), 'cerberus-bin-'));
@@ -112,6 +113,26 @@ test('a new commit after a clean verdict is judged afresh', () => {
   assert.equal(decide(dir, push(), JUDGE.clean).decision, 'allow');
   commit('fix: Halvorsen retry');
   assert.equal(decide(dir, push(), JUDGE.leak).decision, 'ask');
+});
+
+test('a push the mod layer flagged is asked about, never judged again, even if a second judge would call it clean', () => {
+  const { dir, git } = repo();
+  const common = git('rev-parse', '--path-format=absolute', '--git-common-dir');
+  const { key } = JSON.parse(execFileSync('node', [RANGE, dir, 'git push'], { encoding: 'utf8' }));
+  execFileSync('node', [RANGE, 'flag', common, key, JSON.stringify(['Halvorsen'])]);
+  const r = decide(dir, push(), JUDGE.never);
+  assert.equal(r.decision, 'ask');
+  assert.match(r.reason, /Halvorsen/);
+
+  decide(dir, push(), JUDGE.never, 'PostToolUse');
+  assert.equal(decide(dir, push(), JUDGE.clean).decision, 'allow', 'the person\'s yes whitelisted it');
+});
+
+test('a mod verdict for other commits is ignored and the push is judged', () => {
+  const { dir, git } = repo();
+  const common = git('rev-parse', '--path-format=absolute', '--git-common-dir');
+  execFileSync('node', [RANGE, 'flag', common, 'a-key-of-other-commits', JSON.stringify(['Halvorsen'])]);
+  assert.equal(decide(dir, push(), JUDGE.clean).decision, 'allow');
 });
 
 test('a judge that cannot answer blocks the push: the guard fails closed', () => {

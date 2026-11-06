@@ -122,10 +122,29 @@ export function recordClean(gitDir, key) {
   writeFileSync(verdictPath(gitDir, key), 'clean\n');
 }
 
+// The mod layer's verdict on findings off the whitelist, handed to the classic hook so it asks the
+// person about exactly these instead of judging again (RMA-411): two judges of one push disagreed,
+// and the second's clean verdict let through a push the first had promised to ask about.
+export function recordFlagged(commonDir, key, whats) {
+  writeFileSync(pendingPath(commonDir), JSON.stringify({ key, whats }));
+}
+
+/** The findings the mod layer flagged for this exact push text, or null when it flagged none. */
+export function flagged(commonDir, key) {
+  try {
+    const pending = JSON.parse(readFileSync(pendingPath(commonDir), 'utf8'));
+    return pending.key === key && Array.isArray(pending.whats) && pending.whats.length ? pending.whats : null;
+  } catch {
+    return null;
+  }
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === import.meta.filename) {
-  const [cmd, cwd, key] = process.argv.slice(2);
+  const [cmd, cwd, key, whats] = process.argv.slice(2);
   if (cmd === 'record' && cwd && key) {
     recordClean(cwd, key);
+  } else if (cmd === 'flag' && cwd && key && whats) {
+    recordFlagged(cwd, key, JSON.parse(whats));
   } else {
     console.log(JSON.stringify(await pushRange(cmd ?? process.cwd(), cwd)));
   }
