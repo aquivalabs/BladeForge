@@ -1,0 +1,49 @@
+name: machine-health-tests
+# The scanner decides what Claude is told to offer, including a kill, so a detector regression must
+# be loud. This runs the detector tests and builds the binary for all six targets without cgo
+# (plan docs/plans/machine-health-plugin.md § Language and distribution).
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "plugins/machine-health/**"
+      - ".github/workflows/machine-health-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plugins/machine-health/scanner
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: plugins/machine-health/scanner/go.mod
+      - name: Vet and test
+        run: go vet ./... && go test ./...
+      - name: Build every release target without cgo
+        run: |
+          for target in darwin/arm64 darwin/amd64 linux/arm64 linux/amd64 windows/arm64 windows/amd64; do
+            CGO_ENABLED=0 GOOS="${target%/*}" GOARCH="${target#*/}" go build -trimpath -o /dev/null . || exit 1
+            echo "$target ok"
+          done
+  macos:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: plugins/machine-health/scanner
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: plugins/machine-health/scanner/go.mod
+      - name: Test and run the real reads on macOS
+        run: |
+          go test ./...
+          CGO_ENABLED=0 go build -trimpath -o machine-health .
+          echo '{}' | MACHINE_HEALTH_DIR="$RUNNER_TEMP/mh" ./machine-health hook
+          MACHINE_HEALTH_DIR="$RUNNER_TEMP/mh" ./machine-health status

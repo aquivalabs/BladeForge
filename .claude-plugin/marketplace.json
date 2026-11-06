@@ -148,6 +148,16 @@
       "source": "./plugins/jira"
     },
     {
+      "name": "machine-health",
+      "description": "Tells you and Claude, at session start, what is slowing the machine: orphaned agent and test processes, sustained memory pressure and swap growth, low disk, a runaway fseventsd. Each finding comes with one suggested step that Claude offers and runs only on your yes; the plugin itself executes nothing. Ships a status-line command your own status-line script can call. macOS first; Linux and Windows builds are silent until measured.",
+      "author": {
+        "name": "Roman Maslennikov",
+        "email": "rmaslennikov@aquivalabs.com"
+      },
+      "source": "./plugins/machine-health",
+      "category": "engineering"
+    },
+    {
       "name": "meta",
       "description": "Meta skills — authoring new skills, the OCKHAM minimal-entities discipline, and the WITTGENSTEIN clarity gate for specs & plans.",
       "author": {
