@@ -1,7 +1,6 @@
 package main
 
 import (
-	"path/filepath"
 	"sort"
 	"strings"
 )
@@ -47,6 +46,7 @@ var appMarkers = []struct{ prefix, tool string }{
 	{"java", "java"},
 	{"Slack", "slack"},
 	{"Claude", "claude-desktop"},
+	{"claude", "claude"},
 }
 
 // classifyLargest names the topConsumers own processes by footprint, so a memory finding says what
@@ -82,10 +82,9 @@ func classifyLargest(procs []Proc, args func(Proc) []string) {
 
 // classify returns the tool id for a process, or "" when it is not a known agent or test tool.
 func classify(comm string, argv []string) string {
-	switch comm {
-	case "claude":
-		return "claude"
-	case "tsserver":
+	// claude itself is never a tool id: a live `claude daemon` is parented by launchd and runs for
+	// days, so it would match the orphan rule. It is named only as an app in the memory report.
+	if comm == "tsserver" {
 		return "tsserver"
 	}
 	if strings.HasPrefix(comm, "python") && len(argv) > 0 && argv[len(argv)-1] == "-" {
@@ -101,9 +100,6 @@ func classify(comm string, argv []string) string {
 				return m.tool
 			}
 		}
-	}
-	if len(argv) > 0 && filepath.Base(argv[0]) == "claude" {
-		return "claude"
 	}
 	return ""
 }

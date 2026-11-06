@@ -11,7 +11,7 @@ func TestClassifyKnownToolsAndNothingElse(t *testing.T) {
 		{"node", []string{"node", "/repo/node_modules/.bin/vitest", "run"}, "vitest"},
 		{"node", []string{"node", "/repo/node_modules/typescript/bin/tsc", "-w"}, "tsc"},
 		{"python3", []string{"python3", "-I", "-"}, "python-stdin"},
-		{"claude", nil, "claude"},
+		{"claude", []string{"claude", "daemon", "run"}, ""},
 		{"node", []string{"node", "server.js"}, ""},
 		{"node", []string{"node", "/repo/node_modules/@modelcontextprotocol/server-files/dist/index.js"}, "mcp-server"},
 		{"node", []string{"node", "/home/demo/mcp-notes/app.js"}, ""},
@@ -43,5 +43,17 @@ func TestLargestGetAppIDsButNotTheirNames(t *testing.T) {
 		if got[i] != want[i] {
 			t.Fatalf("got %v, want %v", got, want)
 		}
+	}
+}
+
+func TestALiveClaudeDaemonIsNeverAnOrphan(t *testing.T) {
+	procs := []Proc{{Pid: 30, Ppid: 1, Own: true, Start: now - 72*3600, Footprint: 2 * gib, comm: "claude"}}
+	procs[0].Tool = classify(procs[0].comm, []string{"claude", "daemon", "run"})
+	classifyLargest(procs, func(Proc) []string { return []string{"claude", "daemon", "run"} })
+	if got := orphans(Machine{Procs: procs}, Context{Now: now}); len(got) != 0 {
+		t.Fatalf("a claude daemon must never be offered for kill: %+v", got)
+	}
+	if procs[0].App != "claude" {
+		t.Fatalf("it is still named in the memory report, got %+v", procs[0])
 	}
 }
