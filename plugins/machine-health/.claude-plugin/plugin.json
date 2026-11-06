@@ -1,7 +1,7 @@
 {
   "name": "machine-health",
   "description": "Tells you and Claude, at session start, what is slowing the machine: orphaned agent and test processes, sustained memory pressure and swap growth, low disk, a runaway fseventsd. Each finding comes with one suggested step that Claude offers and runs only on your yes; the plugin itself executes nothing. Ships a status-line command your own status-line script can call. macOS first; Linux and Windows builds are silent until measured.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": [
     "performance",
     "orphan-processes",
