@@ -52,11 +52,12 @@ jobs:
           # parent, then map each plugins/<domain>/... path to its owning plugin.json.
           # Exclude the auto-managed files (the version we're about to write, and scout's
           # generated catalog) so a bot write or a manual version edit can't self-trigger.
-          changed_paths="$(git diff --name-only HEAD^ HEAD -- 'plugins/*' ':(exclude)plugins/*/.claude-plugin/plugin.json' ':(exclude)plugins/scout/skills/scout/catalog.json' || true)"
-          if [ -z "$changed_paths" ]; then
+          # scripts/affected_plugins.py also skips paths that never reach a user's session: tests, evals,
+          # metadata.yaml (RMA-415), so a test-only merge no longer asks every user to update.
+          affected_plugins="$(git diff --name-only HEAD^ HEAD -- 'plugins/*' | python3 scripts/affected_plugins.py)"
+          if [ -z "$affected_plugins" ]; then
             echo "no plugin payload changes in this push — nothing to bump"; exit 0
           fi
-          affected_plugins="$(echo "$changed_paths" | cut -d/ -f2 | sort -u)"
           for plugin in $affected_plugins; do
             plugin_json="plugins/$plugin/.claude-plugin/plugin.json"
             if [ ! -f "$plugin_json" ]; then
