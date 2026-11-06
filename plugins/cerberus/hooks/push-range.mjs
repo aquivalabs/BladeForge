@@ -144,7 +144,12 @@ export function flagged(commonDir, key) {
 
 // The permission question, readable on the first pass: what was found, one line each with what it
 // is and where, then what yes and no do. A judge's run-on line is cut, never pasted whole (RMA-417).
-const cut = (text, length) => (text.length > length ? `${text.slice(0, length - 1)}…` : text);
+// The judge's fields come from a model that read commit text: a line break or a control character
+// in them could forge a line of the question, so each field is flattened to one line first.
+const cut = (text, length) => {
+  const flat = text.replace(/[\u0000-\u001f\u007f\u2028\u2029]+/g, ' ').trim();
+  return flat.length > length ? `${flat.slice(0, length - 1)}…` : flat;
+};
 export function question(leaks, scope) {
   const kind = scope === 'secrets' ? 'secret' : 'work fingerprint';
   const lines = leaks.map(l => {
