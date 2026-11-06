@@ -9,7 +9,7 @@ import type { Register } from 'claude-code'
 const PUSH = /(^|[;&|(\s])git(\s+-[Cc]\s+\S+)*\s+push(\s|$)/
 
 type Range = { off: boolean; scope?: 'all' | 'secrets'; gitDir: string; commonDir: string; log?: string; branch?: string; key?: string; cached?: boolean; allow?: string[] }
-type Leak = { where: string; what: string }
+type Leak = { where: string; what: string; why?: string }
 
 // push-range.mjs `covers`, repeated because a mod cannot import outside its sandbox: an exact value,
 // or a tracker key such as `RMA` that accepts any `RMA-<n>` id and `rma-<n>-<slug>` branch.
@@ -20,7 +20,7 @@ const trackerKey = (text: string): string | null => {
   return keys.length && !rest && keys.every(k => k === keys[0]) ? keys[0] : null
 }
 const covers = (entry: string, text: string) =>
-  text.toLowerCase() === entry.toLowerCase() || trackerKey(text) === entry.toUpperCase()
+  text.toLowerCase() === entry.toLowerCase() || trackerKey(text) === (trackerKey(entry) ?? entry.toUpperCase())
 
 export const register: Register = on => {
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
@@ -45,7 +45,7 @@ export const register: Register = on => {
     // through after this toast had promised a question (RMA-411).
     const fresh = leaks.filter(l => !(range.allow ?? []).some(entry => covers(entry, String(l.what).trim())))
     if (fresh.length) {
-      await $.process.run(['node', script, 'flag', range.commonDir, range.key!, JSON.stringify(fresh.map(l => String(l.what).trim()))])
+      await $.process.run(['node', script, 'flag', range.commonDir, range.key!, JSON.stringify(fresh)])
       $.ui.toast(`cerberus: ${fresh.length} finding(s) not on the whitelist; asking you`)
       return next(e)
     }

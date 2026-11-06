@@ -14,7 +14,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { addAllowed, flagged, judgePrompt, pendingPath, pushRange, recordClean, unaccepted } from './push-range.mjs';
+import { addAllowed, flagged, judgePrompt, pendingPath, pushRange, question, recordClean, unaccepted } from './push-range.mjs';
 
 export const PUSH = /(^|[;&|(\s])git(\s+-[Cc]\s+\S+)*\s+push(\s|$)/;
 
@@ -53,10 +53,9 @@ if (!PUSH.test(command)) process.exit(0);
 const range = await pushRange(input.cwd || process.cwd(), command);
 if (!range || range.off || !range.log || range.cached) process.exit(0);
 
-const askAbout = (whats, where = () => '') => {
-  writeFileSync(pendingPath(range.commonDir), JSON.stringify({ command, key: range.key, whats }));
-  ask(`CERBERUS: this push would publish ${range.scope === 'secrets' ? 'a secret' : 'work fingerprints'} not on this repository's whitelist — ${whats.map(w => `${where(w)}${w}`).join('; ')}. ` +
-    'Allow it to push and add them to the whitelist. Deny it, and fix them with cerberus:leak-check (amend or reword the commits, reset a work author, rename the branch).');
+const askAbout = (leaks) => {
+  writeFileSync(pendingPath(range.commonDir), JSON.stringify({ command, key: range.key, whats: leaks.map(l => l.what) }));
+  ask(question(leaks, range.scope));
 };
 
 // The mod layer already judged this exact text and found something: ask about that, never judge again.
@@ -82,7 +81,6 @@ if (!Array.isArray(leaks))
     'blocked until it can: check that claude is on PATH and signed in, then push again.');
 const fresh = unaccepted(leaks, range.allow);
 if (fresh.length) {
-  const where = new Map(fresh.map(l => [l.what, l.where]));
-  askAbout(fresh.map(l => l.what), w => `${where.get(w)}: `);
+  askAbout(fresh);
 }
 recordClean(range.gitDir, range.key);

@@ -79,7 +79,7 @@ test('an accepted tracker id is kept as its key, which then covers every id and 
   const other = fakeClaude(`cat >/dev/null; echo '{"leaks":[{"where":"c","what":"ABC-1"},{"where":"c","what":"RMA-351 Halvorsen"}]}'`);
   const r = decide(dir, push(), other);
   assert.equal(r.decision, 'ask', 'another key, or an id mixed with a name, is still asked about');
-  assert.match(r.reason, /ABC-1.*RMA-351 Halvorsen/);
+  assert.match(r.reason, /ABC-1[\s\S]*RMA-351 Halvorsen/);
 });
 
 test('a push the person never approved adds nothing to the whitelist', () => {
@@ -119,7 +119,7 @@ test('a push the mod layer flagged is asked about, never judged again, even if a
   const { dir, git } = repo();
   const common = git('rev-parse', '--path-format=absolute', '--git-common-dir');
   const { key } = JSON.parse(execFileSync('node', [RANGE, dir, 'git push'], { encoding: 'utf8' }));
-  execFileSync('node', [RANGE, 'flag', common, key, JSON.stringify(['Halvorsen'])]);
+  execFileSync('node', [RANGE, 'flag', common, key, JSON.stringify([{ what: 'Halvorsen', why: 'a real surname', where: 'a1b2c3d subject' }])]);
   const r = decide(dir, push(), JUDGE.never);
   assert.equal(r.decision, 'ask');
   assert.match(r.reason, /Halvorsen/);
@@ -131,8 +131,27 @@ test('a push the mod layer flagged is asked about, never judged again, even if a
 test('a mod verdict for other commits is ignored and the push is judged', () => {
   const { dir, git } = repo();
   const common = git('rev-parse', '--path-format=absolute', '--git-common-dir');
-  execFileSync('node', [RANGE, 'flag', common, 'a-key-of-other-commits', JSON.stringify(['Halvorsen'])]);
+  execFileSync('node', [RANGE, 'flag', common, 'a-key-of-other-commits', JSON.stringify([{ what: 'Halvorsen', where: 'a1b2c3d' }])]);
   assert.equal(decide(dir, push(), JUDGE.clean).decision, 'allow');
+});
+
+test('the question reads on the first pass: one line per fingerprint with what it is and where, then yes and no', () => {
+  const { dir } = repo();
+  const two = fakeClaude(`cat >/dev/null; echo '{"leaks":[{"what":"Halvorsen","why":"a real client surname","where":"a1b2c3d subject"},{"what":"d@work.test","why":"a work email","where":"a1b2c3d author"}]}'`);
+  const lines = decide(dir, push(), two).reason.split('\n');
+  assert.equal(lines[0], "CERBERUS: this push would publish 2 work fingerprints not on this repository's whitelist:");
+  assert.equal(lines[1], '  • Halvorsen (a real client surname) in a1b2c3d subject');
+  assert.equal(lines[2], '  • d@work.test (a work email) in a1b2c3d author');
+  assert.match(lines[3], /^Yes: the push runs and they go on the whitelist\.$/);
+  assert.match(lines[4], /^No: nothing is pushed/);
+});
+
+test('a whitelist entry written as an id counts as its key', () => {
+  const { dir, git } = repo();
+  const common = git('rev-parse', '--path-format=absolute', '--git-common-dir');
+  writeFileSync(join(common, 'cerberus-allow'), 'RMA-374\n');
+  const ids = fakeClaude(`cat >/dev/null; echo '{"leaks":[{"what":"RMA-397","where":"a1b2c3d subject"},{"what":"rma-397-eval-gate-stdin","where":"branch"}]}'`);
+  assert.equal(decide(dir, push(), ids).decision, 'allow');
 });
 
 test('a judge that cannot answer blocks the push: the guard fails closed', () => {
