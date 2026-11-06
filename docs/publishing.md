@@ -9,8 +9,10 @@ automatically — this is the marketplace's self-update mechanism.
 `main` is protected: changes land only through a PR that passes `eval-gate` + `scout-gate`.
 On merge (a push to `main`), the `scout-publish` workflow runs and:
 
-1. PATCH-bumps the `version` of each plugin whose skills changed in that push (so `/plugin update`
-   actually reinstalls them — an un-bumped skill edit never reaches users).
+1. PATCH-bumps the `version` of each plugin whose installed payload changed in that push (so `/plugin update`
+   actually reinstalls them — an un-bumped skill edit never reaches users). `scripts/affected_plugins.py`
+   decides: tests (`*.test.*`, `tests/`, `test/`), `evals/` and `metadata.yaml` never reach a user's session,
+   so a merge that touches only those bumps nothing (RMA-415).
 2. Regenerates `catalog.json` from every plugin's skills + `metadata.yaml` (`scripts/gen_catalog.py`).
    The bump comes first because the catalog carries each plugin's version: generated the other way
    round, the catalog described the version just replaced, and every branch that regenerated it
