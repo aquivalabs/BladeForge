@@ -14,7 +14,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { addAllowed, judgePrompt, pendingPath, pushRange, recordClean, unaccepted } from './push-range.mjs';
+import { addAllowed, flagged, judgePrompt, pendingPath, pushRange, recordClean, unaccepted } from './push-range.mjs';
 
 export const PUSH = /(^|[;&|(\s])git(\s+-[Cc]\s+\S+)*\s+push(\s|$)/;
 
@@ -53,6 +53,16 @@ if (!PUSH.test(command)) process.exit(0);
 const range = await pushRange(input.cwd || process.cwd(), command);
 if (!range || range.off || !range.log || range.cached) process.exit(0);
 
+const askAbout = (whats, where = () => '') => {
+  writeFileSync(pendingPath(range.commonDir), JSON.stringify({ command, key: range.key, whats }));
+  ask(`CERBERUS: this push would publish ${range.scope === 'secrets' ? 'a secret' : 'work fingerprints'} not on this repository's whitelist — ${whats.map(w => `${where(w)}${w}`).join('; ')}. ` +
+    'Allow it to push and add them to the whitelist. Deny it, and fix them with cerberus:leak-check (amend or reword the commits, reset a work author, rename the branch).');
+};
+
+// The mod layer already judged this exact text and found something: ask about that, never judge again.
+const fromMod = flagged(range.commonDir, range.key);
+if (fromMod) askAbout(fromMod);
+
 const prompt = `${judgePrompt(import.meta.dirname, range.scope, range.allow)}\n` +
   `<branch>${range.branch}</branch>\n<commits>\n${range.log}\n</commits>`;
 const judgeDir = mkdtempSync(join(tmpdir(), 'cerberus-judge-'));
@@ -72,8 +82,7 @@ if (!Array.isArray(leaks))
     'blocked until it can: check that claude is on PATH and signed in, then push again.');
 const fresh = unaccepted(leaks, range.allow);
 if (fresh.length) {
-  writeFileSync(pendingPath(range.commonDir), JSON.stringify({ command, whats: fresh.map(l => l.what) }));
-  ask(`CERBERUS: this push would publish ${range.scope === 'secrets' ? 'a secret' : 'work fingerprints'} not on this repository's whitelist — ${fresh.map(l => `${l.where}: ${l.what}`).join('; ')}. ` +
-    'Allow it to push and add them to the whitelist. Deny it, and fix them with cerberus:leak-check (amend or reword the commits, reset a work author, rename the branch).');
+  const where = new Map(fresh.map(l => [l.what, l.where]));
+  askAbout(fresh.map(l => l.what), w => `${where.get(w)}: `);
 }
 recordClean(range.gitDir, range.key);

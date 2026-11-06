@@ -8,7 +8,7 @@ import type { Register } from 'claude-code'
 
 const PUSH = /(^|[;&|(\s])git(\s+-[Cc]\s+\S+)*\s+push(\s|$)/
 
-type Range = { off: boolean; scope?: 'all' | 'secrets'; gitDir: string; log?: string; branch?: string; key?: string; cached?: boolean; allow?: string[] }
+type Range = { off: boolean; scope?: 'all' | 'secrets'; gitDir: string; commonDir: string; log?: string; branch?: string; key?: string; cached?: boolean; allow?: string[] }
 type Leak = { where: string; what: string }
 
 // push-range.mjs `covers`, repeated because a mod cannot import outside its sandbox: an exact value,
@@ -40,9 +40,12 @@ export const register: Register = on => {
       try { return JSON.parse(r.text.slice(r.text.indexOf('{'), r.text.lastIndexOf('}') + 1)).leaks } catch { return null }
     })()
     if (!Array.isArray(leaks)) return next(e)
-    // A finding off the whitelist goes to the classic hook beneath, which asks the person about it.
+    // A finding off the whitelist goes to the classic hook beneath, which asks the person about exactly
+    // it. The verdict is handed over, not re-judged: a second judge that found nothing let the push
+    // through after this toast had promised a question (RMA-411).
     const fresh = leaks.filter(l => !(range.allow ?? []).some(entry => covers(entry, String(l.what).trim())))
     if (fresh.length) {
+      await $.process.run(['node', script, 'flag', range.commonDir, range.key!, JSON.stringify(fresh.map(l => String(l.what).trim()))])
       $.ui.toast(`cerberus: ${fresh.length} finding(s) not on the whitelist; asking you`)
       return next(e)
     }

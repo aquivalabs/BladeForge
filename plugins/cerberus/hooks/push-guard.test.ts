@@ -9,11 +9,13 @@ const out = (stdout: string, exitCode = 0) =>
 
 function engine(on: any, { leaks, range }: { leaks: unknown[]; range?: Record<string, unknown> }) {
   const recorded: string[][] = []
+  const flagged: string[][] = []
   let pushed = false
   on('process.run', ($: any, e: any) => {
     const [, , cmd, ...rest] = e.argv
     if (cmd === 'record') { recorded.push(rest); return out('') }
-    return out(JSON.stringify({ off: false, gitDir: '/repo/.git', branch: 'main', key: KEY, cached: false,
+    if (cmd === 'flag') { flagged.push(rest); return out('') }
+    return out(JSON.stringify({ off: false, gitDir: '/repo/.git', commonDir: '/repo/.git', branch: 'main', key: KEY, cached: false,
       log: 'a1b2c3d author: Demo <d@example.com> committer: Demo <d@example.com>\nfix: Halvorsen retry for HLD-4412\n---',
       ...range }))
   })
@@ -21,14 +23,15 @@ function engine(on: any, { leaks, range }: { leaks: unknown[]; range?: Record<st
   on('model.complete', () => ({ value: { isAnswered: true, text: JSON.stringify({ leaks }),
     usage: { input_tokens: 1, output_tokens: 1, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 } } }))
   on('tool.call', { tool: 'Bash' }, () => { pushed = true; return { result: { stdout: 'pushed', stderr: '', interrupted: false } } })
-  return { recorded, wasPushed: () => pushed }
+  return { recorded, flagged, wasPushed: () => pushed }
 }
 
-test('a finding off the whitelist goes to the hook beneath, which asks; nothing is cached', async ($, on) => {
+test('a finding off the whitelist is handed to the hook beneath, which asks about it; nothing is cached', async ($, on) => {
   const env = engine(on, { leaks: [{ where: 'a1b2c3d', what: 'Halvorsen, HLD-4412' }] })
   await $.tool.call({ tool: 'Bash', command: 'git push origin main' })
   expect(env.wasPushed()).toBe(true)
   expect(env.recorded.length).toBe(0)
+  expect(env.flagged).toEqual([['/repo/.git', KEY, JSON.stringify(['Halvorsen, HLD-4412'])]])
 })
 
 test('a finding on the whitelist passes and the push is recorded clean', async ($, on) => {
