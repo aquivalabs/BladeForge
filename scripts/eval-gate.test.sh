@@ -174,5 +174,13 @@ git -C "$r" add -A >/dev/null; git -C "$r" commit -qm edit
 head="$(git -C "$r" rev-parse HEAD)"
 check "edited existing skill needs no hillclimb record" 0 "$(cd "$r" && echo "refs/heads/main $head refs/heads/main $base" | bash scripts/eval-gate.sh >/dev/null 2>&1; echo $?)"
 
+# N: an open stdin that never sends a line or closes (an agent's shell) falls back to origin/main..HEAD
+# within the read timeout instead of hanging (RMA-397).
+r="$(setup_repo)"; git -C "$r" commit -q --allow-empty -m base
+start=$SECONDS
+run_gate "$r" >/dev/null 2>&1 < <(sleep 30); code=$?
+check "an open, silent stdin does not hang the gate" 0 "$code"
+[ $((SECONDS - start)) -lt 15 ] && check "and it returns within the read timeout" 0 0 || check "and it returns within the read timeout" 0 1
+
 echo "== $pass passed, $fail failed =="
 [ "$fail" -eq 0 ]

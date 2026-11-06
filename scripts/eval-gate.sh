@@ -18,7 +18,10 @@
 # One git diff --name-status per pushed ref yields both the changed paths (the last
 # column, so a rename counts under its new name) and the added ones (status A).
 # Reads pre-push stdin; falls back to origin/main..HEAD when run by hand with no
-# stdin. Bash 3.2 compatible.
+# stdin. Only a pipe or a file is read, and each line waits at most STDIN_WAIT seconds:
+# an agent's shell hands the script an open socket that never closes, and a plain
+# `read` on it hung for hours (RMA-397). git writes every ref line at once. Bash 3.2
+# compatible.
 set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
@@ -34,8 +37,9 @@ EMPTY_TREE="$(git hash-object -t tree /dev/null)"
 changed=""
 added=""
 have_stdin=0
-if [ ! -t 0 ]; then
-  while read -r _localref localsha _remoteref remotesha; do
+STDIN_WAIT=5
+if [ -p /dev/stdin ] || [ -f /dev/stdin ]; then
+  while read -r -t "$STDIN_WAIT" _localref localsha _remoteref remotesha; do
     [ -z "${localsha:-}" ] && continue
     have_stdin=1
     [ "$localsha" = "$ZERO" ] && continue           # branch deletion
