@@ -50,6 +50,34 @@ the reason, in the PR description or the issue, before writing code.
 The ladder is proportionate: a debounce takes one look at the platform and the hook library and is
 done; a data grid deserves the full comparison.
 
+## The same ladder for checks: a tool before a lens
+
+A rule about code (units, naming, braces, selector shape, import direction, a forbidden call) is
+also a thing to reuse rather than build. The hand-built version of a check is an LLM reading the
+diff, and it is the last rung, not the first. A linter reads every line on every push and never
+tires. A lens reads a diff once, under a budget, and counts a whole class of breaks once.
+
+1. **The tool the project already runs.** Is the rule configured, and is it really on? Prove it
+   with `npx eslint --print-config <file>` or `npx stylelint --print-config <file>`. A config that
+   comes later can switch an earlier rule off: `eslint-config-prettier` turns `curly` off unless it
+   is set again after it.
+2. **A built-in rule of the stack's linter, type checker or formatter.** This holds in every
+   language, back end as much as front end: ESLint and `tsc` for TypeScript, Ruff and mypy for
+   Python, golangci-lint for Go, Checkstyle and Error Prone for Java, Roslyn analyzers for C#,
+   RuboCop for Ruby, PHPStan for PHP, Clippy for Rust, PMD for Apex, ShellCheck for shell,
+   Stylelint for CSS. The full table, with formatters, rule engines and cross-language checks, is in
+   `references/catalog.md` § Checks; the exact rules a stack turns on live in its tooling skill.
+3. **A maintained plugin or a rule engine for the rule**: a linter plugin, Semgrep or ast-grep for a
+   project rule in any language, ArchUnit, Deptrac or `eslint-plugin-boundaries` for layers.
+   Compare it the way rung 5 above compares a library.
+4. **A short script or test in the repo** that fails on the break, wired into the one check command.
+5. **An LLM lens or reviewer**, only for what no tool can judge: design, naming that needs meaning,
+   whether a test proves the behaviour, whether a document tells the truth.
+
+A finding of a class that rungs 1 to 4 can catch is a missing or disabled rule. Fix the rule first,
+then the code it now reports. A review finding that a linter could have caught names the rule it
+needs, not only the lines.
+
 ## Where it plugs in
 
 The stack skills call this one at the moment they would otherwise write code: the Vue skills name
@@ -67,3 +95,6 @@ wins when the thing being reused is one of our own components.
    comparison names at least one alternative that lost and why.
 3. If our own code was written for a task in `references/catalog.md`: the paragraph says which
    library was rejected and for which reason from rung 7. No reason, no own code.
+4. If the change adds or enforces a rule about code: the rule lives in the project's analyser or
+   check script and is proven on with `--print-config`, or the paragraph says why no tool on
+   rungs 1 to 4 of the checks ladder can hold it.

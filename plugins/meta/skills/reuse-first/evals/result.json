@@ -2,57 +2,57 @@
   "acceptance": null,
   "security": {
     "verdict": "pass",
-    "scanned_at": "2026-11-02T19:48:38",
+    "scanned_at": "2026-11-06T15:40:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "dfc8b1fbe0ecd9aab3a4f3aefa9ec5df1447d28ead8a74205048366d62524ffe",
+    "scanned_hash": "6358b6f019a2eea6e2e92b79388d1cbdb13181835e6c8fa4267baacec7346e0b",
     "checklist": [
       {
         "n": 1,
         "point": "prompt-injection",
         "verdict": "pass",
-        "note": "Instructional prose for the agent's own task; no directive that overrides or hijacks the session."
+        "note": "Instructional prose for the agent's own task; no directive that overrides or hijacks the session. RMA-374: the checks ladder is guidance to the author; no directive aimed at the reading agent."
       },
       {
         "n": 2,
         "point": "data-exfiltration",
         "verdict": "pass",
-        "note": "Nothing leaves the machine; the skill reads and writes project files only."
+        "note": "Nothing leaves the machine; the skill reads and writes project files only. RMA-374: nothing leaves the machine."
       },
       {
         "n": 3,
         "point": "secret-detection",
         "verdict": "pass",
-        "note": "No key, token or credential in SKILL.md or references/catalog.md."
+        "note": "No key, token or credential in SKILL.md or references/catalog.md. RMA-374: no secret."
       },
       {
         "n": 4,
         "point": "dangerous-commands",
         "verdict": "pass",
-        "note": "Only git diff package.json as a check; nothing destructive."
+        "note": "Only git diff package.json as a check; nothing destructive. RMA-374: the only commands named are read-only, `eslint --print-config` and `stylelint --print-config`."
       },
       {
         "n": 5,
         "point": "obfuscation",
         "verdict": "pass",
-        "note": "Readable Markdown and code examples; no encoded payloads or eval of decoded blobs."
+        "note": "Readable Markdown and code examples; no encoded payloads or eval of decoded blobs. RMA-374: plain prose."
       },
       {
         "n": 6,
         "point": "external-fetches",
         "verdict": "pass",
-        "note": "Library names are listed as directions to look in; no URL, no download, nothing fetched."
+        "note": "Library names are listed as directions to look in; no URL, no download, nothing fetched. RMA-374: no fetch; plugin names are suggestions to compare, not installs. The catalog's Checks table names analysers to compare, not installs."
       },
       {
         "n": 7,
         "point": "credential-access",
         "verdict": "pass",
-        "note": "No reference to ~/.ssh, ~/.aws, .env, a keychain or a cookie store."
+        "note": "No reference to ~/.ssh, ~/.aws, .env, a keychain or a cookie store. RMA-374: no credential read."
       },
       {
         "n": 8,
         "point": "privilege-escalation",
         "verdict": "pass",
-        "note": "No sudo, setuid, cron, launch agent or shell-profile edits."
+        "note": "No sudo, setuid, cron, launch agent or shell-profile edits. RMA-374: no privilege change."
       }
     ]
   },
