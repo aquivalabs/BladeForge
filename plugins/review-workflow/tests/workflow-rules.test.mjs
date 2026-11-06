@@ -982,34 +982,28 @@ console.log("\ndeterministic gates");
 console.log("\nskills");
 {
   const entry = lensEntry("craft", { skills: ["frontend-css:rem", "no-code-prose:policy"], extensionSkill: "meta:ockham" });
-  const skillProofs = {
-    "frontend-css:rem": { path: "/m/plugins/frontend-css/skills/rem/SKILL.md", line: 40, text: "Every spacing and font size goes in rem,\n  never in px, so the page follows the browser zoom.\n## Exceptions" },
-    "no-code-prose:policy": { path: "/m/plugins/no-code-prose/skills/policy/SKILL.md", line: 12, text: "A comment is a pointer to a document, not prose." },
-    "meta:ockham": { path: "/m/plugins/meta/skills/ockham/SKILL.md", line: 7, text: "Make the simplest change that solves the problem." },
+  const skillTexts = {
+    "frontend-css:rem": { path: "/m/plugins/frontend-css/skills/rem/SKILL.md", text: "Every spacing and font size goes in rem,\n  never in px, so the page follows the browser zoom.\n## Exceptions" },
+    "no-code-prose:policy": { path: "/m/plugins/no-code-prose/skills/policy/SKILL.md", text: "A comment is a pointer to a document, not prose." },
+    "meta:ockham": { path: "/m/plugins/meta/skills/ockham/SKILL.md", text: "Make the simplest change that solves the problem." },
   };
-  const quoting = (read) => ({ "lens:craft": { ...lensResponse({ agentName: "craft" }), summary: { ...lensResponse({ agentName: "craft" }).summary, skills_read: read } } });
-  const args = (extra = {}) => baseArgs({ round: 1, config: { agents: [entry] }, skillProofs, ...extra });
+  const args = (extra = {}) => baseArgs({ round: 1, config: { agents: [entry] }, skillTexts, ...extra });
+  const lens = { "lens:craft": lensResponse({ agentName: "craft" }) };
 
-  const blind = await runWorkflow({ args: args(), agents: { "lens:craft": lensResponse({ agentName: "craft" }) } });
-  check("skills: no quotes → the lens fails", blind.result?.perAgent?.[0]?.verdict === "FAIL");
-  check("skills: and the gate does not attest", blind.result?.attest === false);
-  checkIncludes("skills: the refusal log names the missing skills", blind.logs.join("\n"), "without skills frontend-css:rem");
-
-  const wrong = await runWorkflow({ args: args(), agents: quoting({ "frontend-css:rem": "never in px, so the page follows the browser zoom.", "no-code-prose:policy": "a made-up rule nobody wrote down", "meta:ockham": "Make the simplest change that solves the problem." }) });
-  checkEqual("skills: a wrong quote is a fail for that skill", [wrong.result?.perAgent?.[0]?.verdict, wrong.result?.perAgent?.[0]?.skillsMissing], ["FAIL", ["no-code-prose:policy"]]);
-
-  const noProofs = await runWorkflow({ args: args({ skillProofs: null }), agents: quoting({ "frontend-css:rem": "never in px, so the page follows the browser zoom." }) });
-  check("skills: no skillProofs from the caller → the lens fails", noProofs.result?.perAgent?.[0]?.verdict === "FAIL");
-
-  const full = await runWorkflow({ args: args(), agents: quoting({ "frontend-css:rem": " goes in rem, never in px, so the page ", "no-code-prose:policy": "A comment is a pointer to a document, not prose.", "meta:ockham": "Make the simplest change that solves the problem." }) });
-  check("skills: every line quoted → the lens passes and attests", full.result?.perAgent?.[0]?.verdict === "PASS" && full.result?.attest === true);
-  checkEqual("skills: the record lists the skills proven read", full.result?.perAgent?.[0]?.skillsLoaded, ["frontend-css:rem", "no-code-prose:policy", "meta:ockham"]);
+  const full = await runWorkflow({ args: args(), agents: lens });
+  check("skills: every skill given → the lens passes and attests", full.result?.perAgent?.[0]?.verdict === "PASS" && full.result?.attest === true);
+  checkEqual("skills: the record lists the skills given", full.result?.perAgent?.[0]?.skillsLoaded, ["frontend-css:rem", "no-code-prose:policy", "meta:ockham"]);
   const prompt = full.calls.find((call) => call.label === "lens:craft")?.prompt || "";
-  checkIncludes("skills: the prompt names the path and the line to quote from", prompt, "/m/plugins/frontend-css/skills/rem/SKILL.md` — quote one line numbered **40 or higher**");
-  check("skills: the prompt does not give the answer away", !prompt.includes("never in px"));
+  checkIncludes("skills: the prompt names the skill and its path", prompt, "`frontend-css:rem` — `/m/plugins/frontend-css/skills/rem/SKILL.md`");
+  checkIncludes("skills: the prompt carries the whole file", prompt, "Every spacing and font size goes in rem,\n  never in px, so the page follows the browser zoom.\n## Exceptions");
 
-  const short = await runWorkflow({ args: args(), agents: quoting({ "frontend-css:rem": "## Exceptions", "no-code-prose:policy": "A comment is a pointer to a document, not prose.", "meta:ockham": "Make the simplest change that solves the problem." }) });
-  checkEqual("skills: a quote under twenty characters proves nothing", short.result?.perAgent?.[0]?.skillsMissing, ["frontend-css:rem"]);
+  const partial = await runWorkflow({ args: args({ skillTexts: { "frontend-css:rem": skillTexts["frontend-css:rem"], "meta:ockham": { path: "/m/x/SKILL.md", text: "  " } } }), agents: lens });
+  checkEqual("skills: a skill missing or empty is a fail for that skill", [partial.result?.perAgent?.[0]?.verdict, partial.result?.perAgent?.[0]?.skillsMissing], ["FAIL", ["no-code-prose:policy", "meta:ockham"]]);
+  check("skills: and the gate does not attest", partial.result?.attest === false);
+  checkIncludes("skills: the refusal log names the missing skills", partial.logs.join("\n"), "without skills no-code-prose:policy");
+
+  const noTexts = await runWorkflow({ args: args({ skillTexts: null }), agents: lens });
+  check("skills: no skillTexts from the caller → the lens fails", noTexts.result?.perAgent?.[0]?.verdict === "FAIL");
 
   const none = await runWorkflow({ args: baseArgs({ round: 1, config: { agents: [lensEntry("solo")] } }), agents: { "lens:solo": lensResponse({ agentName: "solo" }) } });
   check("skills: a lens with no configured skill is unaffected", none.result?.attest === true);
