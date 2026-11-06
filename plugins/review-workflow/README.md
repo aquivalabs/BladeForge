@@ -19,29 +19,28 @@ marketplace install clones the whole repository and both plugins land side by si
 scriptPath: ${CLAUDE_PLUGIN_ROOT}/../review-workflow/workflow.js
 ```
 
-## Skill proofs
+## Skill texts
 
-A lens applies the house rules its config names only if it reads them, and the Skill tool finds a
-plugin's skills only when that plugin is both enabled and installed for the session's project: a
-project that enables its plugins in its own `.claude/settings.json` gives a session started
-elsewhere, or one whose plugins were installed for another project only, and every agent it spawns,
-none of them ("Unknown skill"). `skill-proofs.mjs` (run by `/review`) gives each configured skill its
-`SKILL.md` path and its second half; the prompt names the path and the line that part starts at, the
-lens quotes one line of at least 20 characters from it in `summary.skills_read`, and the script checks
-that the quote is in that part, with whitespace folded so a line copied across a wrap still counts.
-The window is the second half (RMA-389): with the last fifth, a lens that had read a 102-line file in full quoted line 72 twice and failed. Measured on the first round: asking for one exact line by number failed two lenses that had read the
-file, one that copied across a wrap and one that picked a line further down. A skill not proven
-read fails its lens (`skillsMissing` in `perAgent`), so the gate cannot attest a round judged without
-its rules. The proof reads the file from disk, so it holds whichever directory the session started in.
-Measured before this existed: from mid-October 2026 most rounds ran from such a session, scored
-without their skills and attested anyway, and one lens that claimed twelve had seen a 2 KB preview of
-51 KB. RMA-345.
+A lens applies the house rules its config names only if they are in its context, and the Skill tool
+finds a plugin's skills only when that plugin is both enabled and installed for the session's
+project: a session started elsewhere, and every agent it spawns, gets none of them ("Unknown skill").
+`skill-texts.mjs` (run by `/review`) reads each configured skill's `SKILL.md` whole, and the script
+puts that text into the lens prompt. A skill whose file was not given, or is empty, fails its lens
+(`skillsMissing` in `perAgent`), so the gate cannot attest a round judged without its rules.
+
+Why the file goes in whole (RMA-395): before it, a lens read its skills itself and quoted one line
+back as proof, from a window of the file the script then checked. Lenses that had read the file
+quoted real lines from outside the window and failed, round after round, while the window moved from
+one exact line to the last fifth to the second half. A lens with the rules in its prompt has nothing
+to prove. The tokens are the ones it spent reading the files anyway: 102 KB for the nine skills of
+this repository's four lenses. Measured before any of this existed: from mid-October 2026 most rounds
+ran from a session with no skills, scored without them and attested anyway. RMA-345.
 
 ## Contract
 
 The script performs no I/O. Everything it needs arrives in `args` — `base`, `hash`, `round`,
 `attempt`, `changedFiles`, `diffPath`, `config`, `agentsDir`, `machineFacts`, `gateResults`,
-`priorPerAgent`, `skillProofs` — and everything it produces leaves through its return value:
+`priorPerAgent`, `skillTexts` — and everything it produces leaves through its return value:
 
 ```
 { attest: boolean, capReached: boolean, refusedCriterion: number | null, failedLenses: [...], failedGates: [...], perAgent: [...], report: string }
