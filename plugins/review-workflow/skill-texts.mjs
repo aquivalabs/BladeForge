@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-// Prints `skillProofs` for /review to pass to workflow.js: for every skill an enabled lens names, the
-// SKILL.md path and its second half, from which the lens must quote one line back, proving it read the
-// whole file (RMA-345).
-// Usage: node skill-proofs.mjs --agents-dir <abs dir of review-<lens>.md> --config <review.config.json>
+// Prints `skillTexts` for /review to pass to workflow.js: for every skill an enabled lens names, the
+// SKILL.md path and its whole text, which the script puts into the lens prompt (RMA-395).
+// Usage: node skill-texts.mjs --agents-dir <abs dir of review-<lens>.md> --config <review.config.json>
 // Exits 1, naming the ids, when a configured skill has no readable SKILL.md: a lens never judges without it.
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -39,27 +38,16 @@ export const skillPath = (agentsDir, id) => {
   return null;
 };
 
-/** The shortest quote a proof accepts: a heading such as `## Rules` is guessable without reading. */
-export const MIN_QUOTE = 20;
-
-/** The second half of `text`: its 1-based first line and the text from there to the end. */
-export const proofTail = (text) => {
-  const lines = text.split('\n');
-  const start = Math.floor(lines.length * 0.5);
-  const tail = lines.slice(start);
-  return tail.some((line) => line.trim().length >= MIN_QUOTE) ? { line: start + 1, text: tail.join('\n') } : null;
-};
-
-/** `{ proofs, missing }`: a proof per configured skill, and the ids with no readable file. */
-export const readSkillProofs = (agentsDir, config, read = (path) => readFileSync(path, 'utf8')) => {
-  const proofs = {};
+/** `{ texts, missing }`: the SKILL.md text per configured skill, and the ids with no readable file. */
+export const readSkillTexts = (agentsDir, config, read = (path) => readFileSync(path, 'utf8')) => {
+  const texts = {};
   const missing = [];
   for (const id of configuredSkills(config)) {
     const path = skillPath(agentsDir, id);
     try {
-      const proof = path ? proofTail(read(path)) : null;
-      if (proof) {
-        proofs[id] = { path, ...proof };
+      const text = path ? read(path) : '';
+      if (text.trim()) {
+        texts[id] = { path, text };
       } else {
         missing.push(id);
       }
@@ -67,19 +55,19 @@ export const readSkillProofs = (agentsDir, config, read = (path) => readFileSync
       missing.push(id);
     }
   }
-  return { proofs, missing };
+  return { texts, missing };
 };
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const { values } = parseArgs({ options: { 'agents-dir': { type: 'string' }, config: { type: 'string' } }, strict: true });
   if (!values['agents-dir'] || !values.config) {
-    console.error('usage: skill-proofs.mjs --agents-dir <dir> --config <review.config.json>');
+    console.error('usage: skill-texts.mjs --agents-dir <dir> --config <review.config.json>');
     process.exit(2);
   }
-  const { proofs, missing } = readSkillProofs(values['agents-dir'], JSON.parse(readFileSync(values.config, 'utf8')));
+  const { texts, missing } = readSkillTexts(values['agents-dir'], JSON.parse(readFileSync(values.config, 'utf8')));
   if (missing.length) {
-    console.error(`skill-proofs: no readable SKILL.md for ${missing.join(', ')}`);
+    console.error(`skill-texts: no readable SKILL.md for ${missing.join(', ')}`);
     process.exit(1);
   }
-  process.stdout.write(JSON.stringify(proofs));
+  process.stdout.write(JSON.stringify(texts));
 }

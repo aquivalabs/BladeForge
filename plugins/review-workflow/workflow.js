@@ -43,7 +43,7 @@ export const meta = {
 };
 
 const parsedArgs = typeof args === "string" ? JSON.parse(args) : args;
-const { base, hash, round, attempt, changedFiles, diffPath, config, agentsDir, machineFacts, gateResults, priorPerAgent, skillProofs } =
+const { base, hash, round, attempt, changedFiles, diffPath, config, agentsDir, machineFacts, gateResults, priorPerAgent, skillTexts } =
   parsedArgs;
 
 // Deterministic gates — the external oracle layer. `machineFacts` are soft: a
@@ -149,8 +149,7 @@ const LENS_RESPONSE_SCHEMA = {
           },
           required: ["blocker", "major", "minor", "advisory"]
         },
-        one_line: { type: "string" },
-        skills_read: { type: "object", additionalProperties: { type: "string" } }
+        one_line: { type: "string" }
       },
       required: ["agent", "verdict", "score", "counts", "one_line"]
     }
@@ -234,23 +233,18 @@ function lensAgentFilePath(entry) {
 // and a judgment with no contract behind it came back as PASS 10 in a measured round.
 const contractPathIsAGuess = !(typeof agentsDir === "string" && agentsDir.trim());
 
-// The skills a lens must apply: its config's skills plus its extensionSkill; skill-proofs.mjs
-// `configuredSkills` is the same rule for /review. README § Skill proofs.
+// The skills a lens must apply: its config's skills plus its extensionSkill; skill-texts.mjs
+// `configuredSkills` is the same rule for /review. README § Skill texts.
 function lensSkills(entry) {
   const ids = [...(Array.isArray(entry.skills) ? entry.skills : []), ...(entry.extensionSkill ? [entry.extensionSkill] : [])];
   return [...new Set(ids.filter((id) => typeof id === "string" && id.trim()))];
 }
 
-// The proof /review computed for a skill: its SKILL.md path and the second half to quote from. README § Skill proofs.
-function skillProof(id) {
-  const proof = skillProofs && typeof skillProofs === "object" ? skillProofs[id] : null;
-  return proof && typeof proof.path === "string" && Number.isInteger(proof.line) && typeof proof.text === "string" ? proof : null;
+// The SKILL.md /review read for a skill: its path and whole text. README § Skill texts.
+function skillText(id) {
+  const skill = skillTexts && typeof skillTexts === "object" ? skillTexts[id] : null;
+  return skill && typeof skill.path === "string" && typeof skill.text === "string" && skill.text.trim() ? skill : null;
 }
-
-// The shortest quote a proof accepts; skill-proofs.mjs `MIN_QUOTE` is the same rule for /review.
-const MIN_QUOTE = 20;
-// A quote is compared with runs of whitespace folded, so a line the lens copied across a wrap still matches.
-const squash = (text) => text.replace(/\s+/g, " ").trim();
 
 function skillsBlock(entry) {
   const ids = lensSkills(entry);
@@ -258,11 +252,14 @@ function skillsBlock(entry) {
     return "";
   }
   return `
-## Your skills — read each one in full before judging
-These files are the house rules this lens applies. Read every one with the **Read tool, one call per file** (a Bash \`cat\` of several files goes over the output limit and shows only a preview). The Skill tool cannot load them here.
-${ids.map((id) => { const proof = skillProof(id); return proof ? `- \`${id}\`: \`${proof.path}\` — quote one line numbered **${proof.line} or higher**` : `- \`${id}\`: (no path from the caller; this lens fails without it)`; }).join("\n")}
-
-In \`summary.skills_read\` give, for each id, one line copied exactly from that file at or after the line named beside it, at least ${MIN_QUOTE} characters long. A skill whose quote is missing, shorter, or not in that part of the file counts as not applied, and the lens fails this round whatever its findings.
+## Your skills — the house rules this lens applies
+Each file is given whole below; judge against all of it. A file it links to under \`references/\` is not included: read that one yourself when a rule sends you there. The Skill tool cannot load skills here.
+${ids.map((id) => { const skill = skillText(id); return skill ? `
+### \`${id}\` — \`${skill.path}\`
+\`\`\`\`\`markdown
+${skill.text.trimEnd()}
+\`\`\`\`\`` : `
+### \`${id}\` — not given by the caller; this lens fails without it`; }).join("\n")}
 `;
 }
 
@@ -740,14 +737,8 @@ function scoreLens(entry) {
   const reportedScore =
     typeof entry.response.summary?.score === "number" ? entry.response.summary.score : null;
   const threshold = Number(entry.entry?.threshold ?? 0);
-  const quoted = entry.response.summary?.skills_read && typeof entry.response.summary.skills_read === "object" ? entry.response.summary.skills_read : {};
-  const proven = (id) => {
-    const proof = skillProof(id);
-    const quote = typeof quoted[id] === "string" ? squash(quoted[id]) : "";
-    return Boolean(proof) && quote.length >= MIN_QUOTE && squash(proof.text).includes(quote);
-  };
   const ids = lensSkills(entry.entry || {});
-  const skillsLoaded = ids.filter(proven);
+  const skillsLoaded = ids.filter((id) => Boolean(skillText(id)));
   const skillsMissing = ids.filter((id) => !skillsLoaded.includes(id));
   const verdict = score >= threshold && skillsMissing.length === 0 ? "PASS" : "FAIL";
   return {
@@ -767,7 +758,7 @@ function scoreLens(entry) {
     reportedScore,
     verdict,
     oneLine: skillsMissing.length
-      ? `judged without its skills ${skillsMissing.join(", ")} (no proof it read them) — not a pass. ${entry.response.summary?.one_line || ""}`
+      ? `judged without its skills ${skillsMissing.join(", ")} (their SKILL.md was not given) — not a pass. ${entry.response.summary?.one_line || ""}`
       : entry.response.summary?.one_line || ""
   };
 }
