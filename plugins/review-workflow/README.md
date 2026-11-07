@@ -12,19 +12,19 @@ that shape: a plugin with no skill is simply absent from the catalog.
 
 ## Invocation
 
-`/review` (in the `review` plugin) calls this workflow with a relative sibling path, because a
-marketplace install clones the whole repository and both plugins land side by side:
-
-```
-scriptPath: ${CLAUDE_PLUGIN_ROOT}/../review-workflow/workflow.js
-```
+`/review` (in the `review` plugin) does not pass `args` to this script. It writes them to a file
+without `skillTexts` and runs `run-copy.mjs`, which reads every lens's skills, adds them, and writes
+a copy of `workflow.js` with the whole object in place of the line that reads `args`. The Workflow
+tool then runs that copy by `scriptPath`. The skills are about 110 KB here; pasted into the call they
+cost about 28k output tokens a round (RMA-418). `run-copy.mjs` refuses a `workflow.js` that does not
+hold that line exactly once, so a change to it cannot quietly produce a copy that ignores its args.
 
 ## Skill texts
 
 A lens applies the house rules its config names only if they are in its context, and the Skill tool
 finds a plugin's skills only when that plugin is both enabled and installed for the session's
 project: a session started elsewhere, and every agent it spawns, gets none of them ("Unknown skill").
-`skill-texts.mjs` (run by `/review`) reads each configured skill's `SKILL.md` whole, and the script
+`skill-texts.mjs` (called by `run-copy.mjs`, which `/review` runs) reads each configured skill's `SKILL.md` whole, and the script
 puts that text into the lens prompt. A skill whose file was not given, or is empty, fails its lens
 (`skillsMissing` in `perAgent`), so the gate cannot attest a round judged without its rules.
 
