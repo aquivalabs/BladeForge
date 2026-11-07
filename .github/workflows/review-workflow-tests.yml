@@ -1,0 +1,26 @@
+name: review-workflow-tests
+# workflow.js decides whether /review attests a change, and skill-texts.mjs decides what rules each
+# lens reads. A regression in either passes reviews it should refuse, and nothing in CI ran their
+# suites (RMA-348). Both suites are offline: no agents, no git, no network.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "plugins/review-workflow/**"
+      - ".github/workflows/review-workflow-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  review-workflow-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run the workflow script's rules
+        run: node plugins/review-workflow/tests/workflow-rules.test.mjs
+      - name: Run the skill-texts suite
+        run: node --test plugins/review-workflow/tests/skill-texts.test.mjs

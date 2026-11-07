@@ -67,3 +67,10 @@ change. `report` names it (`NO ENABLED LENS`); a caller reading only the structu
 
 It never attests, never commits, and never writes a file. `/review` is the only step in the system
 that persists anything.
+
+## Tests
+
+Two offline suites, with no agents, no git and no network: `node tests/workflow-rules.test.mjs`
+drives `workflow.js` with literal `args` and stubbed lenses, and `node --test tests/skill-texts.test.mjs`
+covers how `/review` reads each lens's skills. The `review-workflow-tests` workflow runs both on
+every pull request that touches this plugin (RMA-348).
