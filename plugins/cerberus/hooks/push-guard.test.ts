@@ -31,7 +31,7 @@ test('a finding off the whitelist is handed to the hook beneath, which asks abou
   await $.tool.call({ tool: 'Bash', command: 'git push origin main' })
   expect(env.wasPushed()).toBe(true)
   expect(env.recorded.length).toBe(0)
-  expect(env.flagged).toEqual([['/repo/.git', KEY, JSON.stringify(['Halvorsen, HLD-4412'])]])
+  expect(env.flagged).toEqual([['/repo/.git', KEY, JSON.stringify([{ where: 'a1b2c3d', what: 'Halvorsen, HLD-4412' }])]])
 })
 
 test('a finding on the whitelist passes and the push is recorded clean', async ($, on) => {
