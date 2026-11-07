@@ -23,12 +23,22 @@ on:
 permissions:
   contents: read
 
+# One run at a time, and a run checks out the tip of `main`, not its own merge commit: four PRs
+# merged within a minute on 2026-11-07 started four runs on four commits, and the two that pushed
+# behind a newer one were refused, so their plugins never got bumped (RMA-420). GitHub keeps only
+# the newest queued run and cancels the others, which is safe because a run bumps everything since
+# the last bump commit, not just its own push.
+concurrency:
+  group: scout-publish
+  cancel-in-progress: false
+
 jobs:
   scout-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
           # ssh-key sets the origin remote to SSH and authenticates as the deploy key,
           # which the ruleset allows to bypass branch protection on the push below.
@@ -48,11 +58,15 @@ jobs:
           # hook, command, output-style, or agent. NOT just skills/: a plugin can ship
           # non-skill content (e.g. cicero is a hook + output-style with no skills at all),
           # and a skills-only filter silently skips its bump, leaving the version-keyed
-          # plugin cache stale on every client. Diff the merge commit against its first
-          # parent, then map each plugins/<domain>/... path to its owning plugin.json.
+          # plugin cache stale on every client. Diff everything since the last bump commit
+          # on `main` (or the first parent, before there was one), so pushes whose runs were
+          # cancelled or refused are bumped here too, then map each plugins/<domain>/... path
+          # to its owning plugin.json.
           # Exclude the auto-managed files (the version we're about to write, and scout's
           # generated catalog) so a bot write or a manual version edit can't self-trigger.
-          changed_paths="$(git diff --name-only HEAD^ HEAD -- 'plugins/*' ':(exclude)plugins/*/.claude-plugin/plugin.json' ':(exclude)plugins/scout/skills/scout/catalog.json' || true)"
+          last_bump="$(git log -1 --first-parent --format=%H --fixed-strings --grep='chore(scout): regenerate catalog + bump affected plugin version' HEAD)"
+          since="${last_bump:-HEAD^}"
+          changed_paths="$(git diff --name-only "$since" HEAD -- 'plugins/*' ':(exclude)plugins/*/.claude-plugin/plugin.json' ':(exclude)plugins/scout/skills/scout/catalog.json' || true)"
           if [ -z "$changed_paths" ]; then
             echo "no plugin payload changes in this push — nothing to bump"; exit 0
           fi
@@ -95,4 +109,12 @@ jobs:
           fi
           # [skip ci] stops this deploy-key push from re-triggering the workflow.
           git commit -m "chore(scout): regenerate catalog + bump affected plugin version [skip ci]"
-          git push origin HEAD:main
+          # A merge that lands while this runs moves `main` and queues the next run, which
+          # bumps everything since the last bump commit, this push's plugins included.
+          if ! git push origin HEAD:main; then
+            git fetch -q origin main
+            if [ "$(git rev-parse origin/main)" != "$(git rev-parse HEAD^)" ]; then
+              echo "::notice::main moved during this run; the run queued behind it bumps these plugins"; exit 0
+            fi
+            exit 1
+          fi
