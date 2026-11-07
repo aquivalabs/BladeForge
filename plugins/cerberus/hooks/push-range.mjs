@@ -102,9 +102,12 @@ export const entryFor = (what) => {
   return trackerKey(text) ?? text;
 };
 
+// An entry written as an id (`RMA-374`, kept from before the key rule or added by hand) counts as its
+// key, since accepting an id accepts its key (RMA-417).
 export const covers = (entry, what) => {
   const text = String(what).trim();
-  return text.toLowerCase() === entry.toLowerCase() || trackerKey(text) === entry.toUpperCase();
+  const key = trackerKey(entry) ?? entry.toUpperCase();
+  return text.toLowerCase() === entry.toLowerCase() || trackerKey(text) === key;
 };
 
 /** The findings the whitelist does not cover. */
@@ -125,18 +128,44 @@ export function recordClean(gitDir, key) {
 // The mod layer's verdict on findings off the whitelist, handed to the classic hook so it asks the
 // person about exactly these instead of judging again (RMA-411): two judges of one push disagreed,
 // and the second's clean verdict let through a push the first had promised to ask about.
-export function recordFlagged(commonDir, key, whats) {
-  writeFileSync(pendingPath(commonDir), JSON.stringify({ key, whats }));
+export function recordFlagged(commonDir, key, leaks) {
+  writeFileSync(pendingPath(commonDir), JSON.stringify({ key, leaks, whats: leaks.map(l => l.what) }));
 }
 
 /** The findings the mod layer flagged for this exact push text, or null when it flagged none. */
 export function flagged(commonDir, key) {
   try {
     const pending = JSON.parse(readFileSync(pendingPath(commonDir), 'utf8'));
-    return pending.key === key && Array.isArray(pending.whats) && pending.whats.length ? pending.whats : null;
+    return pending.key === key && Array.isArray(pending.leaks) && pending.leaks.length ? pending.leaks : null;
   } catch {
     return null;
   }
+}
+
+// The permission question, readable on the first pass: what was found, one line each with what it
+// is and where, then what yes and no do. A judge's run-on line is cut, never pasted whole (RMA-417).
+// The judge's fields come from a model that read commit text: a line break or a control character
+// in them could forge a line of the question, so each field is flattened to one line first.
+const cut = (text, length) => {
+  const flat = text.replace(/[\u0000-\u001f\u007f\u2028\u2029]+/g, ' ').trim();
+  return flat.length > length ? `${flat.slice(0, length - 1)}…` : flat;
+};
+export function question(leaks, scope) {
+  const kind = scope === 'secrets' ? 'secret' : 'work fingerprint';
+  const lines = leaks.map(l => {
+    const what = cut(String(l.what ?? '').trim(), 60);
+    const why = l.why ? ` (${cut(String(l.why).trim(), 60)})` : '';
+    const where = l.where ? ` in ${cut(String(l.where).trim(), 40)}` : '';
+    return `  • ${what}${why}${where}`;
+  });
+  const keys = [...new Set(leaks.map(l => trackerKey(String(l.what ?? '').trim())).filter(Boolean))];
+  const keyNote = keys.length ? ` A tracker id adds its whole key (${keys.join(', ')}), so later ids of it pass too.` : '';
+  return [
+    `CERBERUS: this push would publish ${leaks.length === 1 ? `a ${kind}` : `${leaks.length} ${kind}s`} not on this repository's whitelist:`,
+    ...lines,
+    `Yes: the push runs and ${leaks.length === 1 ? 'it goes' : 'they go'} on the whitelist.${keyNote}`,
+    'No: nothing is pushed; fix it with cerberus:leak-check (reword or amend the commit, reset the author, rename the branch).',
+  ].join('\n');
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === import.meta.filename) {
