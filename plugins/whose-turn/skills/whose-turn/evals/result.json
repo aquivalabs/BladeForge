@@ -4,7 +4,7 @@
     "verdict": "pass",
     "scanned_at": "2026-11-07T12:00:00",
     "scanned_by": "cerberus:security-scan",
-    "scanned_hash": "9f700569032d679fd22be2b64a477eff9b822c4f41de70e184881ac8ce533452",
+    "scanned_hash": "611ac5fed483845d7ddae05a3ab7eb0cdd0c5249352deee810a0a25fb2cc4cc3",
     "checklist": [
       {
         "n": 1,
