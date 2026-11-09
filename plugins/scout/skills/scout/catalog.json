@@ -1,7 +1,7 @@
 {
   "schema-version": 1,
   "marketplace": "bladeforge",
-  "generated": "2026-11-07",
+  "generated": "2026-11-09",
   "skills": [
     {
       "name": "cerberus:leak-check",
@@ -926,7 +926,7 @@
     {
       "name": "whose-turn:whose-turn",
       "plugin": "whose-turn",
-      "plugin-version": "1.0.17",
+      "plugin-version": "1.0.18",
       "activates-when": "Use when the user asks what is going on with their tasks, what is waiting on them, what changed, or whose turn it is, in any language; asks to add, finish or list a personal to-do or something not to forget; wants to connect a source or set up the monitor, open its window, or file a bug or an idea about the monitor itself. Reads and writes the local Whose Turn monitor instead of querying Jira, GitHub or Linear again.",
       "category": "workflow",
       "purpose": "Answer what is waiting on the user, what changed and what is on their to-do list from the local Whose Turn monitor, and act on it for the user (to-dos, Handled marks, workspace config, park or pause, monitor settings and notifications, marking the feed read, a fresh check, restart, quit and start of the monitor, an update on the user's yes, the user's own sources, and bug reports); after an update it offers the new features that need setting up.",
