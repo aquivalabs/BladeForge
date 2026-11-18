@@ -69,7 +69,7 @@ When the user wants a source the monitor does not ship (Trello, Notion, an inter
 
 ## The window
 
-To show the window, run `node ${CLAUDE_PLUGIN_ROOT}/bin/app.mjs open` for an app window, or `node ${CLAUDE_PLUGIN_ROOT}/bin/app.mjs open --browser` for a browser tab. `POST /api/open` with `{"mode":"app"|"browser"}` does the same from the server; a second open within 5 seconds is refused with reason `OPEN_TOO_SOON`, which means the window is already opening.
+To show the window, run `node ${CLAUDE_PLUGIN_ROOT}/bin/app.mjs open` for an app window, or `node ${CLAUDE_PLUGIN_ROOT}/bin/app.mjs open --browser` for a browser tab. `POST /api/open` with `{"mode":"app"|"browser"}` does the same from the server; a second open within 5 seconds is refused with reason `OPEN_TOO_SOON`, which means the window is already opening. When the app window does not connect within about 10 seconds, `open` opens the monitor in a browser tab instead, prints a line saying so, and exits 1: tell the user the window is in a tab, and do not open Chrome by hand.
 
 ## Hand-offs from the window
 
