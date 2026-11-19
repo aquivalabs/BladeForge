@@ -1,0 +1,25 @@
+name: bump-rule-tests
+# Runs the unit tests of scripts/affected_plugins.py, the rule scout-publish uses to decide which plugin
+# versions a merge bumps (RMA-415). Path-filtered to the rule, its test and the workflow that calls it.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/affected_plugins.py"
+      - "scripts/affected_plugins.test.py"
+      - ".github/workflows/scout-publish.yml"
+      - ".github/workflows/bump-rule-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  bump-rule-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run the affected-plugins tests
+        run: python3 scripts/affected_plugins.test.py
