@@ -1,0 +1,28 @@
+{
+  "trigger": [
+    { "query": "FeedPanel.vue shows a blank area while the feed store is loading — add a skeleton", "should_trigger": true },
+    { "query": "DataTable.vue uses useFetch and just renders nothing while isFetching — what is the right loading UI?", "should_trigger": true },
+    { "query": "add a loading state to SummaryPanel.vue, it loads its data from a Pinia action on mount", "should_trigger": true },
+    { "query": "should I put a v-if loading branch with grey boxes inside RecordList.vue or make a separate component?", "should_trigger": true },
+    { "query": "the dashboard cards in our Vue app show a blank gap for half a second before data arrives — fix that", "should_trigger": true },
+    { "query": "does FilterPanel.vue need a skeleton? it gets its data through props from the page", "should_trigger": true },
+    { "query": "create an ItemListSkeleton.vue next to ItemList.vue using the shared Skeleton primitive", "should_trigger": true },
+    { "query": "can we install vue-loading-skeleton and use it across all our async Vue components?", "should_trigger": true },
+    { "query": "what goes in the #fallback slot of the Suspense around the async ReportView.vue?", "should_trigger": true },
+    { "query": "make the skeleton shimmer respect prefers-reduced-motion in our Vue app", "should_trigger": false },
+    { "query": "add a Storybook story for the SummaryPanel.vue component", "should_trigger": false },
+    { "query": "the DataGrid React component shows a blank gap while TanStack Query loads — add a skeleton", "should_trigger": false },
+    { "query": "where should the new WorkspaceHeader.vue component live, ui or features?", "should_trigger": false },
+    { "query": "create a Pinia store for the feed with status and error fields", "should_trigger": false },
+    { "query": "write a Vitest test for FeedItem.vue", "should_trigger": false },
+    { "query": "style the card's hover state with BEM in scoped styles", "should_trigger": false }
+  ],
+  "acceptance": [
+    "the skeleton decision came first: one is built only when the first paint waits for a named loading signal; none for a presentational, synchronous, already-loaded or parent-covered component",
+    "the skeleton is built from the shared Skeleton.vue primitive; no skeleton library and no hand-rolled pulsing div, and the primitive is created once in the ui layer if absent",
+    "the skeleton is a separate <Component>Skeleton.vue in the same folder as the real component and exported beside it; the real component has no loading branch of its own",
+    "it has the real component's shape, with shared sizes read from custom properties or tokens, so the content replaces it without a layout jump",
+    "the consumer picks between the two with v-if/v-else on the loading signal, or uses the skeleton as the Suspense #fallback",
+    "in Storybook the skeleton is shown under the real component in each state, with no story file of its own"
+  ]
+}

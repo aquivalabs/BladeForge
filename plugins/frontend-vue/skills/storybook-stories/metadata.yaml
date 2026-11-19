@@ -1,0 +1,9 @@
+schema-version: 1
+category: frontend
+purpose: Writes a Storybook story for a Vue component, with its mock data in a separate file and every state reachable through controls, after asking once per project whether stories are wanted at all.
+best-for: Vue projects using Storybook where every new or finished component should get a reviewable story, including components that read a Pinia store, without re-asking the yes/no question each time.
+needs:
+  - frontend-vue:skeleton-components
+changes:
+  tags: [files]
+  notes: "Creates or edits `<Component>.stories.ts` and `<Component>.mock.ts` in a `stories/` folder beside the component, may add Pinia and theme decorators to `.storybook/preview.ts`, and adds or updates one `Storybook stories: yes/no` line in the project's CLAUDE.md."
