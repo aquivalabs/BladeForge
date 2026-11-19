@@ -1,0 +1,8 @@
+schema-version: 1
+category: frontend
+purpose: Decides whether a Vue component that loads data asynchronously needs a loading skeleton, and if so builds it as a separate component beside the real one from the shared Skeleton primitive.
+best-for: Vue projects with async data from Pinia stores, VueUse, Nuxt useFetch or TanStack Query for Vue that want one consistent loading state instead of blank gaps or hand-rolled pulse markup.
+needs: []
+changes:
+  tags: []
+  notes: ""

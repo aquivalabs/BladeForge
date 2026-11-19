@@ -1,0 +1,234 @@
+{
+  "acceptance": null,
+  "trigger": {
+    "skill": "storybook-stories",
+    "measured_at": "2026-11-19T13:24:53",
+    "model": "claude-opus-5-5",
+    "runs_per_query": 5,
+    "best_score": "79/80",
+    "accuracy": 0.988,
+    "baseline_accuracy": null,
+    "description_hash": "9c1ab4b3d56592cefb0b95acc56fb2d3e7da643d77105dbed2e65f1774381acf",
+    "queryset_hash": "8dc09a9c39d28c640688a5fbd471f85a7e18b18e33944dbfb90eb8c405d6e308",
+    "eval_type": "description-triggering",
+    "runner": "scripts/hillclimb/trigger-runner.mjs",
+    "environment": "crowded",
+    "flow_variant": "baseline",
+    "cases": 16,
+    "train": {
+      "cases": 11,
+      "rows": 55,
+      "mean": 0.982,
+      "ci_half_width": 0.135
+    },
+    "test": {
+      "cases": 5,
+      "rows": 25,
+      "mean": 1,
+      "ci_half_width": 0.2
+    },
+    "method": "trigger-runner.mjs: the description is copied verbatim into a probe skill in a fresh project, and each query runs as a nested `claude -p` with no user settings, plugins, hooks or MCP. A run counts as TRIGGERED only when the Skill tool fires for that probe. best_score and accuracy are over (case, rep) rows.",
+    "results": [
+      {
+        "query": "I just finished the WidgetCard.vue component — does it need a story?",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add a storybook story for the new DataSummary Vue component",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "which states should the ItemList.vue story cover — default, empty, error?",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "FeedPanel.vue reads the feed Pinia store — how do I give it fixture data in Storybook?",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "show FeedPanelSkeleton under the real FeedPanel in its Vue story",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "where do I put mock data for a .stories.ts file of a Vue component — inline or separate?",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "our Vue app has a light and a dark theme, how should the stories show both",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "set up Storybook in this Vite + Vue 3 project and write the first story for Pill.vue",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "write a story for the DateRangePicker.vue with controls for open, disabled and the selected range",
+        "should_trigger": true,
+        "triggers": 5,
+        "runs": 5,
+        "trigger_rate": 1,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "add a storybook story for the MetricCard React component",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 0
+      },
+      {
+        "query": "write a Vitest test for FeedItem.vue that clicks the mark-read button",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "create a FeedPanelSkeleton.vue next to FeedPanel.vue using the Skeleton primitive",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "where should the new WorkspaceHeader.vue component live, ui or features?",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "style the story container with BEM in scoped styles",
+        "should_trigger": false,
+        "triggers": 1,
+        "runs": 5,
+        "trigger_rate": 0.2,
+        "pass": true,
+        "fired_other": 4
+      },
+      {
+        "query": "create a Pinia store for the feed with its unread count",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      },
+      {
+        "query": "configure eslint-plugin-vue flat config for the project",
+        "should_trigger": false,
+        "triggers": 0,
+        "runs": 5,
+        "trigger_rate": 0,
+        "pass": true,
+        "fired_other": 5
+      }
+    ]
+  },
+  "security": {
+    "verdict": "pass",
+    "scanned_at": "2026-11-19T14:28:04",
+    "scanned_by": "cerberus:security-scan",
+    "scanned_hash": "fba75d8ffce4020579e5f55a88f7ce4dc994c727d1324c781e3d0a90a6c6bd88",
+    "checklist": [
+      {
+        "n": 1,
+        "point": "prompt-injection",
+        "verdict": "pass",
+        "note": "no directive aimed at the reading agent beyond the skill's own steps"
+      },
+      {
+        "n": 2,
+        "point": "data-exfiltration",
+        "verdict": "pass",
+        "note": "no data sent off-box"
+      },
+      {
+        "n": 3,
+        "point": "secret-detection",
+        "verdict": "pass",
+        "note": "no key, token or credential"
+      },
+      {
+        "n": 4,
+        "point": "dangerous-commands",
+        "verdict": "pass",
+        "note": "only read-only checks (ls, grep) and a Storybook build; nothing destructive"
+      },
+      {
+        "n": 5,
+        "point": "obfuscation",
+        "verdict": "pass",
+        "note": "plain prose and short readable code examples"
+      },
+      {
+        "n": 6,
+        "point": "external-fetches",
+        "verdict": "pass",
+        "note": "npm create storybook@latest is named for the user to run after they say yes; it reaches the npm registry, the expected host for a Storybook install"
+      },
+      {
+        "n": 7,
+        "point": "credential-access",
+        "verdict": "pass",
+        "note": "no credential-store read"
+      },
+      {
+        "n": 8,
+        "point": "privilege-escalation",
+        "verdict": "pass",
+        "note": "writes only the component's stories/ files, .storybook/preview.ts and one line in the project's CLAUDE.md; no profile, cron or launch agent"
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "trigger": [
+    { "query": "I just finished the WidgetCard.vue component — does it need a story?", "should_trigger": true },
+    { "query": "add a storybook story for the new DataSummary Vue component", "should_trigger": true },
+    { "query": "which states should the ItemList.vue story cover — default, empty, error?", "should_trigger": true },
+    { "query": "FeedPanel.vue reads the feed Pinia store — how do I give it fixture data in Storybook?", "should_trigger": true },
+    { "query": "show FeedPanelSkeleton under the real FeedPanel in its Vue story", "should_trigger": true },
+    { "query": "where do I put mock data for a .stories.ts file of a Vue component — inline or separate?", "should_trigger": true },
+    { "query": "our Vue app has a light and a dark theme, how should the stories show both", "should_trigger": true },
+    { "query": "set up Storybook in this Vite + Vue 3 project and write the first story for Pill.vue", "should_trigger": true },
+    { "query": "write a story for the DateRangePicker.vue with controls for open, disabled and the selected range", "should_trigger": true },
+    { "query": "add a storybook story for the MetricCard React component", "should_trigger": false },
+    { "query": "write a Vitest test for FeedItem.vue that clicks the mark-read button", "should_trigger": false },
+    { "query": "create a FeedPanelSkeleton.vue next to FeedPanel.vue using the Skeleton primitive", "should_trigger": false },
+    { "query": "where should the new WorkspaceHeader.vue component live, ui or features?", "should_trigger": false },
+    { "query": "create a Pinia store for the feed with its unread count", "should_trigger": false },
+    { "query": "style the story container with BEM in scoped styles", "should_trigger": false },
+    { "query": "configure eslint-plugin-vue flat config for the project", "should_trigger": false }
+  ],
+  "acceptance": [
+    "the 'Storybook stories:' line in CLAUDE.md was read; on the first component Storybook was explained, the user asked, and yes or no recorded there",
+    "if no: no story was written",
+    "if yes: the story and its data live in a stories/ folder beside the component, the data in a separate <Component>.mock.ts, never inline and never the app's runtime fixtures",
+    "the story reaches the default, empty, loading and error states through select, radio or boolean controls in one story rather than many near-identical exports",
+    "a component that reads a Pinia store gets its fixture by patching the store from the mock file in a decorator, with Pinia registered once in .storybook/preview.ts and no network action left to fire",
+    "a colocated skeleton is rendered directly below the real component in each state, with no story file of its own, and the preview URL of each story was given to the user"
+  ]
+}
